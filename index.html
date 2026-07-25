@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Project Operating System — единая операционная система для управления AI-проектами, знаниями и правилами работы." />
+  <title>AI Project Operating System</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --bg-elevated: #ffffff;
+      --ink: #0f172a;
+      --ink-soft: #475569;
+      --ink-muted: #64748b;
+      --line: rgba(15, 23, 42, 0.08);
+      --accent: #3b82c4;
+      --accent-deep: #2563a8;
+      --accent-soft: rgba(59, 130, 196, 0.12);
+      --glass: rgba(255, 255, 255, 0.62);
+      --glass-strong: rgba(255, 255, 255, 0.78);
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.08);
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 32px;
+      --max: 1120px;
+      --font-display: "Segoe UI Variable Display", "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
+      --font-body: "Segoe UI Variable Text", "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 55% at 12% -10%, rgba(147, 197, 253, 0.45), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 90% 8%, rgba(186, 230, 253, 0.4), transparent 50%),
+        radial-gradient(ellipse 60% 45% at 50% 100%, rgba(203, 213, 225, 0.55), transparent 55%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2f7 45%, #f5f7fb 100%);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.55;
+      animation: drift 18s ease-in-out infinite;
+    }
+
+    .orb-a {
+      width: 420px;
+      height: 420px;
+      top: -80px;
+      left: -60px;
+      background: rgba(147, 197, 253, 0.55);
+    }
+
+    .orb-b {
+      width: 360px;
+      height: 360px;
+      top: 18%;
+      right: -100px;
+      background: rgba(191, 219, 254, 0.5);
+      animation-delay: -6s;
+    }
+
+    .orb-c {
+      width: 480px;
+      height: 480px;
+      bottom: 8%;
+      left: 30%;
+      background: rgba(226, 232, 240, 0.7);
+      animation-delay: -11s;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(24px, 18px, 0) scale(1.06); }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .wrap {
+      width: min(100% - 2.5rem, var(--max));
+      margin-inline: auto;
+    }
+
+    /* ——— Nav ——— */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      background: rgba(245, 247, 251, 0.72);
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 0.95rem;
+    }
+
+    .brand-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background:
+        linear-gradient(145deg, #7eb6e8 0%, #3b82c4 55%, #2563a8 100%);
+      box-shadow: 0 8px 20px rgba(59, 130, 196, 0.28);
+      position: relative;
+    }
+
+    .brand-dot::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+
+    .nav-links a {
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff !important;
+      font-size: 0.85rem;
+      font-weight: 550;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      background: #1e293b;
+    }
+
+    /* ——— Hero ——— */
+    .hero {
+      position: relative;
+      min-height: min(92vh, 900px);
+      display: flex;
+      align-items: center;
+      padding: 4.5rem 0 5.5rem;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 8% 5% auto;
+      height: 70%;
+      border-radius: 48% 52% 40% 60% / 45% 40% 60% 55%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), transparent 55%),
+        linear-gradient(135deg, rgba(186, 230, 253, 0.55), rgba(226, 232, 240, 0.2) 60%, transparent);
+      filter: blur(2px);
+      z-index: 0;
+      animation: drift 22s ease-in-out infinite reverse;
+    }
+
+    .hero-plane {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(180deg, transparent 55%, rgba(245, 247, 251, 0.85) 100%),
+        repeating-linear-gradient(
+          -12deg,
+          transparent 0,
+          transparent 38px,
+          rgba(148, 163, 184, 0.04) 38px,
+          rgba(148, 163, 184, 0.04) 39px
+        );
+      mask-image: linear-gradient(180deg, #000 35%, transparent 95%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+      animation: rise 0.9s ease both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin: 0 0 1.4rem;
+      padding: 0.35rem 0.85rem 0.35rem 0.4rem;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--ink-soft);
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .eyebrow-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(59, 130, 196, 0.45);
+      animation: pulse 2.4s ease-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(59, 130, 196, 0.45); }
+      70% { box-shadow: 0 0 0 10px rgba(59, 130, 196, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(59, 130, 196, 0); }
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 6.2vw, 4.6rem);
+      font-weight: 650;
+      letter-spacing: -0.045em;
+      line-height: 1.05;
+      color: var(--ink);
+      max-width: 14ch;
+    }
+
+    .hero h1 span {
+      display: block;
+      background: linear-gradient(120deg, #0f172a 0%, #334155 40%, #3b82c4 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-lead {
+      margin: 1.35rem 0 0;
+      max-width: 36rem;
+      font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 2.1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 3.1rem;
+      padding: 0.85rem 1.45rem;
+      border-radius: 16px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      border: 1px solid transparent;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #4b8fd0 0%, var(--accent-deep) 100%);
+      color: #fff;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 14px 28px rgba(37, 99, 168, 0.28);
+    }
+
+    .btn-primary:hover {
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.3) inset,
+        0 18px 34px rgba(37, 99, 168, 0.34);
+    }
+
+    .btn-secondary {
+      background: var(--glass-strong);
+      border-color: rgba(15, 23, 42, 0.08);
+      color: var(--ink);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(59, 130, 196, 0.28);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-arrow {
+      font-size: 1.05em;
+      transition: transform 0.25s ease;
+    }
+
+    .btn:hover .btn-arrow {
+      transform: translateX(3px);
+    }
+
+    /* ——— Sections ——— */
+    section {
+      padding: 5.5rem 0;
+      position: relative;
+    }
+
+    .section-label {
+      margin: 0 0 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 650;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+    }
+
+    .section-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 3.4vw, 2.65rem);
+      font-weight: 650;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      max-width: 16ch;
+    }
+
+    .section-intro {
+      margin: 1rem 0 0;
+      max-width: 40rem;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+    }
+
+    /* ——— About ——— */
+    .about {
+      padding-top: 2rem;
+    }
+
+    .about-panel {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 2rem;
+      padding: 2.4rem;
+      border-radius: var(--radius-lg);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(18px) saturate(1.15);
+      -webkit-backdrop-filter: blur(18px) saturate(1.15);
+      animation: rise 1s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .about-copy p {
+      margin: 0 0 1rem;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .about-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-aside {
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .stat {
+      padding: 1.25rem 1.35rem;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.75));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat span {
+      color: var(--ink-muted);
+      font-size: 0.92rem;
+    }
+
+    /* ——— Capabilities ——— */
+    .capabilities-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 2rem;
+      margin-bottom: 2.4rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.15rem;
+    }
+
+    .card {
+      position: relative;
+      padding: 1.55rem 1.5rem 1.65rem;
+      border-radius: var(--radius-md);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px) saturate(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(1.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(59, 130, 196, 0.22);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.15rem;
+      border-radius: 14px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), var(--accent-soft));
+      border: 1px solid rgba(59, 130, 196, 0.12);
+      font-size: 1.35rem;
+      line-height: 1;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card h3 {
+      margin: 0 0 0.45rem;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 650;
+      letter-spacing: -0.025em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--ink-muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    /* ——— Benefits ——— */
+    .benefits {
+      padding-bottom: 6rem;
+    }
+
+    .benefits-shell {
+      position: relative;
+      padding: clamp(2rem, 4vw, 3rem);
+      border-radius: calc(var(--radius-lg) + 4px);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(239, 246, 255, 0.55));
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    .benefits-shell::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -80px;
+      bottom: -100px;
+      border-radius: 50%;
+      background: rgba(147, 197, 253, 0.35);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .benefits-head {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2rem;
+    }
+
+    .benefits-head .section-title {
+      max-width: 18ch;
+    }
+
+    .benefits-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1.15rem 1.2rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .benefit:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px);
+    }
+
+    .benefit-check {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .benefit span {
+      padding-top: 0.2rem;
+      font-weight: 550;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+    }
+
+    /* ——— Footer ——— */
+    footer {
+      padding: 3.5rem 0 2.75rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.06);
+      background: linear-gradient(180deg, transparent, rgba(226, 232, 240, 0.35));
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.65rem;
+    }
+
+    .footer-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 650;
+      letter-spacing: -0.025em;
+    }
+
+    .footer-tagline {
+      margin: 0;
+      color: var(--ink-muted);
+      font-size: 0.98rem;
+      letter-spacing: 0.01em;
+    }
+
+    .footer-meta {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    /* ——— Responsive ——— */
+    @media (max-width: 960px) {
+      .grid,
+      .benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .capabilities-head {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        width: min(100% - 1.5rem, var(--max));
+      }
+
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 3.25rem 0 4rem;
+      }
+
+      .hero h1 {
+        max-width: none;
+      }
+
+      .about-panel {
+        padding: 1.5rem;
+      }
+
+      .grid,
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 4rem 0;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .hero-actions {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="atmosphere" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
+    </div>
+
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand-mark" href="#top" aria-label="AI POS">
+          <span class="brand-dot" aria-hidden="true"></span>
+          AI POS
+        </a>
+        <nav class="nav-links" aria-label="Основная навигация">
+          <a href="#about">О системе</a>
+          <a href="#capabilities">Возможности</a>
+          <a href="#benefits">Преимущества</a>
+          <a class="nav-cta" href="https://github.com/venera-tropnikova/AI_Project_Operating_System" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-plane" aria-hidden="true"></div>
+        <div class="wrap hero-content">
+          <p class="eyebrow">
+            <span class="eyebrow-pulse" aria-hidden="true"></span>
+            Operating system for AI work
+          </p>
+          <h1>
+            AI Project
+            <span>Operating System</span>
+          </h1>
+          <p class="hero-lead">
+            Единая операционная система для управления AI-проектами, знаниями и правилами работы.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#about">
+              Explore
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn-secondary" href="https://github.com/venera-tropnikova/AI_Project_Operating_System" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="about" id="about">
+        <div class="wrap">
+          <div class="about-panel">
+            <div class="about-copy">
+              <p class="section-label">Что такое AI POS</p>
+              <h2 class="section-title">Фундамент для людей и ИИ</h2>
+              <p>
+                AI Project Operating System — это общий слой правил, знаний и процессов, на котором строятся AI-проекты.
+                Он фиксирует, как принимаются решения, как оформляется работа и как сохраняется контекст между сессиями.
+              </p>
+              <p>
+                Вместо разрозненных чатов и локальных договорённостей появляется единая операционная модель:
+                от Конституции и ролей до стандартов разработки и архива решений.
+              </p>
+              <p>
+                AI POS помогает создавать проекты быстрее, передавать знания между людьми и моделями без потерь
+                и масштабировать практику, а не только код.
+              </p>
+              <p>
+                Один фундамент — много проектов. Build once. Reuse forever.
+              </p>
+            </div>
+            <aside class="about-aside" aria-label="Ключевые свойства">
+              <div class="stat">
+                <strong>1 foundation</strong>
+                <span>Общий каркас для всех AI-инициатив</span>
+              </div>
+              <div class="stat">
+                <strong>People + AI</strong>
+                <span>Одинаковые правила для команд и моделей</span>
+              </div>
+              <div class="stat">
+                <strong>Durable knowledge</strong>
+                <span>Знания живут дольше одной сессии чата</span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="capabilities">
+        <div class="wrap">
+          <div class="capabilities-head">
+            <div>
+              <p class="section-label">Capabilities</p>
+              <h2 class="section-title">Шесть опор системы</h2>
+              <p class="section-intro">
+                Компактный набор модулей, которые покрывают управление, стандарты, процессы и память проекта.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">🏛</div>
+              <h3>Governance</h3>
+              <p>Правила, Конституция, Этика.</p>
+            </article>
+
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">👥</div>
+              <h3>Organization</h3>
+              <p>Роли, Глоссарий, Onboarding.</p>
+            </article>
+
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">📐</div>
+              <h3>Standards</h3>
+              <p>Единые стандарты разработки.</p>
+            </article>
+
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">⚙</div>
+              <h3>Procedures</h3>
+              <p>Рабочие процессы.</p>
+            </article>
+
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">📁</div>
+              <h3>Projects</h3>
+              <p>Все проекты используют единый фундамент.</p>
+            </article>
+
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">🗂</div>
+              <h3>Archive</h3>
+              <p>История изменений и решений.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits" id="benefits">
+        <div class="wrap">
+          <div class="benefits-shell">
+            <div class="benefits-head">
+              <p class="section-label">Why AI POS</p>
+              <h2 class="section-title">Преимущества, которые остаются</h2>
+              <p class="section-intro">
+                Система снижает хаос вокруг AI-работы и делает результат воспроизводимым.
+              </p>
+            </div>
+
+            <div class="benefits-grid">
+              <div class="benefit">
+                <div class="benefit-check" aria-hidden="true">✔</div>
+                <span>единые правила</span>
+              </div>
+              <div class="benefit">
+                <div class="benefit-check" aria-hidden="true">✔</div>
+                <span>независимость от одной нейросети</span>
+              </div>
+              <div class="benefit">
+                <div class="benefit-check" aria-hidden="true">✔</div>
+                <span>сохранение знаний</span>
+              </div>
+              <div class="benefit">
+                <div class="benefit-check" aria-hidden="true">✔</div>
+                <span>масштабируемость</span>
+              </div>
+              <div class="benefit">
+                <div class="benefit-check" aria-hidden="true">✔</div>
+                <span>прозрачность решений</span>
+              </div>
+              <div class="benefit">
+                <div class="benefit-check" aria-hidden="true">✔</div>
+                <span>развитие проекта</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap footer-inner">
+        <p class="footer-title">AI Project Operating System (AI POS)</p>
+        <p class="footer-tagline">Build once. Reuse forever.</p>
+        <p class="footer-meta">© 2026 AI POS</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
