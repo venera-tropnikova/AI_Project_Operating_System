@@ -1,0 +1,3 @@
+# GLOSSARY
+
+Статус: Draft

@@ -1,0 +1,3 @@
+# TECHNOLOGY_PASSPORT
+
+Статус: Draft

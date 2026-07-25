@@ -1,0 +1,3 @@
+# DEVELOPMENT_STANDARD
+
+Статус: Draft

@@ -1,0 +1,3 @@
+# ETHICS
+
+Статус: Draft

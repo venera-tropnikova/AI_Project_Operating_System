@@ -1,0 +1,3 @@
+# ONBOARDING
+
+Статус: Draft

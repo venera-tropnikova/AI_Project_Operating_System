@@ -1,0 +1,3 @@
+# CONSTITUTION
+
+Статус: Active
