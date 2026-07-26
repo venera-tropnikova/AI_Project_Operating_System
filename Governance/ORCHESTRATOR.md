@@ -55,18 +55,80 @@ event
 | Выход Analyzer | `project_analysis.json` |
 | Выход Orchestrator | статус прогона, пути к файлам, ошибки компонентов |
 
-## 5. Ошибки и деградация
+## 5. Режимы работы
 
-| Ситуация | Поведение |
+Orchestrator всегда завершает прогон в одном из трёх режимов:  
+`NORMAL` | `DIAGNOSTIC` | `BLOCKED`.
+
+Режим выбирается по закрытому списку `reason_codes` (без оценочных формулировок).
+
+### Правило выбора
+
+```text
+BLOCKED > DIAGNOSTIC > NORMAL
+```
+
+- есть хотя бы один BLOCKED-код → `BLOCKED`;
+- иначе есть хотя бы один DIAGNOSTIC-код → `DIAGNOSTIC`;
+- иначе → `NORMAL`.
+
+### NORMAL
+
+Все обязательные компоненты успешно завершены.  
+Официальная стадия определена (`project_stage.json` валиден, поле `stage` задано).  
+Обязательные артефакты текущего прогона доступны (включая валидный `project_analysis.json`).  
+`reason_codes` пуст.
+
+### DIAGNOSTIC
+
+Оркестрация завершена, стадия определена, но есть неблокирующие проблемы текущего прогона.
+
+Закрытый список DIAGNOSTIC-кодов (как в реализации):
+
+| `reason_code` | Условие |
 |---|---|
-| Stage Engine недоступен | прогон incomplete; analyzer не назначает stage |
-| Analyzer недоступен | stage всё равно действителен; analysis = missing |
-| GitHub/адаптер недоступен | продолжать без него (не блокировать оркестрацию) |
+| `ANALYZER_FAILED` | Analyzer завершился с ошибкой |
+| `ANALYSIS_JSON_MISSING` | после Analyzer нет `project_analysis.json` |
+| `ANALYSIS_INVALID` | `project_analysis.json` невалиден / `valid=false` |
+| `OPTIONAL_ADAPTER_UNAVAILABLE` | зарезервирован (MVP не активирует) |
+| `STAGE_TTL_REUSED` | зарезервирован (MVP не активирует) |
 
-## 6. Связь с Governance Pipeline
+Перед запуском Analyzer артефакт предыдущего `project_analysis.json` снимается, чтобы DIAGNOSTIC не опирался на результат прошлого успешного прогона.
 
-Изменения самого Orchestrator проходят канонический pipeline:
+### BLOCKED
+
+Оркестрация прекращается; Analyzer не запускается (если стадия/корень уже невалидны).
+
+Закрытый список BLOCKED-кодов (как в реализации):
+
+| `reason_code` | Условие |
+|---|---|
+| `PROJECT_ROOT_INVALID` | невозможно определить корень проекта (путь отсутствует / не директория / не резолвится) |
+| `STAGE_ENGINE_FAILED` | Stage Engine завершился ошибкой |
+| `STAGE_JSON_MISSING` | `project_stage.json` не создан |
+| `STAGE_JSON_INVALID` | `project_stage.json` не читается или не проходит обязательную проверку структуры (`stage` обязателен) |
+| `REQUIRED_INPUT_JSON_MISSING` | зарезервирован под будущий обязательный входной JSON (MVP: вход — путь проекта) |
+
+Запрещается использовать оценочные формулировки  
+вроде «если система считает ситуацию критичной».
+
+Потребители (в т.ч. Local Bridge) при `BLOCKED` не подставляют analysis предыдущего прогона в ответ текущего.
+
+## 6. Ошибки и деградация
+
+Согласовано с §5:
+
+| Ситуация | Режим | Поведение |
+|---|---|---|
+| Stage Engine недоступен / ошибка | `BLOCKED` | Analyzer не запускается; стадию Analyzer не назначает |
+| Analyzer недоступен / ошибка при валидной стадии | `DIAGNOSTIC` | stage остаётся действительным; analysis текущего прогона отсутствует или invalid |
+| GitHub / необязательный адаптер недоступен | `DIAGNOSTIC` (код `OPTIONAL_ADAPTER_UNAVAILABLE`, когда будет активен) | оркестрацию не блокировать |
+
+## 7. Связь с Governance Pipeline
+
+Изменения самого Orchestrator (включая набор режимов, правило выбора и закрытые списки `reason_codes`) проходят канонический pipeline:
 
 `Observation → Hypothesis → Draft → Evidence → Candidate → Action Gate → Accepted`
 
-Текущая роль Orchestrator в Architecture Freeze v1.0 — **Accepted** как координатор, не как ядро истины.
+Текущая роль Orchestrator в Architecture Freeze v1.0 — **Accepted** как координатор, не как ядро истины.  
+Режимы `NORMAL` / `DIAGNOSTIC` / `BLOCKED` входят в Accepted-контур Orchestrator и не заменяют стадии Governance Pipeline.

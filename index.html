@@ -738,6 +738,14 @@
       box-shadow: inset 0 0 0 1px rgba(138, 79, 61, 0.22);
     }
 
+    .cli-insight.is-diagnostic {
+      border-left-color: var(--warn);
+      background: var(--warn-bg);
+      box-shadow: inset 0 0 0 1px rgba(138, 106, 43, 0.18);
+    }
+
+    .cli-insight.is-diagnostic .cli-insight-title { color: var(--warn); }
+
     .cli-insight-head {
       display: flex;
       flex-wrap: wrap;
@@ -782,6 +790,11 @@
     .cli-insight-badge.is-invalid {
       background: #edd9d2;
       color: var(--forbid);
+    }
+
+    .cli-insight-badge.is-diagnostic {
+      background: var(--warn-bg);
+      color: var(--warn);
     }
 
     .cli-insight-actions {
@@ -2864,17 +2877,20 @@
         );
       }
 
-      function setCliInsightBadge(text, isInvalid) {
+      function setCliInsightBadge(text, tone) {
         if (!els.cliInsightBadge) return;
         if (!text) {
           els.cliInsightBadge.hidden = true;
           els.cliInsightBadge.textContent = "";
-          els.cliInsightBadge.classList.remove("is-invalid");
+          els.cliInsightBadge.classList.remove("is-invalid", "is-diagnostic");
           return;
         }
         els.cliInsightBadge.hidden = false;
         els.cliInsightBadge.textContent = text;
-        els.cliInsightBadge.classList.toggle("is-invalid", !!isInvalid);
+        var invalid = tone === true || tone === "invalid" || tone === "blocked";
+        var diagnostic = tone === "diagnostic";
+        els.cliInsightBadge.classList.toggle("is-invalid", invalid);
+        els.cliInsightBadge.classList.toggle("is-diagnostic", diagnostic);
       }
 
       function setCliAnalysisCache(projectId, entry) {
@@ -2886,6 +2902,41 @@
         return state.cliAnalysisByProject[projectId] || null;
       }
 
+      var CLI_REASON_CODE_MESSAGES = {
+        ANALYZER_FAILED:
+          "Не удалось подготовить сводку анализа. Стадия проекта при этом могла быть определена.",
+        ANALYSIS_JSON_MISSING: "Сводка анализа недоступна после этого обновления.",
+        ANALYSIS_INVALID:
+          "Сводка анализа повреждена или неполная. Обновите анализ ещё раз.",
+        PROJECT_ROOT_INVALID:
+          "Рабочая папка проекта не найдена или недоступна. Проверьте путь.",
+        STAGE_ENGINE_FAILED:
+          "Не удалось определить стадию проекта. Повторите обновление.",
+        STAGE_JSON_MISSING:
+          "Данные о стадии проекта отсутствуют. Повторите обновление.",
+        STAGE_JSON_INVALID:
+          "Данные о стадии проекта повреждены. Повторите обновление."
+      };
+
+      function cliReasonCodesMessage(reasonCodes) {
+        var codes = Array.isArray(reasonCodes) ? reasonCodes : [];
+        var lines = [];
+        var seen = {};
+        for (var i = 0; i < codes.length; i++) {
+          var code = String(codes[i] || "").trim();
+          if (!code || seen[code]) continue;
+          seen[code] = true;
+          if (CLI_REASON_CODE_MESSAGES[code]) {
+            lines.push(CLI_REASON_CODE_MESSAGES[code]);
+          }
+          if (lines.length >= 2) break;
+        }
+        if (!lines.length) {
+          return "Не удалось завершить обновление анализа. Повторите попытку.";
+        }
+        return lines.join(" ");
+      }
+
       function softenAnalysisErrorMessage(message) {
         var text = String(message || "").trim();
         if (!text) {
@@ -2893,6 +2944,8 @@
         }
         var lowered = text.toLowerCase();
         if (
+          lowered.indexOf("orchestrator diagnostic") !== -1 ||
+          lowered.indexOf("orchestrator blocked") !== -1 ||
           lowered.indexOf("project_stage.json") !== -1 ||
           lowered.indexOf("project_analysis.json") !== -1 ||
           lowered.indexOf(".ai-pos") !== -1 ||
@@ -2979,8 +3032,10 @@
           }
         }
 
-        var isInvalid = !!(cache && cache.kind === "invalid");
+        var isInvalid = !!(cache && (cache.kind === "invalid" || cache.kind === "blocked"));
+        var isDiagnostic = !!(cache && cache.kind === "diagnostic");
         els.cliInsight.classList.toggle("is-invalid", isInvalid);
+        els.cliInsight.classList.toggle("is-diagnostic", isDiagnostic);
 
         if (!cache) {
           setCliInsightBadge("Не загружен", false);
@@ -2993,6 +3048,24 @@
           setCliInsightBadge("Обновление…", false);
           els.cliInsightBody.innerHTML =
             '<p class="cli-insight-empty">Обновляем анализ проекта…</p>';
+          return;
+        }
+
+        if (cache.kind === "diagnostic") {
+          setCliInsightBadge("Диагностика", "diagnostic");
+          els.cliInsightBody.innerHTML =
+            '<p class="cli-insight-error"><span class="cli-insight-error-title">Анализ обновлён не полностью</span>' +
+            escapeHtml(cache.message || cliReasonCodesMessage(cache.reason_codes)) +
+            "</p>";
+          return;
+        }
+
+        if (cache.kind === "blocked") {
+          setCliInsightBadge("Заблокировано", "blocked");
+          els.cliInsightBody.innerHTML =
+            '<p class="cli-insight-error"><span class="cli-insight-error-title">Не удалось выполнить анализ</span>' +
+            escapeHtml(cache.message || cliReasonCodesMessage(cache.reason_codes)) +
+            "</p>";
           return;
         }
 
@@ -3103,25 +3176,55 @@
           })
           .then(function (result) {
             var payload = result.payload;
-            if (!payload.ok) {
-              if (payload.analysis) {
-                applyCliAnalysisObject(
-                  project,
-                  payload.analysis,
-                  payload.message || "Не удалось обновить анализ."
-                );
-                return;
-              }
+            var mode = String(payload.mode || "").toUpperCase();
+            var reasonCodes = Array.isArray(payload.reason_codes)
+              ? payload.reason_codes
+              : [];
+
+            // Success-path first: any mode with ok:true keeps the analysis grid.
+            if (payload.ok) {
+              applyCliAnalysisObject(project, payload.analysis, payload.message);
+              return;
+            }
+
+            if (mode === "BLOCKED") {
               setCliAnalysisCache(project.id, {
-                kind: "error",
-                message: softenAnalysisErrorMessage(
-                  payload.message || "Не удалось обновить анализ."
-                )
+                kind: "blocked",
+                mode: "BLOCKED",
+                reason_codes: reasonCodes,
+                message: cliReasonCodesMessage(reasonCodes)
               });
               renderCliInsight(project);
               return;
             }
-            applyCliAnalysisObject(project, payload.analysis, payload.message);
+
+            if (mode === "DIAGNOSTIC") {
+              setCliAnalysisCache(project.id, {
+                kind: "diagnostic",
+                mode: "DIAGNOSTIC",
+                reason_codes: reasonCodes,
+                message: cliReasonCodesMessage(reasonCodes)
+              });
+              renderCliInsight(project);
+              return;
+            }
+
+            // Legacy fallback: unknown/missing mode when ok:false.
+            if (payload.analysis) {
+              applyCliAnalysisObject(
+                project,
+                payload.analysis,
+                payload.message || "Не удалось обновить анализ."
+              );
+              return;
+            }
+            setCliAnalysisCache(project.id, {
+              kind: "error",
+              message: softenAnalysisErrorMessage(
+                payload.message || "Не удалось обновить анализ."
+              )
+            });
+            renderCliInsight(project);
           })
           .catch(function (err) {
             var msg = err && err.message ? err.message : String(err);

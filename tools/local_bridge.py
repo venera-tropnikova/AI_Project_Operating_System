@@ -26,6 +26,47 @@ TOOLS_DIR = Path(__file__).resolve().parent
 ORCHESTRATOR = TOOLS_DIR / "refresh_project_insight.py"
 ANALYSIS_REL = Path(".ai-pos") / "project_analysis.json"
 
+RESULT_PREFIX = "AI_POS_ORCHESTRATOR_RESULT="
+MODE_NORMAL = "NORMAL"
+MODE_DIAGNOSTIC = "DIAGNOSTIC"
+MODE_BLOCKED = "BLOCKED"
+RC_ANALYZER_FAILED = "ANALYZER_FAILED"
+RC_PROJECT_ROOT_INVALID = "PROJECT_ROOT_INVALID"
+
+API_KEYS = ("ok", "analysis", "message", "mode", "reason_codes")
+
+
+def parse_orchestrator_result(stdout: str) -> dict[str, Any] | None:
+    for line in reversed((stdout or "").splitlines()):
+        line = line.strip()
+        if line.startswith(RESULT_PREFIX):
+            raw = line[len(RESULT_PREFIX) :]
+            try:
+                data = json.loads(raw)
+            except json.JSONDecodeError:
+                return None
+            if isinstance(data, dict) and data.get("mode"):
+                return data
+    return None
+
+
+def api_result(
+    *,
+    ok: bool,
+    analysis: dict[str, Any] | None,
+    message: str | None,
+    mode: str,
+    reason_codes: list[str] | None = None,
+) -> dict[str, Any]:
+    """Normalized POST /api/refresh-insight payload (exactly five fields)."""
+    return {
+        "ok": bool(ok),
+        "analysis": analysis,
+        "message": message,
+        "mode": mode,
+        "reason_codes": list(reason_codes or []),
+    }
+
 
 def user_facing_error(raw: str | None) -> str:
     """Hide internal artifact names from end-user messages."""
@@ -49,6 +90,19 @@ def user_facing_error(raw: str | None) -> str:
     return text
 
 
+def _analysis_is_valid(analysis: dict[str, Any] | None) -> bool:
+    if not analysis:
+        return False
+    if analysis.get("valid") is False:
+        return False
+    if analysis.get("status") == "invalid":
+        return False
+    stage = analysis.get("stage")
+    if stage is None or stage == "":
+        return False
+    return True
+
+
 def run_refresh(project_path: Path) -> dict[str, Any]:
     completed = subprocess.run(
         [sys.executable, str(ORCHESTRATOR), str(project_path)],
@@ -60,6 +114,28 @@ def run_refresh(project_path: Path) -> dict[str, Any]:
         check=False,
     )
 
+    orch = parse_orchestrator_result(completed.stdout or "")
+    mode = str((orch or {}).get("mode") or "")
+    reason_codes = list((orch or {}).get("reason_codes") or [])
+    if not mode:
+        # Fallback if structured line missing (should not happen on current orchestrator).
+        mode = MODE_BLOCKED if completed.returncode != 0 else MODE_NORMAL
+
+    # BLOCKED: never expose on-disk analysis (prevents stale STAGE_ENGINE_FAILED etc.).
+    if mode == MODE_BLOCKED:
+        detail = None
+        if completed.stderr:
+            detail = completed.stderr.strip().splitlines()[-1]
+        return api_result(
+            ok=False,
+            analysis=None,
+            message=user_facing_error(detail)
+            if detail
+            else "Не удалось обновить анализ. Повторите попытку.",
+            mode=MODE_BLOCKED,
+            reason_codes=reason_codes,
+        )
+
     analysis: dict[str, Any] | None = None
     analysis_path = project_path / ANALYSIS_REL
     if analysis_path.is_file():
@@ -70,35 +146,81 @@ def run_refresh(project_path: Path) -> dict[str, Any]:
         except json.JSONDecodeError:
             analysis = None
 
-    if completed.returncode != 0:
+    valid = _analysis_is_valid(analysis)
+    analyzer_failed = RC_ANALYZER_FAILED in reason_codes
+
+    # ANALYZER_FAILED: never ok:true from a leftover/stale analysis file.
+    if analyzer_failed:
         detail = None
-        if analysis and analysis.get("error"):
+        if analysis and not valid and analysis.get("error"):
             detail = str(analysis.get("error"))
         elif completed.stderr:
             detail = completed.stderr.strip().splitlines()[-1]
-        return {
-            "ok": False,
-            "analysis": analysis,
-            "message": user_facing_error(detail),
-        }
+        return api_result(
+            ok=False,
+            analysis=None if valid or analysis is None else analysis,
+            message=user_facing_error(detail)
+            if detail
+            else "Анализ не получен. Повторите обновление.",
+            mode=MODE_DIAGNOSTIC,
+            reason_codes=reason_codes,
+        )
 
+    # Existing ok semantics unchanged: true only with valid analysis.
+    if valid and mode == MODE_NORMAL:
+        return api_result(
+            ok=True,
+            analysis=analysis,
+            message=None,
+            mode=MODE_NORMAL,
+            reason_codes=reason_codes,
+        )
+
+    if valid and mode == MODE_DIAGNOSTIC:
+        return api_result(
+            ok=True,
+            analysis=analysis,
+            message=None,
+            mode=MODE_DIAGNOSTIC,
+            reason_codes=reason_codes,
+        )
+
+    detail = None
+    if analysis and analysis.get("error"):
+        detail = str(analysis.get("error"))
+    elif completed.stderr:
+        detail = completed.stderr.strip().splitlines()[-1]
+
+    if mode == MODE_DIAGNOSTIC:
+        return api_result(
+            ok=False,
+            analysis=analysis,
+            message=user_facing_error(detail)
+            if detail
+            else "Анализ не получен. Повторите обновление.",
+            mode=MODE_DIAGNOSTIC,
+            reason_codes=reason_codes,
+        )
+
+    # Compatible fallback (legacy exit without mode / incomplete analysis).
     if not analysis:
-        return {
-            "ok": False,
-            "analysis": None,
-            "message": "Анализ не получен. Повторите обновление.",
-        }
+        return api_result(
+            ok=False,
+            analysis=None,
+            message="Анализ не получен. Повторите обновление.",
+            mode=mode or MODE_DIAGNOSTIC,
+            reason_codes=reason_codes,
+        )
 
-    if analysis.get("valid") is False or analysis.get("status") == "invalid":
-        return {
-            "ok": False,
-            "analysis": analysis,
-            "message": user_facing_error(
-                str(analysis.get("error") or "Анализ недействителен.")
-            ),
-        }
-
-    return {"ok": True, "analysis": analysis, "message": None}
+    return api_result(
+        ok=False,
+        analysis=analysis,
+        message=user_facing_error(
+            str(analysis.get("error") or detail or "Анализ недействителен.")
+        ),
+        mode=mode or MODE_DIAGNOSTIC,
+        reason_codes=reason_codes,
+    )
 
 
 class LocalBridgeHandler(SimpleHTTPRequestHandler):
@@ -168,24 +290,29 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
         except ValueError as exc:
             self._send_json(
                 400,
-                {
-                    "ok": False,
-                    "analysis": None,
-                    "message": "Некорректный запрос на обновление анализа.",
-                    "detail": str(exc),
-                },
+                api_result(
+                    ok=False,
+                    analysis=None,
+                    message="Некорректный запрос на обновление анализа.",
+                    mode=MODE_BLOCKED,
+                    reason_codes=[],
+                ),
             )
+            # detail intentionally omitted from normalized public shape
+            _ = exc
             return
 
         project_path_raw = str(body.get("project_path") or "").strip()
         if not project_path_raw:
             self._send_json(
                 400,
-                {
-                    "ok": False,
-                    "analysis": None,
-                    "message": "Укажите рабочую папку проекта и повторите обновление.",
-                },
+                api_result(
+                    ok=False,
+                    analysis=None,
+                    message="Укажите рабочую папку проекта и повторите обновление.",
+                    mode=MODE_BLOCKED,
+                    reason_codes=[RC_PROJECT_ROOT_INVALID],
+                ),
             )
             return
 
@@ -195,22 +322,26 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
         except OSError:
             self._send_json(
                 400,
-                {
-                    "ok": False,
-                    "analysis": None,
-                    "message": "Не удалось открыть рабочую папку проекта.",
-                },
+                api_result(
+                    ok=False,
+                    analysis=None,
+                    message="Не удалось открыть рабочую папку проекта.",
+                    mode=MODE_BLOCKED,
+                    reason_codes=[RC_PROJECT_ROOT_INVALID],
+                ),
             )
             return
 
         if not root.exists() or not root.is_dir():
             self._send_json(
                 400,
-                {
-                    "ok": False,
-                    "analysis": None,
-                    "message": "Рабочая папка проекта не найдена. Проверьте путь и повторите.",
-                },
+                api_result(
+                    ok=False,
+                    analysis=None,
+                    message="Рабочая папка проекта не найдена. Проверьте путь и повторите.",
+                    mode=MODE_BLOCKED,
+                    reason_codes=[RC_PROJECT_ROOT_INVALID],
+                ),
             )
             return
 

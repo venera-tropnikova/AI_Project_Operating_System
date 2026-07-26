@@ -13,6 +13,11 @@ import os
 import subprocess
 import sys
 import tempfile
+import threading
+import time
+import urllib.error
+import urllib.request
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 
 
@@ -24,8 +29,32 @@ ORCH = TOOLS / "refresh_project_insight.py"
 TEMPLATE = ROOT / "Projects" / "TEMPLATE"
 MINI = ROOT / "Projects" / "FIXTURES" / "mini_filled"
 
+sys.path.insert(0, str(TOOLS))
+from local_bridge import (  # noqa: E402
+    API_KEYS,
+    LocalBridgeHandler,
+    RC_PROJECT_ROOT_INVALID as BRIDGE_RC_PROJECT_ROOT_INVALID,
+    run_refresh,
+)
+from refresh_project_insight import (  # noqa: E402
+    MODE_BLOCKED,
+    MODE_DIAGNOSTIC,
+    MODE_NORMAL,
+    RESULT_PREFIX,
+    RC_ANALYZER_FAILED,
+    RC_ANALYSIS_JSON_MISSING,
+    RC_PROJECT_ROOT_INVALID,
+    RC_STAGE_ENGINE_FAILED,
+    parse_result_line,
+    run_insight,
+)
 
-def run(cmd: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+
+def run(
+    cmd: list[str],
+    cwd: Path | None = None,
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         cmd,
         cwd=str(cwd) if cwd else None,
@@ -34,6 +63,7 @@ def run(cmd: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess[
         errors="replace",
         capture_output=True,
         check=False,
+        env=env,
     )
 
 
@@ -49,6 +79,34 @@ def expect(cond: bool, message: str, failures: list[str]) -> None:
         print(f"OK:   {message}")
 
 
+def orch_mode_from_cli(completed: subprocess.CompletedProcess[str]) -> dict:
+    parsed = parse_result_line(completed.stdout or "")
+    return parsed or {}
+
+
+def expect_api_shape(payload: dict, label: str, failures: list[str]) -> None:
+    keys = tuple(sorted(payload.keys()))
+    expect(keys == tuple(sorted(API_KEYS)), f"{label} API shape keys", failures)
+    for key in API_KEYS:
+        expect(key in payload, f"{label} has field {key}", failures)
+
+
+def post_refresh_insight(port: int, project_path: str) -> tuple[int, dict]:
+    data = json.dumps({"project_path": project_path}).encode("utf-8")
+    req = urllib.request.Request(
+        f"http://127.0.0.1:{port}/api/refresh-insight",
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return resp.status, json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8")
+        return exc.code, json.loads(body)
+
+
 def main() -> int:
     failures: list[str] = []
     py = sys.executable
@@ -56,6 +114,10 @@ def main() -> int:
     print("=== 1) TEMPLATE -> IDEA via orchestrator ===")
     r = run([py, str(ORCH), str(TEMPLATE)])
     expect(r.returncode == 0, "orchestrator TEMPLATE exit 0", failures)
+    orch = orch_mode_from_cli(r)
+    expect(orch.get("mode") == MODE_NORMAL, "TEMPLATE mode NORMAL", failures)
+    expect(orch.get("reason_codes") == [], "TEMPLATE reason_codes empty", failures)
+    expect(RESULT_PREFIX in (r.stdout or ""), "TEMPLATE emits result line", failures)
     stage = load_json(TEMPLATE / ".ai-pos" / "project_stage.json")
     analysis = load_json(TEMPLATE / ".ai-pos" / "project_analysis.json")
     expect(stage.get("stage") == "IDEA", "TEMPLATE stage is IDEA", failures)
@@ -70,6 +132,8 @@ def main() -> int:
     print("=== 2) mini_filled -> PLANNING ===")
     r = run([py, str(ORCH), str(MINI)])
     expect(r.returncode == 0, "orchestrator mini_filled exit 0", failures)
+    orch = orch_mode_from_cli(r)
+    expect(orch.get("mode") == MODE_NORMAL, "mini_filled mode NORMAL", failures)
     stage = load_json(MINI / ".ai-pos" / "project_stage.json")
     analysis = load_json(MINI / ".ai-pos" / "project_analysis.json")
     expect(stage.get("stage") == "PLANNING", "mini_filled stage is PLANNING", failures)
@@ -266,6 +330,182 @@ def main() -> int:
             "TODO-only file listed as stub",
             failures,
         )
+
+    print("=== 11) orchestrator modes NORMAL / DIAGNOSTIC / BLOCKED ===")
+    r = run([py, str(ORCH), str(TEMPLATE)])
+    orch = orch_mode_from_cli(r)
+    expect(r.returncode == 0, "mode NORMAL exit 0", failures)
+    expect(orch.get("mode") == MODE_NORMAL, "mode NORMAL set", failures)
+
+    r = run([py, str(ORCH), str(ROOT / "no_such_project_root_for_smoke")])
+    orch = orch_mode_from_cli(r)
+    expect(r.returncode != 0, "mode BLOCKED exit nonzero", failures)
+    expect(orch.get("mode") == MODE_BLOCKED, "mode BLOCKED set", failures)
+    expect(
+        RC_PROJECT_ROOT_INVALID in (orch.get("reason_codes") or []),
+        "BLOCKED reason PROJECT_ROOT_INVALID",
+        failures,
+    )
+
+    with tempfile.TemporaryDirectory() as td:
+        fail_analyzer = Path(td) / "fail_analyzer.py"
+        fail_analyzer.write_text(
+            "import sys\nprint('smoke fail analyzer', file=sys.stderr)\nsys.exit(2)\n",
+            encoding="utf-8",
+        )
+
+        # NORMAL first — leaves a valid analysis on disk.
+        r = run([py, str(ORCH), str(MINI)])
+        expect(r.returncode == 0, "preflight NORMAL exit 0", failures)
+        expect(
+            orch_mode_from_cli(r).get("mode") == MODE_NORMAL,
+            "preflight NORMAL mode",
+            failures,
+        )
+        expect(
+            load_json(MINI / ".ai-pos" / "project_analysis.json").get("valid") is True,
+            "preflight valid analysis present",
+            failures,
+        )
+
+        insight = run_insight(MINI, analyzer=fail_analyzer)
+        expect(insight.get("mode") == MODE_DIAGNOSTIC, "mode DIAGNOSTIC set", failures)
+        expect(
+            RC_ANALYZER_FAILED in (insight.get("reason_codes") or []),
+            "DIAGNOSTIC reason ANALYZER_FAILED",
+            failures,
+        )
+        expect(
+            RC_ANALYSIS_JSON_MISSING in (insight.get("reason_codes") or []),
+            "DIAGNOSTIC clears prior analysis artifact",
+            failures,
+        )
+        expect(
+            not (MINI / ".ai-pos" / "project_analysis.json").is_file(),
+            "stale analysis file removed after ANALYZER_FAILED",
+            failures,
+        )
+        expect(
+            load_json(MINI / ".ai-pos" / "project_stage.json").get("stage") == "PLANNING",
+            "DIAGNOSTIC keeps valid stage from Engine",
+            failures,
+        )
+
+        # Bridge path: stale valid analysis on disk + fail-analyzer → ok:false.
+        run([py, str(ANALYZER), str(MINI)])
+        expect(
+            load_json(MINI / ".ai-pos" / "project_analysis.json").get("valid") is True,
+            "valid analysis on disk before Bridge fail-run",
+            failures,
+        )
+        os.environ["AI_POS_ANALYZER_SCRIPT"] = str(fail_analyzer)
+        try:
+            bridge = run_refresh(MINI)
+        finally:
+            os.environ.pop("AI_POS_ANALYZER_SCRIPT", None)
+
+        expect(bridge.get("ok") is False, "Bridge ok:false on ANALYZER_FAILED", failures)
+        expect(bridge.get("mode") == MODE_DIAGNOSTIC, "Bridge mode DIAGNOSTIC", failures)
+        expect(
+            RC_ANALYZER_FAILED in (bridge.get("reason_codes") or []),
+            "Bridge reason ANALYZER_FAILED",
+            failures,
+        )
+        expect(
+            bridge.get("analysis") is None
+            or (bridge.get("analysis") or {}).get("valid") is False,
+            "Bridge analysis null or invalid",
+            failures,
+        )
+        expect_api_shape(bridge, "DIAGNOSTIC Bridge", failures)
+
+    # Restore mini analysis after failing analyzer stub.
+    run([py, str(ORCH), str(MINI)])
+    normal_bridge = run_refresh(MINI)
+    expect_api_shape(normal_bridge, "NORMAL Bridge", failures)
+    expect(normal_bridge.get("mode") == MODE_NORMAL, "NORMAL Bridge mode", failures)
+    expect(normal_bridge.get("ok") is True, "NORMAL Bridge ok", failures)
+
+    blocked_root = run_refresh(ROOT / "no_such_project_root_for_smoke")
+    expect_api_shape(blocked_root, "BLOCKED root Bridge", failures)
+    expect(blocked_root.get("mode") == MODE_BLOCKED, "BLOCKED root mode", failures)
+    expect(blocked_root.get("analysis") is None, "BLOCKED root analysis null", failures)
+    expect(
+        RC_PROJECT_ROOT_INVALID in (blocked_root.get("reason_codes") or []),
+        "BLOCKED root reason",
+        failures,
+    )
+
+    print("=== 12) API contract shape + STAGE_ENGINE_FAILED no stale ===")
+    # STAGE_ENGINE_FAILED via in-process orch result + Bridge packaging (no env-hook).
+    with tempfile.TemporaryDirectory() as td:
+        fail_engine = Path(td) / "fail_engine.py"
+        fail_engine.write_text("import sys\nsys.exit(3)\n", encoding="utf-8")
+        expect(
+            load_json(MINI / ".ai-pos" / "project_analysis.json").get("valid") is True,
+            "stale valid analysis present before STAGE_ENGINE_FAILED",
+            failures,
+        )
+        real_run = subprocess.run
+
+        def fake_run(cmd: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            if len(cmd) >= 2 and "refresh_project_insight.py" in str(cmd[1]):
+                result = run_insight(cmd[2], stage_engine=fail_engine)
+                out = RESULT_PREFIX + json.dumps(result, ensure_ascii=False) + "\n"
+                return subprocess.CompletedProcess(
+                    args=cmd,
+                    returncode=1,
+                    stdout=out,
+                    stderr="Orchestrator BLOCKED: Stage Engine failed.\n",
+                )
+            return real_run(cmd, **kwargs)  # type: ignore[arg-type]
+
+        subprocess.run = fake_run  # type: ignore[assignment]
+        try:
+            engine_blocked = run_refresh(MINI)
+        finally:
+            subprocess.run = real_run  # type: ignore[assignment]
+
+        expect_api_shape(engine_blocked, "STAGE_ENGINE_FAILED Bridge", failures)
+        expect(engine_blocked.get("mode") == MODE_BLOCKED, "STAGE_ENGINE_FAILED mode", failures)
+        expect(
+            RC_STAGE_ENGINE_FAILED in (engine_blocked.get("reason_codes") or []),
+            "STAGE_ENGINE_FAILED reason",
+            failures,
+        )
+        expect(
+            engine_blocked.get("analysis") is None,
+            "STAGE_ENGINE_FAILED analysis null (no stale)",
+            failures,
+        )
+        expect(engine_blocked.get("ok") is False, "STAGE_ENGINE_FAILED ok false", failures)
+
+    # HTTP 400 path pre-check: full five-field shape.
+    port = 18082
+    server = ThreadingHTTPServer(("127.0.0.1", port), LocalBridgeHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    time.sleep(0.2)
+    try:
+        status, payload = post_refresh_insight(
+            port, str(ROOT / "no_such_project_root_http400")
+        )
+        expect(status == 400, "HTTP 400 for missing project root", failures)
+        expect_api_shape(payload, "HTTP 400", failures)
+        expect(payload.get("mode") == MODE_BLOCKED, "HTTP 400 mode BLOCKED", failures)
+        expect(payload.get("analysis") is None, "HTTP 400 analysis null", failures)
+        expect(
+            payload.get("reason_codes") == [BRIDGE_RC_PROJECT_ROOT_INVALID],
+            "HTTP 400 reason PROJECT_ROOT_INVALID",
+            failures,
+        )
+        expect(payload.get("ok") is False, "HTTP 400 ok false", failures)
+    finally:
+        server.shutdown()
+        server.server_close()
+
+    # Restore mini after fake engine path.
+    run([py, str(ORCH), str(MINI)])
 
     print()
     if failures:
