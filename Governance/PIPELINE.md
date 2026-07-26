@@ -46,6 +46,6 @@ Observation
 |---|---|
 | Governance Pipeline (этот документ) | Accepted |
 | Orchestrator (роль) | Accepted (в рамках Freeze) |
-| Project Health | Observation (+ Hypothesis A/B/C) |
+| Project Health | Draft (Hypothesis C); D-2026-07-27-02 |
 | Architectural Observations #1–#3 | Observation (журнал) |
 | Architecture Freeze v1.0 | Accepted (ADR-0002) |
