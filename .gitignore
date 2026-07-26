@@ -1,0 +1,7 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packaging artifact
+AI_Project_Operating_System.zip
