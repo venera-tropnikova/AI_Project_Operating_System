@@ -68,3 +68,24 @@
 - **Решение:** удалить scaffold слоя `Procedures/` целиком.
 - **Повторное введение:** слой `Procedures` может быть введён только через обычный Governance Pipeline (`Observation → Hypothesis → Draft → … → Action Gate → Accepted`).
 - **Не затрагивает:** Architecture Freeze v1.0 (ADR-0002); канон Action Gate в `PIPELINE.md` / `CHANGE_PROTOCOL.md`; CONSTITUTION и прочие Accepted-контуры.
+
+---
+
+## D-2026-07-27-02 — Project Health: Hypothesis C как основа Draft
+
+- **Дата:** 2026-07-27  
+- **Статус:** Accepted  
+- **Pipeline:** Observation → Hypothesis (выбор C) → вход в Draft  
+- **Решение:**
+  - человек рассмотрел Recommendation Decision Workshop (`Governance/HEALTH_DECISION_WORKSHOP_2026-07-27.md`);
+  - Recommendation признана обоснованной;
+  - выбрана Hypothesis **C** (гибридная модель) как основа Draft Project Health;
+  - `Governance/HEALTH.md` переводится из Observation в **Draft** на этой основе.
+- **Основание:**
+  - Constitution Principle 2 (нормы и факты разделяются);
+  - предметное применение Stage / Analyzer (факт стадии vs интерпретация);
+  - предметное применение Evidence / Accept;
+  - методологически исправленный Observation #4 (Конституция — нормативный источник; Project Health — третье применение оси «факты / интерпретация»);
+  - Decision Workshop 2026-07-27.
+- **Не решает:** спецификацию индикаторов; код Health; перевод в Candidate/Accepted; изменение PIPELINE.md.
+- **Связанные документы:** `Governance/HEALTH.md`, `Governance/HEALTH_DECISION_WORKSHOP_2026-07-27.md`, `Governance/CONSTITUTION.md`, ADR-0002
