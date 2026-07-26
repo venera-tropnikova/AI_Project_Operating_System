@@ -54,3 +54,17 @@
   - подпись поля в интерфейсе: «Текущая работа»;
   - Stage Engine остаётся единственным источником истины о системной стадии проекта.
 - **Связанные документы:** `index.html`, `Governance/ARCHITECTURAL_OBSERVATIONS.md` (#4)
+
+---
+
+## D-2026-07-27-01 — Удаление незачартёренного scaffold `Procedures/`
+
+- **Дата:** 2026-07-27  
+- **Статус:** Accepted  
+- **Что установлено аудитом:**
+  - проведён архитектурный аудит слоя `Procedures/`;
+  - подтверждено отсутствие принятого решения об учреждении этого слоя (нет в CONSTITUTION, PIPELINE, CHANGE_PROTOCOL, ADR, DECISION_LOG);
+  - каталог признан неиспользуемым initial scaffold: пустые Draft-файлы без содержания, ссылок и архитектурной ответственности.
+- **Решение:** удалить scaffold слоя `Procedures/` целиком.
+- **Повторное введение:** слой `Procedures` может быть введён только через обычный Governance Pipeline (`Observation → Hypothesis → Draft → … → Action Gate → Accepted`).
+- **Не затрагивает:** Architecture Freeze v1.0 (ADR-0002); канон Action Gate в `PIPELINE.md` / `CHANGE_PROTOCOL.md`; CONSTITUTION и прочие Accepted-контуры.
