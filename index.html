@@ -3,926 +3,3973 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AI Project Operating System — единая операционная система для управления AI-проектами, знаниями и правилами работы." />
-  <title>AI Project Operating System</title>
+  <meta name="description" content="AI POS — персональная операционная система для AI-проектов." />
+  <title>AI POS</title>
+  <link rel="icon" href="assets/icons/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="assets/icons/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="assets/icons/favicon-16x16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <style>
     :root {
-      --bg: #f5f7fb;
-      --bg-elevated: #ffffff;
-      --ink: #0f172a;
-      --ink-soft: #475569;
-      --ink-muted: #64748b;
-      --line: rgba(15, 23, 42, 0.08);
-      --accent: #3b82c4;
-      --accent-deep: #2563a8;
-      --accent-soft: rgba(59, 130, 196, 0.12);
-      --glass: rgba(255, 255, 255, 0.62);
-      --glass-strong: rgba(255, 255, 255, 0.78);
-      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.06);
-      --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.08);
-      --radius-sm: 14px;
-      --radius-md: 22px;
-      --radius-lg: 32px;
-      --max: 1120px;
-      --font-display: "Segoe UI Variable Display", "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
-      --font-body: "Segoe UI Variable Text", "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
+      /* Professional light tool UI — brand blue + semantic green */
+      --bg: #f4f6fa;
+      --surface: #ffffff;
+      --ink: #1a1f2c;
+      --ink-soft: #4a5160;
+      --ink-muted: #7a8294;
+      --line: #e2e6ef;
+      --accent: #3b5bdb;
+      --accent-hover: #2f4bc0;
+      --brand-grad-from: #7b5cff;
+      --brand-grad-to: #2eb8e6;
+      --info: #3b5bdb;
+      --info-soft: #eef1fb;
+      --warn: #8a6a2b;
+      --warn-bg: #f3ead8;
+      --gain-bg: #eef5ef;
+      --gain-ink: #2a4a35;
+      --lv-project: #1a4d3a;
+      --lv-project-soft: #e7f0eb;
+      --lv-module: #4f6070;
+      --lv-module-soft: #e9eef2;
+      --lv-task: #9a6a2f;
+      --lv-task-soft: #f6efe4;
+      --lv-work: #5a3d55;
+      --lv-work-soft: #f0e9ee;
+      --lv-materials: #6d5643;
+      --lv-materials-soft: #f2ebe3;
+      --lv-team: #3a3936;
+      --lv-team-soft: #ecebe8;
+      --lv-rules: #3a3936;
+      --lv-rules-soft: #ecebe8;
+      --allow: #1a4d3a;
+      --allow-soft: #e7f0eb;
+      --forbid: #a14b3a;
+      --forbid-soft: #f3e8e3;
+      --radius: 12px;
+      --radius-control: 10px;
+      --shadow-soft: 0 1px 2px rgba(26, 31, 44, 0.04), 0 4px 14px rgba(26, 31, 44, 0.05);
+      --shadow-btn: 0 1px 2px rgba(47, 75, 192, 0.18);
+      --topbar-h: 60px;
+      --max-home: 560px;
+      --max: 920px;
+      --font: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
     }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: var(--font-body);
+      font-family: var(--font);
       color: var(--ink);
       background: var(--bg);
-      line-height: 1.6;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    button, input, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; border: none; background: none; }
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    .page {
-      position: relative;
-      isolation: isolate;
-    }
-
-    .atmosphere {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background:
-        radial-gradient(ellipse 80% 55% at 12% -10%, rgba(147, 197, 253, 0.45), transparent 55%),
-        radial-gradient(ellipse 70% 50% at 90% 8%, rgba(186, 230, 253, 0.4), transparent 50%),
-        radial-gradient(ellipse 60% 45% at 50% 100%, rgba(203, 213, 225, 0.55), transparent 55%),
-        linear-gradient(180deg, #f8fafc 0%, #eef2f7 45%, #f5f7fb 100%);
-    }
-
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.55;
-      animation: drift 18s ease-in-out infinite;
-    }
-
-    .orb-a {
-      width: 420px;
-      height: 420px;
-      top: -80px;
-      left: -60px;
-      background: rgba(147, 197, 253, 0.55);
-    }
-
-    .orb-b {
-      width: 360px;
-      height: 360px;
-      top: 18%;
-      right: -100px;
-      background: rgba(191, 219, 254, 0.5);
-      animation-delay: -6s;
-    }
-
-    .orb-c {
-      width: 480px;
-      height: 480px;
-      bottom: 8%;
-      left: 30%;
-      background: rgba(226, 232, 240, 0.7);
-      animation-delay: -11s;
-    }
-
-    @keyframes drift {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(24px, 18px, 0) scale(1.06); }
-    }
-
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .wrap {
+    .app {
       width: min(100% - 2.5rem, var(--max));
-      margin-inline: auto;
+      margin: 0 auto;
+      padding: 0 0 4rem;
+      /* horizontal inset kept via width min(100% - 2.5rem) */
     }
 
-    /* ——— Nav ——— */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(18px) saturate(1.2);
-      -webkit-backdrop-filter: blur(18px) saturate(1.2);
-      background: rgba(245, 247, 251, 0.72);
-      border-bottom: 1px solid transparent;
-    }
+    .app.is-home { width: min(100% - 2.5rem, var(--max-home)); }
 
-    .nav-inner {
+    .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 0;
+      min-height: var(--topbar-h);
+      margin: 0 0 2rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      position: relative;
+      padding-bottom: 0.15rem;
     }
 
     .brand-mark {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.7rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      font-size: 0.95rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
     }
 
-    .brand-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 9px;
-      background:
-        linear-gradient(145deg, #7eb6e8 0%, #3b82c4 55%, #2563a8 100%);
-      box-shadow: 0 8px 20px rgba(59, 130, 196, 0.28);
-      position: relative;
-    }
-
-    .brand-dot::after {
+    .brand::after {
       content: "";
       position: absolute;
-      inset: 7px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.85);
+      left: calc(34px + 0.65rem);
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--brand-grad-from), var(--brand-grad-to));
+      opacity: 0.75;
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      font-size: 0.9rem;
-      color: var(--ink-soft);
+    a {
+      color: var(--accent);
     }
 
-    .nav-links a {
-      transition: color 0.25s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--ink);
-    }
-
-    .nav-cta {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.45rem 0.95rem;
-      border-radius: 999px;
-      background: var(--ink);
-      color: #fff !important;
-      font-size: 0.85rem;
-      font-weight: 550;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.25s ease, background 0.25s ease;
-    }
-
-    .nav-cta:hover {
-      transform: translateY(-1px);
-      background: #1e293b;
-    }
-
-    /* ——— Hero ——— */
-    .hero {
-      position: relative;
-      min-height: min(92vh, 900px);
-      display: flex;
-      align-items: center;
-      padding: 4.5rem 0 5.5rem;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 8% 5% auto;
-      height: 70%;
-      border-radius: 48% 52% 40% 60% / 45% 40% 60% 55%;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), transparent 55%),
-        linear-gradient(135deg, rgba(186, 230, 253, 0.55), rgba(226, 232, 240, 0.2) 60%, transparent);
-      filter: blur(2px);
-      z-index: 0;
-      animation: drift 22s ease-in-out infinite reverse;
-    }
-
-    .hero-plane {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        linear-gradient(180deg, transparent 55%, rgba(245, 247, 251, 0.85) 100%),
-        repeating-linear-gradient(
-          -12deg,
-          transparent 0,
-          transparent 38px,
-          rgba(148, 163, 184, 0.04) 38px,
-          rgba(148, 163, 184, 0.04) 39px
-        );
-      mask-image: linear-gradient(180deg, #000 35%, transparent 95%);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 820px;
-      animation: rise 0.9s ease both;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      margin: 0 0 1.4rem;
-      padding: 0.35rem 0.85rem 0.35rem 0.4rem;
-      border-radius: 999px;
-      background: var(--glass);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      box-shadow: var(--shadow-sm);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: var(--ink-soft);
-      font-size: 0.8rem;
-      letter-spacing: 0.02em;
-    }
-
-    .eyebrow-pulse {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 0 rgba(59, 130, 196, 0.45);
-      animation: pulse 2.4s ease-out infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(59, 130, 196, 0.45); }
-      70% { box-shadow: 0 0 0 10px rgba(59, 130, 196, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(59, 130, 196, 0); }
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(2.6rem, 6.2vw, 4.6rem);
-      font-weight: 650;
-      letter-spacing: -0.045em;
-      line-height: 1.05;
-      color: var(--ink);
-      max-width: 14ch;
-    }
-
-    .hero h1 span {
-      display: block;
-      background: linear-gradient(120deg, #0f172a 0%, #334155 40%, #3b82c4 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero-lead {
-      margin: 1.35rem 0 0;
-      max-width: 36rem;
-      font-size: clamp(1.05rem, 1.7vw, 1.25rem);
-      color: var(--ink-soft);
-      letter-spacing: -0.01em;
-      line-height: 1.55;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.85rem;
-      margin-top: 2.1rem;
+    a:hover {
+      color: var(--accent-hover);
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      min-height: 3.1rem;
-      padding: 0.85rem 1.45rem;
-      border-radius: 16px;
-      font-size: 0.98rem;
+      gap: 0.4rem;
+      min-height: 2.75rem;
+      padding: 0.6rem 1.15rem;
+      border-radius: var(--radius-control);
+      font-size: 0.92rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
-      border: 1px solid transparent;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
+      letter-spacing: -0.015em;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .btn-primary {
-      background: linear-gradient(180deg, #4b8fd0 0%, var(--accent-deep) 100%);
+      background: var(--accent);
       color: #fff;
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.25) inset,
-        0 14px 28px rgba(37, 99, 168, 0.28);
+      box-shadow: var(--shadow-btn);
     }
 
-    .btn-primary:hover {
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.3) inset,
-        0 18px 34px rgba(37, 99, 168, 0.34);
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--brand-grad-to) 65%, var(--accent));
+      outline-offset: 2px;
     }
 
     .btn-secondary {
-      background: var(--glass-strong);
-      border-color: rgba(15, 23, 42, 0.08);
+      background: var(--surface);
+      border: 1px solid var(--line);
       color: var(--ink);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 1px 1px rgba(26, 31, 44, 0.03);
     }
 
     .btn-secondary:hover {
-      border-color: rgba(59, 130, 196, 0.28);
-      box-shadow: var(--shadow-md);
+      border-color: #cfd5e2;
+      background: #fbfcfe;
     }
 
-    .btn-arrow {
-      font-size: 1.05em;
-      transition: transform 0.25s ease;
-    }
-
-    .btn:hover .btn-arrow {
-      transform: translateX(3px);
-    }
-
-    /* ——— Sections ——— */
-    section {
-      padding: 5.5rem 0;
-      position: relative;
-    }
-
-    .section-label {
-      margin: 0 0 0.85rem;
-      font-size: 0.78rem;
-      font-weight: 650;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent-deep);
-    }
-
-    .section-title {
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(1.85rem, 3.4vw, 2.65rem);
-      font-weight: 650;
-      letter-spacing: -0.035em;
-      line-height: 1.15;
-      max-width: 16ch;
-    }
-
-    .section-intro {
-      margin: 1rem 0 0;
-      max-width: 40rem;
-      color: var(--ink-soft);
-      font-size: 1.05rem;
-    }
-
-    /* ——— About ——— */
-    .about {
-      padding-top: 2rem;
-    }
-
-    .about-panel {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 2rem;
-      padding: 2.4rem;
-      border-radius: var(--radius-lg);
-      background: var(--glass);
-      border: 1px solid rgba(255, 255, 255, 0.75);
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(18px) saturate(1.15);
-      -webkit-backdrop-filter: blur(18px) saturate(1.15);
-      animation: rise 1s ease both;
-      animation-delay: 0.1s;
-    }
-
-    .about-copy p {
-      margin: 0 0 1rem;
-      color: var(--ink-soft);
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-
-    .about-copy p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-aside {
-      display: grid;
-      gap: 1rem;
-      align-content: start;
-    }
-
-    .stat {
-      padding: 1.25rem 1.35rem;
-      border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.75));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .stat strong {
-      display: block;
-      font-family: var(--font-display);
-      font-size: 1.55rem;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.25rem;
-    }
-
-    .stat span {
+    .btn-ghost {
       color: var(--ink-muted);
-      font-size: 0.92rem;
+      min-height: 2.2rem;
+      padding: 0.35rem 0.6rem;
+      font-weight: 500;
+      font-size: 0.86rem;
     }
 
-    /* ——— Capabilities ——— */
-    .capabilities-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 2rem;
-      margin-bottom: 2.4rem;
-    }
+    .btn-ghost:hover { color: var(--ink); }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.15rem;
-    }
-
-    .card {
-      position: relative;
-      padding: 1.55rem 1.5rem 1.65rem;
-      border-radius: var(--radius-md);
-      background: var(--glass);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      box-shadow: var(--shadow-md);
-      backdrop-filter: blur(16px) saturate(1.1);
-      -webkit-backdrop-filter: blur(16px) saturate(1.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto auto 0;
+    .btn-hero {
       width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+      min-height: 3.35rem;
+      font-size: 1.02rem;
+      border-radius: 13px;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: rgba(59, 130, 196, 0.22);
-    }
+    .panel { display: none; }
+    .panel.is-active { display: block; }
 
-    .card-icon {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 1.15rem;
-      border-radius: 14px;
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), var(--accent-soft));
-      border: 1px solid rgba(59, 130, 196, 0.12);
-      font-size: 1.35rem;
-      line-height: 1;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .card h3 {
-      margin: 0 0 0.45rem;
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 650;
-      letter-spacing: -0.025em;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--ink-muted);
-      font-size: 0.95rem;
-      line-height: 1.55;
-    }
-
-    /* ——— Benefits ——— */
-    .benefits {
-      padding-bottom: 6rem;
-    }
-
-    .benefits-shell {
-      position: relative;
-      padding: clamp(2rem, 4vw, 3rem);
-      border-radius: calc(var(--radius-lg) + 4px);
-      background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(239, 246, 255, 0.55));
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      overflow: hidden;
-    }
-
-    .benefits-shell::after {
-      content: "";
-      position: absolute;
-      width: 320px;
-      height: 320px;
-      right: -80px;
-      bottom: -100px;
-      border-radius: 50%;
-      background: rgba(147, 197, 253, 0.35);
-      filter: blur(40px);
-      pointer-events: none;
-    }
-
-    .benefits-head {
-      position: relative;
-      z-index: 1;
-      margin-bottom: 2rem;
-    }
-
-    .benefits-head .section-title {
-      max-width: 18ch;
-    }
-
-    .benefits-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    .benefit {
+    .home {
+      min-height: calc(100vh - 8rem);
       display: flex;
-      align-items: flex-start;
-      gap: 0.85rem;
-      padding: 1.15rem 1.2rem;
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.55);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      transition: background 0.25s ease, transform 0.25s ease;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2.75rem;
+      padding-bottom: 2rem;
     }
 
-    .benefit:hover {
-      background: rgba(255, 255, 255, 0.9);
-      transform: translateY(-2px);
+    .greeting {
+      margin: 0 0 0.85rem;
+      font-size: 0.95rem;
+      color: var(--ink-muted);
+      font-weight: 500;
     }
 
-    .benefit-check {
-      flex-shrink: 0;
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 9px;
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .benefit span {
-      padding-top: 0.2rem;
-      font-weight: 550;
-      letter-spacing: -0.015em;
+    .home-question {
+      margin: 0 0 1.6rem;
+      font-size: clamp(1.65rem, 4.5vw, 2rem);
+      font-weight: 750;
+      letter-spacing: -0.04em;
+      line-height: 1.18;
       color: var(--ink);
     }
 
-    /* ——— Footer ——— */
-    footer {
-      padding: 3.5rem 0 2.75rem;
-      border-top: 1px solid rgba(15, 23, 42, 0.06);
-      background: linear-gradient(180deg, transparent, rgba(226, 232, 240, 0.35));
+    .home-label {
+      margin: 0 0 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
     }
 
-    .footer-inner {
+    .last-project {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: 0.65rem;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.05rem 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
-    .footer-title {
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 650;
+    .last-project strong {
+      display: block;
+      font-size: 1.05rem;
       letter-spacing: -0.025em;
     }
 
-    .footer-tagline {
-      margin: 0;
+    .last-project span {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.86rem;
       color: var(--ink-muted);
+    }
+
+    .next-step-home p {
+      margin: 0;
       font-size: 0.98rem;
-      letter-spacing: 0.01em;
+      color: var(--ink-soft);
     }
 
-    .footer-meta {
-      margin-top: 1.5rem;
-      font-size: 0.8rem;
-      color: #94a3b8;
+    .next-step-home p + p {
+      margin-top: 0.25rem;
+      color: var(--ink);
+      font-weight: 550;
     }
 
-    /* ——— Responsive ——— */
-    @media (max-width: 960px) {
-      .grid,
-      .benefits-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .next-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
 
-      .about-panel {
-        grid-template-columns: 1fr;
-      }
+    .surface {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.55rem;
+      box-shadow: var(--shadow-soft);
+    }
 
-      .capabilities-head {
-        flex-direction: column;
-        align-items: start;
-      }
+    .page-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .page-lead {
+      margin: 0.45rem 0 0;
+      color: var(--ink-soft);
+      font-size: 0.94rem;
+      font-weight: 500;
+    }
+
+    .form-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .workspace-shell { padding: 0; border: none; background: transparent; box-shadow: none; }
+
+    .workspace-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .workspace-title-block { min-width: 0; flex: 1; }
+
+    .workspace-line {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .workspace-line strong {
+      font-weight: 750;
+      font-size: 1.28rem;
+      color: var(--lv-project);
+    }
+
+    .workspace-line span { font-weight: 600; }
+
+    .workspace-line .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-width: 7.8rem;
+      color: var(--ink-muted);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .workspace-line.is-project .label { color: var(--lv-project); }
+    .workspace-line.is-module .label { color: var(--lv-module); }
+    .workspace-line.is-task .label { color: var(--lv-task); }
+    .workspace-line.is-module > span { color: var(--lv-module); }
+    .workspace-line.is-task > span { color: var(--lv-task); }
+
+    .level-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: currentColor;
+    }
+
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 0.5rem;
+      margin: 0.85rem 0 0;
+      padding: 0.7rem 0.85rem;
+      background: var(--surface);
+      border-radius: 12px;
+      font-size: 0.88rem;
+    }
+
+    .crumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 650;
+      max-width: 100%;
+    }
+
+    .crumb-sep {
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    .crumb-project { color: var(--lv-project); }
+    .crumb-module { color: var(--lv-module); }
+    .crumb-task { color: var(--lv-task); }
+
+    .crumb-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: min(220px, 42vw);
+    }
+
+    .workspace-meta {
+      margin: 0.55rem 0 0;
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+    }
+
+    .workspace-head-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: flex-end;
+    }
+
+    .workspace-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 0 0 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 0 1.25rem;
+      padding-bottom: 0.15rem;
+      border-bottom: 1px solid var(--line);
+      scrollbar-width: thin;
+    }
+
+    .tab-btn {
+      flex: 0 0 auto;
+      min-height: 2.45rem;
+      padding: 0.5rem 0.95rem;
+      border-radius: 8px 8px 0 0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      white-space: nowrap;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .tab-btn:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .tab-btn.is-active,
+    .tab-btn[data-tab="overview"].is-active,
+    .tab-btn[data-tab="task"].is-active,
+    .tab-btn[data-tab="work"].is-active,
+    .tab-btn[data-tab="materials"].is-active,
+    .tab-btn[data-tab="team"].is-active,
+    .tab-btn[data-tab="rules"].is-active {
+      color: var(--accent);
+      background: var(--info-soft);
+      font-weight: 700;
+      box-shadow: inset 0 -2px 0 var(--accent);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; }
+
+    .section-heading.lv-rules { color: var(--lv-rules); }
+
+    .rules-sub {
+      margin: -0.35rem 0 1rem;
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+    }
+
+    .rules-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .rules-card {
+      padding: 0.85rem 0.95rem;
+      background: var(--surface);
+      border-radius: 12px;
+    }
+
+    .rules-card h4 {
+      margin: 0 0 0.45rem;
+      font-size: 0.95rem;
+      font-weight: 750;
+      color: var(--lv-rules);
+      letter-spacing: -0.015em;
+    }
+
+    .rules-card.allow h4 { color: var(--allow); }
+    .rules-card.warn h4 { color: var(--lv-task); }
+    .rules-card.forbid h4 { color: var(--forbid); }
+
+    .rules-card.allow { background: var(--allow-soft); }
+    .rules-card.warn { background: var(--lv-task-soft); }
+    .rules-card.forbid { background: var(--forbid-soft); }
+
+    .rules-card p,
+    .rules-card li {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+
+    .rules-card ul {
+      margin: 0;
+      padding-left: 1.05rem;
+    }
+
+    .rules-card li + li { margin-top: 0.28rem; }
+
+    .rules-note {
+      margin-top: 0.85rem;
+      padding: 0.8rem 0.9rem;
+      border-radius: 12px;
+      background: #f4f2ee;
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .review-card {
+      padding: 0.95rem 1rem;
+      border-radius: 12px;
+      background: var(--surface);
+      border-left: 3px solid var(--lv-task);
+    }
+
+    .review-status {
+      display: inline-flex;
+      margin: 0.35rem 0 0.75rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: var(--lv-task-soft);
+      color: var(--lv-task);
+    }
+
+    .review-status.is-notes {
+      background: var(--forbid-soft);
+      color: var(--forbid);
+    }
+
+    .review-status.is-accepted {
+      background: var(--allow-soft);
+      color: var(--allow);
+    }
+
+    .check-list {
+      margin: 0 0 0.85rem;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .check-list label {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      cursor: pointer;
+    }
+
+    .check-list input {
+      margin-top: 0.2rem;
+    }
+
+    .gate-card {
+      width: min(100%, 520px);
+    }
+
+    .gate-meta {
+      display: grid;
+      gap: 0.55rem;
+      margin: 0.75rem 0 1rem;
+    }
+
+    .gate-meta div {
+      padding: 0.65rem 0.75rem;
+      border-radius: 10px;
+      background: #f7f5f1;
+    }
+
+    .gate-meta strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .gate-meta p,
+    .gate-meta li {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+
+    .gate-meta ul {
+      margin: 0;
+      padding-left: 1rem;
+    }
+
+    .gate-meta.allow { background: var(--allow-soft); }
+    .gate-meta.forbid { background: var(--forbid-soft); }
+
+    .gate-checks {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .gate-checks label {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      margin: 0.15rem 0 0.55rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .status-pill.active {
+      background: var(--allow-soft);
+      color: var(--allow);
+    }
+
+    .status-pill.consult {
+      background: var(--lv-task-soft);
+      color: var(--lv-task);
+    }
+
+    .status-pill.idle {
+      background: var(--lv-team-soft);
+      color: var(--lv-team);
+    }
+
+    .status-reason {
+      margin: 0.35rem 0 0;
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+    }
+
+    .team-card.is-idle { opacity: 0.72; }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .overview-item {
+      padding: 1rem 1.05rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .overview-item.wide { grid-column: 1 / -1; }
+
+    .overview-item .field-label,
+    .callout .field-label,
+    .info-card .field-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .overview-item p,
+    .callout p,
+    .info-card p {
+      margin: 0;
+      font-size: 0.98rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .section-heading {
+      margin: 0 0 1rem;
+      font-size: clamp(1.45rem, 2.2vw, 1.7rem);
+      font-weight: 750;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      color: var(--ink);
+    }
+
+    .section-heading.lv-project { color: var(--lv-project); }
+    .section-heading.lv-task { color: var(--lv-task); }
+    .section-heading.lv-work { color: var(--lv-work); }
+    .section-heading.lv-materials { color: var(--lv-materials); }
+    .section-heading.lv-team { color: var(--lv-team); }
+
+    .field-label .ico {
+      margin-right: 0.28rem;
+    }
+
+    .overview-item.is-goal {
+      border-left: 3px solid var(--lv-project);
+    }
+
+    .overview-item.is-module {
+      border-left: 3px solid var(--lv-module);
+    }
+
+    .overview-item.is-task {
+      border-left: 3px solid var(--lv-task);
+    }
+
+    .cli-insight {
+      margin-top: 1.25rem;
+      padding: 1.15rem 1.2rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--allow);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .cli-insight.is-invalid {
+      border-left-color: var(--forbid);
+      background: var(--forbid-soft);
+      box-shadow: inset 0 0 0 1px rgba(138, 79, 61, 0.22);
+    }
+
+    .cli-insight-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cli-insight-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
+    .cli-insight-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .cli-insight.is-invalid .cli-insight-title { color: var(--forbid); }
+
+    .cli-insight-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.45rem;
+      padding: 0.12rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      background: var(--lv-project-soft);
+      color: var(--lv-project);
+    }
+
+    .cli-insight-badge.is-invalid {
+      background: #edd9d2;
+      color: var(--forbid);
+    }
+
+    .cli-insight-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .cli-insight-note {
+      margin: 0 0 0.55rem;
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .cli-insight-source {
+      margin: 0 0 0.85rem;
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .cli-insight-source strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .cli-insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .cli-insight-item {
+      padding: 0.65rem 0.75rem;
+      background: var(--bg);
+      border-radius: 10px;
+      min-width: 0;
+    }
+
+    .cli-insight-item.wide { grid-column: 1 / -1; }
+
+    .cli-insight-item .field-label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .cli-insight-item p,
+    .cli-insight-item li {
+      margin: 0;
+      font-size: 0.94rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .cli-insight-code {
+      display: inline-block;
+      margin-left: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .cli-insight-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .cli-insight-list li {
+      padding-left: 0.9rem;
+      position: relative;
+    }
+
+    .cli-insight-list li::before {
+      content: "·";
+      position: absolute;
+      left: 0.15rem;
+      color: var(--ink-muted);
+    }
+
+    .cli-insight-empty {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .cli-insight-error {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--forbid);
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .cli-insight-error-title {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 1rem;
+      font-weight: 750;
     }
 
     @media (max-width: 640px) {
-      .wrap {
-        width: min(100% - 1.5rem, var(--max));
-      }
-
-      .nav-links a:not(.nav-cta) {
-        display: none;
-      }
-
-      .hero {
-        min-height: auto;
-        padding: 3.25rem 0 4rem;
-      }
-
-      .hero h1 {
-        max-width: none;
-      }
-
-      .about-panel {
-        padding: 1.5rem;
-      }
-
-      .grid,
-      .benefits-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 4rem 0;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .hero-actions {
-        width: 100%;
-      }
+      .cli-insight-grid { grid-template-columns: 1fr; }
+      .cli-insight-item.wide { grid-column: auto; }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition: none !important;
+    .task-stack {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .callout-gain {
+      background: var(--gain-bg);
+    }
+
+    .callout-gain .field-label,
+    .callout-gain p { color: var(--gain-ink); }
+
+    .callout-restrict {
+      background: #f7f1e6;
+    }
+
+    .callout-risk {
+      background: var(--warn-bg);
+    }
+
+    .callout-risk .field-label {
+      color: var(--warn);
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      font-weight: 750;
+    }
+
+    .risk-list,
+    .restrict-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .restrict-list li {
+      color: var(--warn);
+      font-size: 0.94rem;
+      padding-left: 1.1rem;
+      position: relative;
+    }
+
+    .restrict-list li::before {
+      content: "✕";
+      position: absolute;
+      left: 0;
+      top: 0.12rem;
+      font-size: 0.75rem;
+    }
+
+    .risk-list li {
+      color: var(--warn);
+      font-size: 0.95rem;
+      padding: 0.45rem 0.65rem;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 8px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+    }
+
+    .team-card {
+      padding: 0.85rem 0.95rem;
+      background: var(--surface);
+      border-radius: 12px;
+      border-left: 3px solid var(--lv-team);
+    }
+
+    .team-card h4 {
+      margin: 0 0 0.7rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .team-card .field-label { margin-top: 0.55rem; }
+
+    .form-grid { display: grid; gap: 0.95rem; }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .field .hint {
+      display: block;
+      margin: 0.1rem 0 0.35rem;
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      font-weight: 400;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #faf9f7;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: #8aa894;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(30, 79, 58, 0.1);
+    }
+
+    .field.is-invalid input,
+    .field.is-invalid textarea { border-color: #b85c5c; }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.2rem;
+    }
+
+    .form-error {
+      display: none;
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 10px;
+      background: #f7ecec;
+      color: #8a3a3a;
+      font-size: 0.86rem;
+    }
+
+    .form-error.is-visible { display: block; }
+
+    .templates {
+      margin-bottom: 1.35rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+      margin-top: 0.7rem;
+    }
+
+    .tpl-btn {
+      min-height: 2.5rem;
+      padding: 0.45rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #faf9f7;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .tpl-btn:hover,
+    .tpl-btn.is-active {
+      border-color: #a8c0b2;
+      background: #eef5f0;
+      color: var(--accent);
+    }
+
+    .tpl-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.7rem;
+    }
+
+    .section-note {
+      margin: 0 0 0.85rem;
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+    }
+
+    .tool-picks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-pick {
+      min-height: 2.2rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .tool-pick.is-active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .tool-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-card {
+      padding: 1rem 1.05rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .info-card.wide { grid-column: 1 / -1; }
+
+    .assignment-title {
+      margin: 0 0 0.65rem;
+      font-size: 1.25rem;
+      font-weight: 780;
+      letter-spacing: -0.02em;
+      color: var(--lv-work);
+    }
+
+    .work-editor {
+      margin: 0;
+      padding: 1rem 1.05rem 1.15rem;
+      border-radius: 12px;
+      background: #fbfaf8;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      min-height: 320px;
+      max-height: min(68vh, 640px);
+      overflow: auto;
+      border-left: 3px solid var(--lv-work);
+      box-shadow: inset 0 0 0 1px rgba(90, 61, 85, 0.08);
+    }
+
+    .work-intro {
+      margin: 0 0 0.85rem;
+      font-weight: 650;
+      color: var(--ink);
+    }
+
+    .work-sec {
+      margin: 0 0 0.85rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .work-sec:last-child { margin-bottom: 0; }
+
+    .work-sec-title {
+      display: block;
+      margin: 0 0 0.45rem;
+      font-size: 0.72rem;
+      font-weight: 780;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .work-sec[data-sec="project"] .work-sec-title { color: var(--lv-project); }
+    .work-sec[data-sec="module"] .work-sec-title { color: var(--lv-module); }
+    .work-sec[data-sec="task"] .work-sec-title { color: var(--lv-task); }
+    .work-sec[data-sec="goal"] .work-sec-title { color: var(--lv-task); }
+    .work-sec[data-sec="ready"] .work-sec-title { color: var(--lv-project); }
+    .work-sec[data-sec="todo"] .work-sec-title { color: var(--lv-task); }
+    .work-sec[data-sec="limits"] .work-sec-title { color: var(--warn); }
+    .work-sec[data-sec="result"] .work-sec-title { color: var(--lv-work); }
+    .work-sec[data-sec="place"] .work-sec-title { color: var(--lv-module); }
+    .work-sec[data-sec="gate"] .work-sec-title { color: var(--lv-rules); }
+    .work-sec[data-sec="other"] .work-sec-title { color: var(--lv-team); }
+
+    .work-sec-body {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--ink-soft);
+    }
+
+    .material-example {
+      opacity: 0.78;
+    }
+
+    .material-example .btn { display: none; }
+
+    .materials-hint {
+      margin: 0 0 0.75rem;
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+    }
+
+    .role-block {
+      margin-top: 0.7rem;
+    }
+
+    .role-block:first-of-type { margin-top: 0.15rem; }
+
+    .role-block .field-label {
+      margin-bottom: 0.35rem;
+    }
+
+    .role-list {
+      margin: 0;
+      padding: 0 0 0 1.05rem;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .role-list li + li { margin-top: 0.25rem; }
+
+    .role-status {
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .copy-toast {
+      font-size: 0.8rem;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .copy-toast.is-visible { opacity: 1; }
+
+    .pass-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+    }
+
+    .pass-item {
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #faf9f7;
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+    }
+
+    .pass-item em {
+      display: block;
+      font-style: normal;
+      font-size: 0.72rem;
+      font-weight: 650;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .materials-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding-left: 0.1rem;
+    }
+
+    .file-btn { position: relative; overflow: hidden; }
+
+    .file-btn input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .materials-list { display: grid; gap: 0.4rem; }
+
+    .material-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--lv-materials);
+      border-radius: 10px;
+      background: #faf9f7;
+    }
+
+    .material-row strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .material-row span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      margin-top: 0.1rem;
+    }
+
+    .empty-soft {
+      margin: 0;
+      color: var(--ink-muted);
+      font-size: 0.88rem;
+    }
+
+    .plan-inline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+    }
+
+    .plan-inline li:not(:last-child)::after {
+      content: "→";
+      margin-left: 0.35rem;
+      color: var(--ink-muted);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(26, 26, 24, 0.32);
+    }
+
+    .modal.is-open { display: flex; }
+
+    .modal-card {
+      width: min(100%, 480px);
+      max-height: min(88vh, 760px);
+      overflow: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.3rem;
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .modal-top h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .modal-card > p {
+      margin: 0 0 0.65rem;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+
+    .modal-details {
+      display: grid;
+      gap: 0.65rem;
+      margin: 0.85rem 0 1rem;
+    }
+
+    .modal-details div strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      font-size: 0.74rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .modal-details div p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.45rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 720px) {
+      .templates-grid { grid-template-columns: repeat(2, 1fr); }
+      .overview-grid,
+      .tool-meta,
+      .team-grid { grid-template-columns: 1fr; }
+      .overview-item.wide { grid-column: auto; }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        width: min(100% - 1.5rem, var(--max));
+        padding-top: 1.1rem;
       }
+
+      .app.is-home { width: min(100% - 1.5rem, var(--max-home)); }
+
+      .last-project {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .last-project .btn,
+      .next-actions .btn-primary { width: 100%; }
+
+      .form-head,
+      .workspace-head { flex-direction: column; }
+
+      .workspace-head-actions { justify-content: stretch; width: 100%; }
+      .workspace-head-actions .btn { flex: 1; }
+      .workspace-line .label { min-width: 5.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="atmosphere" aria-hidden="true">
-      <div class="orb orb-a"></div>
-      <div class="orb orb-b"></div>
-      <div class="orb orb-c"></div>
-    </div>
-
-    <header class="nav">
-      <div class="wrap nav-inner">
-        <a class="brand-mark" href="#top" aria-label="AI POS">
-          <span class="brand-dot" aria-hidden="true"></span>
-          AI POS
-        </a>
-        <nav class="nav-links" aria-label="Основная навигация">
-          <a href="#about">О системе</a>
-          <a href="#capabilities">Возможности</a>
-          <a href="#benefits">Преимущества</a>
-          <a class="nav-cta" href="https://github.com/venera-tropnikova/AI_Project_Operating_System" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </nav>
+  <div class="app is-home" id="appShell">
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="34" height="34" alt="" />
+        AI POS
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero">
-        <div class="hero-plane" aria-hidden="true"></div>
-        <div class="wrap hero-content">
-          <p class="eyebrow">
-            <span class="eyebrow-pulse" aria-hidden="true"></span>
-            Operating system for AI work
-          </p>
-          <h1>
-            AI Project
-            <span>Operating System</span>
-          </h1>
-          <p class="hero-lead">
-            Единая операционная система для управления AI-проектами, знаниями и правилами работы.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#about">
-              Explore
-              <span class="btn-arrow" aria-hidden="true">→</span>
-            </a>
-            <a class="btn btn-secondary" href="https://github.com/venera-tropnikova/AI_Project_Operating_System" target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-          </div>
+    <section class="panel is-active" id="panelList" aria-label="Главный экран">
+      <div class="home">
+        <div>
+          <p class="greeting" id="greetingTitle">Добрый вечер, Венера</p>
+          <h1 class="home-question">Что будем создавать сегодня?</h1>
+          <button type="button" class="btn btn-primary btn-hero" id="btnNewProject">
+            <span aria-hidden="true">+</span> Новый проект
+          </button>
         </div>
-      </section>
 
-      <section class="about" id="about">
-        <div class="wrap">
-          <div class="about-panel">
-            <div class="about-copy">
-              <p class="section-label">Что такое AI POS</p>
-              <h2 class="section-title">Фундамент для людей и ИИ</h2>
-              <p>
-                AI Project Operating System — это общий слой правил, знаний и процессов, на котором строятся AI-проекты.
-                Он фиксирует, как принимаются решения, как оформляется работа и как сохраняется контекст между сессиями.
-              </p>
-              <p>
-                Вместо разрозненных чатов и локальных договорённостей появляется единая операционная модель:
-                от Конституции и ролей до стандартов разработки и архива решений.
-              </p>
-              <p>
-                AI POS помогает создавать проекты быстрее, передавать знания между людьми и моделями без потерь
-                и масштабировать практику, а не только код.
-              </p>
-              <p>
-                Один фундамент — много проектов. Build once. Reuse forever.
-              </p>
-            </div>
-            <aside class="about-aside" aria-label="Ключевые свойства">
-              <div class="stat">
-                <strong>1 foundation</strong>
-                <span>Общий каркас для всех AI-инициатив</span>
-              </div>
-              <div class="stat">
-                <strong>People + AI</strong>
-                <span>Одинаковые правила для команд и моделей</span>
-              </div>
-              <div class="stat">
-                <strong>Durable knowledge</strong>
-                <span>Знания живут дольше одной сессии чата</span>
-              </div>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <section id="capabilities">
-        <div class="wrap">
-          <div class="capabilities-head">
+        <div>
+          <p class="home-label">Последний проект</p>
+          <div class="last-project">
             <div>
-              <p class="section-label">Capabilities</p>
-              <h2 class="section-title">Шесть опор системы</h2>
-              <p class="section-intro">
-                Компактный набор модулей, которые покрывают управление, стандарты, процессы и память проекта.
-              </p>
+              <strong id="continueName">Мой день</strong>
+              <span>Продолжить с того места, где остановились</span>
             </div>
-          </div>
-
-          <div class="grid">
-            <article class="card">
-              <div class="card-icon" aria-hidden="true">🏛</div>
-              <h3>Governance</h3>
-              <p>Правила, Конституция, Этика.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-icon" aria-hidden="true">👥</div>
-              <h3>Organization</h3>
-              <p>Роли, Глоссарий, Onboarding.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-icon" aria-hidden="true">📐</div>
-              <h3>Standards</h3>
-              <p>Единые стандарты разработки.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-icon" aria-hidden="true">⚙</div>
-              <h3>Procedures</h3>
-              <p>Рабочие процессы.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-icon" aria-hidden="true">📁</div>
-              <h3>Projects</h3>
-              <p>Все проекты используют единый фундамент.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-icon" aria-hidden="true">🗂</div>
-              <h3>Archive</h3>
-              <p>История изменений и решений.</p>
-            </article>
+            <button type="button" class="btn btn-secondary" id="btnContinue">Продолжить</button>
           </div>
         </div>
-      </section>
 
-      <section class="benefits" id="benefits">
-        <div class="wrap">
-          <div class="benefits-shell">
-            <div class="benefits-head">
-              <p class="section-label">Why AI POS</p>
-              <h2 class="section-title">Преимущества, которые остаются</h2>
-              <p class="section-intro">
-                Система снижает хаос вокруг AI-работы и делает результат воспроизводимым.
-              </p>
-            </div>
-
-            <div class="benefits-grid">
-              <div class="benefit">
-                <div class="benefit-check" aria-hidden="true">✔</div>
-                <span>единые правила</span>
-              </div>
-              <div class="benefit">
-                <div class="benefit-check" aria-hidden="true">✔</div>
-                <span>независимость от одной нейросети</span>
-              </div>
-              <div class="benefit">
-                <div class="benefit-check" aria-hidden="true">✔</div>
-                <span>сохранение знаний</span>
-              </div>
-              <div class="benefit">
-                <div class="benefit-check" aria-hidden="true">✔</div>
-                <span>масштабируемость</span>
-              </div>
-              <div class="benefit">
-                <div class="benefit-check" aria-hidden="true">✔</div>
-                <span>прозрачность решений</span>
-              </div>
-              <div class="benefit">
-                <div class="benefit-check" aria-hidden="true">✔</div>
-                <span>развитие проекта</span>
-              </div>
-            </div>
+        <div class="next-step-home">
+          <p class="home-label">Следующий лучший шаг</p>
+          <p id="nextLine1">Модуль «Историческая справка» почти готов.</p>
+          <p id="nextLine2">Рекомендуем завершить механику раскрытия карточки на трёх датах.</p>
+          <div class="next-actions">
+            <button type="button" class="btn btn-primary" id="btnStartNext">Начать</button>
+            <button type="button" class="btn btn-ghost" id="btnStepDetails">Подробнее</button>
           </div>
         </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="wrap footer-inner">
-        <p class="footer-title">AI Project Operating System (AI POS)</p>
-        <p class="footer-tagline">Build once. Reuse forever.</p>
-        <p class="footer-meta">© 2026 AI POS</p>
       </div>
-    </footer>
+    </section>
+
+    <section class="panel" id="panelForm" aria-label="Создание проекта">
+      <div class="surface">
+        <div class="form-head">
+          <div>
+            <h1 class="page-title">Новый проект</h1>
+            <p class="page-lead">Опишите весь продукт. Модули и текущие задачи добавляются уже внутри проекта.</p>
+          </div>
+          <button type="button" class="btn btn-ghost" id="btnCancelForm">Назад</button>
+        </div>
+
+        <div class="templates">
+          <p class="home-label">Создать из шаблона</p>
+          <div class="templates-grid" id="templatesGrid"></div>
+          <div class="tpl-actions">
+            <button type="button" class="btn btn-ghost" id="btnClearTemplate">Без шаблона</button>
+            <button type="button" class="btn btn-ghost" id="btnSaveTemplate">Сохранить как свой шаблон</button>
+          </div>
+        </div>
+
+        <form id="projectForm" novalidate>
+          <input type="hidden" id="fieldTemplate" value="" />
+          <div class="form-grid">
+            <div class="field" data-field="name">
+              <label for="fieldName">Название всего проекта</label>
+              <input id="fieldName" name="name" type="text" maxlength="120" required placeholder="Например: Мой день" />
+            </div>
+            <div class="field" data-field="idea">
+              <label for="fieldIdea">Главная идея продукта</label>
+              <textarea id="fieldIdea" name="idea" required placeholder="Какой продукт создаём целиком"></textarea>
+            </div>
+            <div class="field" data-field="result">
+              <label for="fieldResult">Итоговый результат всего проекта</label>
+              <textarea id="fieldResult" name="result" required placeholder="Что должно получиться, когда весь проект готов"></textarea>
+            </div>
+            <div class="field" data-field="audience">
+              <label for="fieldAudience">Для кого создаётся</label>
+              <textarea id="fieldAudience" name="audience" required></textarea>
+            </div>
+            <div class="field" data-field="assets">
+              <label for="fieldAssets">Что уже существует во всём проекте</label>
+              <textarea id="fieldAssets" name="assets" placeholder="Готовые модули, экраны, код, заметки"></textarea>
+            </div>
+            <div class="field" data-field="constraints">
+              <label for="fieldConstraints">Общие ограничения проекта</label>
+              <textarea id="fieldConstraints" name="constraints"></textarea>
+            </div>
+            <div class="field" data-field="workFolder">
+              <label for="fieldWorkFolder">Рабочая папка / репозиторий</label>
+              <span class="hint">Куда ИИ должен вносить изменения</span>
+              <input id="fieldWorkFolder" name="workFolder" type="text" placeholder="D:\путь\к\проекту" />
+            </div>
+          </div>
+
+          <div class="form-error" id="formError" role="alert">Заполните обязательные поля проекта: название, идея, результат и аудитория.</div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Сформировать проект</button>
+            <button type="button" class="btn btn-secondary" id="btnCancelFormAlt">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel" id="panelWorkspace" aria-label="Проект">
+      <div class="workspace-shell">
+        <div class="workspace-head">
+          <div class="workspace-title-block">
+            <p class="workspace-line is-project"><span class="label"><span class="level-dot" aria-hidden="true"></span>Проект</span> <strong id="headProjectName">—</strong></p>
+            <p class="workspace-line is-module"><span class="label"><span class="level-dot" aria-hidden="true"></span>Модуль</span> <span id="headModuleName">—</span></p>
+            <p class="workspace-line is-task"><span class="label"><span class="level-dot" aria-hidden="true"></span>Текущая задача</span> <span id="headTaskName">—</span></p>
+            <nav class="crumbs" id="crumbs" aria-label="Иерархия проекта">
+              <span class="crumb crumb-project"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbProject">—</span></span>
+              <span class="crumb-sep" aria-hidden="true">→</span>
+              <span class="crumb crumb-module"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbModule">—</span></span>
+              <span class="crumb-sep" aria-hidden="true">→</span>
+              <span class="crumb crumb-task"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbTask">—</span></span>
+            </nav>
+            <p class="workspace-meta" id="workspaceMeta"></p>
+          </div>
+          <div class="workspace-head-actions">
+            <button type="button" class="btn btn-ghost" id="btnBackToList">На главную</button>
+            <button type="button" class="btn btn-secondary" id="btnNewFromWorkspace">Новый проект</button>
+          </div>
+        </div>
+
+        <div class="workspace-actions">
+          <button type="button" class="btn btn-secondary" id="btnAddModule">Добавить модуль</button>
+          <button type="button" class="btn btn-secondary" id="btnAddTask">Добавить текущую задачу</button>
+        </div>
+
+        <nav class="tabs" id="workspaceTabs" aria-label="Разделы проекта">
+          <button type="button" class="tab-btn is-active" data-tab="overview">Обзор</button>
+          <button type="button" class="tab-btn" data-tab="rules">Правила и контроль</button>
+          <button type="button" class="tab-btn" data-tab="task">Текущая задача</button>
+          <button type="button" class="tab-btn" data-tab="work">Рабочее задание</button>
+          <button type="button" class="tab-btn" data-tab="materials">Материалы</button>
+          <button type="button" class="tab-btn" data-tab="team">AI-специалисты</button>
+        </nav>
+
+        <div class="tab-panel is-active" id="tab-overview" data-tab-panel="overview">
+          <h3 class="section-heading lv-project">Обзор</h3>
+          <div class="overview-grid">
+            <div class="overview-item is-goal"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель проекта</span><p id="ovGoal">—</p></div>
+            <div class="overview-item is-module"><span class="field-label">Текущий модуль</span><p id="ovModule">—</p></div>
+            <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">🚧</span>Текущая работа</span><p id="ovStage">—</p></div>
+            <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что готово</span><p id="ovReady">—</p></div>
+            <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">⚠</span>Требует внимания</span><p id="ovAttention">—</p></div>
+            <div class="overview-item wide is-task"><span class="field-label"><span class="ico" aria-hidden="true">➡</span>Следующий шаг</span><p id="ovNext">—</p></div>
+          </div>
+
+          <section class="cli-insight" id="cliInsight" aria-label="Анализ проекта из CLI, отдельно от поля «Текущая работа» в обзоре">
+            <div class="cli-insight-head">
+              <div class="cli-insight-title-row">
+                <h4 class="cli-insight-title">Анализ проекта</h4>
+                <span class="cli-insight-badge" id="cliInsightBadge" hidden>Не загружен</span>
+              </div>
+              <div class="cli-insight-actions">
+                <button type="button" class="btn btn-secondary" id="btnCliInsightRefresh">🔄 Обновить анализ</button>
+              </div>
+            </div>
+            <p class="cli-insight-note" id="cliInsightNote">
+              Отдельно от поля «Текущая работа» выше. Нажмите «Обновить анализ» — AI POS сам пересчитает состояние по рабочей папке проекта.
+            </p>
+            <div id="cliInsightBody">
+              <p class="cli-insight-empty" id="cliInsightEmpty">Анализ ещё не обновлялся.</p>
+            </div>
+          </section>
+        </div>
+
+        <div class="tab-panel" id="tab-rules" data-tab-panel="rules">
+          <h3 class="section-heading lv-rules">Правила и контроль</h3>
+          <p class="rules-sub">Правила управления проектом</p>
+          <div class="rules-grid" id="rulesGrid"></div>
+          <p class="rules-note" id="rulesHonestNote">
+            Сейчас AI POS контролирует подготовку задания и проверку результата. Автоматическая сверка фактических изменений с Git diff будет добавлена после подключения локальной интеграции.
+          </p>
+        </div>
+
+        <div class="tab-panel" id="tab-task" data-tab-panel="task">
+          <h3 class="section-heading lv-task">Текущая задача</h3>
+          <p class="section-note" id="taskEmptyNote" hidden>Текущая задача ещё не добавлена. Задача относится к модулю и не заменяет проект.</p>
+          <div class="task-stack" id="taskStack">
+            <div class="callout"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель задачи</span><p id="taskGoalText">—</p></div>
+            <div class="callout"><span class="field-label"><span class="ico" aria-hidden="true">💡</span>Зачем выполнять сейчас</span><p id="taskWhyText">—</p></div>
+            <div class="callout callout-gain"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что получим</span><p id="taskResultText">—</p></div>
+            <div class="callout"><span class="field-label">Что можно менять</span><p id="taskCanText">—</p></div>
+            <div class="callout callout-restrict">
+              <span class="field-label"><span class="ico" aria-hidden="true">🚫</span>Что нельзя менять</span>
+              <ul class="restrict-list" id="dontList"></ul>
+            </div>
+            <div class="callout callout-risk">
+              <span class="field-label"><span class="ico" aria-hidden="true">⚠️</span>Риски</span>
+              <ul class="risk-list" id="riskList"></ul>
+            </div>
+            <div class="callout"><span class="field-label">Альтернатива</span><p id="taskAltText">—</p></div>
+            <div class="review-card" id="reviewCard">
+              <span class="field-label">Проверка результата</span>
+              <div class="review-status" id="reviewStatus">Не проверено</div>
+              <ul class="check-list" id="reviewChecks"></ul>
+              <div class="field">
+                <label for="reviewNotes">Замечания после проверки</label>
+                <textarea id="reviewNotes" rows="3" placeholder="Что нужно исправить или уточнить"></textarea>
+              </div>
+              <div class="section-actions" style="margin-top:0.75rem">
+                <button type="button" class="btn btn-secondary" id="btnReviewNotes">Есть замечания</button>
+                <button type="button" class="btn btn-primary" id="btnReviewAccept">Принять результат</button>
+                <button type="button" class="btn btn-ghost" id="btnNextTask" disabled title="Доступно после статуса «Принято»">К следующей задаче</button>
+              </div>
+              <p class="section-note" id="reviewHint" style="margin-top:0.65rem">Переход к следующей задаче доступен только после статуса «Принято».</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-work" data-tab-panel="work">
+          <h3 class="section-heading lv-work"><span class="ico" aria-hidden="true">📋</span> Рабочее задание</h3>
+          <p class="section-note">Выберите инструмент — ниже появятся рекомендации и готовый контекст для ИИ. Перед копированием откроется контроль перед передачей задачи.</p>
+          <div class="tool-picks" id="toolPicks"></div>
+          <div class="tool-meta">
+            <div class="info-card"><span class="field-label"><span class="ico" aria-hidden="true">🤖</span>Зачем этот инструмент</span><p id="toolWhy">—</p></div>
+            <div class="info-card"><span class="field-label">Когда использовать</span><p id="toolWhen">—</p></div>
+            <div class="info-card"><span class="field-label">Когда не использовать</span><p id="toolAvoid">—</p></div>
+            <div class="info-card"><span class="field-label">Рабочая папка / репозиторий</span><p id="toolFolder">—</p></div>
+          </div>
+          <h4 class="assignment-title" id="assignmentTitle"><span class="ico" aria-hidden="true">📋</span> Рабочее задание</h4>
+          <div class="work-editor" id="workBox" aria-label="Рабочее задание"></div>
+          <div class="section-actions">
+            <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
+            <span class="copy-toast" id="copyToast" aria-live="polite">Скопировано</span>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-materials" data-tab-panel="materials">
+          <h3 class="section-heading lv-materials"><span class="ico" aria-hidden="true">📂</span> Материалы</h3>
+          <p class="section-note">Вложения сохраняются в проекте и могут входить в контекст рабочего задания.</p>
+          <div class="materials-bar">
+            <label class="btn btn-secondary file-btn">
+              Прикрепить файлы
+              <input type="file" id="materialsInput" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.doc,.docx,.txt,.md,.markdown,.json,.zip,.rar,.7z,.fig,.sketch,.xd,image/*,text/*,application/pdf,application/json" />
+            </label>
+          </div>
+          <div class="materials-list" id="materialsList"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-team" data-tab-panel="team">
+          <h3 class="section-heading lv-team">AI-специалисты проекта</h3>
+          <p class="section-note">Роли ИИ, которые помогают планировать, создавать, проверять и документировать проект.</p>
+          <div class="team-grid" id="teamList"></div>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <div class="modal" id="stepModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-card">
+      <div class="modal-top"><h3>Обоснование рекомендации</h3></div>
+      <p id="stepModalLead"></p>
+      <div class="modal-details">
+        <div><strong>Проект</strong><p id="stepModalProject"></p></div>
+        <div><strong>Модуль</strong><p id="stepModalModule"></p></div>
+        <div><strong>Текущая задача</strong><p id="stepModalTask"></p></div>
+        <div><strong>Цель задачи</strong><p id="stepModalGoal"></p></div>
+        <div><strong>Почему именно сейчас</strong><p id="stepModalWhy"></p></div>
+        <div><strong>Ожидаемый эффект</strong><p id="stepModalEffect"></p></div>
+        <div><strong>Риски</strong><p id="stepModalRisk"></p></div>
+        <div><strong>Альтернативы</strong><p id="stepModalAlt"></p></div>
+        <div><strong>Уровень уверенности системы</strong><p id="stepModalConfidence"></p></div>
+        <div><strong>Основание</strong><p id="stepModalBasis"></p></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="btnCloseStep">Закрыть</button>
+        <button type="button" class="btn btn-primary" id="btnStartFromModal">Начать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="moduleModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-card">
+      <div class="modal-top"><h3>Добавить модуль</h3></div>
+      <p>Модуль — функциональная часть проекта, не весь продукт.</p>
+      <form id="moduleForm">
+        <div class="form-grid">
+          <div class="field"><label for="modName">Название модуля</label><input id="modName" required /></div>
+          <div class="field"><label for="modPurpose">Назначение</label><textarea id="modPurpose" required></textarea></div>
+          <div class="field"><label for="modStatus">Статус</label><input id="modStatus" value="В работе" /></div>
+          <div class="field"><label for="modReady">Что уже готово</label><textarea id="modReady"></textarea></div>
+          <div class="field"><label for="modRemaining">Что осталось сделать</label><textarea id="modRemaining"></textarea></div>
+          <div class="field"><label for="modConstraints">Ограничения модуля</label><textarea id="modConstraints"></textarea></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="btnCancelModule">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить модуль</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="taskModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-card">
+      <div class="modal-top"><h3>Добавить текущую задачу</h3></div>
+      <p>Задача относится к выбранному модулю и не заменяет проект.</p>
+      <form id="taskForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="taskModule">Модуль</label>
+            <select id="taskModule" required></select>
+          </div>
+          <div class="field"><label for="taskName">Название задачи</label><input id="taskName" required /></div>
+          <div class="field"><label for="taskGoal">Цель</label><textarea id="taskGoal" required></textarea></div>
+          <div class="field"><label for="taskWhy">Зачем выполнять сейчас</label><textarea id="taskWhy" required></textarea></div>
+          <div class="field"><label for="taskResult">Ожидаемый результат</label><textarea id="taskResult" required></textarea></div>
+          <div class="field"><label for="taskCan">Что можно менять</label><textarea id="taskCan"></textarea></div>
+          <div class="field"><label for="taskCannot">Что нельзя менять</label><textarea id="taskCannot" placeholder="Каждый пункт с новой строки"></textarea></div>
+          <div class="field">
+            <label for="taskTool">Рекомендуемый AI-инструмент</label>
+            <select id="taskTool"></select>
+          </div>
+          <div class="field"><label for="taskFiles">Необходимые файлы и референсы</label><textarea id="taskFiles"></textarea></div>
+          <div class="field"><label for="taskSub">Подзадача (необязательно)</label><input id="taskSub" placeholder="Конкретное небольшое действие" /></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="btnCancelTask">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить задачу</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="gateModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-card gate-card">
+      <div class="modal-top"><h3>Передать задачу ИИ</h3></div>
+      <p>Контроль перед передачей задачи. Подтвердите границы, затем скопируйте задание.</p>
+      <div class="gate-meta">
+        <div><strong>Проект</strong><p id="gateProject">—</p></div>
+        <div><strong>Модуль</strong><p id="gateModule">—</p></div>
+        <div><strong>Текущая задача</strong><p id="gateTask">—</p></div>
+        <div class="allow"><strong>Разрешено менять</strong><ul id="gateAllowed"></ul></div>
+        <div class="forbid"><strong>Запрещено менять</strong><ul id="gateForbidden"></ul></div>
+      </div>
+      <div class="gate-checks" id="gateChecks">
+        <label><input type="checkbox" data-gate-check="task" /> Я проверил текущую задачу.</label>
+        <label><input type="checkbox" data-gate-check="scope" /> Я проверил разрешённую область изменений.</label>
+        <label><input type="checkbox" data-gate-check="forbid" /> Я проверил, что нельзя менять.</label>
+        <label><input type="checkbox" data-gate-check="criteria" /> В рабочее задание включены критерии проверки результата.</label>
+      </div>
+      <p class="section-note" id="gateConfirmedAt" hidden></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="btnCancelGate">Отмена</button>
+        <button type="button" class="btn btn-primary" id="btnConfirmGate" disabled>Скопировать и продолжить</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var STORAGE_KEY = "ai-pos-projects-v1";
+      var LAST_OPENED_KEY = "ai-pos-last-opened-v1";
+      var TEMPLATES_KEY = "ai-pos-templates-v1";
+      var GATE_KEY = "ai-pos-gate-confirmations-v1";
+      var REVIEW_KEY = "ai-pos-task-reviews-v1";
+      var MAX_TEXT_CHARS = 120000;
+      var MAX_DATA_URL = 400000;
+
+      var DEMO_RULES = {
+        mission: "Создать полезное персональное приложение дня, которым хочется пользоваться ежедневно.",
+        principles: [
+          "не ломать готовые модули",
+          "менять только согласованную область",
+          "сохранять понятную архитектуру",
+          "сначала завершать механику, затем расширять данные",
+          "не добавлять лишние функции без отдельного решения"
+        ],
+        changeScale: "Только согласованная область текущей задачи внутри активного модуля. Расширение продукта — только после отдельного решения.",
+        protectedModules: [
+          "погода",
+          "календарь",
+          "планы",
+          "праздники",
+          "общая архитектура главной страницы"
+        ],
+        forbidden: [
+          "менять защищённые модули без отдельного решения",
+          "переписывать архитектуру всего проекта ради одной задачи",
+          "подключать внешние API и библиотеки без согласования",
+          "расширять объём задачи сверх согласованных границ"
+        ],
+        approvalOrder: [
+          "зафиксировать текущую задачу и область изменений",
+          "пройти контроль перед передачей задачи ИИ",
+          "выполнить работу в разрешённых границах",
+          "пройти проверку результата и принять её явно"
+        ],
+        acceptance: [
+          "результат соответствует цели текущей задачи",
+          "изменения уложились в разрешённую область",
+          "запрещённые области не затронуты",
+          "критерии проверки результата отмечены и приняты"
+        ]
+      };
+
+      var DEMO_REVIEW_ITEMS = [
+        { id: "cardReveal", label: "Карточка раскрывается на каждой из трёх дат." },
+        { id: "contentOk", label: "Содержимое отображается корректно." },
+        { id: "modulesIntact", label: "Остальные модули не изменены." },
+        { id: "noConsoleErrors", label: "Новые ошибки в консоли отсутствуют." },
+        { id: "browserChecked", label: "Результат проверен в браузере." },
+        { id: "mobileChecked", label: "Результат проверен на мобильной ширине." }
+      ];
+
+      var PLAN = ["Анализ", "Архитектура", "Прототип", "Разработка", "Проверка"];
+
+      var TEAM = [
+        {
+          role: "Архитектор",
+          rolePoints: [
+            "отвечает за архитектуру проекта",
+            "определяет границы модулей",
+            "принимает технические решения"
+          ],
+          responsibility: [
+            "структура проекта",
+            "связи модулей",
+            "контроль архитектуры"
+          ]
+        },
+        {
+          role: "UX/UI-дизайнер",
+          rolePoints: [
+            "проектирует сценарии пользователя",
+            "держит интерфейс простым и понятным",
+            "согласует визуальные решения с целью продукта"
+          ],
+          responsibility: [
+            "экраны и состояния",
+            "иерархия информации",
+            "удобство ключевых действий"
+          ]
+        },
+        {
+          role: "Разработчик",
+          rolePoints: [
+            "реализует текущую задачу в коде",
+            "сохраняет работоспособность существующих модулей",
+            "вносит минимально достаточные изменения"
+          ],
+          responsibility: [
+            "код в рабочей папке",
+            "механика текущей задачи",
+            "техническая целостность решения"
+          ]
+        },
+        {
+          role: "QA",
+          rolePoints: [
+            "проверяет результат текущей задачи",
+            "ищет риски регрессии",
+            "фиксирует критерии «готово»"
+          ],
+          responsibility: [
+            "проверка сценариев",
+            "контроль ограничений",
+            "подтверждение ожидаемого результата"
+          ]
+        },
+        {
+          role: "Технический редактор",
+          rolePoints: [
+            "собирает ясный контекст для ИИ",
+            "не смешивает проект, модуль и задачу",
+            "формулирует ограничения и ожидаемый результат"
+          ],
+          responsibility: [
+            "рабочие задания",
+            "точность формулировок",
+            "читаемость решений и документации"
+          ]
+        }
+      ];
+
+      var AI_TOOLS = [
+        { id: "cursor", name: "Cursor", why: "Править код в рабочей папке проекта с контекстом файлов.", strengths: "Точечные правки, рефакторинг, следование структуре репозитория.", avoid: "Не для длинной продуктовой стратегии без кода." },
+        { id: "chatgpt", name: "ChatGPT", why: "Быстро прояснить задачу модуля и формулировки.", strengths: "Диалог, структура, черновики.", avoid: "Не единственный источник правок большой кодовой базы." },
+        { id: "claude", name: "Claude", why: "Аккуратный разбор требований модуля и задачи.", strengths: "Длинный контекст, ясный анализ.", avoid: "Если нужны правки многих файлов в IDE — лучше Cursor / Claude Code." },
+        { id: "claude-code", name: "Claude Code", why: "Агентная работа в репозитории по текущей задаче.", strengths: "Многошаговые изменения в пределах задачи.", avoid: "Не давать полномочий шире списка «что нельзя»." },
+        { id: "codex", name: "Codex", why: "Сфокусированная кодовая реализация задачи.", strengths: "Функции, тесты, точечный код.", avoid: "Слабее для продуктовой стратегии всего проекта." },
+        { id: "gemini", name: "Gemini", why: "Мультимодальный разбор референсов и материалов.", strengths: "Изображения, документы, обзор.", avoid: "Не как единственный источник архитектуры." },
+        { id: "grok", name: "Grok", why: "Быстрая проверка альтернатив по задаче.", strengths: "Скорость, короткий ревью.", avoid: "Не для финальной реализации критичного модуля без сверки." },
+        { id: "other", name: "Другие AI", why: "Любой другой инструмент под задачу.", strengths: "Гибкость.", avoid: "Не смешивать несколько ИИ без единой постановки." }
+      ];
+
+      var BUILTIN_TEMPLATES = [
+        { id: "web-app", label: "Web App", idea: "Веб-приложение как цельный продукт с несколькими модулями.", result: "Рабочий продукт с главным сценарием пользователя.", audience: "Пользователи в браузере", constraints: "Адаптивность, понятная модульная структура.", workFolder: "" },
+        { id: "pwa", label: "PWA", idea: "PWA-продукт с установкой и ключевыми модулями.", result: "Устанавливаемое приложение с основным сценарием.", audience: "Пользователи телефона и десктопа", constraints: "Манифест, service worker, мобильный UX.", workFolder: "" },
+        { id: "telegram-bot", label: "Telegram Bot", idea: "Telegram-бот как продукт с отдельными сценариями-модулями.", result: "Бот с ясным основным сценарием.", audience: "Пользователи Telegram", constraints: "Простые состояния диалога.", workFolder: "" },
+        { id: "python", label: "Python", idea: "Python-продукт или сервис из модулей/скриптов.", result: "Рабочий запуск с понятным входом и выходом.", audience: "Разработчик или оператор", constraints: "Минимум зависимостей.", workFolder: "" },
+        { id: "powerpoint", label: "PowerPoint", idea: "Презентационный продукт с разделами как модулями.", result: "Готовая структура и черновик презентации.", audience: "Слушатели встречи", constraints: "Мало текста, ясная логика.", workFolder: "" },
+        { id: "book", label: "Книга", idea: "Книга как проект; главы — модули.", result: "Оглавление и первый законченный раздел.", audience: "Читатели", constraints: "Единый стиль.", workFolder: "" },
+        { id: "ai-agent", label: "AI Агент", idea: "AI-агент как продукт с модулями поведения.", result: "Один стабильный end-to-end сценарий.", audience: "Пользователь или команда", constraints: "Границы полномочий.", workFolder: "" },
+        { id: "landing", label: "Landing", idea: "Лендинг как цельный продукт; блоки — модули.", result: "Одностраничный лендинг с одним CTA.", audience: "Новые посетители", constraints: "Один главный CTA.", workFolder: "" },
+        { id: "chrome-ext", label: "Chrome Extension", idea: "Расширение Chrome как продукт.", result: "Рабочее главное действие расширения.", audience: "Пользователи Chrome", constraints: "Минимальные разрешения.", workFolder: "" }
+      ];
+
+      var DEMO_TASK = {
+        id: "task-card-reveal",
+        name: "Завершить механику раскрытия карточки на трёх проверенных датах",
+        goal: "Довести раскрытие карточки исторической справки до рабочего состояния на трёх датах.",
+        whyNow: "Механика почти готова; без неё модуль нельзя считать завершённым для главной страницы проекта «Мой день».",
+        expectedResult: "Карточка корректно раскрывается и показывает содержимое на трёх проверенных датах.",
+        canChange: "Код и разметку модуля «Историческая справка», связанные с раскрытием карточки и отображением трёх дат.",
+        cannotChange: [
+          "Не менять архитектуру всего проекта «Мой день»",
+          "Не переписывать другие модули (погода, планы, календарь, праздники)",
+          "Не удалять существующую функциональность проекта",
+          "Не подключать внешние API и библиотеки",
+          "Не менять общий дизайн проекта без отдельного решения",
+          "Не раздувать базу событий сверх трёх проверенных дат"
+        ],
+        gateAllowed: [
+          "код и разметку модуля исторической справки",
+          "отображение трёх тестовых дат"
+        ],
+        gateForbidden: [
+          "другие модули",
+          "архитектуру проекта",
+          "общий дизайн без отдельного решения",
+          "базу событий сверх текущих трёх дат"
+        ],
+        reviewItems: DEMO_REVIEW_ITEMS.slice(),
+        teamEngagement: {
+          "Разработчик": {
+            kind: "active",
+            label: "Активен сейчас",
+            reason: "Нужно завершить механику раскрытия карточки в коде модуля."
+          },
+          "QA": {
+            kind: "active",
+            label: "Активен сейчас",
+            reason: "Проверяет раскрытие на трёх датах и отсутствие регрессий."
+          },
+          "Архитектор": {
+            kind: "consult",
+            label: "Подключается для проверки",
+            reason: "Консультирует по границам изменений и защите архитектуры главной страницы."
+          },
+          "UX/UI-дизайнер": {
+            kind: "idle",
+            label: "Не требуется на этом этапе",
+            reason: "Новый дизайн не входит в текущую задачу."
+          },
+          "Технический редактор": {
+            kind: "idle",
+            label: "Не требуется на этом этапе",
+            reason: "Формулировка задания уже подготовлена; сейчас важны реализация и проверка."
+          }
+        },
+        recommendedTool: "cursor",
+        filesRefs: "Файлы модуля исторической справки в рабочей папке; три проверенные даты; текущий UI карточки.",
+        subtask: "Проверить раскрытие карточки поочерёдно на каждой из трёх дат."
+      };
+
+      var DEMO_MODULE = {
+        id: "mod-history",
+        name: "Историческая справка",
+        purpose: "Показывать интересные исторические факты дня внутри приложения «Мой день».",
+        status: "В работе",
+        ready: "Каркас модуля, черновик карточки, три проверенные даты.",
+        remaining: "Завершить механику раскрытия карточки и стабильно показать содержимое на трёх датах.",
+        constraints: "Не превращать модуль в отдельный продукт; не расширять базу событий раньше механики.",
+        tasks: [DEMO_TASK],
+        activeTaskId: DEMO_TASK.id
+      };
+
+      var DEMO_PROJECT = {
+        id: "demo-moy-den",
+        name: "Мой день",
+        idea: "Создать персональное приложение дня с погодой, планами, календарём, праздниками, полезными и интересными ежедневными блоками.",
+        result: "Ежедневный персональный экран, где собраны погода, планы, календарь, праздники и полезные блоки, включая модуль «Историческая справка».",
+        audience: "Для личного использования.",
+        assets: "Каркас главной страницы; заготовки блоков дня; модуль «Историческая справка» в черновике; три проверенные даты.",
+        constraints: "Локальный прототип; модульная структура; не ломать уже работающие части проекта ради одного модуля.",
+        workFolder: "D:\\Cursor Проект Мой день",
+        status: "В работе",
+        stage: "Разработка",
+        modules: [DEMO_MODULE],
+        activeModuleId: DEMO_MODULE.id,
+        materials: [],
+        rules: DEMO_RULES,
+        isDemo: true,
+        createdAt: "2026-07-25T09:00:00.000Z"
+      };
+
+      var state = {
+        projects: [],
+        currentId: null,
+        lastOpenedId: null,
+        selectedTool: "cursor",
+        selectedTemplate: "",
+        customTemplates: [],
+        activeTab: "overview",
+        cliAnalysisByProject: {}
+      };
+
+      var els = {
+        appShell: document.getElementById("appShell"),
+        panelList: document.getElementById("panelList"),
+        panelForm: document.getElementById("panelForm"),
+        panelWorkspace: document.getElementById("panelWorkspace"),
+        projectForm: document.getElementById("projectForm"),
+        formError: document.getElementById("formError"),
+        templatesGrid: document.getElementById("templatesGrid"),
+        greetingTitle: document.getElementById("greetingTitle"),
+        continueName: document.getElementById("continueName"),
+        nextLine1: document.getElementById("nextLine1"),
+        nextLine2: document.getElementById("nextLine2"),
+        headProjectName: document.getElementById("headProjectName"),
+        headModuleName: document.getElementById("headModuleName"),
+        headTaskName: document.getElementById("headTaskName"),
+        workspaceMeta: document.getElementById("workspaceMeta"),
+        ovGoal: document.getElementById("ovGoal"),
+        ovModule: document.getElementById("ovModule"),
+        ovStage: document.getElementById("ovStage"),
+        ovReady: document.getElementById("ovReady"),
+        ovAttention: document.getElementById("ovAttention"),
+        ovNext: document.getElementById("ovNext"),
+        cliInsight: document.getElementById("cliInsight"),
+        cliInsightNote: document.getElementById("cliInsightNote"),
+        cliInsightBadge: document.getElementById("cliInsightBadge"),
+        cliInsightBody: document.getElementById("cliInsightBody"),
+        btnCliInsightRefresh: document.getElementById("btnCliInsightRefresh"),
+        taskEmptyNote: document.getElementById("taskEmptyNote"),
+        taskStack: document.getElementById("taskStack"),
+        taskGoalText: document.getElementById("taskGoalText"),
+        taskWhyText: document.getElementById("taskWhyText"),
+        taskResultText: document.getElementById("taskResultText"),
+        taskCanText: document.getElementById("taskCanText"),
+        taskAltText: document.getElementById("taskAltText"),
+        dontList: document.getElementById("dontList"),
+        riskList: document.getElementById("riskList"),
+        toolPicks: document.getElementById("toolPicks"),
+        toolWhy: document.getElementById("toolWhy"),
+        toolWhen: document.getElementById("toolWhen"),
+        toolAvoid: document.getElementById("toolAvoid"),
+        toolFolder: document.getElementById("toolFolder"),
+        assignmentTitle: document.getElementById("assignmentTitle"),
+        workBox: document.getElementById("workBox"),
+        materialsList: document.getElementById("materialsList"),
+        materialsInput: document.getElementById("materialsInput"),
+        teamList: document.getElementById("teamList"),
+        rulesGrid: document.getElementById("rulesGrid"),
+        reviewCard: document.getElementById("reviewCard"),
+        reviewStatus: document.getElementById("reviewStatus"),
+        reviewChecks: document.getElementById("reviewChecks"),
+        reviewNotes: document.getElementById("reviewNotes"),
+        reviewHint: document.getElementById("reviewHint"),
+        btnReviewNotes: document.getElementById("btnReviewNotes"),
+        btnReviewAccept: document.getElementById("btnReviewAccept"),
+        btnNextTask: document.getElementById("btnNextTask"),
+        copyToast: document.getElementById("copyToast"),
+        stepModal: document.getElementById("stepModal"),
+        moduleModal: document.getElementById("moduleModal"),
+        taskModal: document.getElementById("taskModal"),
+        gateModal: document.getElementById("gateModal"),
+        gateProject: document.getElementById("gateProject"),
+        gateModule: document.getElementById("gateModule"),
+        gateTask: document.getElementById("gateTask"),
+        gateAllowed: document.getElementById("gateAllowed"),
+        gateForbidden: document.getElementById("gateForbidden"),
+        gateChecks: document.getElementById("gateChecks"),
+        gateConfirmedAt: document.getElementById("gateConfirmedAt"),
+        btnConfirmGate: document.getElementById("btnConfirmGate"),
+        moduleForm: document.getElementById("moduleForm"),
+        taskForm: document.getElementById("taskForm"),
+        taskModule: document.getElementById("taskModule"),
+        taskTool: document.getElementById("taskTool"),
+        workspaceTabs: document.getElementById("workspaceTabs")
+      };
+
+      function uid(prefix) {
+        return (prefix || "id") + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
+      }
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function formatDate(iso) {
+        try {
+          return new Date(iso).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+        } catch (e) { return ""; }
+      }
+
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      function greetingText() {
+        var hour = new Date().getHours();
+        var part = "Добрый вечер";
+        if (hour >= 5 && hour < 12) part = "Доброе утро";
+        else if (hour >= 12 && hour < 18) part = "Добрый день";
+        return part + ", Венера";
+      }
+
+      function linesFromCannot(text) {
+        if (Array.isArray(text)) return text.filter(Boolean);
+        return String(text || "")
+          .split(/\r?\n|;/)
+          .map(function (s) { return s.replace(/^[-•\s]+/, "").trim(); })
+          .filter(Boolean);
+      }
+
+      function defaultRulesFor(project) {
+        return {
+          mission: project.idea || "Сделать полезный продукт с понятной целью.",
+          principles: [
+            "не ломать готовые модули",
+            "менять только согласованную область",
+            "сохранять понятную архитектуру",
+            "сначала завершать механику, затем расширять данные",
+            "не добавлять лишние функции без отдельного решения"
+          ],
+          changeScale: "Только согласованная область текущей задачи внутри активного модуля.",
+          protectedModules: ["общая архитектура проекта", "готовые модули без отдельного решения"],
+          forbidden: linesFromCannot(project.constraints).length
+            ? linesFromCannot(project.constraints)
+            : [
+              "менять весь проект без необходимости",
+              "расширять задачу сверх согласованных границ"
+            ],
+          approvalOrder: [
+            "зафиксировать текущую задачу и область изменений",
+            "пройти контроль перед передачей задачи ИИ",
+            "выполнить работу в разрешённых границах",
+            "пройти проверку результата и принять её явно"
+          ],
+          acceptance: [
+            "результат соответствует цели текущей задачи",
+            "изменения уложились в разрешённую область",
+            "запрещённые области не затронуты",
+            "критерии проверки результата отмечены и приняты"
+          ]
+        };
+      }
+
+      function ensureProjectRules(project) {
+        if (!project.rules || typeof project.rules !== "object") {
+          project.rules = project.isDemo ? Object.assign({}, DEMO_RULES) : defaultRulesFor(project);
+        }
+        var rules = project.rules;
+        if (!rules.mission) rules.mission = (project.isDemo ? DEMO_RULES.mission : project.idea) || "";
+        if (!Array.isArray(rules.principles) || !rules.principles.length) {
+          rules.principles = (project.isDemo ? DEMO_RULES.principles : defaultRulesFor(project).principles).slice();
+        }
+        if (!rules.changeScale) {
+          rules.changeScale = project.isDemo ? DEMO_RULES.changeScale : defaultRulesFor(project).changeScale;
+        }
+        if (!Array.isArray(rules.protectedModules) || !rules.protectedModules.length) {
+          rules.protectedModules = (project.isDemo ? DEMO_RULES.protectedModules : defaultRulesFor(project).protectedModules).slice();
+        }
+        if (!Array.isArray(rules.forbidden) || !rules.forbidden.length) {
+          rules.forbidden = (project.isDemo ? DEMO_RULES.forbidden : defaultRulesFor(project).forbidden).slice();
+        }
+        if (!Array.isArray(rules.approvalOrder) || !rules.approvalOrder.length) {
+          rules.approvalOrder = DEMO_RULES.approvalOrder.slice();
+        }
+        if (!Array.isArray(rules.acceptance) || !rules.acceptance.length) {
+          rules.acceptance = DEMO_RULES.acceptance.slice();
+        }
+        return project;
+      }
+
+      function defaultReviewItems(task) {
+        if (task && Array.isArray(task.reviewItems) && task.reviewItems.length) return task.reviewItems.slice();
+        if (task && task.id === DEMO_TASK.id) return DEMO_REVIEW_ITEMS.slice();
+        return [
+          { id: "resultOk", label: "Ожидаемый результат задачи достигнут." },
+          { id: "scopeOk", label: "Изменения уложились в разрешённую область." },
+          { id: "forbidOk", label: "Запрещённые области не затронуты." },
+          { id: "manualOk", label: "Результат проверен вручную." },
+          { id: "criteriaOk", label: "Критерии принятия выполнены." }
+        ];
+      }
+
+      function emptyReviewState(task) {
+        var items = defaultReviewItems(task);
+        var checks = {};
+        for (var i = 0; i < items.length; i++) checks[items[i].id] = false;
+        return {
+          status: "unchecked",
+          checks: checks,
+          notes: "",
+          acceptedAt: null,
+          items: items
+        };
+      }
+
+      function loadJsonMap(key) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (!raw) return {};
+          var parsed = JSON.parse(raw);
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function saveJsonMap(key, map) {
+        try { localStorage.setItem(key, JSON.stringify(map || {})); } catch (e) {}
+      }
+
+      function reviewMapKey(project, task) {
+        return (project && project.id ? project.id : "project") + ":" + (task && task.id ? task.id : "task");
+      }
+
+      function ensureTaskReview(project, task) {
+        if (!task) return null;
+        var stored = loadJsonMap(REVIEW_KEY)[reviewMapKey(project, task)];
+        var base = emptyReviewState(task);
+        var source = task.review && typeof task.review === "object" ? task.review : stored;
+        if (!source) {
+          task.review = base;
+          return task.review;
+        }
+        var checks = Object.assign({}, base.checks, source.checks || {});
+        var items = Array.isArray(source.items) && source.items.length ? source.items : base.items;
+        for (var i = 0; i < items.length; i++) {
+          if (typeof checks[items[i].id] !== "boolean") checks[items[i].id] = false;
+        }
+        task.review = {
+          status: source.status === "accepted" || source.status === "notes" ? source.status : "unchecked",
+          checks: checks,
+          notes: source.notes || "",
+          acceptedAt: source.acceptedAt || null,
+          items: items
+        };
+        return task.review;
+      }
+
+      function persistTaskReview(project, task) {
+        if (!project || !task || !task.review) return;
+        var map = loadJsonMap(REVIEW_KEY);
+        map[reviewMapKey(project, task)] = {
+          status: task.review.status,
+          checks: task.review.checks,
+          notes: task.review.notes || "",
+          acceptedAt: task.review.acceptedAt || null,
+          items: task.review.items || defaultReviewItems(task)
+        };
+        saveJsonMap(REVIEW_KEY, map);
+        if (!project.isDemo) saveProjects();
+      }
+
+      function allReviewChecksDone(review) {
+        if (!review || !review.items || !review.items.length) return false;
+        for (var i = 0; i < review.items.length; i++) {
+          if (!review.checks[review.items[i].id]) return false;
+        }
+        return true;
+      }
+
+      function reviewStatusLabel(status) {
+        if (status === "accepted") return "Принято";
+        if (status === "notes") return "Есть замечания";
+        return "Не проверено";
+      }
+
+      function gateAllowedList(task, module) {
+        if (task && Array.isArray(task.gateAllowed) && task.gateAllowed.length) return task.gateAllowed.slice();
+        var fromCan = linesFromCannot(task && task.canChange);
+        if (fromCan.length) return fromCan;
+        return [
+          "код и логику текущего модуля" + (module ? " «" + module.name + "»" : ""),
+          "область текущей задачи"
+        ];
+      }
+
+      function gateForbiddenList(task) {
+        if (task && Array.isArray(task.gateForbidden) && task.gateForbidden.length) return task.gateForbidden.slice();
+        var fromCannot = linesFromCannot(task && task.cannotChange);
+        if (fromCannot.length) return fromCannot;
+        return [
+          "другие модули",
+          "архитектуру проекта",
+          "общий дизайн без отдельного решения"
+        ];
+      }
+
+      function teamEngagementFor(task, role) {
+        if (task && task.teamEngagement && task.teamEngagement[role]) return task.teamEngagement[role];
+        if (role === "Разработчик") {
+          return { kind: "active", label: "Активен сейчас", reason: "Реализует текущую задачу в пределах согласованной области." };
+        }
+        if (role === "QA") {
+          return { kind: "active", label: "Активен сейчас", reason: "Проверяет результат и критерии принятия." };
+        }
+        if (role === "Архитектор") {
+          return { kind: "consult", label: "Подключается для проверки", reason: "Консультирует по границам архитектуры." };
+        }
+        return { kind: "idle", label: "Не требуется на этом этапе", reason: "На текущей задаче эта роль не задействована." };
+      }
+
+      function getActiveModule(project) {
+        var modules = project.modules || [];
+        if (!modules.length) return null;
+        for (var i = 0; i < modules.length; i++) {
+          if (modules[i].id === project.activeModuleId) return modules[i];
+        }
+        return modules[0];
+      }
+
+      function getActiveTask(module) {
+        if (!module) return null;
+        var tasks = module.tasks || [];
+        if (!tasks.length) return null;
+        for (var i = 0; i < tasks.length; i++) {
+          if (tasks[i].id === module.activeTaskId) return tasks[i];
+        }
+        return tasks[0];
+      }
+
+      function migrateProject(raw) {
+        if (!raw || !raw.id || !raw.name) return null;
+        var project = Object.assign({}, raw);
+        if (!Array.isArray(project.modules)) project.modules = [];
+
+        // Старые данные без модулей: не называем nextAction проектом
+        if (!project.modules.length && (raw.nextAction || raw.stageOutcome)) {
+          var legacyTask = {
+            id: uid("task"),
+            name: raw.nextAction || "Уточнить текущую задачу модуля",
+            goal: raw.nextAction || "Сделать следующий конкретный шаг",
+            whyNow: raw.nextWhy || "Нужно продвинуть активный модуль.",
+            expectedResult: raw.stageOutcome || raw.result || "Завершённый шаг модуля",
+            canChange: "Только файлы и логику текущего модуля",
+            cannotChange: Array.isArray(raw.dontDo) ? raw.dontDo : linesFromCannot(raw.dontDo),
+            recommendedTool: raw.preferredTool || "cursor",
+            filesRefs: raw.documents || "",
+            subtask: ""
+          };
+          var legacyModule = {
+            id: uid("mod"),
+            name: "Основной модуль",
+            purpose: "Первый функциональный блок проекта «" + project.name + "».",
+            status: raw.status || "В работе",
+            ready: raw.assets || "",
+            remaining: raw.nextAction || "",
+            constraints: raw.constraints || "",
+            tasks: [legacyTask],
+            activeTaskId: legacyTask.id
+          };
+          project.modules = [legacyModule];
+          project.activeModuleId = legacyModule.id;
+        }
+
+        if (!project.activeModuleId && project.modules.length) {
+          project.activeModuleId = project.modules[0].id;
+        }
+
+        project.materials = Array.isArray(project.materials) ? project.materials : [];
+        project.workFolder = project.workFolder || "";
+        project.stage = project.stage || "Анализ";
+        project.status = project.status || "В работе";
+        ensureProjectRules(project);
+
+        for (var m = 0; m < project.modules.length; m++) {
+          var mod = project.modules[m];
+          if (!Array.isArray(mod.tasks)) mod.tasks = [];
+          for (var t = 0; t < mod.tasks.length; t++) {
+            ensureTaskReview(project, mod.tasks[t]);
+          }
+        }
+        return project;
+      }
+
+      function deriveView(project) {
+        var mod = getActiveModule(project);
+        var task = getActiveTask(mod);
+        var view = {
+          project: project,
+          module: mod,
+          task: task,
+          stage: project.stage || "Анализ",
+          workFolder: project.workFolder || "не указана",
+          nextLine1: "Сначала добавьте модуль и текущую задачу.",
+          nextLine2: "Рекомендуем уточнить следующий шаг внутри модуля.",
+          whyPath: "Пока нет модуля и задачи, система не смешивает уровни: сначала проект, затем модуль, затем конкретная задача.",
+          stageOutcome: "Появится понятная текущая задача внутри модуля.",
+          confidence: "Низкая — не хватает модуля или задачи.",
+          nextRisk: "Можно начать работу без границ и затронуть весь проект.",
+          nextAlt: "Сначала описать один модуль и одну задачу.",
+          nextBasis: "Факт: проект создан. Предположение: без модуля и задачи контекст для ИИ будет слишком широким.",
+          nextEffect: "Работа станет адресной: ИИ получит проект, модуль и задачу раздельно."
+        };
+
+        if (mod && task) {
+          view.nextLine1 = "Модуль «" + mod.name + "»: " + (mod.remaining || "есть незакрытая работа") + ".";
+          view.nextLine2 = "Рекомендуем задачу: " + task.name + ".";
+          if (project.isDemo || mod.id === "mod-history") {
+            view.nextLine1 = "Модуль «Историческая справка» почти готов.";
+            view.nextLine2 = "Рекомендуем завершить механику раскрытия карточки на трёх датах.";
+          }
+          view.whyPath = task.whyNow
+            ? ("Сейчас в проекте «" + project.name + "» активен модуль «" + mod.name + "». " +
+              "Текущая задача — «" + task.name + "». " + task.whyNow + " " +
+              "Так мы не путаем весь продукт с одним модулем и не расширяем объём раньше времени.")
+            : view.whyPath;
+          view.stageOutcome = task.expectedResult || view.stageOutcome;
+          view.confidence = "Высокая — есть проект, модуль и конкретная задача.";
+          view.nextRisk = "Можно начать наполнять модуль шире текущей задачи и затронуть весь проект.";
+          view.nextAlt = "Сначала зафиксировать подзадачу: " + (task.subtask || "проверить минимальный сценарий");
+          view.nextBasis = "Факт: проект «" + project.name + "», модуль «" + mod.name + "», задача «" + task.name + "». Предположение системы: завершение этой задачи безопаснее, чем открывать новый модуль.";
+          view.nextEffect = task.expectedResult;
+        } else if (mod && !task) {
+          view.nextLine1 = "Модуль «" + mod.name + "» добавлен в проект «" + project.name + "».";
+          view.nextLine2 = "Рекомендуем добавить текущую задачу для этого модуля.";
+          view.whyPath = "Модуль уже есть, но без текущей задачи ИИ может воспринять модуль как весь проект. Нужна узкая задача.";
+          view.confidence = "Средняя — есть модуль, нет задачи.";
+        }
+
+        return view;
+      }
+
+      function ensureDerived(project) {
+        var next = migrateProject(project);
+        if (!next) return null;
+        return next;
+      }
+
+      function loadProjects() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return [];
+          var parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) return [];
+          return parsed.map(migrateProject).filter(Boolean);
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveProjects() {
+        var toStore = state.projects.filter(function (p) { return !p.isDemo; });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
+      }
+
+      function loadLastOpened() {
+        try { return localStorage.getItem(LAST_OPENED_KEY) || DEMO_PROJECT.id; }
+        catch (e) { return DEMO_PROJECT.id; }
+      }
+
+      function saveLastOpened(id) {
+        state.lastOpenedId = id;
+        try { localStorage.setItem(LAST_OPENED_KEY, id); } catch (e) {}
+      }
+
+      function loadCustomTemplates() {
+        try {
+          var raw = localStorage.getItem(TEMPLATES_KEY);
+          if (!raw) return [];
+          var parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) { return []; }
+      }
+
+      function saveCustomTemplates() {
+        localStorage.setItem(TEMPLATES_KEY, JSON.stringify(state.customTemplates));
+      }
+
+      function showPanel(name, options) {
+        els.panelList.classList.toggle("is-active", name === "list");
+        els.panelForm.classList.toggle("is-active", name === "form");
+        els.panelWorkspace.classList.toggle("is-active", name === "workspace");
+        els.appShell.classList.toggle("is-home", name === "list");
+        if (name === "list") renderHome();
+        if (!options || !options.keepScroll) window.scrollTo(0, 0);
+      }
+
+      function openModal(el) {
+        el.hidden = false;
+        el.classList.add("is-open");
+      }
+
+      function closeModal(el) {
+        el.classList.remove("is-open");
+        el.hidden = true;
+      }
+
+      function openForm() {
+        els.projectForm.reset();
+        document.getElementById("fieldTemplate").value = "";
+        state.selectedTemplate = "";
+        clearFieldErrors();
+        els.formError.classList.remove("is-visible");
+        renderTemplates();
+        showPanel("form");
+        document.getElementById("fieldName").focus();
+      }
+
+      function clearFieldErrors() {
+        var fields = els.projectForm.querySelectorAll(".field");
+        for (var i = 0; i < fields.length; i++) fields[i].classList.remove("is-invalid");
+      }
+
+      function allTemplates() {
+        return BUILTIN_TEMPLATES.concat(state.customTemplates);
+      }
+
+      function renderTemplates() {
+        var list = allTemplates();
+        var html = "";
+        for (var i = 0; i < list.length; i++) {
+          var t = list[i];
+          var active = state.selectedTemplate === t.id ? " is-active" : "";
+          html += '<button type="button" class="tpl-btn' + active + '" data-template="' + escapeHtml(t.id) + '">' + escapeHtml(t.label) + "</button>";
+        }
+        els.templatesGrid.innerHTML = html;
+        var buttons = els.templatesGrid.querySelectorAll("[data-template]");
+        for (var b = 0; b < buttons.length; b++) buttons[b].addEventListener("click", onTemplateClick);
+      }
+
+      function onTemplateClick(event) {
+        applyTemplate(event.currentTarget.getAttribute("data-template"));
+      }
+
+      function applyTemplate(id) {
+        var list = allTemplates();
+        var tpl = null;
+        for (var i = 0; i < list.length; i++) if (list[i].id === id) tpl = list[i];
+        if (!tpl) return;
+        state.selectedTemplate = id;
+        document.getElementById("fieldTemplate").value = id;
+        if (tpl.name) document.getElementById("fieldName").value = tpl.name;
+        document.getElementById("fieldIdea").value = tpl.idea || "";
+        document.getElementById("fieldResult").value = tpl.result || "";
+        document.getElementById("fieldAudience").value = tpl.audience || "";
+        document.getElementById("fieldConstraints").value = tpl.constraints || "";
+        document.getElementById("fieldWorkFolder").value = tpl.workFolder || "";
+        renderTemplates();
+      }
+
+      function saveAsCustomTemplate() {
+        var data = getFormData();
+        if (!data.name && !data.idea) {
+          window.alert("Сначала заполните хотя бы название или идею проекта.");
+          return;
+        }
+        var label = window.prompt("Название шаблона", data.name || "Мой шаблон");
+        if (!label) return;
+        var tpl = {
+          id: uid("custom"),
+          label: label.trim(),
+          name: data.name,
+          idea: data.idea,
+          result: data.result,
+          audience: data.audience,
+          constraints: data.constraints,
+          workFolder: data.workFolder,
+          custom: true
+        };
+        state.customTemplates.push(tpl);
+        saveCustomTemplates();
+        state.selectedTemplate = tpl.id;
+        document.getElementById("fieldTemplate").value = tpl.id;
+        renderTemplates();
+      }
+
+      function findProject(id) {
+        if (id === DEMO_PROJECT.id) return ensureDerived(DEMO_PROJECT);
+        for (var i = 0; i < state.projects.length; i++) {
+          if (state.projects[i].id === id) return ensureDerived(state.projects[i]);
+        }
+        return null;
+      }
+
+      function getFocusProject() {
+        var project = findProject(state.lastOpenedId);
+        if (project) return project;
+        if (state.projects.length) return ensureDerived(state.projects[state.projects.length - 1]);
+        return ensureDerived(DEMO_PROJECT);
+      }
+
+      function currentProjectMutable() {
+        if (state.currentId === DEMO_PROJECT.id) return DEMO_PROJECT;
+        for (var i = 0; i < state.projects.length; i++) {
+          if (state.projects[i].id === state.currentId) return state.projects[i];
+        }
+        return null;
+      }
+
+      function getTool(id) {
+        for (var i = 0; i < AI_TOOLS.length; i++) if (AI_TOOLS[i].id === id) return AI_TOOLS[i];
+        return AI_TOOLS[0];
+      }
+
+      function materialsDigest(project) {
+        var materials = project.materials || [];
+        if (!materials.length) return "Материалы проекта пока не прикреплены.";
+        return materials.map(function (m) {
+          return m.name + " (" + (m.kind || m.type || "файл") + ")";
+        }).join("; ");
+      }
+
+      function textMaterialsBlock(project) {
+        var materials = project.materials || [];
+        var chunks = [];
+        for (var i = 0; i < materials.length; i++) {
+          var m = materials[i];
+          if (m.contentText) chunks.push("--- Файл проекта: " + m.name + " ---\n" + m.contentText.slice(0, 8000));
+          else chunks.push("--- Файл проекта: " + m.name + " (без текста в контексте) ---");
+        }
+        return chunks.length ? chunks.join("\n\n") : "Нет текстовых вложений проекта.";
+      }
+
+      function buildAssignment(project, tool) {
+        var mod = getActiveModule(project);
+        var task = getActiveTask(mod);
+        var cannot = task ? linesFromCannot(task.cannotChange) : [];
+        var review = task ? ensureTaskReview(project, task) : null;
+        var criteria = review && review.items
+          ? review.items.map(function (item, i) { return (i + 1) + ". " + item.label; }).join("\n")
+          : "1. Результат соответствует цели задачи";
+        var styleHints = {
+          cursor: "Вноси изменения только в рабочей папке проекта. Минимальный diff. Не называй модуль проектом.",
+          chatgpt: "Сначала раздели уровни: проект / модуль / задача. Затем дай план только для задачи.",
+          claude: "Подтверди понимание иерархии. Не расширяй задачу до всего проекта.",
+          "claude-code": "Работай в указанной папке. Меняй только то, что разрешено задачей модуля.",
+          codex: "Сфокусируйся на коде текущей задачи модуля, не на всём продукте.",
+          gemini: "Учти референсы задачи. Не подменяй проект модулем.",
+          grok: "Дай прямой план по задаче и одну альтернативу в пределах модуля.",
+          other: "Сначала подтверди проект, модуль и задачу раздельно."
+        };
+
+        return [
+          "Рабочее задание для " + tool.name,
+          "",
+          "КОНТРОЛЬ ПЕРЕД ПЕРЕДАЧЕЙ ЗАДАЧИ",
+          "Это требование к порядку работы с ИИ. Это не техническая блокировка Cursor или другого инструмента.",
+          "",
+          "ПЕРЕД НАЧАЛОМ РАБОТЫ",
+          "1. Прочитай проект, модуль, задачу и ограничения.",
+          "2. Кратко напиши:",
+          "   - что ты понял;",
+          "   - какие файлы или области планируешь изменить;",
+          "   - что менять не будешь;",
+          "   - как проверишь результат.",
+          "3. Не начинай изменения до подтверждения пользователя символом «+».",
+          "4. После «-» остановись и жди новых указаний.",
+          "",
+          "ПРОЕКТ",
+          "Название: " + project.name,
+          "Идея продукта: " + project.idea,
+          "Итоговый результат проекта: " + project.result,
+          "Для кого: " + project.audience,
+          "Что уже существует во всём проекте: " + (project.assets && project.assets.trim() ? project.assets : "не указано"),
+          "Общие ограничения проекта: " + (project.constraints && project.constraints.trim() ? project.constraints : "не указаны"),
+          "Материалы проекта: " + materialsDigest(project),
+          "",
+          "МОДУЛЬ",
+          mod
+            ? ("Название: " + mod.name + "\nНазначение: " + mod.purpose + "\nСтатус: " + mod.status + "\nОграничения модуля: " + (mod.constraints || "не указаны"))
+            : "Модуль не выбран. Не начинай работу по всему проекту без модуля.",
+          "",
+          "ТЕКУЩАЯ ЗАДАЧА",
+          task
+            ? ("Название: " + task.name + "\nЗачем сейчас: " + task.whyNow + (task.subtask ? ("\nПодзадача: " + task.subtask) : "") + "\nНеобходимые файлы/референсы: " + (task.filesRefs || "не указаны"))
+            : "Текущая задача не задана.",
+          "",
+          "ЦЕЛЬ",
+          task ? task.goal : "Уточните цель текущей задачи.",
+          "",
+          "ЧТО ГОТОВО",
+          mod && mod.ready ? mod.ready : (project.assets && project.assets.trim() ? project.assets : "пока не зафиксировано"),
+          "",
+          "ЧТО СДЕЛАТЬ",
+          task ? task.name : (mod && mod.remaining ? mod.remaining : "Добавьте текущую задачу"),
+          "",
+          "ОГРАНИЧЕНИЯ",
+          "Что можно менять: " + ((task && task.canChange) || "только согласованную область текущей задачи"),
+          "Что нельзя менять:",
+          (cannot.length ? cannot.map(function (x, i) { return (i + 1) + ". " + x; }).join("\n") : "1. Не менять весь проект без необходимости"),
+          "",
+          "КРИТЕРИИ ПРОВЕРКИ РЕЗУЛЬТАТА",
+          criteria,
+          "",
+          "ГДЕ ВЫПОЛНЯТЬ РАБОТУ",
+          "Рабочая папка / репозиторий: " + (project.workFolder || "не указана"),
+          "Инструмент: " + tool.name,
+          "Зачем этот инструмент: " + tool.why,
+          styleHints[tool.id] || styleHints.other,
+          "",
+          "ОЖИДАЕМЫЙ РЕЗУЛЬТАТ",
+          (task && task.expectedResult) || "Конкретный завершённый результат текущей задачи модуля — не всего проекта.",
+          "",
+          "Формат ответа:",
+          "1) Сначала выполни блок «ПЕРЕД НАЧАЛОМ РАБОТЫ» и жди «+»",
+          "2) Подтверди ПРОЕКТ / МОДУЛЬ / ТЕКУЩУЮ ЗАДАЧУ раздельно",
+          "3) Перечисли, что не будешь менять",
+          "4) Выполни только текущую задачу",
+          "5) Покажи результат и проверку по критериям",
+          "",
+          "Главное правило: не подменяй проект модулем или задачей. Помоги принять правильное решение и уменьшить риск ошибки."
+        ].join("\n");
+      }
+
+      function renderHome() {
+        els.greetingTitle.textContent = greetingText();
+        var project = getFocusProject();
+        var view = deriveView(project);
+        els.continueName.textContent = project.name;
+        els.nextLine1.textContent = view.nextLine1;
+        els.nextLine2.textContent = view.nextLine2;
+      }
+
+      function setActiveTab(tabId) {
+        state.activeTab = tabId || "overview";
+        var buttons = els.workspaceTabs.querySelectorAll("[data-tab]");
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.toggle("is-active", buttons[i].getAttribute("data-tab") === state.activeTab);
+        }
+        var panels = els.panelWorkspace.querySelectorAll("[data-tab-panel]");
+        for (var p = 0; p < panels.length; p++) {
+          panels[p].classList.toggle("is-active", panels[p].getAttribute("data-tab-panel") === state.activeTab);
+        }
+      }
+
+      function renderHeader(project, view) {
+        els.headProjectName.textContent = project.name;
+        els.headModuleName.textContent = view.module ? view.module.name : "не выбран";
+        els.headTaskName.textContent = view.task ? view.task.name : "не выбрана";
+        document.getElementById("crumbProject").textContent = project.name;
+        document.getElementById("crumbModule").textContent = view.module ? view.module.name : "не выбран";
+        document.getElementById("crumbTask").textContent = view.task ? view.task.name : "не выбрана";
+        els.workspaceMeta.textContent =
+          view.stage +
+          " · " + (project.status || "В работе") +
+          (project.createdAt ? " · обновлено " + formatDate(project.createdAt) : "");
+      }
+
+      function renderOverview(project, view) {
+        els.ovGoal.textContent = project.idea || "—";
+        els.ovModule.textContent = view.module ? view.module.name : "не выбран";
+        els.ovStage.textContent = view.stage || "—";
+        els.ovReady.textContent = view.module && view.module.ready ? view.module.ready : (project.assets || "—");
+        els.ovAttention.textContent = view.module && view.module.remaining ? view.module.remaining : "Добавьте модуль или уточните, что осталось";
+        els.ovNext.textContent = view.task ? view.task.name : (view.nextLine2 || "—");
+        renderCliInsight(project);
+      }
+
+      var CLI_STAGE_LABELS = {
+        IDEA: "Идея",
+        INTAKE: "Подключение",
+        DISCOVERY: "Изучение",
+        PLANNING: "Планирование",
+        EXECUTION: "Выполнение"
+      };
+
+      var CLI_CONFIDENCE_LABELS = {
+        CONFIRMED: "Подтверждено",
+        PROVISIONAL: "Предварительно",
+        UNKNOWN: "Неизвестно"
+      };
+
+      function listHtmlFromItems(items) {
+        if (!items || !items.length) return "<p>—</p>";
+        var html = '<ul class="cli-insight-list">';
+        for (var i = 0; i < items.length; i++) {
+          html += "<li>" + escapeHtml(items[i]) + "</li>";
+        }
+        return html + "</ul>";
+      }
+
+      function cliStageDisplay(stageId) {
+        var code = String(stageId || "").trim();
+        if (!code) return "—";
+        var label = CLI_STAGE_LABELS[code] || code;
+        return (
+          escapeHtml(label) +
+          '<span class="cli-insight-code">' + escapeHtml(code) + "</span>"
+        );
+      }
+
+      function cliConfidenceDisplay(confidenceId) {
+        var code = String(confidenceId || "").trim();
+        if (!code) return "—";
+        var label = CLI_CONFIDENCE_LABELS[code] || code;
+        return (
+          escapeHtml(label) +
+          '<span class="cli-insight-code">' + escapeHtml(code) + "</span>"
+        );
+      }
+
+      function setCliInsightBadge(text, isInvalid) {
+        if (!els.cliInsightBadge) return;
+        if (!text) {
+          els.cliInsightBadge.hidden = true;
+          els.cliInsightBadge.textContent = "";
+          els.cliInsightBadge.classList.remove("is-invalid");
+          return;
+        }
+        els.cliInsightBadge.hidden = false;
+        els.cliInsightBadge.textContent = text;
+        els.cliInsightBadge.classList.toggle("is-invalid", !!isInvalid);
+      }
+
+      function setCliAnalysisCache(projectId, entry) {
+        if (!projectId) return;
+        state.cliAnalysisByProject[projectId] = entry;
+      }
+
+      function getCliAnalysisCache(projectId) {
+        return state.cliAnalysisByProject[projectId] || null;
+      }
+
+      function softenAnalysisErrorMessage(message) {
+        var text = String(message || "").trim();
+        if (!text) {
+          return "Не удалось обновить анализ. Проверьте рабочую папку проекта и повторите.";
+        }
+        var lowered = text.toLowerCase();
+        if (
+          lowered.indexOf("project_stage.json") !== -1 ||
+          lowered.indexOf("project_analysis.json") !== -1 ||
+          lowered.indexOf(".ai-pos") !== -1 ||
+          lowered.indexOf("analyzer") !== -1 ||
+          lowered.indexOf("stage engine") !== -1
+        ) {
+          return "Не удалось обновить анализ. Проверьте рабочую папку проекта и повторите.";
+        }
+        return text;
+      }
+
+      function acceptCliAnalysisPayload(raw) {
+        if (!raw || typeof raw !== "object") {
+          return { kind: "error", message: "Не удалось прочитать результат анализа." };
+        }
+        if (raw.valid === false || raw.status === "invalid") {
+          return {
+            kind: "invalid",
+            data: raw,
+            message: softenAnalysisErrorMessage(
+              raw.error || "Анализ недействителен. Обновите анализ после исправления данных проекта."
+            )
+          };
+        }
+        if (!raw.stage && raw.stage !== 0) {
+          return {
+            kind: "error",
+            message: "Результат анализа неполный. Нажмите «Обновить анализ» ещё раз."
+          };
+        }
+        return { kind: "ok", data: raw };
+      }
+
+      function applyCliAnalysisObject(project, analysis, fallbackMessage) {
+        if (!project) return;
+        if (!analysis) {
+          setCliAnalysisCache(project.id, {
+            kind: "error",
+            message: softenAnalysisErrorMessage(fallbackMessage)
+          });
+          renderCliInsight(project);
+          return;
+        }
+        var accepted = acceptCliAnalysisPayload(analysis);
+        if (accepted.kind !== "ok" && fallbackMessage && accepted.kind === "error") {
+          accepted.message = softenAnalysisErrorMessage(fallbackMessage);
+        }
+        if (accepted.kind === "invalid" && fallbackMessage) {
+          accepted.message = softenAnalysisErrorMessage(fallbackMessage || accepted.message);
+        }
+        setCliAnalysisCache(project.id, accepted);
+        renderCliInsight(project);
+      }
+
+      function renderCliInsight(project) {
+        if (!els.cliInsight || !els.cliInsightBody) return;
+        var cache = project ? getCliAnalysisCache(project.id) : null;
+        var httpOk = location.protocol === "http:" || location.protocol === "https:";
+        var hasFolder = !!(project && String(project.workFolder || "").trim());
+        var refreshing = !!(cache && cache.kind === "loading");
+
+        if (els.btnCliInsightRefresh) {
+          els.btnCliInsightRefresh.disabled = refreshing || !hasFolder || !httpOk;
+          if (!httpOk) {
+            els.btnCliInsightRefresh.title =
+              "Запустите AI POS через Local Bridge: python tools/local_bridge.py";
+          } else if (!hasFolder) {
+            els.btnCliInsightRefresh.title = "Сначала укажите рабочую папку проекта.";
+          } else {
+            els.btnCliInsightRefresh.title = "Пересчитать анализ по рабочей папке проекта";
+          }
+        }
+
+        if (els.cliInsightNote) {
+          if (!httpOk) {
+            els.cliInsightNote.textContent =
+              "Отдельно от поля «Текущая работа» выше. Для обновления анализа запустите: python tools/local_bridge.py";
+          } else if (!hasFolder) {
+            els.cliInsightNote.textContent =
+              "Отдельно от поля «Текущая работа» выше. Укажите рабочую папку проекта — затем нажмите «Обновить анализ».";
+          } else {
+            els.cliInsightNote.textContent =
+              "Отдельно от поля «Текущая работа» выше. Кнопка пересчитывает состояние по рабочей папке; стадию назначает система, не интерфейс.";
+          }
+        }
+
+        var isInvalid = !!(cache && cache.kind === "invalid");
+        els.cliInsight.classList.toggle("is-invalid", isInvalid);
+
+        if (!cache) {
+          setCliInsightBadge("Не загружен", false);
+          els.cliInsightBody.innerHTML =
+            '<p class="cli-insight-empty">Анализ ещё не обновлялся. Нажмите «Обновить анализ».</p>';
+          return;
+        }
+
+        if (cache.kind === "loading") {
+          setCliInsightBadge("Обновление…", false);
+          els.cliInsightBody.innerHTML =
+            '<p class="cli-insight-empty">Обновляем анализ проекта…</p>';
+          return;
+        }
+
+        if (cache.kind === "error") {
+          setCliInsightBadge("Ошибка", true);
+          els.cliInsightBody.innerHTML =
+            '<p class="cli-insight-error"><span class="cli-insight-error-title">Не удалось обновить анализ</span>' +
+            escapeHtml(cache.message || "Повторите попытку.") +
+            "</p>";
+          return;
+        }
+
+        if (cache.kind === "invalid") {
+          setCliInsightBadge("Недействителен", true);
+          els.cliInsightBody.innerHTML =
+            '<p class="cli-insight-error"><span class="cli-insight-error-title">Анализ недействителен — не используйте как текущий статус</span>' +
+            escapeHtml(cache.message) +
+            "</p>";
+          return;
+        }
+
+        var data = cache.data || {};
+        setCliInsightBadge("Актуален", false);
+        var nextText =
+          data.next_step && typeof data.next_step === "object"
+            ? data.next_step.text
+            : data.next_step;
+        var conflicts = Array.isArray(data.conflicting_evidence) ? data.conflicting_evidence : [];
+        var conflictItems = [];
+        for (var c = 0; c < conflicts.length; c++) {
+          var item = conflicts[c];
+          if (typeof item === "string") conflictItems.push(item);
+          else if (item && item.text) {
+            conflictItems.push(item.text);
+          }
+        }
+
+        var html = '<div class="cli-insight-grid">';
+        html +=
+          '<div class="cli-insight-item"><span class="field-label">Стадия</span><p>' +
+          cliStageDisplay(data.stage) +
+          "</p></div>";
+        html +=
+          '<div class="cli-insight-item"><span class="field-label">Уверенность</span><p>' +
+          cliConfidenceDisplay(data.confidence_state) +
+          "</p></div>";
+        html +=
+          '<div class="cli-insight-item wide"><span class="field-label">Пояснение</span><p>' +
+          escapeHtml(data.stage_explanation || "—") +
+          "</p></div>";
+        html +=
+          '<div class="cli-insight-item"><span class="field-label">Что уже есть</span>' +
+          listHtmlFromItems(data.what_is_present) +
+          "</div>";
+        html +=
+          '<div class="cli-insight-item"><span class="field-label">Требует внимания</span>' +
+          listHtmlFromItems(data.needs_attention) +
+          "</div>";
+        html +=
+          '<div class="cli-insight-item wide"><span class="field-label">Следующий шаг</span><p>' +
+          escapeHtml(nextText || "—") +
+          "</p></div>";
+        if (conflictItems.length) {
+          html +=
+            '<div class="cli-insight-item wide"><span class="field-label">Противоречивые признаки</span>' +
+            listHtmlFromItems(conflictItems) +
+            "</div>";
+        }
+        html += "</div>";
+        els.cliInsightBody.innerHTML = html;
+      }
+
+      function refreshProjectInsight(project) {
+        if (!project) return;
+        var folder = String(project.workFolder || "").trim();
+        if (!folder) {
+          setCliAnalysisCache(project.id, {
+            kind: "error",
+            message: "Укажите рабочую папку проекта и повторите обновление."
+          });
+          renderCliInsight(project);
+          return;
+        }
+        if (location.protocol !== "http:" && location.protocol !== "https:") {
+          setCliAnalysisCache(project.id, {
+            kind: "error",
+            message: "Запустите AI POS через Local Bridge: python tools/local_bridge.py"
+          });
+          renderCliInsight(project);
+          return;
+        }
+
+        setCliAnalysisCache(project.id, { kind: "loading" });
+        renderCliInsight(project);
+
+        fetch("/api/refresh-insight", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ project_path: folder }),
+          cache: "no-store"
+        })
+          .then(function (res) {
+            return res.json().then(function (payload) {
+              return { res: res, payload: payload || {} };
+            }).catch(function () {
+              throw new Error("Сервер вернул некорректный ответ.");
+            });
+          })
+          .then(function (result) {
+            var payload = result.payload;
+            if (!payload.ok) {
+              if (payload.analysis) {
+                applyCliAnalysisObject(
+                  project,
+                  payload.analysis,
+                  payload.message || "Не удалось обновить анализ."
+                );
+                return;
+              }
+              setCliAnalysisCache(project.id, {
+                kind: "error",
+                message: softenAnalysisErrorMessage(
+                  payload.message || "Не удалось обновить анализ."
+                )
+              });
+              renderCliInsight(project);
+              return;
+            }
+            applyCliAnalysisObject(project, payload.analysis, payload.message);
+          })
+          .catch(function (err) {
+            var msg = err && err.message ? err.message : String(err);
+            if (/Failed to fetch|NetworkError|fetch/i.test(msg)) {
+              msg =
+                "Local Bridge не отвечает. Запустите: python tools/local_bridge.py";
+            }
+            setCliAnalysisCache(project.id, {
+              kind: "error",
+              message: softenAnalysisErrorMessage(msg)
+            });
+            renderCliInsight(project);
+          });
+      }
+
+      function renderRules(project) {
+        ensureProjectRules(project);
+        var rules = project.rules;
+        function listHtml(items) {
+          if (!items || !items.length) return "<p>—</p>";
+          return "<ul>" + items.map(function (item) {
+            return "<li>" + escapeHtml(item) + "</li>";
+          }).join("") + "</ul>";
+        }
+        els.rulesGrid.innerHTML =
+          '<article class="rules-card"><h4>Миссия проекта</h4><p>' + escapeHtml(rules.mission || "—") + "</p></article>" +
+          '<article class="rules-card"><h4>Главные принципы</h4>' + listHtml(rules.principles) + "</article>" +
+          '<article class="rules-card warn"><h4>Разрешённый масштаб изменений</h4><p>' + escapeHtml(rules.changeScale || "—") + "</p></article>" +
+          '<article class="rules-card allow"><h4>Защищённые модули</h4>' + listHtml(rules.protectedModules) + "</article>" +
+          '<article class="rules-card forbid"><h4>Запрещённые действия</h4>' + listHtml(rules.forbidden) + "</article>" +
+          '<article class="rules-card"><h4>Порядок согласования изменений</h4>' + listHtml(rules.approvalOrder) + "</article>" +
+          '<article class="rules-card allow"><h4>Критерии принятия результата</h4>' + listHtml(rules.acceptance) + "</article>";
+      }
+
+      function renderReviewBlock(project, task) {
+        if (!task) {
+          if (els.reviewCard) els.reviewCard.hidden = true;
+          return;
+        }
+        els.reviewCard.hidden = false;
+        var review = ensureTaskReview(project, task);
+        els.reviewStatus.textContent = reviewStatusLabel(review.status);
+        els.reviewStatus.className = "review-status" +
+          (review.status === "accepted" ? " is-accepted" : review.status === "notes" ? " is-notes" : "");
+        els.reviewNotes.value = review.notes || "";
+        els.reviewNotes.disabled = review.status === "accepted";
+
+        var html = "";
+        for (var i = 0; i < review.items.length; i++) {
+          var item = review.items[i];
+          html +=
+            '<label><input type="checkbox" data-review-check="' + escapeHtml(item.id) + '"' +
+            (review.checks[item.id] ? " checked" : "") +
+            (review.status === "accepted" ? " disabled" : "") +
+            " /> " + escapeHtml(item.label) + "</label>";
+        }
+        els.reviewChecks.innerHTML = html;
+
+        var checks = els.reviewChecks.querySelectorAll("[data-review-check]");
+        for (var c = 0; c < checks.length; c++) {
+          checks[c].addEventListener("change", function (event) {
+            var mutable = currentProjectMutable();
+            if (!mutable) return;
+            var mod = getActiveModule(mutable);
+            var active = getActiveTask(mod);
+            if (!active) return;
+            var rev = ensureTaskReview(mutable, active);
+            rev.checks[event.currentTarget.getAttribute("data-review-check")] = event.currentTarget.checked;
+            if (rev.status === "accepted") rev.status = "unchecked";
+            persistTaskReview(mutable, active);
+            renderReviewBlock(mutable, active);
+          });
+        }
+
+        els.btnReviewAccept.disabled = review.status === "accepted";
+        els.btnReviewNotes.disabled = review.status === "accepted";
+        els.btnNextTask.disabled = review.status !== "accepted";
+        els.reviewHint.textContent = review.status === "accepted"
+          ? ("Результат принят" + (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ". Можно перейти к следующей задаче.")
+          : "Переход к следующей задаче доступен только после статуса «Принято». Чтобы принять результат, отметьте весь чек-лист.";
+      }
+
+      function formatDateTime(iso) {
+        try {
+          return new Date(iso).toLocaleString("ru-RU", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+        } catch (e) { return ""; }
+      }
+
+      function renderTaskTab(project, view) {
+        var task = view.task;
+        els.taskEmptyNote.hidden = !!task;
+        els.taskStack.hidden = !task;
+        if (!task) {
+          els.taskGoalText.textContent = "—";
+          els.taskWhyText.textContent = "—";
+          els.taskResultText.textContent = "—";
+          els.taskCanText.textContent = "—";
+          els.taskAltText.textContent = "—";
+          els.dontList.innerHTML = "";
+          els.riskList.innerHTML = "";
+          renderReviewBlock(project, null);
+          return;
+        }
+
+        els.taskGoalText.textContent = task.goal || "—";
+        els.taskWhyText.textContent = task.whyNow || "—";
+        els.taskResultText.textContent = task.expectedResult || view.stageOutcome || "—";
+        els.taskCanText.textContent = task.canChange || "—";
+        els.taskAltText.textContent = view.nextAlt || "—";
+
+        var cannot = linesFromCannot(task.cannotChange);
+        var cantHtml = "";
+        for (var i = 0; i < cannot.length; i++) cantHtml += "<li>" + escapeHtml(cannot[i]) + "</li>";
+        els.dontList.innerHTML = cantHtml || "<li>Ограничения не указаны</li>";
+
+        var risks = linesFromCannot(view.nextRisk);
+        var riskHtml = "";
+        for (var r = 0; r < risks.length; r++) riskHtml += "<li>" + escapeHtml(risks[r]) + "</li>";
+        els.riskList.innerHTML = riskHtml || "<li>—</li>";
+        renderReviewBlock(project, task);
+      }
+
+      function renderTools(project) {
+        var html = "";
+        for (var i = 0; i < AI_TOOLS.length; i++) {
+          var t = AI_TOOLS[i];
+          var active = state.selectedTool === t.id ? " is-active" : "";
+          html += '<button type="button" class="tool-pick' + active + '" data-tool="' + escapeHtml(t.id) + '">' + escapeHtml(t.name) + "</button>";
+        }
+        els.toolPicks.innerHTML = html;
+        var buttons = els.toolPicks.querySelectorAll("[data-tool]");
+        for (var b = 0; b < buttons.length; b++) {
+          buttons[b].addEventListener("click", function (event) {
+            state.selectedTool = event.currentTarget.getAttribute("data-tool");
+            var mutable = currentProjectMutable();
+            var mod = mutable ? getActiveModule(mutable) : null;
+            var task = mod ? getActiveTask(mod) : null;
+            if (task) task.recommendedTool = state.selectedTool;
+            if (mutable && !mutable.isDemo) saveProjects();
+            var fresh = ensureDerived(mutable || project);
+            renderTools(fresh);
+            renderAssignment(fresh);
+          });
+        }
+
+        var tool = getTool(state.selectedTool);
+        els.toolWhy.textContent = tool.why;
+        els.toolWhen.textContent = tool.strengths;
+        els.toolAvoid.textContent = tool.avoid;
+        els.toolFolder.textContent = project.workFolder || "не указана";
+      }
+
+      function sectionKind(title) {
+        var t = String(title || "").toUpperCase();
+        if (t.indexOf("КОНТРОЛЬ ПЕРЕД") === 0 || t.indexOf("ПЕРЕД НАЧАЛОМ") === 0) return "gate";
+        if (t.indexOf("КРИТЕРИИ ПРОВЕРКИ") === 0) return "result";
+        if (t.indexOf("ПРОЕКТ") === 0 && t.indexOf("КОНТЕКСТ") === -1) return "project";
+        if (t.indexOf("МОДУЛЬ") === 0 || t.indexOf("КОНТЕКСТ МОДУЛЯ") === 0) return "module";
+        if (t.indexOf("ТЕКУЩАЯ ЗАДАЧА") === 0) return "task";
+        if (t === "ЦЕЛЬ" || t.indexOf("КОНТЕКСТ ПРОЕКТА") === 0) return "goal";
+        if (t.indexOf("ЧТО ГОТОВО") === 0) return "ready";
+        if (t.indexOf("ЧТО СДЕЛАТЬ") === 0) return "todo";
+        if (t.indexOf("ОГРАНИЧЕНИЯ") === 0) return "limits";
+        if (t.indexOf("ОЖИДАЕМЫЙ РЕЗУЛЬТАТ") === 0) return "result";
+        if (t.indexOf("ГДЕ ВЫПОЛНЯТЬ") === 0) return "place";
+        return "other";
+      }
+
+      function formatAssignmentHtml(text) {
+        var lines = String(text || "").split("\n");
+        var headers = {
+          "КОНТРОЛЬ ПЕРЕД ПЕРЕДАЧЕЙ ЗАДАЧИ": true,
+          "ПЕРЕД НАЧАЛОМ РАБОТЫ": true,
+          "ПРОЕКТ": true,
+          "МОДУЛЬ": true,
+          "ТЕКУЩАЯ ЗАДАЧА": true,
+          "ЦЕЛЬ": true,
+          "ЧТО ГОТОВО": true,
+          "ЧТО СДЕЛАТЬ": true,
+          "ОГРАНИЧЕНИЯ": true,
+          "КРИТЕРИИ ПРОВЕРКИ РЕЗУЛЬТАТА": true,
+          "ГДЕ ВЫПОЛНЯТЬ РАБОТУ": true,
+          "ОЖИДАЕМЫЙ РЕЗУЛЬТАТ": true
+        };
+        var html = "";
+        var currentTitle = "";
+        var body = [];
+
+        function flush() {
+          if (!currentTitle && !body.length) return;
+          if (!currentTitle) {
+            html += '<p class="work-intro">' + escapeHtml(body.join("\n").trim()) + "</p>";
+          } else {
+            html +=
+              '<section class="work-sec" data-sec="' + sectionKind(currentTitle) + '">' +
+              '<span class="work-sec-title">' + escapeHtml(currentTitle) + "</span>" +
+              '<p class="work-sec-body">' + escapeHtml(body.join("\n").replace(/^\n+/, "")) + "</p>" +
+              "</section>";
+          }
+          body = [];
+        }
+
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          var key = line.trim().toUpperCase();
+          if (headers[key]) {
+            flush();
+            currentTitle = line.trim();
+          } else {
+            body.push(line);
+          }
+        }
+        flush();
+        return html;
+      }
+
+      function renderAssignment(project) {
+        var tool = getTool(state.selectedTool);
+        var plain = buildAssignment(project, tool);
+        els.assignmentTitle.innerHTML =
+          '<span class="ico" aria-hidden="true">📋</span> Рабочее задание для ' + escapeHtml(tool.name);
+        els.workBox.setAttribute("data-plain", plain);
+        els.workBox.innerHTML = formatAssignmentHtml(plain);
+        els.copyToast.classList.remove("is-visible");
+      }
+
+      function materialKind(file) {
+        var name = (file.name || "").toLowerCase();
+        var type = file.type || "";
+        if (type.indexOf("image/") === 0 || /\.(png|jpe?g|gif|webp|svg)$/.test(name)) return "изображение";
+        if (type === "application/pdf" || /\.pdf$/.test(name)) return "PDF";
+        if (/\.(md|markdown)$/.test(name)) return "Markdown";
+        if (/\.json$/.test(name) || type === "application/json") return "JSON";
+        if (/\.txt$/.test(name) || type.indexOf("text/") === 0) return "TXT";
+        if (/\.(zip|rar|7z)$/.test(name)) return "архив";
+        if (/\.(fig|sketch|xd)$/.test(name)) return "макет";
+        if (/\.(doc|docx|rtf|odt)$/.test(name)) return "документ";
+        return "файл";
+      }
+
+      function renderMaterials(project) {
+        var materials = project.materials || [];
+        if (!materials.length) {
+          els.materialsList.innerHTML =
+            '<p class="materials-hint">Пока файлов нет. Так будет выглядеть раздел после наполнения:</p>' +
+            '<div class="material-row material-example"><div><strong>📄 PROJECT_CONTEXT.md</strong><span>Описание проекта · уровень: проект · пример</span></div></div>' +
+            '<div class="material-row material-example"><div><strong>📄 DESIGN_RULES.md</strong><span>Правила интерфейса · уровень: проект · пример</span></div></div>' +
+            '<div class="material-row material-example"><div><strong>📄 ROADMAP.md</strong><span>План разработки · уровень: проект · пример</span></div></div>';
+          return;
+        }
+        var html = "";
+        for (var i = 0; i < materials.length; i++) {
+          var m = materials[i];
+          var level = m.level || "проект";
+          html +=
+            '<div class="material-row"><div><strong>' + escapeHtml(m.name) + "</strong><span>" +
+            escapeHtml(m.kind || "файл") + " · уровень: " + escapeHtml(level) +
+            " · " + escapeHtml(formatSize(m.size || 0)) +
+            (m.contentText ? " · в контексте" : " · метаданные") +
+            '</span></div><button type="button" class="btn btn-ghost" data-remove-material="' +
+            escapeHtml(m.id) + '">Удалить</button></div>';
+        }
+        els.materialsList.innerHTML = html;
+        var removes = els.materialsList.querySelectorAll("[data-remove-material]");
+        for (var r = 0; r < removes.length; r++) {
+          removes[r].addEventListener("click", function (event) {
+            removeMaterial(event.currentTarget.getAttribute("data-remove-material"));
+          });
+        }
+      }
+
+      function removeMaterial(id) {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        mutable.materials = (mutable.materials || []).filter(function (m) { return m.id !== id; });
+        if (!mutable.isDemo) saveProjects();
+        refreshWorkspace();
+      }
+
+      function readFileAsText(file) {
+        return new Promise(function (resolve) {
+          var reader = new FileReader();
+          reader.onload = function () { resolve(String(reader.result || "")); };
+          reader.onerror = function () { resolve(""); };
+          reader.readAsText(file);
+        });
+      }
+
+      function readFileAsDataURL(file) {
+        return new Promise(function (resolve) {
+          var reader = new FileReader();
+          reader.onload = function () { resolve(String(reader.result || "")); };
+          reader.onerror = function () { resolve(""); };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function isTextLike(file) {
+        var name = (file.name || "").toLowerCase();
+        var type = file.type || "";
+        return type.indexOf("text/") === 0 || type === "application/json" || /\.(txt|md|markdown|json|csv)$/.test(name);
+      }
+
+      function ingestFile(file, mutable) {
+        var item = {
+          id: uid("file"),
+          name: file.name,
+          type: file.type || "application/octet-stream",
+          size: file.size || 0,
+          kind: materialKind(file),
+          level: "проект",
+          contentText: "",
+          dataUrl: ""
+        };
+        if (isTextLike(file) && file.size <= MAX_TEXT_CHARS) {
+          return readFileAsText(file).then(function (text) {
+            item.contentText = text.slice(0, MAX_TEXT_CHARS);
+            mutable.materials.push(item);
+          });
+        }
+        if ((file.type || "").indexOf("image/") === 0 && file.size <= MAX_DATA_URL) {
+          return readFileAsDataURL(file).then(function (url) {
+            if (url && url.length <= MAX_DATA_URL) item.dataUrl = url;
+            mutable.materials.push(item);
+          });
+        }
+        mutable.materials.push(item);
+        return Promise.resolve();
+      }
+
+      function onMaterialsSelected(event) {
+        var files = event.target.files;
+        if (!files || !files.length) return;
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        if (!mutable.materials) mutable.materials = [];
+        var tasks = [];
+        for (var i = 0; i < files.length; i++) tasks.push(ingestFile(files[i], mutable));
+        Promise.all(tasks).then(function () {
+          if (!mutable.isDemo) saveProjects();
+          refreshWorkspace();
+          els.materialsInput.value = "";
+        });
+      }
+
+      function renderTeam(project) {
+        var mod = getActiveModule(project);
+        var task = getActiveTask(mod);
+        var html = "";
+        for (var i = 0; i < TEAM.length; i++) {
+          var member = TEAM[i];
+          var engagement = teamEngagementFor(task, member.role);
+          var roleItems = "";
+          var respItems = "";
+          for (var r = 0; r < member.rolePoints.length; r++) {
+            roleItems += "<li>" + escapeHtml(member.rolePoints[r]) + "</li>";
+          }
+          for (var s = 0; s < member.responsibility.length; s++) {
+            respItems += "<li>" + escapeHtml(member.responsibility[s]) + "</li>";
+          }
+          html +=
+            '<article class="team-card' + (engagement.kind === "idle" ? " is-idle" : "") + '">' +
+            "<h4>" + escapeHtml(member.role) + "</h4>" +
+            '<span class="status-pill ' + escapeHtml(engagement.kind) + '">' + escapeHtml(engagement.label) + "</span>" +
+            '<div class="role-block"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Роль</span><ul class="role-list">' + roleItems + "</ul></div>" +
+            '<div class="role-block"><span class="field-label"><span class="ico" aria-hidden="true">📍</span>Сейчас</span><p class="role-status">' + escapeHtml(engagement.label) + '</p><p class="status-reason">' + escapeHtml(engagement.reason) + '</p></div>' +
+            '<div class="role-block"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Основная ответственность</span><ul class="role-list">' + respItems + "</ul></div>" +
+            "</article>";
+        }
+        els.teamList.innerHTML = html;
+      }
+
+      function refreshWorkspace() {
+        var project = findProject(state.currentId);
+        if (!project) return;
+        openWorkspace(project.id, true);
+      }
+
+      function openWorkspace(id, keepScroll) {
+        var project = findProject(id);
+        if (!project) return;
+        state.currentId = id;
+        saveLastOpened(id);
+
+        var view = deriveView(project);
+        var task = view.task;
+        state.selectedTool = (task && task.recommendedTool) || state.selectedTool || "cursor";
+
+        renderHeader(project, view);
+        renderOverview(project, view);
+        renderRules(project);
+        renderTaskTab(project, view);
+        renderTools(project);
+        renderAssignment(project);
+        renderMaterials(project);
+        renderTeam(project);
+        setActiveTab(state.activeTab || "overview");
+        showPanel("workspace", { keepScroll: !!keepScroll });
+      }
+
+      function getFormData() {
+        return {
+          name: document.getElementById("fieldName").value.trim(),
+          idea: document.getElementById("fieldIdea").value.trim(),
+          result: document.getElementById("fieldResult").value.trim(),
+          audience: document.getElementById("fieldAudience").value.trim(),
+          assets: document.getElementById("fieldAssets").value.trim(),
+          constraints: document.getElementById("fieldConstraints").value.trim(),
+          workFolder: document.getElementById("fieldWorkFolder").value.trim(),
+          template: document.getElementById("fieldTemplate").value.trim()
+        };
+      }
+
+      function validateForm(data) {
+        clearFieldErrors();
+        var ok = true;
+        var required = ["name", "idea", "result", "audience"];
+        for (var i = 0; i < required.length; i++) {
+          if (!data[required[i]]) {
+            var field = els.projectForm.querySelector('[data-field="' + required[i] + '"]');
+            if (field) field.classList.add("is-invalid");
+            ok = false;
+          }
+        }
+        els.formError.classList.toggle("is-visible", !ok);
+        return ok;
+      }
+
+      function onSubmitForm(event) {
+        event.preventDefault();
+        var data = getFormData();
+        if (!validateForm(data)) return;
+
+        var project = ensureDerived({
+          id: uid("proj"),
+          name: data.name,
+          idea: data.idea,
+          result: data.result,
+          audience: data.audience,
+          assets: data.assets,
+          constraints: data.constraints,
+          workFolder: data.workFolder,
+          template: data.template,
+          modules: [],
+          activeModuleId: "",
+          materials: [],
+          status: "В работе",
+          stage: "Анализ",
+          isDemo: false,
+          createdAt: new Date().toISOString()
+        });
+
+        state.projects.push(project);
+        saveProjects();
+        openWorkspace(project.id);
+      }
+
+      function fillTaskToolSelect() {
+        var html = "";
+        for (var i = 0; i < AI_TOOLS.length; i++) {
+          html += '<option value="' + escapeHtml(AI_TOOLS[i].id) + '">' + escapeHtml(AI_TOOLS[i].name) + "</option>";
+        }
+        els.taskTool.innerHTML = html;
+      }
+
+      function fillTaskModuleSelect(project) {
+        var modules = project.modules || [];
+        var html = "";
+        for (var i = 0; i < modules.length; i++) {
+          html += '<option value="' + escapeHtml(modules[i].id) + '">' + escapeHtml(modules[i].name) + "</option>";
+        }
+        els.taskModule.innerHTML = html;
+      }
+
+      function openAddModule() {
+        els.moduleForm.reset();
+        document.getElementById("modStatus").value = "В работе";
+        openModal(els.moduleModal);
+        document.getElementById("modName").focus();
+      }
+
+      function openAddTask(force) {
+        var project = currentProjectMutable();
+        if (!project) return;
+        project = ensureDerived(project);
+        if (!project.modules.length) {
+          window.alert("Сначала добавьте модуль. Задача принадлежит модулю, а не всему проекту.");
+          return;
+        }
+        var currentMod = getActiveModule(project);
+        var currentTask = getActiveTask(currentMod);
+        if (!force && currentTask) {
+          var review = ensureTaskReview(project, currentTask);
+          if (review.status !== "accepted") {
+            window.alert("Сначала примите результат текущей задачи. Переход к следующей задаче доступен только после статуса «Принято».");
+            setActiveTab("task");
+            return;
+          }
+        }
+        els.taskForm.reset();
+        fillTaskModuleSelect(project);
+        fillTaskToolSelect();
+        els.taskModule.value = project.activeModuleId || project.modules[0].id;
+        els.taskTool.value = "cursor";
+        openModal(els.taskModal);
+        document.getElementById("taskName").focus();
+      }
+
+      function markReviewNotes() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var mod = getActiveModule(mutable);
+        var task = getActiveTask(mod);
+        if (!task) return;
+        var review = ensureTaskReview(mutable, task);
+        review.notes = els.reviewNotes.value.trim();
+        review.status = "notes";
+        review.acceptedAt = null;
+        persistTaskReview(mutable, task);
+        renderReviewBlock(mutable, task);
+      }
+
+      function markReviewAccepted() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var mod = getActiveModule(mutable);
+        var task = getActiveTask(mod);
+        if (!task) return;
+        var review = ensureTaskReview(mutable, task);
+        review.notes = els.reviewNotes.value.trim();
+        if (!allReviewChecksDone(review)) {
+          window.alert("Чтобы принять результат, отметьте все пункты чек-листа проверки.");
+          return;
+        }
+        review.status = "accepted";
+        review.acceptedAt = new Date().toISOString();
+        persistTaskReview(mutable, task);
+        renderReviewBlock(mutable, task);
+      }
+
+      function syncGateConfirmButton() {
+        var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
+        var all = true;
+        for (var i = 0; i < boxes.length; i++) {
+          if (!boxes[i].checked) all = false;
+        }
+        els.btnConfirmGate.disabled = !all;
+      }
+
+      function openActionGate() {
+        var project = currentProjectMutable() || findProject(state.currentId);
+        if (!project) return;
+        project = ensureDerived(project);
+        var mod = getActiveModule(project);
+        var task = getActiveTask(mod);
+        if (!task) {
+          window.alert("Сначала добавьте текущую задачу.");
+          return;
+        }
+
+        els.gateProject.textContent = project.name;
+        els.gateModule.textContent = mod ? mod.name : "не выбран";
+        els.gateTask.textContent = task.name;
+
+        var allowed = gateAllowedList(task, mod);
+        var forbidden = gateForbiddenList(task);
+        els.gateAllowed.innerHTML = allowed.map(function (item) {
+          return "<li>" + escapeHtml(item) + "</li>";
+        }).join("");
+        els.gateForbidden.innerHTML = forbidden.map(function (item) {
+          return "<li>" + escapeHtml(item) + "</li>";
+        }).join("");
+
+        var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
+        for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
+        els.btnConfirmGate.disabled = true;
+
+        var prev = loadJsonMap(GATE_KEY)[reviewMapKey(project, task)];
+        if (prev && prev.at) {
+          els.gateConfirmedAt.hidden = false;
+          els.gateConfirmedAt.textContent = "Последнее подтверждение: " + formatDateTime(prev.at);
+        } else {
+          els.gateConfirmedAt.hidden = true;
+          els.gateConfirmedAt.textContent = "";
+        }
+
+        openModal(els.gateModal);
+      }
+
+      function confirmActionGateAndCopy() {
+        var project = currentProjectMutable() || findProject(state.currentId);
+        if (!project) return;
+        project = ensureDerived(project);
+        var mod = getActiveModule(project);
+        var task = getActiveTask(mod);
+        if (!task) return;
+
+        var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
+        for (var i = 0; i < boxes.length; i++) {
+          if (!boxes[i].checked) {
+            window.alert("Нужно подтвердить все пункты контроля перед копированием.");
+            return;
+          }
+        }
+
+        var at = new Date().toISOString();
+        var map = loadJsonMap(GATE_KEY);
+        map[reviewMapKey(project, task)] = {
+          at: at,
+          checks: {
+            task: true,
+            scope: true,
+            forbid: true,
+            criteria: true
+          }
+        };
+        saveJsonMap(GATE_KEY, map);
+        closeModal(els.gateModal);
+        copyWorkText();
+      }
+
+      function onSubmitModule(event) {
+        event.preventDefault();
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        if (!mutable.modules) mutable.modules = [];
+
+        var mod = {
+          id: uid("mod"),
+          name: document.getElementById("modName").value.trim(),
+          purpose: document.getElementById("modPurpose").value.trim(),
+          status: document.getElementById("modStatus").value.trim() || "В работе",
+          ready: document.getElementById("modReady").value.trim(),
+          remaining: document.getElementById("modRemaining").value.trim(),
+          constraints: document.getElementById("modConstraints").value.trim(),
+          tasks: [],
+          activeTaskId: ""
+        };
+
+        if (!mod.name || !mod.purpose) return;
+
+        mutable.modules.push(mod);
+        mutable.activeModuleId = mod.id;
+        if (!mutable.isDemo) saveProjects();
+        closeModal(els.moduleModal);
+        refreshWorkspace();
+      }
+
+      function onSubmitTask(event) {
+        event.preventDefault();
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        mutable = ensureDerived(mutable);
+
+        var moduleId = els.taskModule.value;
+        var mod = null;
+        for (var i = 0; i < mutable.modules.length; i++) {
+          if (mutable.modules[i].id === moduleId) mod = mutable.modules[i];
+        }
+        if (!mod) {
+          window.alert("Выберите модуль для задачи.");
+          return;
+        }
+
+        var task = {
+          id: uid("task"),
+          name: document.getElementById("taskName").value.trim(),
+          goal: document.getElementById("taskGoal").value.trim(),
+          whyNow: document.getElementById("taskWhy").value.trim(),
+          expectedResult: document.getElementById("taskResult").value.trim(),
+          canChange: document.getElementById("taskCan").value.trim(),
+          cannotChange: linesFromCannot(document.getElementById("taskCannot").value),
+          recommendedTool: els.taskTool.value || "cursor",
+          filesRefs: document.getElementById("taskFiles").value.trim(),
+          subtask: document.getElementById("taskSub").value.trim()
+        };
+
+        if (!task.name || !task.goal || !task.whyNow || !task.expectedResult) return;
+
+        if (!mod.tasks) mod.tasks = [];
+        mod.tasks.push(task);
+        mod.activeTaskId = task.id;
+        mutable.activeModuleId = mod.id;
+        if (!mutable.stage || mutable.stage === "Анализ") mutable.stage = "Разработка";
+
+        if (!mutable.isDemo) saveProjects();
+        closeModal(els.taskModal);
+        refreshWorkspace();
+      }
+
+      function copyWorkText() {
+        var text = els.workBox.getAttribute("data-plain") || els.workBox.textContent || "";
+        if (!text) return;
+
+        function showOk() {
+          els.copyToast.classList.add("is-visible");
+          window.setTimeout(function () {
+            els.copyToast.classList.remove("is-visible");
+          }, 1800);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(showOk).catch(function () {
+            fallbackCopy(text, showOk);
+          });
+        } else {
+          fallbackCopy(text, showOk);
+        }
+      }
+
+      function fallbackCopy(text, onSuccess) {
+        var area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.left = "-9999px";
+        document.body.appendChild(area);
+        area.select();
+        try {
+          document.execCommand("copy");
+          onSuccess();
+        } catch (e) {}
+        document.body.removeChild(area);
+      }
+
+      function openStepDetails() {
+        var project = getFocusProject();
+        var view = deriveView(project);
+        document.getElementById("stepModalLead").textContent = view.task ? view.task.name : view.nextLine2;
+        document.getElementById("stepModalProject").textContent = project.name;
+        document.getElementById("stepModalModule").textContent = view.module ? view.module.name : "не выбран";
+        document.getElementById("stepModalTask").textContent = view.task ? view.task.name : "не выбрана";
+        document.getElementById("stepModalGoal").textContent = view.task ? view.task.goal : project.result;
+        document.getElementById("stepModalWhy").textContent = view.task ? view.task.whyNow : view.whyPath;
+        document.getElementById("stepModalEffect").textContent = view.nextEffect;
+        document.getElementById("stepModalRisk").textContent = view.nextRisk;
+        document.getElementById("stepModalAlt").textContent = view.nextAlt;
+        document.getElementById("stepModalConfidence").textContent = view.confidence;
+        document.getElementById("stepModalBasis").textContent = view.nextBasis;
+        openModal(els.stepModal);
+      }
+
+      function bindEvents() {
+        document.getElementById("btnNewProject").addEventListener("click", openForm);
+        document.getElementById("btnNewFromWorkspace").addEventListener("click", openForm);
+        document.getElementById("btnCancelForm").addEventListener("click", function () { showPanel("list"); });
+        document.getElementById("btnCancelFormAlt").addEventListener("click", function () { showPanel("list"); });
+        document.getElementById("btnBackToList").addEventListener("click", function () { showPanel("list"); });
+        document.getElementById("btnContinue").addEventListener("click", function () {
+          openWorkspace(getFocusProject().id);
+        });
+        document.getElementById("btnStartNext").addEventListener("click", function () {
+          openWorkspace(getFocusProject().id);
+        });
+        document.getElementById("btnStartFromModal").addEventListener("click", function () {
+          closeModal(els.stepModal);
+          openWorkspace(getFocusProject().id);
+        });
+        document.getElementById("btnStepDetails").addEventListener("click", openStepDetails);
+        document.getElementById("btnCloseStep").addEventListener("click", function () { closeModal(els.stepModal); });
+        document.getElementById("btnClearTemplate").addEventListener("click", function () {
+          state.selectedTemplate = "";
+          document.getElementById("fieldTemplate").value = "";
+          renderTemplates();
+        });
+        document.getElementById("btnSaveTemplate").addEventListener("click", saveAsCustomTemplate);
+        document.getElementById("btnCopyWork").addEventListener("click", openActionGate);
+        document.getElementById("btnAddModule").addEventListener("click", openAddModule);
+        document.getElementById("btnAddTask").addEventListener("click", function () { openAddTask(false); });
+        document.getElementById("btnCancelModule").addEventListener("click", function () { closeModal(els.moduleModal); });
+        document.getElementById("btnCancelTask").addEventListener("click", function () { closeModal(els.taskModal); });
+        document.getElementById("btnCancelGate").addEventListener("click", function () { closeModal(els.gateModal); });
+        document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGateAndCopy);
+        els.btnReviewNotes.addEventListener("click", markReviewNotes);
+        els.btnReviewAccept.addEventListener("click", markReviewAccepted);
+        els.btnNextTask.addEventListener("click", function () { openAddTask(true); });
+        els.reviewNotes.addEventListener("change", function () {
+          var mutable = currentProjectMutable();
+          if (!mutable) return;
+          var mod = getActiveModule(mutable);
+          var task = getActiveTask(mod);
+          if (!task) return;
+          var review = ensureTaskReview(mutable, task);
+          if (review.status === "accepted") return;
+          review.notes = els.reviewNotes.value;
+          persistTaskReview(mutable, task);
+        });
+        els.gateChecks.addEventListener("change", syncGateConfirmButton);
+        els.moduleForm.addEventListener("submit", onSubmitModule);
+        els.taskForm.addEventListener("submit", onSubmitTask);
+        els.materialsInput.addEventListener("change", onMaterialsSelected);
+        if (els.btnCliInsightRefresh) {
+          els.btnCliInsightRefresh.addEventListener("click", function () {
+            refreshProjectInsight(findProject(state.currentId));
+          });
+        }
+        els.projectForm.addEventListener("submit", onSubmitForm);
+
+        var tabButtons = els.workspaceTabs.querySelectorAll("[data-tab]");
+        for (var t = 0; t < tabButtons.length; t++) {
+          tabButtons[t].addEventListener("click", function (event) {
+            setActiveTab(event.currentTarget.getAttribute("data-tab"));
+          });
+        }
+
+        els.stepModal.addEventListener("click", function (event) {
+          if (event.target === els.stepModal) closeModal(els.stepModal);
+        });
+        els.moduleModal.addEventListener("click", function (event) {
+          if (event.target === els.moduleModal) closeModal(els.moduleModal);
+        });
+        els.taskModal.addEventListener("click", function (event) {
+          if (event.target === els.taskModal) closeModal(els.taskModal);
+        });
+        els.gateModal.addEventListener("click", function (event) {
+          if (event.target === els.gateModal) closeModal(els.gateModal);
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            closeModal(els.stepModal);
+            closeModal(els.moduleModal);
+            closeModal(els.taskModal);
+            closeModal(els.gateModal);
+          }
+        });
+      }
+
+      function init() {
+        state.projects = loadProjects();
+        state.customTemplates = loadCustomTemplates();
+        state.lastOpenedId = loadLastOpened();
+        if (!findProject(state.lastOpenedId)) state.lastOpenedId = DEMO_PROJECT.id;
+        fillTaskToolSelect();
+        bindEvents();
+        renderTemplates();
+        renderHome();
+        showPanel("list");
+      }
+
+      init();
+    })();
+  </script>
 </body>
 </html>

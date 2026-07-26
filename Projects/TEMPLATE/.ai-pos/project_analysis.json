@@ -1,0 +1,32 @@
+{
+  "schema": "ai-pos.project_analysis/v1",
+  "project_path": "D:\\AI_Project_Operating_System\\Projects\\TEMPLATE",
+  "stage": "IDEA",
+  "confidence_state": "CONFIRMED",
+  "stage_explanation": "Стадия «Идея» (IDEA) уже назначена Stage Engine с уверенностью CONFIRMED. Проект на стадии идеи: содержательного описания цели ещё нет (или есть только заглушки). Заглушки учтены, но не повысили стадию: Контекст-заглушка (не повышает стадию): PROJECT_CONTEXT.md; Структурная заглушка (не повышает стадию): ARCHITECTURE.md; Структурная заглушка (не повышает стадию): DESIGN_RULES.md; Структурная заглушка (не повышает стадию): DATA_SCHEMA.md.",
+  "what_is_present": [],
+  "needs_attention": [
+    "Заглушка (не содержательный документ): PROJECT_CONTEXT.md",
+    "Заглушка (не содержательный документ): ROADMAP.md",
+    "Заглушка (не содержательный документ): ARCHITECTURE.md",
+    "Заглушка (не содержательный документ): DESIGN_RULES.md",
+    "Заглушка (не содержательный документ): DATA_SCHEMA.md",
+    "Заглушка (не содержательный документ): DECISIONS.md"
+  ],
+  "next_step": {
+    "text": "Заполнить PROJECT_CONTEXT.md или README.md реальным описанием цели (шаг взят из project_stage.json, Analyzer его не заменяет).",
+    "action_hint": "create_context"
+  },
+  "analyzer": "project_analyzer_mvp_min",
+  "project_files_top_level": [
+    "ARCHITECTURE.md",
+    "DATA_SCHEMA.md",
+    "DECISIONS.md",
+    "DESIGN_RULES.md",
+    "PROJECT_CONTEXT.md",
+    "ROADMAP.md"
+  ],
+  "notes": "Analyzer does not assign stage. Fields stage and confidence_state are copied from project_stage.json.",
+  "status": "ok",
+  "valid": true
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "ai-pos.project_analysis/v1",
+  "project_path": "D:\\AI_Project_Operating_System\\Projects\\FIXTURES\\empty_no_stage",
+  "stage": "IDEA",
+  "confidence_state": "CONFIRMED",
+  "stage_explanation": "Стадия «Идея» (IDEA) уже назначена Stage Engine с уверенностью CONFIRMED. В project_stage.json мало evidence — показана только зафиксированная стадия.",
+  "what_is_present": [],
+  "needs_attention": [
+    "Нет содержательного PROJECT_CONTEXT.md или README.md",
+    "Нет содержательного ROADMAP.md"
+  ],
+  "next_step": {
+    "text": "Заполнить PROJECT_CONTEXT.md или README.md реальным описанием цели (шаг взят из project_stage.json, Analyzer его не заменяет).",
+    "action_hint": "create_context"
+  },
+  "analyzer": "project_analyzer_mvp_min",
+  "project_files_top_level": [],
+  "notes": "Analyzer does not assign stage. Fields stage and confidence_state are copied from project_stage.json."
+}

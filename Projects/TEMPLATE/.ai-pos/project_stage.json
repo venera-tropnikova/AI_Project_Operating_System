@@ -1,0 +1,103 @@
+{
+  "schema": "ai-pos.project_stage/v1",
+  "stage": "IDEA",
+  "stage_label": "Идея",
+  "confidence_state": "CONFIRMED",
+  "evidence": [
+    {
+      "code": "FILE_CONTEXT_STUB",
+      "text": "Контекст-заглушка (не повышает стадию): PROJECT_CONTEXT.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    },
+    {
+      "code": "FILE_STRUCTURE_STUB",
+      "text": "Структурная заглушка (не повышает стадию): ARCHITECTURE.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    },
+    {
+      "code": "FILE_STRUCTURE_STUB",
+      "text": "Структурная заглушка (не повышает стадию): DESIGN_RULES.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    },
+    {
+      "code": "FILE_STRUCTURE_STUB",
+      "text": "Структурная заглушка (не повышает стадию): DATA_SCHEMA.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    },
+    {
+      "code": "FILE_STRUCTURE_STUB",
+      "text": "Структурная заглушка (не повышает стадию): DECISIONS.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    },
+    {
+      "code": "FILE_ROADMAP_STUB",
+      "text": "План-заглушка (не повышает стадию): ROADMAP.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    }
+  ],
+  "conflicting_evidence": [],
+  "blockers": [
+    {
+      "text": "Есть файлы-заглушки; нужно заполнить содержательный PROJECT_CONTEXT.md или README.md"
+    }
+  ],
+  "next_step": {
+    "text": "Заполнить PROJECT_CONTEXT.md или README.md реальным описанием цели",
+    "action_hint": "create_context"
+  },
+  "inappropriate_actions": [],
+  "detected_at": "2026-07-25T22:45:35Z",
+  "source_freshness": {
+    "snapshot_at": "2026-07-25T22:45:35Z",
+    "state_at": null,
+    "stale": false
+  },
+  "workstreams": [],
+  "global_stage": "IDEA",
+  "dominant_stage": "IDEA",
+  "blocking_stage": "IDEA",
+  "override": null,
+  "engine": "project_stage_engine_mvp_min",
+  "project_root": "D:\\AI_Project_Operating_System\\Projects\\TEMPLATE",
+  "mvp_note": "Temporary minimal Stage Engine (IDEA..EXECUTION). Only substantive files raise stage; stubs do not. EXECUTION requires roadmap ladder + runtime app signal.",
+  "presence": {
+    "context_hits": [],
+    "roadmap_hits": [],
+    "structure_hits": [],
+    "context_stubs": [
+      "PROJECT_CONTEXT.md"
+    ],
+    "roadmap_stubs": [
+      "ROADMAP.md"
+    ],
+    "structure_stubs": [
+      "ARCHITECTURE.md",
+      "DESIGN_RULES.md",
+      "DATA_SCHEMA.md",
+      "DECISIONS.md"
+    ],
+    "stub_files": [
+      "PROJECT_CONTEXT.md",
+      "ROADMAP.md",
+      "ARCHITECTURE.md",
+      "DESIGN_RULES.md",
+      "DATA_SCHEMA.md",
+      "DECISIONS.md"
+    ],
+    "has_runtime_app": false,
+    "marker_locations": [
+      "",
+      "docs"
+    ]
+  },
+  "substantive_rules": {
+    "min_body_chars": 80,
+    "min_body_lines": 2
+  }
+}

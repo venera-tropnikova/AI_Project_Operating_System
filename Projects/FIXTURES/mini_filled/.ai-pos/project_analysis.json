@@ -1,0 +1,24 @@
+{
+  "schema": "ai-pos.project_analysis/v1",
+  "project_path": "D:\\AI_Project_Operating_System\\Projects\\FIXTURES\\mini_filled",
+  "stage": "PLANNING",
+  "confidence_state": "CONFIRMED",
+  "stage_explanation": "Стадия «Планирование» (PLANNING) уже назначена Stage Engine с уверенностью CONFIRMED. Проект на стадии планирования: есть содержательный контекст и план, но явного каркаса работающего приложения ещё не видно. Основание: Содержательный контекст: PROJECT_CONTEXT.md; Содержательный план: ROADMAP.md.",
+  "what_is_present": [
+    "PROJECT_CONTEXT.md",
+    "ROADMAP.md"
+  ],
+  "needs_attention": [],
+  "next_step": {
+    "text": "Определить текущую задачу для исполнения (шаг взят из project_stage.json, Analyzer его не заменяет).",
+    "action_hint": "define_task"
+  },
+  "analyzer": "project_analyzer_mvp_min",
+  "project_files_top_level": [
+    "PROJECT_CONTEXT.md",
+    "ROADMAP.md"
+  ],
+  "notes": "Analyzer does not assign stage. Fields stage and confidence_state are copied from project_stage.json.",
+  "status": "ok",
+  "valid": true
+}

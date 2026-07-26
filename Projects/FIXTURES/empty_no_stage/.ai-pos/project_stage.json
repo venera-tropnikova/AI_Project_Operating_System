@@ -1,0 +1,52 @@
+{
+  "schema": "ai-pos.project_stage/v1",
+  "stage": "IDEA",
+  "stage_label": "Идея",
+  "confidence_state": "CONFIRMED",
+  "evidence": [
+    {
+      "code": "NO_MARKERS",
+      "text": "Не найдены PROJECT_CONTEXT.md / README.md / ROADMAP.md",
+      "trust": "system-confirmed",
+      "source": "fs"
+    }
+  ],
+  "conflicting_evidence": [],
+  "blockers": [
+    {
+      "text": "Нужно указать цель проекта и базовые документы"
+    }
+  ],
+  "next_step": {
+    "text": "Заполнить PROJECT_CONTEXT.md или README.md реальным описанием цели",
+    "action_hint": "create_context"
+  },
+  "inappropriate_actions": [],
+  "detected_at": "2026-07-25T20:44:21Z",
+  "source_freshness": {
+    "snapshot_at": "2026-07-25T20:44:21Z",
+    "state_at": null,
+    "stale": false
+  },
+  "workstreams": [],
+  "global_stage": "IDEA",
+  "dominant_stage": "IDEA",
+  "blocking_stage": "IDEA",
+  "override": null,
+  "engine": "project_stage_engine_mvp_min",
+  "project_root": "D:\\AI_Project_Operating_System\\Projects\\FIXTURES\\empty_no_stage",
+  "mvp_note": "Temporary minimal Stage Engine (IDEA..PLANNING). Only substantive files raise stage; stubs do not.",
+  "presence": {
+    "context_hits": [],
+    "roadmap_hits": [],
+    "structure_hits": [],
+    "context_stubs": [],
+    "roadmap_stubs": [],
+    "structure_stubs": [],
+    "stub_files": []
+  },
+  "substantive_rules": {
+    "min_body_chars": 80,
+    "min_body_lines": 2
+  }
+}
