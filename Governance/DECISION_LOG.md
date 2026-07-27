@@ -92,6 +92,25 @@
 
 ---
 
+## D-2026-07-27-03 — Architecture Baseline v0.1 и уточнение области Freeze
+
+- **Дата:** 2026-07-27  
+- **Статус:** Accepted  
+- **Pipeline:** … → Action Gate → Accepted  
+- **Action Gate:** пройден человеком (Human Decision; зафиксировано 2026-07-28)  
+- **ADR:** ADR-0002 (уточнение; Freeze остаётся **ACTIVE**)  
+- **Решение:**
+  - введён временный документ `docs/architecture/ARCHITECTURE_BASELINE_V0.1.md` (Experimental / Temporary / Support First MVP);
+  - Architecture Freeze v1.0 подтверждён как **ACTIVE** с явной областью: Governance Layer; Architecture Baseline v0.1; фундаментальные допущения MVP (B-001–B-005);
+  - Freeze не запрещает реализацию MVP, исправление ошибок, развитие Orchestrator / Analyzer / Local Bridge / UI в пределах Baseline, Observation и сбор Evidence;
+  - изменение замороженной архитектуры — только через Governance Pipeline и Action Gate пользователя;
+  - открыт журнал `research/evidence/MVP-001-EVIDENCE.md` как стартовый журнал наблюдений (пустой шаблон записи не является Evidence принятия архитектуры).
+- **Не решает:** изменение канона `PIPELINE.md`; принятие Validation как постоянной стадии; превращение Baseline в объективную модель AI POS; изменение Конституции.
+- **Human Decision (кратко):** Accepted — временный/экспериментальный Baseline для First MVP; Freeze ACTIVE с областью выше; Validation не в каноне PIPELINE; постоянная архитектура из временных элементов Baseline без отдельного решения не следует.
+- **Связанные документы:** `docs/architecture/ARCHITECTURE_BASELINE_V0.1.md`, `Governance/ADR/ADR-0002-architecture-freeze-v1.0.md`, `research/evidence/MVP-001-EVIDENCE.md`
+
+---
+
 ## D-2026-07-27-04 — Layered Knowledge Principle (Accepted)
 
 - **Дата:** 2026-07-27  
