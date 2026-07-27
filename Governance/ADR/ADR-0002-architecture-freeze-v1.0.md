@@ -21,6 +21,7 @@ AI POS накопила архитектурные контуры: универ�
 3. Стадия проекта — только результат Stage Engine (`project_stage.json`); analyzer объясняет, не назначает; результаты разделены (`project_stage.json` / `project_analysis.json`).
 4. GitHub и иные внешние системы — поставщики evidence, не прямые назначники стадии/accept.
 5. Project Health в Freeze v1.0 имеет статус Governance **Observation** (не Draft и не Accepted), с тремя конкурирующими Hypothesis A/B/C (см. `HEALTH.md`).
+   - **Supersede note (2026-07-27):** как *текущий* статус Project Health этот пункт superseded решением `DECISION_LOG` **D-2026-07-27-02**. Актуальный статус: **Draft** (основа Hypothesis C) — см. `Governance/HEALTH.md`, `Governance/PIPELINE.md`. Текст пункта 5 сохраняется как историческая фиксация Freeze v1.0; он не отменяет сам Architecture Freeze.
 6. Architectural Observations #1–#3 зафиксированы как действующий журнал наблюдений.
 7. Исполняющий ИИ не может единолично назначить `CONFIRMED`-стадию и не завершает Action Gate / Accepted.
 

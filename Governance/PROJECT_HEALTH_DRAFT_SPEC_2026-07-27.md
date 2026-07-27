@@ -40,7 +40,7 @@
 | `needs_attention` | `tools/project_analyzer.py`, `project_analysis.json`, UI `index.html`, Boundary | Поле **Analyzer**; **не** готовый контракт Project Health (`HEALTH.md` §3) |
 | `/api/health` | `tools/local_bridge.py` | Liveness Local Bridge (`ok`, `service`, `orchestrator`); **не** Project Health |
 | Упоминания «Project Health» | HEALTH.md, ADR-0002, PIPELINE таблица, Stage Engine FAQ, ORCHESTRATOR, ARCHITECTURE_RISKS, Workshop | Документальные; не runtime-контракт |
-| Устаревшие статусы в тексте | `PIPELINE.md` / ADR-0002 всё ещё могут говорить Observation | **Документальный drift** относительно D-02 / HEALTH.md Draft; **не** резерв полей Health |
+| Устаревшие статусы в тексте | Исторический ADR-0002 п.5 (Observation) | Закрыто для текущего статуса: PIPELINE/HEALTH = Draft (D-02); ADR-0002 п.5 — supersede-note. **Не** резерв полей Health |
 | Формулировки «по уже спроектированной модели Health» | `ARCHITECTURE_RISKS_AND_DECISIONS.md` | Аспиративно; **не** утверждённый контракт индикаторов |
 
 **Зафиксировано для проектирования:**
@@ -340,7 +340,7 @@ Analyzer:
 | E6 | **Verified against current Bridge code** | См. §11.2. |
 | E7 | **Not applicable until UI exists** | UI Project Health facts не реализован; смешение с Stage в интерфейсе проверить нельзя. |
 | E8 | **partial current-state verification only** | Спека запрещает блокировку Gate (§9); в текущем коде нет Health→Gate lock API. Полная проверка «агрегат не блокирует» — после появления агрегата/UI. |
-| E9 | **Failed** | `Governance/PIPELINE.md` в таблице текущего контура всё ещё указывает Project Health как **Observation** (+ Hypothesis A/B/C), тогда как D-2026-07-27-02 и `HEALTH.md` фиксируют **Draft** (основа C). **PIPELINE.md этим Review не исправляется** (отдельное решение / doc-sync). |
+| E9 | **Passed** | `Governance/PIPELINE.md` = `Draft (Hypothesis C); D-2026-07-27-02`; `HEALTH.md` = Draft; эта спека согласована с D-02. Исторический текст ADR-0002 п.5 (Observation) помечен supersede-note и не читается как текущий закон без D-02. |
 
 ### 11.2. E6 — проверка `tools/local_bridge.py` (факт, код не менялся)
 
