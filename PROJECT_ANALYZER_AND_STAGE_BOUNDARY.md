@@ -77,6 +77,8 @@
   project_state.json       ← workflow / user state (как ранее)
 ```
 
+Проекция этих артефактов (и карточки UI) на экран «Обзор» — **отдельный** контракт слоёв Passport / Workflow / System: см. `OVERVIEW_READ_MODEL.md`. Настоящий документ по-прежнему описывает только границу Stage Engine ↔ Analyzer.
+
 Analyzer **читает** `project_stage.json` и может цитировать его поля в сводке.  
 Analyzer **не пишет** стадию обратно в `project_stage.json`.
 
