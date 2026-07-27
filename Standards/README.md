@@ -28,7 +28,8 @@ Brand Consistency и Simplicity **не** являются принципами �
 
 ### DEVELOPMENT_STANDARD.md
 
-Правила разработки и внесения изменений.
+Правила разработки и внесения изменений.  
+**Git Commit Standard** (один коммит = одна логическая задача, Conventional Commits, тело значимого коммита, порядок работы Cursor) — полностью в этом файле.
 
 ### DESIGN_SYSTEM.md
 
