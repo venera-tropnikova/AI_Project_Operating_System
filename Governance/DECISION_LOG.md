@@ -89,3 +89,14 @@
   - Decision Workshop 2026-07-27.
 - **Не решает:** спецификацию индикаторов; код Health; перевод в Candidate/Accepted; изменение PIPELINE.md.
 - **Связанные документы:** `Governance/HEALTH.md`, `Governance/HEALTH_DECISION_WORKSHOP_2026-07-27.md`, `Governance/CONSTITUTION.md`, ADR-0002
+
+---
+
+## D-2026-07-27-04 — Layered Knowledge Principle (Accepted)
+
+- **Дата:** 2026-07-27  
+- **Статус:** Accepted  
+- **Pipeline:** … → Action Gate → Accepted  
+- **Решение:** в Конституцию добавлен принцип **11. Layered Knowledge Principle**: новые знания сначала изолируются и не влияют на действующую систему до завершения принятия через существующий Governance Pipeline; любая будущая подсистема обучения специалистов обязана использовать тот же Pipeline и не создавать собственный Action Gate.  
+- **Не затрагивает:** Architecture Freeze v1.0 (ADR-0002); состав и статус остальных принципов 1–10; код, Orchestrator, Analyzer, Local Bridge, UI.  
+- **Связанные документы:** `Governance/CONSTITUTION.md` (принцип 11), `Governance/PIPELINE.md`
