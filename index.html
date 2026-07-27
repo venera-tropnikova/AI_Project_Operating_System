@@ -827,6 +827,22 @@
       font-weight: 650;
     }
 
+    .cli-insight-freshness {
+      margin: 0.2rem 0 0;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.35;
+    }
+
+    .cli-insight-freshness[hidden] {
+      display: none !important;
+    }
+
+    .cli-insight-freshness time {
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
     .cli-insight-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1638,6 +1654,7 @@
                 <button type="button" class="btn btn-secondary" id="btnCliInsightRefresh">🔄 Обновить анализ</button>
               </div>
             </div>
+            <p class="cli-insight-freshness" id="cliInsightFreshness" hidden></p>
             <p class="cli-insight-note" id="cliInsightNote">
               Отдельно от поля «Текущая работа» выше. Нажмите «Обновить анализ» — AI POS сам пересчитает состояние по рабочей папке проекта.
             </p>
@@ -2078,7 +2095,8 @@
         selectedTemplate: "",
         customTemplates: [],
         activeTab: "overview",
-        cliAnalysisByProject: {}
+        cliAnalysisByProject: {},
+        cliFreshnessTimer: null
       };
 
       var els = {
@@ -2106,6 +2124,7 @@
         cliInsight: document.getElementById("cliInsight"),
         cliInsightNote: document.getElementById("cliInsightNote"),
         cliInsightBadge: document.getElementById("cliInsightBadge"),
+        cliInsightFreshness: document.getElementById("cliInsightFreshness"),
         cliInsightBody: document.getElementById("cliInsightBody"),
         btnCliInsightRefresh: document.getElementById("btnCliInsightRefresh"),
         taskEmptyNote: document.getElementById("taskEmptyNote"),
@@ -2893,13 +2912,159 @@
         els.cliInsightBadge.classList.toggle("is-diagnostic", diagnostic);
       }
 
+      function cliNowIso() {
+        return new Date().toISOString();
+      }
+
+      function extractDetectedAtFromAnalysis(data) {
+        if (!data || typeof data !== "object") return null;
+        if (data.detected_at) return String(data.detected_at);
+        if (data.source_freshness && data.source_freshness.snapshot_at) {
+          return String(data.source_freshness.snapshot_at);
+        }
+        if (data.invalidated_at) return String(data.invalidated_at);
+        return null;
+      }
+
+      function retainOkSnapshot(entry) {
+        if (!entry) return null;
+        if (entry.kind === "ok" && entry.data) {
+          return {
+            data: entry.data,
+            fetchedAt: entry.fetchedAt || null,
+            detectedAt: entry.detectedAt || null
+          };
+        }
+        if (entry.retainOk && entry.retainOk.data) return entry.retainOk;
+        return null;
+      }
+
       function setCliAnalysisCache(projectId, entry) {
-        if (!projectId) return;
+        if (!projectId || !entry) return;
+        var prev = state.cliAnalysisByProject[projectId] || null;
+        var retain = retainOkSnapshot(prev);
+
+        if (entry.kind === "loading") {
+          entry.retainOk = retain;
+          state.cliAnalysisByProject[projectId] = entry;
+          return;
+        }
+
+        if (entry.kind === "ok") {
+          entry.fetchedAt = cliNowIso();
+          entry.detectedAt = extractDetectedAtFromAnalysis(entry.data);
+          entry.refreshError = null;
+          entry.retainOk = null;
+          state.cliAnalysisByProject[projectId] = entry;
+          return;
+        }
+
+        // Invalid analysis is a new server result — stamp freshness, do not keep old ok as current.
+        if (entry.kind === "invalid") {
+          entry.fetchedAt = cliNowIso();
+          entry.detectedAt = extractDetectedAtFromAnalysis(entry.data);
+          entry.refreshError = null;
+          entry.retainOk = null;
+          state.cliAnalysisByProject[projectId] = entry;
+          return;
+        }
+
+        // error / blocked / diagnostic: keep previous successful analysis visible with old fetchedAt.
+        if (retain) {
+          state.cliAnalysisByProject[projectId] = {
+            kind: "ok",
+            data: retain.data,
+            fetchedAt: retain.fetchedAt,
+            detectedAt: retain.detectedAt,
+            refreshError: {
+              kind: entry.kind,
+              message: entry.message || "",
+              reason_codes: entry.reason_codes || [],
+              at: cliNowIso()
+            }
+          };
+          return;
+        }
+
+        entry.fetchedAt = null;
+        entry.detectedAt = null;
+        entry.refreshError = null;
+        entry.retainOk = null;
         state.cliAnalysisByProject[projectId] = entry;
       }
 
       function getCliAnalysisCache(projectId) {
         return state.cliAnalysisByProject[projectId] || null;
+      }
+
+      function formatCliFetchedExact(iso) {
+        if (!iso) return "";
+        try {
+          return new Date(iso).toLocaleString("ru-RU", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+        } catch (e) {
+          return String(iso);
+        }
+      }
+
+      function formatCliFetchedRelative(iso, nowMs) {
+        if (!iso) return "";
+        var t = Date.parse(iso);
+        if (isNaN(t)) return "";
+        var now = typeof nowMs === "number" ? nowMs : Date.now();
+        var sec = Math.max(0, Math.floor((now - t) / 1000));
+        if (sec < 45) return "Обновлено: только что";
+        var min = Math.floor(sec / 60);
+        if (min === 1) return "Обновлено: 1 мин назад";
+        if (min < 60) return "Обновлено: " + min + " мин назад";
+        var hours = Math.floor(min / 60);
+        if (hours === 1) return "Обновлено: 1 ч назад";
+        if (hours < 24) return "Обновлено: " + hours + " ч назад";
+        var days = Math.floor(hours / 24);
+        if (days === 1) return "Обновлено: 1 дн назад";
+        return "Обновлено: " + days + " дн назад";
+      }
+
+      function updateCliFreshnessLabel(cache) {
+        if (!els.cliInsightFreshness) return;
+        if (!cache || (cache.kind !== "ok" && cache.kind !== "invalid") || !cache.fetchedAt) {
+          els.cliInsightFreshness.hidden = true;
+          els.cliInsightFreshness.textContent = "";
+          els.cliInsightFreshness.removeAttribute("title");
+          return;
+        }
+        var relative = formatCliFetchedRelative(cache.fetchedAt);
+        var exact = formatCliFetchedExact(cache.fetchedAt);
+        var html = "<time datetime=\"" + escapeHtml(cache.fetchedAt) + "\">" + escapeHtml(relative) + "</time>";
+        if (cache.detectedAt) {
+          html +=
+            '<span class="cli-insight-detected"> · стадия: ' +
+            escapeHtml(formatCliFetchedExact(cache.detectedAt) || cache.detectedAt) +
+            "</span>";
+        }
+        els.cliInsightFreshness.hidden = false;
+        els.cliInsightFreshness.innerHTML = html;
+        els.cliInsightFreshness.title = exact ? ("Получено UI: " + exact) : "";
+      }
+
+      function syncCliFreshnessTicker(project) {
+        if (state.cliFreshnessTimer) {
+          window.clearInterval(state.cliFreshnessTimer);
+          state.cliFreshnessTimer = null;
+        }
+        var cache = project ? getCliAnalysisCache(project.id) : null;
+        if (!cache || (cache.kind !== "ok" && cache.kind !== "invalid") || !cache.fetchedAt) return;
+        state.cliFreshnessTimer = window.setInterval(function () {
+          var current = findProject(state.currentId);
+          if (!current) return;
+          updateCliFreshnessLabel(getCliAnalysisCache(current.id));
+        }, 15000);
       }
 
       var CLI_REASON_CODE_MESSAGES = {
@@ -3022,13 +3187,13 @@
         if (els.cliInsightNote) {
           if (!httpOk) {
             els.cliInsightNote.textContent =
-              "Отдельно от поля «Текущая работа» выше. Для обновления анализа запустите: python tools/local_bridge.py";
+              "Дополнительный анализ по рабочей папке. Для обновления запустите: python tools/local_bridge.py";
           } else if (!hasFolder) {
             els.cliInsightNote.textContent =
-              "Отдельно от поля «Текущая работа» выше. Укажите рабочую папку проекта — затем нажмите «Обновить анализ».";
+              "Дополнительный анализ по рабочей папке. Укажите рабочую папку проекта — затем нажмите «Обновить анализ».";
           } else {
             els.cliInsightNote.textContent =
-              "Отдельно от поля «Текущая работа» выше. Кнопка пересчитывает состояние по рабочей папке; стадию назначает система, не интерфейс.";
+              "Дополнительный анализ по рабочей папке. Кнопка пересчитывает состояние; стадию назначает система, не интерфейс.";
           }
         }
 
@@ -3037,10 +3202,16 @@
         els.cliInsight.classList.toggle("is-invalid", isInvalid);
         els.cliInsight.classList.toggle("is-diagnostic", isDiagnostic);
 
+        function finishCliRender() {
+          updateCliFreshnessLabel(cache);
+          syncCliFreshnessTicker(project);
+        }
+
         if (!cache) {
           setCliInsightBadge("Не загружен", false);
           els.cliInsightBody.innerHTML =
             '<p class="cli-insight-empty">Анализ ещё не обновлялся. Нажмите «Обновить анализ».</p>';
+          finishCliRender();
           return;
         }
 
@@ -3048,6 +3219,7 @@
           setCliInsightBadge("Обновление…", false);
           els.cliInsightBody.innerHTML =
             '<p class="cli-insight-empty">Обновляем анализ проекта…</p>';
+          finishCliRender();
           return;
         }
 
@@ -3057,6 +3229,7 @@
             '<p class="cli-insight-error"><span class="cli-insight-error-title">Анализ обновлён не полностью</span>' +
             escapeHtml(cache.message || cliReasonCodesMessage(cache.reason_codes)) +
             "</p>";
+          finishCliRender();
           return;
         }
 
@@ -3066,6 +3239,7 @@
             '<p class="cli-insight-error"><span class="cli-insight-error-title">Не удалось выполнить анализ</span>' +
             escapeHtml(cache.message || cliReasonCodesMessage(cache.reason_codes)) +
             "</p>";
+          finishCliRender();
           return;
         }
 
@@ -3075,6 +3249,7 @@
             '<p class="cli-insight-error"><span class="cli-insight-error-title">Не удалось обновить анализ</span>' +
             escapeHtml(cache.message || "Повторите попытку.") +
             "</p>";
+          finishCliRender();
           return;
         }
 
@@ -3084,11 +3259,13 @@
             '<p class="cli-insight-error"><span class="cli-insight-error-title">Анализ недействителен — не используйте как текущий статус</span>' +
             escapeHtml(cache.message) +
             "</p>";
+          finishCliRender();
           return;
         }
 
         var data = cache.data || {};
-        setCliInsightBadge("Актуален", false);
+        var hasRefreshError = !!(cache.refreshError && cache.refreshError.message);
+        setCliInsightBadge(hasRefreshError ? "Ошибка обновления" : "Актуален", hasRefreshError ? true : false);
         var nextText =
           data.next_step && typeof data.next_step === "object"
             ? data.next_step.text
@@ -3103,7 +3280,14 @@
           }
         }
 
-        var html = '<div class="cli-insight-grid">';
+        var html = "";
+        if (hasRefreshError) {
+          html +=
+            '<p class="cli-insight-error"><span class="cli-insight-error-title">Последнее обновление не удалось</span>' +
+            escapeHtml(cache.refreshError.message) +
+            " Ниже показан предыдущий успешный анализ; время «Обновлено» относится к нему, не к этой ошибке.</p>";
+        }
+        html += '<div class="cli-insight-grid">';
         html +=
           '<div class="cli-insight-item"><span class="field-label">Стадия</span><p>' +
           cliStageDisplay(data.stage) +
@@ -3136,9 +3320,8 @@
         }
         html += "</div>";
         els.cliInsightBody.innerHTML = html;
-      }
-
-      function refreshProjectInsight(project) {
+        finishCliRender();
+      }      function refreshProjectInsight(project) {
         if (!project) return;
         var folder = String(project.workFolder || "").trim();
         if (!folder) {
