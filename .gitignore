@@ -5,3 +5,7 @@ __pycache__/
 
 # Packaging artifact
 AI_Project_Operating_System.zip
+
+# Local quarantine (not product)
+/Backups/
+/cls
