@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-appearance="system" data-color-scheme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,25 +9,48 @@
   <link rel="icon" type="image/png" href="assets/icons/favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="assets/icons/favicon-16x16.png" sizes="16x16" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <script>
+    /* Appearance boot: light | dark | system → data-color-scheme light|dark */
+    (function () {
+      var KEY = "ai-pos-appearance-v1";
+      var pref = "system";
+      try {
+        var stored = localStorage.getItem(KEY);
+        if (stored === "light" || stored === "dark" || stored === "system") pref = stored;
+      } catch (e) {}
+      var scheme = pref;
+      if (pref === "system") {
+        scheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-appearance", pref);
+      document.documentElement.setAttribute("data-color-scheme", scheme);
+    })();
+  </script>
   <style>
     :root {
-      /* Professional light tool UI — brand blue + semantic green */
-      --bg: #f4f6fa;
+      --bg: #f4f5f7;
+      --topbar-bg: #f7f8fa;
       --surface: #ffffff;
-      --ink: #1a1f2c;
-      --ink-soft: #4a5160;
-      --ink-muted: #7a8294;
-      --line: #e2e6ef;
-      --accent: #3b5bdb;
-      --accent-hover: #2f4bc0;
-      --brand-grad-from: #7b5cff;
-      --brand-grad-to: #2eb8e6;
-      --info: #3b5bdb;
-      --info-soft: #eef1fb;
+      --surface-elevated: #ffffff;
+      --ink: #151a24;
+      --ink-soft: #445063;
+      --ink-muted: #7a8496;
+      --line: #e3e6ee;
+      --line-strong: #d0d5e0;
+      --accent: #1e3a5f;
+      --accent-hover: #152c4a;
+      --accent-soft: #e8eef5;
+      --accent-contrast: #ffffff;
+      --info: #1e3a5f;
+      --info-soft: #e8eef5;
       --warn: #8a6a2b;
       --warn-bg: #f3ead8;
       --gain-bg: #eef5ef;
       --gain-ink: #2a4a35;
+      --brand-tile-bg: #ffffff;
+      --brand-tile-border: #e3e6ee;
+      --control-bg: #ffffff;
+      --control-hover: #f7f8fa;
       --lv-project: #1a4d3a;
       --lv-project-soft: #e7f0eb;
       --lv-module: #4f6070;
@@ -48,12 +71,58 @@
       --forbid-soft: #f3e8e3;
       --radius: 12px;
       --radius-control: 10px;
-      --shadow-soft: 0 1px 2px rgba(26, 31, 44, 0.04), 0 4px 14px rgba(26, 31, 44, 0.05);
-      --shadow-btn: 0 1px 2px rgba(47, 75, 192, 0.18);
+      --shadow-soft: 0 1px 2px rgba(21, 26, 36, 0.04), 0 6px 18px rgba(21, 26, 36, 0.05);
+      --shadow-btn: 0 1px 2px rgba(30, 58, 95, 0.28);
       --topbar-h: 60px;
       --max-home: 560px;
       --max: 920px;
       --font: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
+    }
+
+    html[data-color-scheme="dark"] {
+      --bg: #12141a;
+      --topbar-bg: #181b22;
+      --surface: #1c2028;
+      --surface-elevated: #242933;
+      --ink: #e8eaef;
+      --ink-soft: #b4bac6;
+      --ink-muted: #8a919e;
+      --line: #2c313c;
+      --line-strong: #3d4554;
+      --accent: #1e3a5f;
+      --accent-hover: #2a4d7a;
+      --accent-soft: #243044;
+      --accent-contrast: #ffffff;
+      --info: #1e3a5f;
+      --info-soft: #243044;
+      --warn: #c4a35a;
+      --warn-bg: #2e291e;
+      --gain-bg: #1e2a22;
+      --gain-ink: #8fbf9a;
+      --brand-tile-bg: #242933;
+      --brand-tile-border: #3d4554;
+      --control-bg: #1c2028;
+      --control-hover: #2a2f3a;
+      --lv-project: #8fbf9a;
+      --lv-project-soft: #1e2a22;
+      --lv-module: #a8b4c0;
+      --lv-module-soft: #242830;
+      --lv-task: #d2b07a;
+      --lv-task-soft: #2c271e;
+      --lv-work: #c4a8bc;
+      --lv-work-soft: #2a2429;
+      --lv-materials: #c4b09a;
+      --lv-materials-soft: #2a2622;
+      --lv-team: #c5c4c0;
+      --lv-team-soft: #262624;
+      --lv-rules: #c5c4c0;
+      --lv-rules-soft: #262624;
+      --allow: #8fbf9a;
+      --allow-soft: #1e2a22;
+      --forbid: #d09080;
+      --forbid-soft: #2f2421;
+      --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.28), 0 8px 24px rgba(0, 0, 0, 0.22);
+      --shadow-btn: 0 1px 2px rgba(0, 0, 0, 0.4);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -84,43 +153,76 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
       min-height: var(--topbar-h);
       margin: 0 0 2rem;
-      padding: 0.35rem 0;
+      padding: 0.45rem 0.55rem;
       border-bottom: 1px solid var(--line);
-      background: transparent;
+      background: var(--topbar-bg);
+      border-radius: 12px;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
-      font-size: 1.02rem;
+      gap: 0.75rem;
+      padding: 0.35rem 0.8rem 0.35rem 0.35rem;
+      border-radius: 11px;
+      background: var(--brand-tile-bg);
+      border: 1px solid var(--brand-tile-border);
+      box-shadow: var(--shadow-soft);
+      font-size: 1.1rem;
       font-weight: 700;
       letter-spacing: -0.03em;
       color: var(--ink);
-      position: relative;
-      padding-bottom: 0.15rem;
     }
 
     .brand-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
       object-fit: cover;
       flex-shrink: 0;
     }
 
-    .brand::after {
-      content: "";
-      position: absolute;
-      left: calc(34px + 0.65rem);
-      right: 0;
-      bottom: 0;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--brand-grad-from), var(--brand-grad-to));
-      opacity: 0.75;
+    .appearance-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.2rem;
+      border-radius: 11px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .appearance-switch button {
+      box-sizing: border-box;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-size: 1rem;
+      line-height: 1;
+      color: var(--ink-muted);
+    }
+
+    .appearance-switch button:hover {
+      color: var(--ink);
+      background: var(--control-hover);
+    }
+
+    .appearance-switch button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    .appearance-switch button.is-active {
+      color: var(--ink);
+      background: var(--accent-soft);
+      border-color: var(--line-strong);
     }
 
     a {
@@ -1582,8 +1684,13 @@
   <div class="app is-home" id="appShell">
     <header class="topbar">
       <div class="brand">
-        <img class="brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="34" height="34" alt="" />
+        <img class="brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="38" height="38" alt="" />
         AI POS
+      </div>
+      <div class="appearance-switch" id="appearanceSwitch" role="group" aria-label="Оформление">
+        <button type="button" data-appearance-choice="light" title="Светлая тема" aria-label="Светлая тема">☀</button>
+        <button type="button" data-appearance-choice="dark" title="Тёмная тема" aria-label="Тёмная тема">🌙</button>
+        <button type="button" data-appearance-choice="system" title="Как в системе" aria-label="Как в системе">💻</button>
       </div>
     </header>
 
@@ -1971,6 +2078,7 @@
       "use strict";
 
       var STORAGE_KEY = "ai-pos-projects-v1";
+      var APPEARANCE_KEY = "ai-pos-appearance-v1";
       var LAST_OPENED_KEY = "ai-pos-last-opened-v1";
       var TEMPLATES_KEY = "ai-pos-templates-v1";
       var GATE_KEY = "ai-pos-gate-confirmations-v1";
@@ -2220,6 +2328,7 @@
 
       var els = {
         appShell: document.getElementById("appShell"),
+        appearanceSwitch: document.getElementById("appearanceSwitch"),
         panelList: document.getElementById("panelList"),
         panelForm: document.getElementById("panelForm"),
         panelWorkspace: document.getElementById("panelWorkspace"),
@@ -4781,12 +4890,70 @@
         });
       }
 
+      function resolveColorScheme(appearancePref) {
+        if (appearancePref === "light" || appearancePref === "dark") return appearancePref;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+
+      function loadAppearancePreference() {
+        try {
+          var stored = localStorage.getItem(APPEARANCE_KEY);
+          if (stored === "light" || stored === "dark" || stored === "system") return stored;
+        } catch (e) {}
+        return "system";
+      }
+
+      function saveAppearancePreference(pref) {
+        try { localStorage.setItem(APPEARANCE_KEY, pref); } catch (e) {}
+      }
+
+      function applyAppearance(pref, options) {
+        var appearance = pref === "light" || pref === "dark" || pref === "system" ? pref : "system";
+        var scheme = resolveColorScheme(appearance);
+        document.documentElement.setAttribute("data-appearance", appearance);
+        document.documentElement.setAttribute("data-color-scheme", scheme);
+        if (!options || options.persist !== false) saveAppearancePreference(appearance);
+        syncAppearanceSwitch(appearance);
+      }
+
+      function syncAppearanceSwitch(activePref) {
+        if (!els.appearanceSwitch) return;
+        var buttons = els.appearanceSwitch.querySelectorAll("[data-appearance-choice]");
+        for (var i = 0; i < buttons.length; i++) {
+          var value = buttons[i].getAttribute("data-appearance-choice");
+          buttons[i].classList.toggle("is-active", value === activePref);
+          buttons[i].setAttribute("aria-pressed", value === activePref ? "true" : "false");
+        }
+      }
+
+      function initAppearanceControls() {
+        applyAppearance(loadAppearancePreference(), { persist: false });
+        if (els.appearanceSwitch) {
+          els.appearanceSwitch.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-appearance-choice]");
+            if (!btn || !els.appearanceSwitch.contains(btn)) return;
+            applyAppearance(btn.getAttribute("data-appearance-choice"));
+          });
+        }
+        if (window.matchMedia) {
+          var media = window.matchMedia("(prefers-color-scheme: dark)");
+          var onChange = function () {
+            if (loadAppearancePreference() === "system") {
+              applyAppearance("system", { persist: false });
+            }
+          };
+          if (typeof media.addEventListener === "function") media.addEventListener("change", onChange);
+          else if (typeof media.addListener === "function") media.addListener(onChange);
+        }
+      }
+
       function init() {
         state.projects = loadProjects();
         state.customTemplates = loadCustomTemplates();
         state.lastOpenedId = loadLastOpened();
         if (!findProject(state.lastOpenedId)) state.lastOpenedId = DEMO_PROJECT.id;
         fillTaskToolSelect();
+        initAppearanceControls();
         bindEvents();
         renderTemplates();
         renderHome();
