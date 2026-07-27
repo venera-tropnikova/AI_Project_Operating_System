@@ -722,6 +722,35 @@
       border-left: 3px solid var(--lv-task);
     }
 
+
+    .ov-stage-meta {
+      margin: 0.4rem 0 0;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.35;
+    }
+
+    .ov-stage-meta[hidden],
+    .ov-stage-warn[hidden] {
+      display: none !important;
+    }
+
+    .ov-stage-source {
+      font-weight: 650;
+      color: var(--ink-soft);
+    }
+
+    .ov-stage-freshness {
+      margin-left: 0.35rem;
+    }
+
+    .ov-stage-warn {
+      margin: 0.35rem 0 0;
+      font-size: 0.8rem;
+      color: #8a5a12;
+      line-height: 1.35;
+    }
+
     .cli-insight {
       margin-top: 1.25rem;
       padding: 1.15rem 1.2rem;
@@ -1638,7 +1667,15 @@
           <div class="overview-grid">
             <div class="overview-item is-goal"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель проекта</span><p id="ovGoal">—</p></div>
             <div class="overview-item is-module"><span class="field-label">Текущий модуль</span><p id="ovModule">—</p></div>
-            <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">🚧</span>Текущая работа</span><p id="ovStage">—</p></div>
+            <div class="overview-item">
+              <span class="field-label">Текущий этап</span>
+              <p id="ovStage">—</p>
+              <p class="ov-stage-meta" id="ovStageMeta" hidden>
+                <span class="ov-stage-source" id="ovStageSource"></span>
+                <span class="ov-stage-freshness" id="ovStageFreshness"></span>
+              </p>
+              <p class="ov-stage-warn" id="ovStageWarn" hidden></p>
+            </div>
             <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что готово</span><p id="ovReady">—</p></div>
             <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">⚠</span>Требует внимания</span><p id="ovAttention">—</p></div>
             <div class="overview-item wide is-task"><span class="field-label"><span class="ico" aria-hidden="true">➡</span>Следующий шаг</span><p id="ovNext">—</p></div>
@@ -2118,6 +2155,10 @@
         ovGoal: document.getElementById("ovGoal"),
         ovModule: document.getElementById("ovModule"),
         ovStage: document.getElementById("ovStage"),
+        ovStageMeta: document.getElementById("ovStageMeta"),
+        ovStageSource: document.getElementById("ovStageSource"),
+        ovStageFreshness: document.getElementById("ovStageFreshness"),
+        ovStageWarn: document.getElementById("ovStageWarn"),
         ovReady: document.getElementById("ovReady"),
         ovAttention: document.getElementById("ovAttention"),
         ovNext: document.getElementById("ovNext"),
@@ -2843,10 +2884,75 @@
           (project.createdAt ? " · обновлено " + formatDate(project.createdAt) : "");
       }
 
+      function passportStageFallback(project) {
+        var value = project && String(project.stage || "").trim();
+        return value || "—";
+      }
+      function systemProjectStageFromCache(cache) {
+        if (!cache || cache.kind !== "ok" || !cache.data) return null;
+        var code = cache.data.stage;
+        if (code === undefined || code === null || code === "") return null;
+        var codeText = String(code);
+        var label = (typeof CLI_STAGE_LABELS !== "undefined" && CLI_STAGE_LABELS[codeText])
+          ? CLI_STAGE_LABELS[codeText]
+          : codeText;
+        return {
+          code: codeText,
+          label: label,
+          fetchedAt: cache.fetchedAt || null,
+          refreshError: cache.refreshError || null
+        };
+      }
+      function updateOverviewProjectStage(project) {
+        if (!els.ovStage) return;
+        var cache = project ? getCliAnalysisCache(project.id) : null;
+        var system = systemProjectStageFromCache(cache);
+
+        if (system) {
+          els.ovStage.textContent = system.label;
+          if (els.ovStageMeta) els.ovStageMeta.hidden = false;
+          if (els.ovStageSource) els.ovStageSource.textContent = "Система";
+          if (els.ovStageFreshness) {
+            if (system.fetchedAt) {
+              var relative = formatCliFetchedRelative(system.fetchedAt);
+              // Strip leading "Обновлено: " for compact meta next to source.
+              var shortRel = relative.replace(/^Обновлено:\s*/i, "");
+              els.ovStageFreshness.textContent = shortRel ? ("· " + shortRel) : "";
+              els.ovStageFreshness.title = formatCliFetchedExact(system.fetchedAt) || "";
+            } else {
+              els.ovStageFreshness.textContent = "";
+              els.ovStageFreshness.removeAttribute("title");
+            }
+          }
+          if (els.ovStageWarn) {
+            if (system.refreshError && system.refreshError.message) {
+              els.ovStageWarn.hidden = false;
+              els.ovStageWarn.textContent =
+                "Последнее обновление анализа завершилось ошибкой. Показан предыдущий системный этап.";
+            } else {
+              els.ovStageWarn.hidden = true;
+              els.ovStageWarn.textContent = "";
+            }
+          }
+          return;
+        }
+
+        els.ovStage.textContent = passportStageFallback(project);
+        if (els.ovStageMeta) els.ovStageMeta.hidden = false;
+        if (els.ovStageSource) els.ovStageSource.textContent = "Карточка проекта";
+        if (els.ovStageFreshness) {
+          els.ovStageFreshness.textContent = "";
+          els.ovStageFreshness.removeAttribute("title");
+        }
+        if (els.ovStageWarn) {
+          els.ovStageWarn.hidden = true;
+          els.ovStageWarn.textContent = "";
+        }
+      }
       function renderOverview(project, view) {
         els.ovGoal.textContent = project.idea || "—";
         els.ovModule.textContent = view.module ? view.module.name : "не выбран";
-        els.ovStage.textContent = view.stage || "—";
+        updateOverviewProjectStage(project);
         els.ovReady.textContent = view.module && view.module.ready ? view.module.ready : (project.assets || "—");
         els.ovAttention.textContent = view.module && view.module.remaining ? view.module.remaining : "Добавьте модуль или уточните, что осталось";
         els.ovNext.textContent = view.task ? view.task.name : (view.nextLine2 || "—");
@@ -3064,6 +3170,7 @@
           var current = findProject(state.currentId);
           if (!current) return;
           updateCliFreshnessLabel(getCliAnalysisCache(current.id));
+          updateOverviewProjectStage(current);
         }, 15000);
       }
 
@@ -3205,6 +3312,7 @@
         function finishCliRender() {
           updateCliFreshnessLabel(cache);
           syncCliFreshnessTicker(project);
+          updateOverviewProjectStage(project);
         }
 
         if (!cache) {
