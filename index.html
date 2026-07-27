@@ -1679,6 +1679,20 @@
             <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что готово</span><p id="ovReady">—</p></div>
             <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">⚠</span>Требует внимания</span><p id="ovAttention">—</p></div>
             <div class="overview-item wide is-task"><span class="field-label"><span class="ico" aria-hidden="true">➡</span>Следующий шаг</span><p id="ovNext">—</p></div>
+
+            <div class="overview-item wide is-task">
+              <span class="field-label">Следующее действие системы</span>
+              <p id="ovSystemNext">—</p>
+              <p class="ov-stage-meta" id="ovSystemNextMeta" hidden>
+                <span class="ov-stage-source" id="ovSystemNextSource"></span>
+                <span class="ov-stage-freshness" id="ovSystemNextFreshness"></span>
+              </p>
+              <p class="ov-stage-warn" id="ovSystemNextWarn" hidden></p>
+            </div>
+            <div class="overview-item wide">
+              <span class="field-label">Инструмент выполнения</span>
+              <p id="ovExecTool">—</p>
+            </div>
           </div>
 
           <section class="cli-insight" id="cliInsight" aria-label="Анализ проекта из CLI, отдельно от поля «Текущая работа» в обзоре">
@@ -2162,6 +2176,12 @@
         ovReady: document.getElementById("ovReady"),
         ovAttention: document.getElementById("ovAttention"),
         ovNext: document.getElementById("ovNext"),
+        ovSystemNext: document.getElementById("ovSystemNext"),
+        ovSystemNextMeta: document.getElementById("ovSystemNextMeta"),
+        ovSystemNextSource: document.getElementById("ovSystemNextSource"),
+        ovSystemNextFreshness: document.getElementById("ovSystemNextFreshness"),
+        ovSystemNextWarn: document.getElementById("ovSystemNextWarn"),
+        ovExecTool: document.getElementById("ovExecTool"),
         cliInsight: document.getElementById("cliInsight"),
         cliInsightNote: document.getElementById("cliInsightNote"),
         cliInsightBadge: document.getElementById("cliInsightBadge"),
@@ -2949,6 +2969,96 @@
           els.ovStageWarn.textContent = "";
         }
       }
+
+      function extractSystemNextStepText(data) {
+        if (!data || typeof data !== "object") return null;
+        var step = data.next_step;
+        if (step === undefined || step === null || step === "") return null;
+        if (typeof step === "object") {
+          var text = step.text != null ? String(step.text).trim() : "";
+          return text || null;
+        }
+        var asText = String(step).trim();
+        return asText || null;
+      }
+      function setOverviewSystemNextFreshness(fetchedAt) {
+        if (!els.ovSystemNextFreshness) return;
+        if (!fetchedAt) {
+          els.ovSystemNextFreshness.textContent = "";
+          els.ovSystemNextFreshness.removeAttribute("title");
+          return;
+        }
+        var relative = formatCliFetchedRelative(fetchedAt);
+        var shortRel = relative.replace(/^Обновлено:\s*/i, "");
+        els.ovSystemNextFreshness.textContent = shortRel ? ("· " + shortRel) : "";
+        els.ovSystemNextFreshness.title = formatCliFetchedExact(fetchedAt) || "";
+      }
+      function updateOverviewSystemNext(project) {
+        if (!els.ovSystemNext) return;
+        var cache = project ? getCliAnalysisCache(project.id) : null;
+
+        function showMeta(sourceLabel, fetchedAt, warnText) {
+          if (els.ovSystemNextMeta) els.ovSystemNextMeta.hidden = false;
+          if (els.ovSystemNextSource) els.ovSystemNextSource.textContent = sourceLabel;
+          setOverviewSystemNextFreshness(fetchedAt || null);
+          if (els.ovSystemNextWarn) {
+            if (warnText) {
+              els.ovSystemNextWarn.hidden = false;
+              els.ovSystemNextWarn.textContent = warnText;
+            } else {
+              els.ovSystemNextWarn.hidden = true;
+              els.ovSystemNextWarn.textContent = "";
+            }
+          }
+        }
+
+        if (cache && cache.kind === "ok" && cache.data) {
+          var text = extractSystemNextStepText(cache.data);
+          els.ovSystemNext.textContent = text || "Система не предложила следующее действие";
+          var warn = null;
+          if (cache.refreshError && cache.refreshError.message) {
+            warn = "Последнее обновление анализа завершилось ошибкой. Показано предыдущее системное действие.";
+          }
+          showMeta("Система", cache.fetchedAt, warn);
+          return;
+        }
+
+        if (cache && cache.kind === "invalid") {
+          els.ovSystemNext.textContent = "Анализ недействителен";
+          showMeta("Состояние анализа", cache.fetchedAt || null, cache.message || null);
+          return;
+        }
+
+        if (cache && cache.kind === "blocked") {
+          els.ovSystemNext.textContent = "Анализ заблокирован";
+          showMeta(
+            "Состояние анализа",
+            null,
+            cache.message || "Не удалось выполнить анализ"
+          );
+          return;
+        }
+
+        if (cache && cache.kind === "error") {
+          els.ovSystemNext.textContent = "Анализ недоступен";
+          showMeta(
+            "Состояние анализа",
+            null,
+            cache.message || "Не удалось обновить анализ"
+          );
+          return;
+        }
+
+        if (cache && cache.kind === "loading") {
+          els.ovSystemNext.textContent = "Обновляем анализ…";
+          showMeta("Система", null, null);
+          return;
+        }
+
+        // No cache / unavailable
+        els.ovSystemNext.textContent = "Анализ не загружен";
+        showMeta("Недоступно", null, null);
+      }
       function renderOverview(project, view) {
         els.ovGoal.textContent = project.idea || "—";
         els.ovModule.textContent = view.module ? view.module.name : "не выбран";
@@ -2956,6 +3066,13 @@
         els.ovReady.textContent = view.module && view.module.ready ? view.module.ready : (project.assets || "—");
         els.ovAttention.textContent = view.module && view.module.remaining ? view.module.remaining : "Добавьте модуль или уточните, что осталось";
         els.ovNext.textContent = view.task ? view.task.name : (view.nextLine2 || "—");
+        updateOverviewSystemNext(project);
+        if (els.ovExecTool) {
+          var tool = getTool((view.task && view.task.recommendedTool) || state.selectedTool || "cursor");
+          els.ovExecTool.textContent = view.task
+            ? ("Необходимо выполнить задание в " + (tool && tool.name ? tool.name : "выбранном инструменте") + ".")
+            : "Сначала выберите или добавьте текущую задачу.";
+        }
         renderCliInsight(project);
       }
 
@@ -3171,6 +3288,7 @@
           if (!current) return;
           updateCliFreshnessLabel(getCliAnalysisCache(current.id));
           updateOverviewProjectStage(current);
+          updateOverviewSystemNext(current);
         }, 15000);
       }
 
@@ -3313,6 +3431,7 @@
           updateCliFreshnessLabel(cache);
           syncCliFreshnessTicker(project);
           updateOverviewProjectStage(project);
+          updateOverviewSystemNext(project);
         }
 
         if (!cache) {
