@@ -751,6 +751,63 @@
       line-height: 1.35;
     }
 
+    .ov-sys-attention-list {
+      margin: 0.45rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ov-sys-attention-list li {
+      position: relative;
+      margin: 0.3rem 0 0;
+      padding-left: 0.95rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+
+    .ov-sys-attention-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 0.35rem;
+      height: 0.35rem;
+      border-radius: 50%;
+      background: #8a5a12;
+    }
+
+    .ov-sys-attention-empty {
+      margin: 0.45rem 0 0;
+      font-size: 0.95rem;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    .ov-sys-attention-banner {
+      margin: 0.45rem 0 0;
+      padding: 0.7rem 0.85rem;
+      border-radius: 8px;
+      border-left: 3px solid #8a5a12;
+      background: var(--warn-bg, #f7f1e6);
+      color: var(--warn, #6b5428);
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .ov-sys-attention-banner.is-blocked {
+      border-left-color: var(--forbid, #8a4f3d);
+      background: var(--forbid-soft, #edd9d2);
+      color: var(--forbid, #8a4f3d);
+      font-weight: 650;
+    }
+
+    .ov-sys-attention-banner.is-invalid {
+      border-left-color: var(--forbid, #8a4f3d);
+      background: var(--forbid-soft, #edd9d2);
+      color: var(--forbid, #8a4f3d);
+    }
+
     .cli-insight {
       margin-top: 1.25rem;
       padding: 1.15rem 1.2rem;
@@ -1693,6 +1750,17 @@
               <span class="field-label">Инструмент выполнения</span>
               <p id="ovExecTool">—</p>
             </div>
+            <div class="overview-item wide" id="ovSystemAttentionBlock" hidden>
+              <span class="field-label">Требует внимания</span>
+              <p class="ov-sys-attention-banner" id="ovSystemAttentionBanner" hidden></p>
+              <ul class="ov-sys-attention-list" id="ovSystemAttentionList" hidden></ul>
+              <p class="ov-sys-attention-empty" id="ovSystemAttentionEmpty" hidden>Нет системных замечаний</p>
+              <p class="ov-stage-meta" id="ovSystemAttentionMeta" hidden>
+                <span class="ov-stage-source" id="ovSystemAttentionSource"></span>
+                <span class="ov-stage-freshness" id="ovSystemAttentionFreshness"></span>
+              </p>
+              <p class="ov-stage-warn" id="ovSystemAttentionWarn" hidden></p>
+            </div>
           </div>
 
           <section class="cli-insight" id="cliInsight" aria-label="Анализ проекта из CLI, отдельно от поля «Текущая работа» в обзоре">
@@ -2182,6 +2250,14 @@
         ovSystemNextFreshness: document.getElementById("ovSystemNextFreshness"),
         ovSystemNextWarn: document.getElementById("ovSystemNextWarn"),
         ovExecTool: document.getElementById("ovExecTool"),
+        ovSystemAttentionBlock: document.getElementById("ovSystemAttentionBlock"),
+        ovSystemAttentionBanner: document.getElementById("ovSystemAttentionBanner"),
+        ovSystemAttentionList: document.getElementById("ovSystemAttentionList"),
+        ovSystemAttentionEmpty: document.getElementById("ovSystemAttentionEmpty"),
+        ovSystemAttentionMeta: document.getElementById("ovSystemAttentionMeta"),
+        ovSystemAttentionSource: document.getElementById("ovSystemAttentionSource"),
+        ovSystemAttentionFreshness: document.getElementById("ovSystemAttentionFreshness"),
+        ovSystemAttentionWarn: document.getElementById("ovSystemAttentionWarn"),
         cliInsight: document.getElementById("cliInsight"),
         cliInsightNote: document.getElementById("cliInsightNote"),
         cliInsightBadge: document.getElementById("cliInsightBadge"),
@@ -3059,6 +3135,239 @@
         els.ovSystemNext.textContent = "Анализ не загружен";
         showMeta("Недоступно", null, null);
       }
+
+      function extractSystemAttentionItems(data) {
+        var items = [];
+        var seen = {};
+        function pushItem(raw) {
+          var text = "";
+          if (typeof raw === "string") text = raw.trim();
+          else if (raw && typeof raw === "object" && raw.text != null) text = String(raw.text).trim();
+          if (!text || seen[text]) return;
+          seen[text] = true;
+          items.push(text);
+        }
+        if (!data || typeof data !== "object") return items;
+        var attention = data.needs_attention;
+        if (Array.isArray(attention)) {
+          for (var i = 0; i < attention.length; i++) pushItem(attention[i]);
+        }
+        var blockers = data.blockers;
+        if (!Array.isArray(blockers) && data.project_stage && typeof data.project_stage === "object") {
+          blockers = data.project_stage.blockers;
+        }
+        if (!Array.isArray(blockers) && data.stage_payload && typeof data.stage_payload === "object") {
+          blockers = data.stage_payload.blockers;
+        }
+        if (Array.isArray(blockers)) {
+          for (var b = 0; b < blockers.length; b++) pushItem(blockers[b]);
+        }
+        return items;
+      }
+
+      function setOverviewSystemAttentionFreshness(fetchedAt) {
+        if (!els.ovSystemAttentionFreshness) return;
+        if (!fetchedAt) {
+          els.ovSystemAttentionFreshness.textContent = "";
+          els.ovSystemAttentionFreshness.removeAttribute("title");
+          return;
+        }
+        var relative = formatCliFetchedRelative(fetchedAt);
+        var shortRel = relative.replace(/^Обновлено:\s*/i, "");
+        els.ovSystemAttentionFreshness.textContent = shortRel ? ("· " + shortRel) : "";
+        els.ovSystemAttentionFreshness.title = formatCliFetchedExact(fetchedAt) || "";
+      }
+
+      function updateOverviewSystemAttention(project) {
+        if (!els.ovSystemAttentionBlock) return;
+        var cache = project ? getCliAnalysisCache(project.id) : null;
+
+        function hideAllBodies() {
+          if (els.ovSystemAttentionBanner) {
+            els.ovSystemAttentionBanner.hidden = true;
+            els.ovSystemAttentionBanner.textContent = "";
+            els.ovSystemAttentionBanner.classList.remove("is-blocked", "is-invalid");
+          }
+          if (els.ovSystemAttentionList) {
+            els.ovSystemAttentionList.hidden = true;
+            els.ovSystemAttentionList.innerHTML = "";
+          }
+          if (els.ovSystemAttentionEmpty) {
+            els.ovSystemAttentionEmpty.hidden = true;
+          }
+        }
+
+        function showMeta(sourceLabel, fetchedAt, warnText) {
+          if (els.ovSystemAttentionMeta) els.ovSystemAttentionMeta.hidden = false;
+          if (els.ovSystemAttentionSource) els.ovSystemAttentionSource.textContent = sourceLabel;
+          setOverviewSystemAttentionFreshness(fetchedAt || null);
+          if (els.ovSystemAttentionWarn) {
+            if (warnText) {
+              els.ovSystemAttentionWarn.hidden = false;
+              els.ovSystemAttentionWarn.textContent = warnText;
+            } else {
+              els.ovSystemAttentionWarn.hidden = true;
+              els.ovSystemAttentionWarn.textContent = "";
+            }
+          }
+        }
+
+        function showBanner(text, toneClass) {
+          hideAllBodies();
+          els.ovSystemAttentionBlock.hidden = false;
+          if (els.ovSystemAttentionBanner) {
+            els.ovSystemAttentionBanner.hidden = false;
+            els.ovSystemAttentionBanner.textContent = text;
+            els.ovSystemAttentionBanner.classList.remove("is-blocked", "is-invalid");
+            if (toneClass) els.ovSystemAttentionBanner.classList.add(toneClass);
+          }
+        }
+
+        function showOkItems(items, fetchedAt, warnText) {
+          hideAllBodies();
+          els.ovSystemAttentionBlock.hidden = false;
+          if (items && items.length) {
+            if (els.ovSystemAttentionList) {
+              var html = "";
+              for (var i = 0; i < items.length; i++) {
+                html += "<li>" + escapeHtml(items[i]) + "</li>";
+              }
+              els.ovSystemAttentionList.innerHTML = html;
+              els.ovSystemAttentionList.hidden = false;
+            }
+          } else if (els.ovSystemAttentionEmpty) {
+            els.ovSystemAttentionEmpty.hidden = false;
+          }
+          showMeta("Система", fetchedAt, warnText || null);
+        }
+
+        // No cache / unavailable — do not invent blockers.
+        if (!cache) {
+          els.ovSystemAttentionBlock.hidden = true;
+          hideAllBodies();
+          if (els.ovSystemAttentionMeta) els.ovSystemAttentionMeta.hidden = true;
+          if (els.ovSystemAttentionWarn) {
+            els.ovSystemAttentionWarn.hidden = true;
+            els.ovSystemAttentionWarn.textContent = "";
+          }
+          return;
+        }
+
+        if (cache.kind === "ok" && cache.data) {
+          var items = extractSystemAttentionItems(cache.data);
+          var refreshErr = cache.refreshError || null;
+          var refreshKind = refreshErr && refreshErr.kind ? String(refreshErr.kind) : "";
+          var warn = null;
+
+          // Cache may retain last ok when Bridge returns BLOCKED/DIAGNOSTIC —
+          // still surface a clear system banner, not a Workflow Review.
+          if (refreshKind === "blocked") {
+            hideAllBodies();
+            els.ovSystemAttentionBlock.hidden = false;
+            if (els.ovSystemAttentionBanner) {
+              els.ovSystemAttentionBanner.hidden = false;
+              els.ovSystemAttentionBanner.textContent =
+                (refreshErr && refreshErr.message) ||
+                "Анализ заблокирован. Это системная блокировка, не замечание из проверки задачи.";
+              els.ovSystemAttentionBanner.classList.remove("is-blocked", "is-invalid");
+              els.ovSystemAttentionBanner.classList.add("is-blocked");
+            }
+            if (items && items.length && els.ovSystemAttentionList) {
+              var blockedHtml = "";
+              for (var bi = 0; bi < items.length; bi++) {
+                blockedHtml += "<li>" + escapeHtml(items[bi]) + "</li>";
+              }
+              els.ovSystemAttentionList.innerHTML = blockedHtml;
+              els.ovSystemAttentionList.hidden = false;
+            }
+            showMeta("Система", cache.fetchedAt, null);
+            return;
+          }
+
+          if (refreshKind === "diagnostic") {
+            hideAllBodies();
+            els.ovSystemAttentionBlock.hidden = false;
+            if (els.ovSystemAttentionBanner) {
+              els.ovSystemAttentionBanner.hidden = false;
+              els.ovSystemAttentionBanner.textContent =
+                (refreshErr && refreshErr.message) ||
+                "Диагностика анализа: система не подтвердила полное состояние проекта.";
+              els.ovSystemAttentionBanner.classList.remove("is-blocked", "is-invalid");
+            }
+            if (items && items.length && els.ovSystemAttentionList) {
+              var diagHtml = "";
+              for (var di = 0; di < items.length; di++) {
+                diagHtml += "<li>" + escapeHtml(items[di]) + "</li>";
+              }
+              els.ovSystemAttentionList.innerHTML = diagHtml;
+              els.ovSystemAttentionList.hidden = false;
+            }
+            showMeta("Система", cache.fetchedAt, null);
+            return;
+          }
+
+          if (refreshErr && refreshErr.message) {
+            warn = "Последнее обновление анализа завершилось ошибкой. Показаны предыдущие системные замечания.";
+          }
+          showOkItems(items, cache.fetchedAt, warn);
+          return;
+        }
+
+        if (cache.kind === "invalid") {
+          showBanner(
+            cache.message || "Анализ недействителен — не используйте его как текущий статус проекта.",
+            "is-invalid"
+          );
+          showMeta("Состояние анализа", cache.fetchedAt || null, null);
+          return;
+        }
+
+        if (cache.kind === "blocked") {
+          showBanner(
+            cache.message || "Анализ заблокирован. Это системная блокировка, не замечание из проверки задачи.",
+            "is-blocked"
+          );
+          showMeta("Состояние анализа", null, null);
+          return;
+        }
+
+        if (cache.kind === "diagnostic") {
+          showBanner(
+            cache.message || "Диагностика анализа: система не подтвердила полное состояние проекта.",
+            null
+          );
+          showMeta("Состояние анализа", cache.fetchedAt || null, null);
+          return;
+        }
+
+        if (cache.kind === "error") {
+          // No successful analysis to retain — do not invent blockers.
+          els.ovSystemAttentionBlock.hidden = true;
+          hideAllBodies();
+          if (els.ovSystemAttentionMeta) els.ovSystemAttentionMeta.hidden = true;
+          if (els.ovSystemAttentionWarn) {
+            els.ovSystemAttentionWarn.hidden = true;
+            els.ovSystemAttentionWarn.textContent = "";
+          }
+          return;
+        }
+
+        if (cache.kind === "loading") {
+          // Keep previous ok projection if retainOk exists; otherwise stay quiet.
+          var retain = cache.retainOk && cache.retainOk.data ? cache.retainOk : null;
+          if (retain) {
+            showOkItems(extractSystemAttentionItems(retain.data), retain.fetchedAt || null, null);
+            return;
+          }
+          els.ovSystemAttentionBlock.hidden = true;
+          hideAllBodies();
+          return;
+        }
+
+        els.ovSystemAttentionBlock.hidden = true;
+        hideAllBodies();
+      }
+
       function renderOverview(project, view) {
         els.ovGoal.textContent = project.idea || "—";
         els.ovModule.textContent = view.module ? view.module.name : "не выбран";
@@ -3067,6 +3376,7 @@
         els.ovAttention.textContent = view.module && view.module.remaining ? view.module.remaining : "Добавьте модуль или уточните, что осталось";
         els.ovNext.textContent = view.task ? view.task.name : (view.nextLine2 || "—");
         updateOverviewSystemNext(project);
+        updateOverviewSystemAttention(project);
         if (els.ovExecTool) {
           var tool = getTool((view.task && view.task.recommendedTool) || state.selectedTool || "cursor");
           els.ovExecTool.textContent = view.task
@@ -3289,6 +3599,7 @@
           updateCliFreshnessLabel(getCliAnalysisCache(current.id));
           updateOverviewProjectStage(current);
           updateOverviewSystemNext(current);
+          updateOverviewSystemAttention(current);
         }, 15000);
       }
 
@@ -3432,6 +3743,7 @@
           syncCliFreshnessTicker(project);
           updateOverviewProjectStage(project);
           updateOverviewSystemNext(project);
+          updateOverviewSystemAttention(project);
         }
 
         if (!cache) {
