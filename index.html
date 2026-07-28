@@ -148,6 +148,7 @@
     }
 
     .app.is-home { width: min(100% - 2.5rem, var(--max-home)); }
+    .app.is-home .topbar { margin-bottom: 1rem; }
 
     .topbar {
       display: flex;
@@ -293,17 +294,17 @@
     .panel.is-active { display: block; }
 
     .home {
-      min-height: calc(100vh - 8rem);
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 2.75rem;
+      justify-content: flex-start;
+      gap: 1.25rem;
       padding-bottom: 2rem;
     }
 
     .greeting {
-      margin: 0 0 0.85rem;
-      font-size: 0.95rem;
+      margin: 0;
+      font-size: 0.9rem;
       color: var(--ink-muted);
       font-weight: 500;
     }
@@ -318,55 +319,145 @@
     }
 
     .home-label {
-      margin: 0 0 0.65rem;
-      font-size: 0.75rem;
+      margin: 0 0 0.35rem;
+      font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-muted);
     }
 
-    .last-project {
+    .home-mvp {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 1.05rem 0;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .home-mvp-row {
+      padding: 0.85rem 0;
       border-top: 1px solid var(--line);
+    }
+
+    .home-mvp-row:last-of-type {
       border-bottom: 1px solid var(--line);
     }
 
-    .last-project strong {
-      display: block;
-      font-size: 1.05rem;
-      letter-spacing: -0.025em;
-    }
-
-    .last-project span {
-      display: block;
-      margin-top: 0.2rem;
-      font-size: 0.86rem;
-      color: var(--ink-muted);
-    }
-
-    .next-step-home p {
+    .home-mvp-value {
       margin: 0;
-      font-size: 0.98rem;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    /* Проект — компактный контекст */
+    .home-mvp-row.is-project {
+      padding: 0.45rem 0 0.65rem;
+      border-top: none;
+    }
+
+    .home-mvp-row.is-project .home-label {
+      margin: 0 0 0.15rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    .home-mvp-row.is-project .home-mvp-value {
+      font-size: 0.92rem;
+      font-weight: 550;
       color: var(--ink-soft);
     }
 
-    .next-step-home p + p {
-      margin-top: 0.25rem;
-      color: var(--ink);
+    /* Текущая работа — главный смысловой блок */
+    .home-mvp-row.is-work {
+      padding: 1rem 0 1.1rem;
+    }
+
+    .home-mvp-row.is-work .home-mvp-value {
+      font-size: clamp(1.2rem, 3.2vw, 1.45rem);
+      font-weight: 750;
+      letter-spacing: -0.035em;
+      line-height: 1.25;
+    }
+
+    /* Цель — вторичная */
+    .home-mvp-row.is-goal {
+      padding: 0.7rem 0;
+    }
+
+    .home-mvp-row.is-goal .home-mvp-value {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+
+    /* Следующий шаг — основной акцент */
+    .home-mvp-row.is-next {
+      padding: 1rem 0.9rem;
+      margin: 0.15rem 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      border-radius: var(--radius-control);
+      background: var(--accent-soft);
+    }
+
+    .home-mvp-row.is-next .home-label {
+      color: var(--accent);
+    }
+
+    .home-mvp-row.is-next .home-mvp-value {
+      font-size: clamp(1.05rem, 2.6vw, 1.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    /* Результат + бейдж статуса */
+    .home-mvp-row.is-result {
+      padding-top: 0.95rem;
+    }
+
+    .home-mvp-row.is-result .home-mvp-value {
+      font-size: 0.95rem;
       font-weight: 550;
     }
 
-    .next-actions {
+    .home-mvp-status {
+      display: inline-block;
+      margin: 0.55rem 0 0;
+      padding: 0.22rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--ink-soft);
+      line-height: 1.2;
+    }
+
+    .home-mvp-status.is-notes {
+      color: var(--warn);
+      border-color: var(--warn);
+      background: var(--warn-bg);
+    }
+
+    .home-mvp-status.is-accepted {
+      color: var(--gain-ink);
+      border-color: var(--gain-ink);
+      background: var(--gain-bg);
+    }
+
+    .home-actions {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      gap: 0.65rem;
+      margin-top: 0.35rem;
+    }
+
+    .home-actions .btn-hero {
+      flex: 1 1 12rem;
     }
 
     .surface {
@@ -412,40 +503,6 @@
 
     .workspace-title-block { min-width: 0; flex: 1; }
 
-    .workspace-line {
-      margin: 0 0 0.35rem;
-      font-size: 1.05rem;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-      line-height: 1.35;
-    }
-
-    .workspace-line strong {
-      font-weight: 750;
-      font-size: 1.28rem;
-      color: var(--lv-project);
-    }
-
-    .workspace-line span { font-weight: 600; }
-
-    .workspace-line .label {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      min-width: 7.8rem;
-      color: var(--ink-muted);
-      font-weight: 700;
-      font-size: 0.78rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .workspace-line.is-project .label { color: var(--lv-project); }
-    .workspace-line.is-module .label { color: var(--lv-module); }
-    .workspace-line.is-task .label { color: var(--lv-task); }
-    .workspace-line.is-module > span { color: var(--lv-module); }
-    .workspace-line.is-task > span { color: var(--lv-task); }
-
     .level-dot {
       width: 0.55rem;
       height: 0.55rem;
@@ -459,11 +516,76 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 0.4rem 0.5rem;
-      margin: 0.85rem 0 0;
+      margin: 0;
       padding: 0.7rem 0.85rem;
       background: var(--surface);
       border-radius: 12px;
       font-size: 0.88rem;
+    }
+
+    .detail-level-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.15rem;
+      padding: 0.2rem;
+      margin: 0 0 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .detail-level-switch button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--ink-muted);
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 2rem;
+    }
+
+    .detail-level-switch button:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .detail-level-switch button[aria-checked="true"] {
+      color: var(--ink);
+      background: var(--accent-soft, rgba(37, 99, 235, 0.12));
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .detail-level-switch button:focus-visible {
+      outline: 2px solid var(--accent, #2563eb);
+      outline-offset: 2px;
+    }
+
+    /* Detail levels: child data-detail-level = minimum required */
+    #panelWorkspace[data-detail-level="basic"] [data-detail-level="extended"],
+    #panelWorkspace[data-detail-level="basic"] [data-detail-level="technical"],
+    #panelWorkspace[data-detail-level="extended"] [data-detail-level="technical"] {
+      display: none !important;
+    }
+
+    #panelWorkspace[data-detail-level="technical"] #cliInsight,
+    #panelWorkspace[data-detail-level="technical"] #ovSystemNextBlock,
+    #panelWorkspace[data-detail-level="technical"] #ovSystemAttentionBlock,
+    #panelWorkspace[data-detail-level="extended"] #ovExecToolBlock,
+    #panelWorkspace[data-detail-level="technical"] #ovExecToolBlock {
+      display: block !important;
+    }
+
+    #panelWorkspace[data-detail-level="basic"] .tab-btn[data-detail-level="extended"],
+    #panelWorkspace[data-detail-level="basic"] .tab-panel[data-detail-level="extended"] {
+      display: none !important;
     }
 
     .crumb {
@@ -1663,20 +1785,15 @@
 
       .app.is-home { width: min(100% - 1.5rem, var(--max-home)); }
 
-      .last-project {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .last-project .btn,
-      .next-actions .btn-primary { width: 100%; }
+      .home-actions .btn { width: 100%; }
 
       .form-head,
       .workspace-head { flex-direction: column; }
 
       .workspace-head-actions { justify-content: stretch; width: 100%; }
       .workspace-head-actions .btn { flex: 1; }
-      .workspace-line .label { min-width: 5.5rem; }
+      .detail-level-switch { width: 100%; justify-content: stretch; }
+      .detail-level-switch button { flex: 1; text-align: center; padding-left: 0.4rem; padding-right: 0.4rem; }
     }
   </style>
 </head>
@@ -1698,31 +1815,37 @@
       <div class="home">
         <div>
           <p class="greeting" id="greetingTitle">Добрый вечер, Венера</p>
-          <h1 class="home-question">Что будем создавать сегодня?</h1>
-          <button type="button" class="btn btn-primary btn-hero" id="btnNewProject">
+        </div>
+
+        <div class="home-mvp" id="homeMvp">
+          <div class="home-mvp-row is-project">
+            <p class="home-label">Загружен проект</p>
+            <p class="home-mvp-value" id="homeProjectName">—</p>
+          </div>
+          <div class="home-mvp-row is-work">
+            <p class="home-label">Текущая работа</p>
+            <p class="home-mvp-value" id="homeCurrentWork">—</p>
+          </div>
+          <div class="home-mvp-row is-goal">
+            <p class="home-label">Цель</p>
+            <p class="home-mvp-value" id="homeGoal">—</p>
+          </div>
+          <div class="home-mvp-row is-next">
+            <p class="home-label">Следующий шаг</p>
+            <p class="home-mvp-value" id="homeNextStep">—</p>
+          </div>
+          <div class="home-mvp-row is-result">
+            <p class="home-label">Результат</p>
+            <p class="home-mvp-value" id="homeResult">—</p>
+            <p class="home-mvp-status" id="homeResultStatus">Не проверен</p>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button type="button" class="btn btn-primary btn-hero" id="btnContinue">Продолжить работу</button>
+          <button type="button" class="btn btn-secondary" id="btnNewProject">
             <span aria-hidden="true">+</span> Новый проект
           </button>
-        </div>
-
-        <div>
-          <p class="home-label">Последний проект</p>
-          <div class="last-project">
-            <div>
-              <strong id="continueName">Мой день</strong>
-              <span>Продолжить с того места, где остановились</span>
-            </div>
-            <button type="button" class="btn btn-secondary" id="btnContinue">Продолжить</button>
-          </div>
-        </div>
-
-        <div class="next-step-home">
-          <p class="home-label">Следующий лучший шаг</p>
-          <p id="nextLine1">Модуль «Историческая справка» почти готов.</p>
-          <p id="nextLine2">Рекомендуем завершить механику раскрытия карточки на трёх датах.</p>
-          <div class="next-actions">
-            <button type="button" class="btn btn-primary" id="btnStartNext">Начать</button>
-            <button type="button" class="btn btn-ghost" id="btnStepDetails">Подробнее</button>
-          </div>
         </div>
       </div>
     </section>
@@ -1790,21 +1913,18 @@
       </div>
     </section>
 
-    <section class="panel" id="panelWorkspace" aria-label="Проект">
+    <section class="panel" id="panelWorkspace" aria-label="Проект" data-detail-level="basic">
       <div class="workspace-shell">
         <div class="workspace-head">
           <div class="workspace-title-block">
-            <p class="workspace-line is-project"><span class="label"><span class="level-dot" aria-hidden="true"></span>Проект</span> <strong id="headProjectName">—</strong></p>
-            <p class="workspace-line is-module"><span class="label"><span class="level-dot" aria-hidden="true"></span>Модуль</span> <span id="headModuleName">—</span></p>
-            <p class="workspace-line is-task"><span class="label"><span class="level-dot" aria-hidden="true"></span>Текущая задача</span> <span id="headTaskName">—</span></p>
-            <nav class="crumbs" id="crumbs" aria-label="Иерархия проекта">
+            <nav class="crumbs" id="crumbs" aria-label="Иерархия проекта: Проект → Модуль → Задача">
               <span class="crumb crumb-project"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbProject">—</span></span>
               <span class="crumb-sep" aria-hidden="true">→</span>
               <span class="crumb crumb-module"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbModule">—</span></span>
               <span class="crumb-sep" aria-hidden="true">→</span>
               <span class="crumb crumb-task"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbTask">—</span></span>
             </nav>
-            <p class="workspace-meta" id="workspaceMeta"></p>
+            <p class="workspace-meta" id="workspaceMeta" data-detail-level="technical"></p>
           </div>
           <div class="workspace-head-actions">
             <button type="button" class="btn btn-ghost" id="btnBackToList">На главную</button>
@@ -1812,27 +1932,34 @@
           </div>
         </div>
 
-        <div class="workspace-actions">
+        <div class="detail-level-switch" id="detailLevelSwitch" role="radiogroup" aria-label="Уровень детализации">
+          <button type="button" role="radio" aria-checked="true" data-detail-choice="basic">Основной</button>
+          <button type="button" role="radio" aria-checked="false" data-detail-choice="extended">Расширенный</button>
+          <button type="button" role="radio" aria-checked="false" data-detail-choice="technical">Технический</button>
+        </div>
+
+        <div class="workspace-actions" data-detail-level="extended">
           <button type="button" class="btn btn-secondary" id="btnAddModule">Добавить модуль</button>
           <button type="button" class="btn btn-secondary" id="btnAddTask">Добавить текущую задачу</button>
         </div>
 
         <nav class="tabs" id="workspaceTabs" aria-label="Разделы проекта">
           <button type="button" class="tab-btn is-active" data-tab="overview">Обзор</button>
-          <button type="button" class="tab-btn" data-tab="rules">Правила и контроль</button>
+          <button type="button" class="tab-btn" data-tab="rules" data-detail-level="extended">Правила и контроль</button>
           <button type="button" class="tab-btn" data-tab="task">Текущая задача</button>
           <button type="button" class="tab-btn" data-tab="work">Рабочее задание</button>
-          <button type="button" class="tab-btn" data-tab="materials">Материалы</button>
-          <button type="button" class="tab-btn" data-tab="team">AI-специалисты</button>
+          <button type="button" class="tab-btn" data-tab="materials" data-detail-level="extended">Материалы</button>
+          <button type="button" class="tab-btn" data-tab="team" data-detail-level="extended">AI-специалисты</button>
         </nav>
 
         <div class="tab-panel is-active" id="tab-overview" data-tab-panel="overview">
           <h3 class="section-heading lv-project">Обзор</h3>
           <div class="overview-grid">
-            <div class="overview-item is-goal"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель проекта</span><p id="ovGoal">—</p></div>
-            <div class="overview-item is-module"><span class="field-label">Текущий модуль</span><p id="ovModule">—</p></div>
-            <div class="overview-item">
-              <span class="field-label">Текущий этап</span>
+            <div class="overview-item is-goal"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель</span><p id="ovGoal">—</p></div>
+            <div class="overview-item is-module"><span class="field-label">Текущая работа</span><p id="ovModule">—</p></div>
+            <div class="overview-item"><span class="field-label">Статус</span><p id="ovStatus">—</p></div>
+            <div class="overview-item" data-detail-level="technical">
+              <span class="field-label">Текущий этап (система)</span>
               <p id="ovStage">—</p>
               <p class="ov-stage-meta" id="ovStageMeta" hidden>
                 <span class="ov-stage-source" id="ovStageSource"></span>
@@ -1840,11 +1967,13 @@
               </p>
               <p class="ov-stage-warn" id="ovStageWarn" hidden></p>
             </div>
-            <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что готово</span><p id="ovReady">—</p></div>
-            <div class="overview-item"><span class="field-label"><span class="ico" aria-hidden="true">⚠</span>Требует внимания</span><p id="ovAttention">—</p></div>
+            <div class="overview-item" data-detail-level="extended"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что готово</span><p id="ovReady">—</p></div>
+            <div class="overview-item" data-detail-level="extended"><span class="field-label"><span class="ico" aria-hidden="true">⚠</span>Требует внимания</span><p id="ovAttention">—</p></div>
+            <div class="overview-item wide is-task"><span class="field-label">Задача</span><p id="ovTask">—</p></div>
             <div class="overview-item wide is-task"><span class="field-label"><span class="ico" aria-hidden="true">➡</span>Следующий шаг</span><p id="ovNext">—</p></div>
+            <div class="overview-item wide"><span class="field-label">Результат</span><p id="ovResult">—</p></div>
 
-            <div class="overview-item wide is-task">
+            <div class="overview-item wide is-task" id="ovSystemNextBlock" data-detail-level="technical" hidden>
               <span class="field-label">Следующее действие системы</span>
               <p id="ovSystemNext">—</p>
               <p class="ov-stage-meta" id="ovSystemNextMeta" hidden>
@@ -1853,12 +1982,12 @@
               </p>
               <p class="ov-stage-warn" id="ovSystemNextWarn" hidden></p>
             </div>
-            <div class="overview-item wide">
+            <div class="overview-item wide" id="ovExecToolBlock" data-detail-level="extended" hidden>
               <span class="field-label">Инструмент выполнения</span>
               <p id="ovExecTool">—</p>
             </div>
-            <div class="overview-item wide" id="ovSystemAttentionBlock" hidden>
-              <span class="field-label">Требует внимания</span>
+            <div class="overview-item wide" id="ovSystemAttentionBlock" data-detail-level="technical" hidden>
+              <span class="field-label">Системные замечания</span>
               <p class="ov-sys-attention-banner" id="ovSystemAttentionBanner" hidden></p>
               <ul class="ov-sys-attention-list" id="ovSystemAttentionList" hidden></ul>
               <p class="ov-sys-attention-empty" id="ovSystemAttentionEmpty" hidden>Нет системных замечаний</p>
@@ -1868,9 +1997,13 @@
               </p>
               <p class="ov-stage-warn" id="ovSystemAttentionWarn" hidden></p>
             </div>
+            <div class="overview-item wide" data-detail-level="technical">
+              <span class="field-label">Технические сведения</span>
+              <p id="ovTechInfo">—</p>
+            </div>
           </div>
 
-          <section class="cli-insight" id="cliInsight" aria-label="Анализ проекта из CLI, отдельно от поля «Текущая работа» в обзоре">
+          <section class="cli-insight" id="cliInsight" data-detail-level="technical" hidden aria-label="Анализ проекта из CLI, отдельно от поля «Текущая работа» в обзоре">
             <div class="cli-insight-head">
               <div class="cli-insight-title-row">
                 <h4 class="cli-insight-title">Анализ проекта</h4>
@@ -1890,7 +2023,7 @@
           </section>
         </div>
 
-        <div class="tab-panel" id="tab-rules" data-tab-panel="rules">
+        <div class="tab-panel" id="tab-rules" data-tab-panel="rules" data-detail-level="extended">
           <h3 class="section-heading lv-rules">Правила и контроль</h3>
           <p class="rules-sub">Правила управления проектом</p>
           <div class="rules-grid" id="rulesGrid"></div>
@@ -1904,32 +2037,33 @@
           <p class="section-note" id="taskEmptyNote" hidden>Текущая задача ещё не добавлена. Задача относится к модулю и не заменяет проект.</p>
           <div class="task-stack" id="taskStack">
             <div class="callout"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель задачи</span><p id="taskGoalText">—</p></div>
-            <div class="callout"><span class="field-label"><span class="ico" aria-hidden="true">💡</span>Зачем выполнять сейчас</span><p id="taskWhyText">—</p></div>
+            <div class="callout" data-detail-level="extended"><span class="field-label"><span class="ico" aria-hidden="true">💡</span>Зачем выполнять сейчас</span><p id="taskWhyText">—</p></div>
             <div class="callout callout-gain"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что получим</span><p id="taskResultText">—</p></div>
-            <div class="callout"><span class="field-label">Что можно менять</span><p id="taskCanText">—</p></div>
-            <div class="callout callout-restrict">
+            <div class="callout" data-detail-level="extended"><span class="field-label">Что можно менять</span><p id="taskCanText">—</p></div>
+            <div class="callout callout-restrict" data-detail-level="extended">
               <span class="field-label"><span class="ico" aria-hidden="true">🚫</span>Что нельзя менять</span>
               <ul class="restrict-list" id="dontList"></ul>
             </div>
-            <div class="callout callout-risk">
+            <div class="callout callout-risk" data-detail-level="extended">
               <span class="field-label"><span class="ico" aria-hidden="true">⚠️</span>Риски</span>
               <ul class="risk-list" id="riskList"></ul>
             </div>
-            <div class="callout"><span class="field-label">Альтернатива</span><p id="taskAltText">—</p></div>
+            <div class="callout" data-detail-level="extended"><span class="field-label">Альтернатива</span><p id="taskAltText">—</p></div>
             <div class="review-card" id="reviewCard">
               <span class="field-label">Проверка результата</span>
               <div class="review-status" id="reviewStatus">Не проверено</div>
-              <ul class="check-list" id="reviewChecks"></ul>
+              <ul class="check-list" id="reviewChecks" data-detail-level="extended"></ul>
               <div class="field">
                 <label for="reviewNotes">Замечания после проверки</label>
                 <textarea id="reviewNotes" rows="3" placeholder="Что нужно исправить или уточнить"></textarea>
               </div>
               <div class="section-actions" style="margin-top:0.75rem">
-                <button type="button" class="btn btn-secondary" id="btnReviewNotes">Есть замечания</button>
-                <button type="button" class="btn btn-primary" id="btnReviewAccept">Принять результат</button>
-                <button type="button" class="btn btn-ghost" id="btnNextTask" disabled title="Доступно после статуса «Принято»">К следующей задаче</button>
+                <button type="button" class="btn btn-secondary" id="btnReviewReady">Результат готов</button>
+                <button type="button" class="btn btn-primary" id="btnReviewAccept">Принять</button>
+                <button type="button" class="btn btn-ghost" id="btnReviewNotes">Нужны изменения</button>
+                <button type="button" class="btn btn-ghost" id="btnNextTask" disabled title="Доступно после статуса «Принято»" data-detail-level="extended">К следующей задаче</button>
               </div>
-              <p class="section-note" id="reviewHint" style="margin-top:0.65rem">Переход к следующей задаче доступен только после статуса «Принято».</p>
+              <p class="section-note" id="reviewHint" style="margin-top:0.65rem">Отметьте результат: готов, принять или нужны изменения.</p>
             </div>
           </div>
         </div>
@@ -1938,21 +2072,21 @@
           <h3 class="section-heading lv-work"><span class="ico" aria-hidden="true">📋</span> Рабочее задание</h3>
           <p class="section-note">Выберите инструмент — ниже появятся рекомендации и готовый контекст для ИИ. Перед копированием откроется контроль перед передачей задачи.</p>
           <div class="tool-picks" id="toolPicks"></div>
-          <div class="tool-meta">
+          <div class="tool-meta" data-detail-level="extended">
             <div class="info-card"><span class="field-label"><span class="ico" aria-hidden="true">🤖</span>Зачем этот инструмент</span><p id="toolWhy">—</p></div>
             <div class="info-card"><span class="field-label">Когда использовать</span><p id="toolWhen">—</p></div>
             <div class="info-card"><span class="field-label">Когда не использовать</span><p id="toolAvoid">—</p></div>
-            <div class="info-card"><span class="field-label">Рабочая папка / репозиторий</span><p id="toolFolder">—</p></div>
+            <div class="info-card" data-detail-level="technical"><span class="field-label">Рабочая папка / репозиторий</span><p id="toolFolder">—</p></div>
           </div>
           <h4 class="assignment-title" id="assignmentTitle"><span class="ico" aria-hidden="true">📋</span> Рабочее задание</h4>
           <div class="work-editor" id="workBox" aria-label="Рабочее задание"></div>
           <div class="section-actions">
             <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
-            <span class="copy-toast" id="copyToast" aria-live="polite">Скопировано</span>
+            <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано</span>
           </div>
         </div>
 
-        <div class="tab-panel" id="tab-materials" data-tab-panel="materials">
+        <div class="tab-panel" id="tab-materials" data-tab-panel="materials" data-detail-level="extended">
           <h3 class="section-heading lv-materials"><span class="ico" aria-hidden="true">📂</span> Материалы</h3>
           <p class="section-note">Вложения сохраняются в проекте и могут входить в контекст рабочего задания.</p>
           <div class="materials-bar">
@@ -1964,7 +2098,7 @@
           <div class="materials-list" id="materialsList"></div>
         </div>
 
-        <div class="tab-panel" id="tab-team" data-tab-panel="team">
+        <div class="tab-panel" id="tab-team" data-tab-panel="team" data-detail-level="extended">
           <h3 class="section-heading lv-team">AI-специалисты проекта</h3>
           <p class="section-note">Роли ИИ, которые помогают планировать, создавать, проверять и документировать проект.</p>
           <div class="team-grid" id="teamList"></div>
@@ -2079,12 +2213,15 @@
 
       var STORAGE_KEY = "ai-pos-projects-v1";
       var APPEARANCE_KEY = "ai-pos-appearance-v1";
+      var DETAIL_LEVEL_KEY = "ai-pos-detail-level-v1";
       var LAST_OPENED_KEY = "ai-pos-last-opened-v1";
       var TEMPLATES_KEY = "ai-pos-templates-v1";
       var GATE_KEY = "ai-pos-gate-confirmations-v1";
       var REVIEW_KEY = "ai-pos-task-reviews-v1";
       var MAX_TEXT_CHARS = 120000;
       var MAX_DATA_URL = 400000;
+      var DETAIL_LEVELS = ["basic", "extended", "technical"];
+      var DETAIL_TAB_BASIC = { overview: true, task: true, work: true };
 
       var DEMO_RULES = {
         mission: "Создать полезное персональное приложение дня, которым хочется пользоваться ежедневно.",
@@ -2322,6 +2459,7 @@
         selectedTemplate: "",
         customTemplates: [],
         activeTab: "overview",
+        detailLevel: "basic",
         cliAnalysisByProject: {},
         cliFreshnessTimer: null
       };
@@ -2336,15 +2474,18 @@
         formError: document.getElementById("formError"),
         templatesGrid: document.getElementById("templatesGrid"),
         greetingTitle: document.getElementById("greetingTitle"),
-        continueName: document.getElementById("continueName"),
-        nextLine1: document.getElementById("nextLine1"),
-        nextLine2: document.getElementById("nextLine2"),
-        headProjectName: document.getElementById("headProjectName"),
-        headModuleName: document.getElementById("headModuleName"),
-        headTaskName: document.getElementById("headTaskName"),
+        homeProjectName: document.getElementById("homeProjectName"),
+        homeCurrentWork: document.getElementById("homeCurrentWork"),
+        homeGoal: document.getElementById("homeGoal"),
+        homeNextStep: document.getElementById("homeNextStep"),
+        homeResult: document.getElementById("homeResult"),
+        homeResultStatus: document.getElementById("homeResultStatus"),
+        btnNewProject: document.getElementById("btnNewProject"),
+        btnContinue: document.getElementById("btnContinue"),
         workspaceMeta: document.getElementById("workspaceMeta"),
         ovGoal: document.getElementById("ovGoal"),
         ovModule: document.getElementById("ovModule"),
+        ovStatus: document.getElementById("ovStatus"),
         ovStage: document.getElementById("ovStage"),
         ovStageMeta: document.getElementById("ovStageMeta"),
         ovStageSource: document.getElementById("ovStageSource"),
@@ -2352,13 +2493,18 @@
         ovStageWarn: document.getElementById("ovStageWarn"),
         ovReady: document.getElementById("ovReady"),
         ovAttention: document.getElementById("ovAttention"),
+        ovTask: document.getElementById("ovTask"),
         ovNext: document.getElementById("ovNext"),
+        ovResult: document.getElementById("ovResult"),
+        ovTechInfo: document.getElementById("ovTechInfo"),
         ovSystemNext: document.getElementById("ovSystemNext"),
+        ovSystemNextBlock: document.getElementById("ovSystemNextBlock"),
         ovSystemNextMeta: document.getElementById("ovSystemNextMeta"),
         ovSystemNextSource: document.getElementById("ovSystemNextSource"),
         ovSystemNextFreshness: document.getElementById("ovSystemNextFreshness"),
         ovSystemNextWarn: document.getElementById("ovSystemNextWarn"),
         ovExecTool: document.getElementById("ovExecTool"),
+        ovExecToolBlock: document.getElementById("ovExecToolBlock"),
         ovSystemAttentionBlock: document.getElementById("ovSystemAttentionBlock"),
         ovSystemAttentionBanner: document.getElementById("ovSystemAttentionBanner"),
         ovSystemAttentionList: document.getElementById("ovSystemAttentionList"),
@@ -2373,6 +2519,7 @@
         cliInsightFreshness: document.getElementById("cliInsightFreshness"),
         cliInsightBody: document.getElementById("cliInsightBody"),
         btnCliInsightRefresh: document.getElementById("btnCliInsightRefresh"),
+        detailLevelSwitch: document.getElementById("detailLevelSwitch"),
         taskEmptyNote: document.getElementById("taskEmptyNote"),
         taskStack: document.getElementById("taskStack"),
         taskGoalText: document.getElementById("taskGoalText"),
@@ -2398,6 +2545,7 @@
         reviewChecks: document.getElementById("reviewChecks"),
         reviewNotes: document.getElementById("reviewNotes"),
         reviewHint: document.getElementById("reviewHint"),
+        btnReviewReady: document.getElementById("btnReviewReady"),
         btnReviewNotes: document.getElementById("btnReviewNotes"),
         btnReviewAccept: document.getElementById("btnReviewAccept"),
         btnNextTask: document.getElementById("btnNextTask"),
@@ -2580,7 +2728,7 @@
           if (typeof checks[items[i].id] !== "boolean") checks[items[i].id] = false;
         }
         task.review = {
-          status: source.status === "accepted" || source.status === "notes" ? source.status : "unchecked",
+          status: source.status === "accepted" || source.status === "notes" || source.status === "ready" ? source.status : "unchecked",
           checks: checks,
           notes: source.notes || "",
           acceptedAt: source.acceptedAt || null,
@@ -2613,7 +2761,8 @@
 
       function reviewStatusLabel(status) {
         if (status === "accepted") return "Принято";
-        if (status === "notes") return "Есть замечания";
+        if (status === "ready") return "Результат готов";
+        if (status === "notes") return "Нужны изменения";
         return "Не проверено";
       }
 
@@ -2734,8 +2883,8 @@
           task: task,
           stage: project.stage || "Анализ",
           workFolder: project.workFolder || "не указана",
-          nextLine1: "Сначала добавьте модуль и текущую задачу.",
-          nextLine2: "Рекомендуем уточнить следующий шаг внутри модуля.",
+          nextLine1: "Сначала уточните область и текущую задачу.",
+          nextLine2: "Рекомендуем сформулировать следующий конкретный шаг.",
           whyPath: "Пока нет модуля и задачи, система не смешивает уровни: сначала проект, затем модуль, затем конкретная задача.",
           stageOutcome: "Появится понятная текущая задача внутри модуля.",
           confidence: "Низкая — не хватает модуля или задачи.",
@@ -2746,10 +2895,10 @@
         };
 
         if (mod && task) {
-          view.nextLine1 = "Модуль «" + mod.name + "»: " + (mod.remaining || "есть незакрытая работа") + ".";
-          view.nextLine2 = "Рекомендуем задачу: " + task.name + ".";
+          view.nextLine1 = mod.remaining || "Есть незакрытая работа.";
+          view.nextLine2 = "Рекомендуем: " + task.name + ".";
           if (project.isDemo || mod.id === "mod-history") {
-            view.nextLine1 = "Модуль «Историческая справка» почти готов.";
+            view.nextLine1 = "«Историческая справка» почти готова.";
             view.nextLine2 = "Рекомендуем завершить механику раскрытия карточки на трёх датах.";
           }
           view.whyPath = task.whyNow
@@ -2764,8 +2913,8 @@
           view.nextBasis = "Факт: проект «" + project.name + "», модуль «" + mod.name + "», задача «" + task.name + "». Предположение системы: завершение этой задачи безопаснее, чем открывать новый модуль.";
           view.nextEffect = task.expectedResult;
         } else if (mod && !task) {
-          view.nextLine1 = "Модуль «" + mod.name + "» добавлен в проект «" + project.name + "».";
-          view.nextLine2 = "Рекомендуем добавить текущую задачу для этого модуля.";
+          view.nextLine1 = "«" + mod.name + "» уже в проекте «" + project.name + "».";
+          view.nextLine2 = "Рекомендуем добавить текущую задачу.";
           view.whyPath = "Модуль уже есть, но без текущей задачи ИИ может воспринять модуль как весь проект. Нужна узкая задача.";
           view.confidence = "Средняя — есть модуль, нет задачи.";
         }
@@ -3044,6 +3193,9 @@
           "ОЖИДАЕМЫЙ РЕЗУЛЬТАТ",
           (task && task.expectedResult) || "Конкретный завершённый результат текущей задачи модуля — не всего проекта.",
           "",
+          review && review.notes ? "ЗАМЕЧАНИЯ ПОСЛЕ ПРОВЕРКИ" : "",
+          review && review.notes ? review.notes : "",
+          review && review.notes ? "" : null,
           "Формат ответа:",
           "1) Сначала выполни блок «ПЕРЕД НАЧАЛОМ РАБОТЫ» и жди «+»",
           "2) Подтверди ПРОЕКТ / МОДУЛЬ / ТЕКУЩУЮ ЗАДАЧУ раздельно",
@@ -3052,20 +3204,69 @@
           "5) Покажи результат и проверку по критериям",
           "",
           "Главное правило: не подменяй проект модулем или задачей. Помоги принять правильное решение и уменьшить риск ошибки."
-        ].join("\n");
+        ].filter(function (line) { return line !== null; }).join("\n");
       }
 
       function renderHome() {
         els.greetingTitle.textContent = greetingText();
         var project = getFocusProject();
         var view = deriveView(project);
-        els.continueName.textContent = project.name;
-        els.nextLine1.textContent = view.nextLine1;
-        els.nextLine2.textContent = view.nextLine2;
+        var mod = view.module;
+        var task = view.task;
+        var review = ensureTaskReview(project, task);
+
+        if (els.homeProjectName) els.homeProjectName.textContent = project.name || "—";
+
+        if (els.homeCurrentWork) {
+          els.homeCurrentWork.textContent = (task && task.name)
+            ? task.name
+            : (mod && mod.name ? mod.name : "Работа ещё не выбрана");
+        }
+
+        if (els.homeGoal) {
+          els.homeGoal.textContent = (task && task.goal)
+            ? task.goal
+            : (mod && mod.purpose ? mod.purpose : "Цель ещё не указана");
+        }
+
+        if (els.homeNextStep) {
+          var nextText = null;
+          var cache = getCliAnalysisCache(project.id);
+          if (cache && cache.kind === "ok" && cache.data) {
+            nextText = extractSystemNextStepText(cache.data);
+          }
+          if (!nextText && task && task.name) nextText = task.name;
+          if (!nextText && view.nextLine2) nextText = view.nextLine2;
+          els.homeNextStep.textContent = nextText || "Уточните следующий шаг работы";
+        }
+
+        if (els.homeResult) {
+          els.homeResult.textContent = (task && task.expectedResult)
+            ? task.expectedResult
+            : "Результат ещё не сформулирован";
+        }
+
+        if (els.homeResultStatus) {
+          var status = review && review.status ? review.status : "unchecked";
+          var label = "Не проверен";
+          if (status === "accepted") label = "Принят";
+          else if (status === "ready") label = "Результат готов";
+          else if (status === "notes") label = "Нужны изменения";
+          els.homeResultStatus.textContent = label;
+          els.homeResultStatus.className = "home-mvp-status" +
+            (status === "accepted" ? " is-accepted" : status === "notes" || status === "ready" ? " is-notes" : "");
+        }
+
+        if (els.btnContinue) els.btnContinue.className = "btn btn-primary btn-hero";
+        if (els.btnNewProject) els.btnNewProject.className = "btn btn-secondary";
       }
 
       function setActiveTab(tabId) {
-        state.activeTab = tabId || "overview";
+        var next = tabId || "overview";
+        if (state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
+          next = "overview";
+        }
+        state.activeTab = next;
         var buttons = els.workspaceTabs.querySelectorAll("[data-tab]");
         for (var i = 0; i < buttons.length; i++) {
           buttons[i].classList.toggle("is-active", buttons[i].getAttribute("data-tab") === state.activeTab);
@@ -3076,17 +3277,56 @@
         }
       }
 
+      function loadDetailLevel() {
+        try {
+          var stored = localStorage.getItem(DETAIL_LEVEL_KEY);
+          if (DETAIL_LEVELS.indexOf(stored) !== -1) return stored;
+        } catch (e) {}
+        return "basic";
+      }
+
+      function saveDetailLevel(level) {
+        try { localStorage.setItem(DETAIL_LEVEL_KEY, level); } catch (e) {}
+      }
+
+      function syncDetailLevelSwitch(level) {
+        if (!els.detailLevelSwitch) return;
+        var buttons = els.detailLevelSwitch.querySelectorAll("[data-detail-choice]");
+        for (var i = 0; i < buttons.length; i++) {
+          var choice = buttons[i].getAttribute("data-detail-choice");
+          var on = choice === level;
+          buttons[i].setAttribute("aria-checked", on ? "true" : "false");
+          buttons[i].tabIndex = on ? 0 : -1;
+        }
+      }
+
+      function applyDetailLevel(level, options) {
+        var next = DETAIL_LEVELS.indexOf(level) !== -1 ? level : "basic";
+        state.detailLevel = next;
+        if (els.panelWorkspace) els.panelWorkspace.setAttribute("data-detail-level", next);
+        if (!options || options.persist !== false) saveDetailLevel(next);
+        syncDetailLevelSwitch(next);
+        if (state.detailLevel === "basic" && !DETAIL_TAB_BASIC[state.activeTab]) {
+          setActiveTab("overview");
+        } else {
+          setActiveTab(state.activeTab);
+        }
+      }
+
       function renderHeader(project, view) {
-        els.headProjectName.textContent = project.name;
-        els.headModuleName.textContent = view.module ? view.module.name : "не выбран";
-        els.headTaskName.textContent = view.task ? view.task.name : "не выбрана";
         document.getElementById("crumbProject").textContent = project.name;
         document.getElementById("crumbModule").textContent = view.module ? view.module.name : "не выбран";
         document.getElementById("crumbTask").textContent = view.task ? view.task.name : "не выбрана";
+        var status = project.status || "В работе";
+        var review = view.task ? ensureTaskReview(project, view.task) : null;
+        if (review && review.status === "accepted") status = "Задача принята";
+        else if (view.task && view.task.workflowStatus === "Готово") status = "Готово";
         els.workspaceMeta.textContent =
-          view.stage +
-          " · " + (project.status || "В работе") +
-          (project.createdAt ? " · обновлено " + formatDate(project.createdAt) : "");
+          "id: " + (project.id || "—") +
+          " · stage-label: " + (view.stage || "—") +
+          " · " + status +
+          (project.workFolder ? (" · " + project.workFolder) : "") +
+          (project.createdAt ? (" · обновлено " + formatDate(project.createdAt)) : "");
       }
 
       function passportStageFallback(project) {
@@ -3115,19 +3355,11 @@
 
         if (system) {
           els.ovStage.textContent = system.label;
-          if (els.ovStageMeta) els.ovStageMeta.hidden = false;
-          if (els.ovStageSource) els.ovStageSource.textContent = "Система";
+          if (els.ovStageMeta) els.ovStageMeta.hidden = true;
+          if (els.ovStageSource) els.ovStageSource.textContent = "";
           if (els.ovStageFreshness) {
-            if (system.fetchedAt) {
-              var relative = formatCliFetchedRelative(system.fetchedAt);
-              // Strip leading "Обновлено: " for compact meta next to source.
-              var shortRel = relative.replace(/^Обновлено:\s*/i, "");
-              els.ovStageFreshness.textContent = shortRel ? ("· " + shortRel) : "";
-              els.ovStageFreshness.title = formatCliFetchedExact(system.fetchedAt) || "";
-            } else {
-              els.ovStageFreshness.textContent = "";
-              els.ovStageFreshness.removeAttribute("title");
-            }
+            els.ovStageFreshness.textContent = "";
+            els.ovStageFreshness.removeAttribute("title");
           }
           if (els.ovStageWarn) {
             if (system.refreshError && system.refreshError.message) {
@@ -3143,8 +3375,8 @@
         }
 
         els.ovStage.textContent = passportStageFallback(project);
-        if (els.ovStageMeta) els.ovStageMeta.hidden = false;
-        if (els.ovStageSource) els.ovStageSource.textContent = "Карточка проекта";
+        if (els.ovStageMeta) els.ovStageMeta.hidden = true;
+        if (els.ovStageSource) els.ovStageSource.textContent = "";
         if (els.ovStageFreshness) {
           els.ovStageFreshness.textContent = "";
           els.ovStageFreshness.removeAttribute("title");
@@ -3478,12 +3710,40 @@
       }
 
       function renderOverview(project, view) {
-        els.ovGoal.textContent = project.idea || "—";
+        var review = view.task ? ensureTaskReview(project, view.task) : null;
+        var goalText = (view.module && view.module.purpose) || project.idea || "—";
+        if (view.task && view.task.goal) goalText = view.task.goal;
+        els.ovGoal.textContent = goalText;
         els.ovModule.textContent = view.module ? view.module.name : "не выбран";
+        if (els.ovStatus) {
+          if (review && review.status === "accepted") els.ovStatus.textContent = "Готово";
+          else if (view.task && view.task.workflowStatus) els.ovStatus.textContent = view.task.workflowStatus;
+          else els.ovStatus.textContent = project.status || (view.module && view.module.status) || "В работе";
+        }
         updateOverviewProjectStage(project);
         els.ovReady.textContent = view.module && view.module.ready ? view.module.ready : (project.assets || "—");
         els.ovAttention.textContent = view.module && view.module.remaining ? view.module.remaining : "Добавьте модуль или уточните, что осталось";
-        els.ovNext.textContent = view.task ? view.task.name : (view.nextLine2 || "—");
+        if (els.ovTask) els.ovTask.textContent = view.task ? view.task.name : "Задача не выбрана";
+        if (review && review.status === "accepted") {
+          els.ovNext.textContent = view.module && view.module.nextAfterAccept
+            ? view.module.nextAfterAccept
+            : "Сформулируйте следующую точечную задачу модуля";
+        } else {
+          els.ovNext.textContent = view.nextLine2 || (view.task ? ("Выполнить: " + view.task.name) : "—");
+        }
+        if (els.ovResult) {
+          els.ovResult.textContent = view.task && view.task.expectedResult
+            ? view.task.expectedResult
+            : "Результат ещё не сформулирован";
+        }
+        if (els.ovTechInfo) {
+          els.ovTechInfo.textContent =
+            "projectId=" + (project.id || "—") +
+            "; moduleId=" + (view.module && view.module.id ? view.module.id : "—") +
+            "; taskId=" + (view.task && view.task.id ? view.task.id : "—") +
+            "; workFolder=" + (project.workFolder || "не указана") +
+            "; review=" + (review ? review.status : "n/a");
+        }
         updateOverviewSystemNext(project);
         updateOverviewSystemAttention(project);
         if (els.ovExecTool) {
@@ -3812,6 +4072,7 @@
 
       function renderCliInsight(project) {
         if (!els.cliInsight || !els.cliInsightBody) return;
+        els.cliInsight.hidden = true;
         var cache = project ? getCliAnalysisCache(project.id) : null;
         var httpOk = location.protocol === "http:" || location.protocol === "https:";
         var hasFolder = !!(project && String(project.workFolder || "").trim());
@@ -4099,7 +4360,7 @@
         var review = ensureTaskReview(project, task);
         els.reviewStatus.textContent = reviewStatusLabel(review.status);
         els.reviewStatus.className = "review-status" +
-          (review.status === "accepted" ? " is-accepted" : review.status === "notes" ? " is-notes" : "");
+          (review.status === "accepted" ? " is-accepted" : review.status === "notes" || review.status === "ready" ? " is-notes" : "");
         els.reviewNotes.value = review.notes || "";
         els.reviewNotes.disabled = review.status === "accepted";
 
@@ -4130,12 +4391,19 @@
           });
         }
 
+        if (els.btnReviewReady) els.btnReviewReady.disabled = review.status === "accepted";
         els.btnReviewAccept.disabled = review.status === "accepted";
         els.btnReviewNotes.disabled = review.status === "accepted";
         els.btnNextTask.disabled = review.status !== "accepted";
-        els.reviewHint.textContent = review.status === "accepted"
-          ? ("Результат принят" + (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ". Можно перейти к следующей задаче.")
-          : "Переход к следующей задаче доступен только после статуса «Принято». Чтобы принять результат, отметьте весь чек-лист.";
+        if (review.status === "accepted") {
+          els.reviewHint.textContent = "Результат принят" + (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ". Состояние проекта обновлено.";
+        } else if (review.status === "ready") {
+          els.reviewHint.textContent = "Результат отмечен как готовый. Нажмите «Принять», если всё верно, или «Нужны изменения».";
+        } else if (review.status === "notes") {
+          els.reviewHint.textContent = "Замечание сохранено и добавлено в рабочее задание. Исправьте и снова отметьте «Результат готов».";
+        } else {
+          els.reviewHint.textContent = "Когда работа сделана: «Результат готов» → «Принять». Если нужно правки — «Нужны изменения».";
+        }
       }
 
       function formatDateTime(iso) {
@@ -4570,6 +4838,24 @@
         document.getElementById("taskName").focus();
       }
 
+      function markReviewReady() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var mod = getActiveModule(mutable);
+        var task = getActiveTask(mod);
+        if (!task) return;
+        var review = ensureTaskReview(mutable, task);
+        review.notes = els.reviewNotes.value.trim();
+        for (var i = 0; i < review.items.length; i++) {
+          review.checks[review.items[i].id] = true;
+        }
+        review.status = "ready";
+        review.acceptedAt = null;
+        task.workflowStatus = "Результат готов";
+        persistTaskReview(mutable, task);
+        refreshWorkspace();
+      }
+
       function markReviewNotes() {
         var mutable = currentProjectMutable();
         if (!mutable) return;
@@ -4578,10 +4864,17 @@
         if (!task) return;
         var review = ensureTaskReview(mutable, task);
         review.notes = els.reviewNotes.value.trim();
+        if (!review.notes) {
+          window.alert("Кратко опишите, что нужно изменить.");
+          els.reviewNotes.focus();
+          return;
+        }
         review.status = "notes";
         review.acceptedAt = null;
+        task.workflowStatus = "Нужны изменения";
         persistTaskReview(mutable, task);
-        renderReviewBlock(mutable, task);
+        refreshWorkspace();
+        setActiveTab("work");
       }
 
       function markReviewAccepted() {
@@ -4592,14 +4885,25 @@
         if (!task) return;
         var review = ensureTaskReview(mutable, task);
         review.notes = els.reviewNotes.value.trim();
-        if (!allReviewChecksDone(review)) {
-          window.alert("Чтобы принять результат, отметьте все пункты чек-листа проверки.");
+        if (review.status !== "ready" && !allReviewChecksDone(review)) {
+          window.alert("Сначала нажмите «Результат готов» или отметьте критерии приёмки (расширенный уровень).");
           return;
+        }
+        for (var i = 0; i < review.items.length; i++) {
+          review.checks[review.items[i].id] = true;
         }
         review.status = "accepted";
         review.acceptedAt = new Date().toISOString();
+        task.workflowStatus = "Готово";
+        if (mod) {
+          mod.remaining = "Сформулировать следующую точечную доработку модуля";
+          mod.nextAfterAccept = "Определить следующую точечную задачу для «" + mod.name + "»";
+          mod.ready = (mod.ready ? (mod.ready + " ") : "") + "Принята задача: " + task.name + ".";
+        }
         persistTaskReview(mutable, task);
-        renderReviewBlock(mutable, task);
+        if (!mutable.isDemo) saveProjects();
+        refreshWorkspace();
+        setActiveTab("overview");
       }
 
       function syncGateConfirmButton() {
@@ -4813,14 +5117,10 @@
         document.getElementById("btnContinue").addEventListener("click", function () {
           openWorkspace(getFocusProject().id);
         });
-        document.getElementById("btnStartNext").addEventListener("click", function () {
-          openWorkspace(getFocusProject().id);
-        });
         document.getElementById("btnStartFromModal").addEventListener("click", function () {
           closeModal(els.stepModal);
           openWorkspace(getFocusProject().id);
         });
-        document.getElementById("btnStepDetails").addEventListener("click", openStepDetails);
         document.getElementById("btnCloseStep").addEventListener("click", function () { closeModal(els.stepModal); });
         document.getElementById("btnClearTemplate").addEventListener("click", function () {
           state.selectedTemplate = "";
@@ -4835,9 +5135,43 @@
         document.getElementById("btnCancelTask").addEventListener("click", function () { closeModal(els.taskModal); });
         document.getElementById("btnCancelGate").addEventListener("click", function () { closeModal(els.gateModal); });
         document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGateAndCopy);
+        if (els.btnReviewReady) els.btnReviewReady.addEventListener("click", markReviewReady);
         els.btnReviewNotes.addEventListener("click", markReviewNotes);
         els.btnReviewAccept.addEventListener("click", markReviewAccepted);
         els.btnNextTask.addEventListener("click", function () { openAddTask(true); });
+        if (els.detailLevelSwitch) {
+          els.detailLevelSwitch.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-detail-choice]");
+            if (!btn || !els.detailLevelSwitch.contains(btn)) return;
+            applyDetailLevel(btn.getAttribute("data-detail-choice"));
+          });
+          els.detailLevelSwitch.addEventListener("keydown", function (event) {
+            var buttons = Array.prototype.slice.call(
+              els.detailLevelSwitch.querySelectorAll("[data-detail-choice]")
+            );
+            var current = buttons.indexOf(document.activeElement);
+            if (current < 0) current = DETAIL_LEVELS.indexOf(state.detailLevel);
+            if (current < 0) current = 0;
+            var next = current;
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+              next = (current + 1) % buttons.length;
+              event.preventDefault();
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+              next = (current - 1 + buttons.length) % buttons.length;
+              event.preventDefault();
+            } else if (event.key === "Home") {
+              next = 0;
+              event.preventDefault();
+            } else if (event.key === "End") {
+              next = buttons.length - 1;
+              event.preventDefault();
+            } else {
+              return;
+            }
+            buttons[next].focus();
+            applyDetailLevel(buttons[next].getAttribute("data-detail-choice"));
+          });
+        }
         els.reviewNotes.addEventListener("change", function () {
           var mutable = currentProjectMutable();
           if (!mutable) return;
@@ -4954,6 +5288,7 @@
         if (!findProject(state.lastOpenedId)) state.lastOpenedId = DEMO_PROJECT.id;
         fillTaskToolSelect();
         initAppearanceControls();
+        applyDetailLevel(loadDetailLevel(), { persist: false });
         bindEvents();
         renderTemplates();
         renderHome();
