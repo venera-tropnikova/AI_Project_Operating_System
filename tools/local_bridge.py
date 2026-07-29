@@ -6,6 +6,7 @@ AI POS Local Bridge (MVP v0.3).
 Serves the UI and exposes a tiny localhost API:
 - Orchestrator refresh-insight (unchanged contract)
 - Project folder pick / preview / create / inspect (Passport bootstrap)
+- Desktop shortcut creation (reuses tools/create_ai_pos_shortcut.ps1)
 
 Does not determine stage. Does not replace Analyzer / Stage Engine.
 """
@@ -14,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -28,10 +30,16 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS_DIR = Path(__file__).resolve().parent
 ORCHESTRATOR = TOOLS_DIR / "refresh_project_insight.py"
+SHORTCUT_SCRIPT = TOOLS_DIR / "create_ai_pos_shortcut.ps1"
 TEMPLATE_DIR = ROOT / "Projects" / "TEMPLATE"
 ANALYSIS_REL = Path(".ai-pos") / "project_analysis.json"
 
 RESULT_PREFIX = "AI_POS_ORCHESTRATOR_RESULT="
+SHORTCUT_RESULT_PREFIX = "AI_POS_SHORTCUT_RESULT="
+SHORTCUT_FAILED_MESSAGE = (
+    "Не удалось создать ярлык. "
+    "Попробуйте запустить create_ai_pos_shortcut.cmd в папке программы."
+)
 MODE_NORMAL = "NORMAL"
 MODE_DIAGNOSTIC = "DIAGNOSTIC"
 MODE_BLOCKED = "BLOCKED"
@@ -41,6 +49,7 @@ RC_PROJECT_ROOT_INVALID = "PROJECT_ROOT_INVALID"
 API_KEYS = ("ok", "analysis", "message", "mode", "reason_codes")
 
 _PICK_LOCK = threading.Lock()
+_SHORTCUT_LOCK = threading.Lock()
 
 
 def parse_orchestrator_result(stdout: str) -> dict[str, Any] | None:
@@ -463,6 +472,84 @@ def pick_directory(title: str = "Выберите папку") -> dict[str, Any]
     )
 
 
+def parse_shortcut_result(stdout: str) -> dict[str, Any] | None:
+    for line in reversed((stdout or "").splitlines()):
+        line = line.strip()
+        if line.startswith(SHORTCUT_RESULT_PREFIX):
+            try:
+                data = json.loads(line[len(SHORTCUT_RESULT_PREFIX) :])
+            except json.JSONDecodeError:
+                return None
+            return data if isinstance(data, dict) else None
+    return None
+
+
+def find_powershell() -> str | None:
+    system_root = os.environ.get("SystemRoot") or "C:\\Windows"
+    builtin = (
+        Path(system_root) / "System32" / "WindowsPowerShell" / "v1.0" / "powershell.exe"
+    )
+    if builtin.is_file():
+        return str(builtin)
+    return shutil.which("powershell")
+
+
+def create_desktop_shortcut() -> dict[str, Any]:
+    """Desktop shortcut for AI POS: same script as the manual create_ai_pos_shortcut.cmd."""
+    if os.name != "nt":
+        return simple_result(ok=False, message="Создание ярлыка доступно только в Windows.")
+    if not SHORTCUT_SCRIPT.is_file():
+        return simple_result(ok=False, message=SHORTCUT_FAILED_MESSAGE)
+    powershell = find_powershell()
+    if powershell is None:
+        return simple_result(ok=False, message=SHORTCUT_FAILED_MESSAGE)
+
+    with _SHORTCUT_LOCK:
+        try:
+            completed = subprocess.run(
+                [
+                    powershell,
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(SHORTCUT_SCRIPT),
+                    "-NoPause",
+                ],
+                cwd=str(ROOT),
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                stdin=subprocess.DEVNULL,
+                timeout=60,
+                check=False,
+            )
+        except (subprocess.TimeoutExpired, OSError):
+            return simple_result(ok=False, message=SHORTCUT_FAILED_MESSAGE)
+
+    # Script console output may arrive in the OEM code page: trust only the ASCII result line.
+    result = parse_shortcut_result(completed.stdout or "")
+    if completed.returncode != 0 or not result or result.get("ok") is not True:
+        if (result or {}).get("reason") == "LAUNCHER_MISSING":
+            return simple_result(
+                ok=False,
+                message="Не удалось создать ярлык: в папке программы нет файла запуска AI POS.",
+            )
+        return simple_result(ok=False, message=SHORTCUT_FAILED_MESSAGE)
+
+    icon_missing = bool(result.get("icon_missing"))
+    message = "Готово. Ярлык AI POS создан на рабочем столе."
+    if icon_missing:
+        message += " Использована стандартная иконка."
+    return simple_result(
+        ok=True,
+        message=message,
+        icon_missing=icon_missing,
+        shortcut_path=str(result.get("lnk") or ""),
+    )
+
+
 class LocalBridgeHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, directory=str(ROOT), **kwargs)
@@ -618,6 +705,11 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
+        if path == "/api/create-desktop-shortcut":
+            result = create_desktop_shortcut()
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
         if path == "/api/create-project":
             confirm = body.get("confirm") is True
             result = create_project_folder(
@@ -664,6 +756,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"API: http://{args.host}:{args.port}/api/preview-new-project")
     print(f"API: http://{args.host}:{args.port}/api/inspect-project-folder")
     print(f"API: http://{args.host}:{args.port}/api/create-project")
+    print(f"API: http://{args.host}:{args.port}/api/create-desktop-shortcut")
     print("Stop with Ctrl+C")
     try:
         server.serve_forever()

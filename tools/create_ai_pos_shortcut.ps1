@@ -1,10 +1,24 @@
 ﻿# Optional: create Desktop shortcut AI POS -> start_ai_pos_silent.vbs
 # Технические файлы держим в ASCII-именах: русское название живёт в самом ярлыке.
 # Optional branding ICO; warns if missing and uses default icon.
+param(
+    # Local Bridge запускает скрипт без консоли: пауза и ожидание ввода недопустимы.
+    [switch]$NoPause
+)
+
 $ErrorActionPreference = "Stop"
 
 function Write-User([string]$Text) {
     Write-Host $Text
+}
+
+function Wait-User() {
+    if ($NoPause) { return }
+    try { Read-Host "Нажмите Enter, чтобы закрыть" | Out-Null } catch { }
+}
+
+function Write-Result([hashtable]$Data) {
+    Write-Host ("AI_POS_SHORTCUT_RESULT=" + ($Data | ConvertTo-Json -Compress))
 }
 
 try {
@@ -15,6 +29,8 @@ try {
     if (-not (Test-Path -LiteralPath $vbs)) {
         Write-User "Не найден файл запуска AI POS в корне папки."
         Write-User "Откройте папку AI POS и запустите start_ai_pos.cmd."
+        Write-Result @{ ok = $false; reason = "LAUNCHER_MISSING" }
+        Wait-User
         exit 1
     }
 
@@ -39,6 +55,9 @@ try {
 
     $shortcut.Save()
 
+    # Результат подтверждаем фактом: перечитываем сохранённый ярлык, а не свои же намерения.
+    $saved = $wsh.CreateShortcut($lnkPath)
+
     Write-User "Ярлык AI POS создан на рабочем столе."
     if ($iconMissing) {
         Write-User ""
@@ -48,13 +67,22 @@ try {
     Write-User ""
     Write-User "После переноса папки AI POS запустите создание ярлыка снова."
     Write-User ""
-    try { Read-Host "Нажмите Enter, чтобы закрыть" | Out-Null } catch { }
+    Write-Result @{
+        ok           = $true
+        icon_missing = [bool]$iconMissing
+        lnk          = $saved.FullName
+        target       = $saved.TargetPath
+        arguments    = $saved.Arguments
+        icon         = $saved.IconLocation
+    }
+    Wait-User
     exit 0
 }
 catch {
     Write-User "Не удалось создать ярлык."
     Write-User ($_.Exception.Message)
     Write-User ""
-    try { Read-Host "Нажмите Enter, чтобы закрыть" | Out-Null } catch { }
+    Write-Result @{ ok = $false; reason = "SHORTCUT_FAILED" }
+    Wait-User
     exit 1
 }

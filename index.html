@@ -548,7 +548,7 @@
       gap: 1.25rem;
     }
 
-    .desktop-start-example {
+    .desktop-start-block {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -2271,6 +2271,17 @@
       background: var(--surface);
       box-shadow: var(--shadow-soft);
     }
+
+    .settings-app {
+      max-width: 420px;
+      margin-top: 1.25rem;
+      padding: 1rem 1.05rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+
     .settings-form select,
     .settings-form input,
     .form-grid select {
@@ -2519,9 +2530,15 @@
             <button type="button" class="btn btn-primary" id="btnStartNewProject">Создать проект</button>
             <button type="button" class="btn btn-secondary" id="btnStartExistingProject">Подключить существующую папку</button>
           </div>
-          <div class="desktop-start-example">
+          <div class="desktop-start-block">
             <button type="button" class="btn btn-ghost" id="btnOpenExample">Посмотреть пример</button>
             <p class="desktop-proto-note">Пример — готовый проект «Мой день». Он показывает, как устроена работа в AI POS. Изменения в примере не сохраняются и не затрагивают ваши проекты.</p>
+          </div>
+          <div class="desktop-start-block">
+            <button type="button" class="btn btn-ghost" data-shortcut-button>Создать ярлык AI POS</button>
+            <p class="desktop-proto-note">Ярлык появится на рабочем столе и будет открывать AI POS правильно. Создайте его один раз.</p>
+            <p class="section-note" data-shortcut-note hidden style="margin:0" aria-live="polite"></p>
+            <p class="form-error" data-shortcut-error aria-live="polite"></p>
           </div>
         </div>
 
@@ -2935,6 +2952,17 @@
               <span class="section-note" id="settingsSaveNote" hidden style="margin:0">Сохранено</span>
             </div>
           </form>
+
+          <div class="settings-app">
+            <h3 class="section-heading">AI POS</h3>
+            <p class="section-note">Эти действия относятся к самому AI POS, а не к текущему проекту.</p>
+            <div class="section-actions" style="margin-top:0.75rem">
+              <button type="button" class="btn btn-secondary" data-shortcut-button>Создать ярлык AI POS</button>
+            </div>
+            <p class="hint" style="margin-top:0.5rem">Ярлык появится на рабочем столе и будет открывать AI POS правильно. Если ярлык перестал работать после переноса папки программы, создайте его заново.</p>
+            <p class="section-note" data-shortcut-note hidden style="margin:0" aria-live="polite"></p>
+            <p class="form-error" data-shortcut-error aria-live="polite"></p>
+          </div>
         </div>
       </div>
     </section>
@@ -4218,6 +4246,38 @@
             }
           };
         });
+      }
+
+      function setShortcutResult(button, text, isError) {
+        var block = button.closest(".desktop-start-block, .settings-app");
+        if (!block) return;
+        var note = block.querySelector("[data-shortcut-note]");
+        var error = block.querySelector("[data-shortcut-error]");
+        if (note) {
+          note.textContent = text && !isError ? text : "";
+          note.hidden = !text || isError;
+        }
+        if (error) {
+          error.textContent = text && isError ? text : "";
+          error.classList.toggle("is-visible", !!text && isError);
+        }
+      }
+
+      async function createDesktopShortcut(button) {
+        if (!button || button.disabled) return;
+        var label = button.textContent;
+        setShortcutResult(button, "", false);
+        button.disabled = true;
+        button.textContent = "Создаю ярлык…";
+        var res = await postBridgeJson("/api/create-desktop-shortcut", {});
+        button.disabled = false;
+        button.textContent = label;
+        var data = res.data || {};
+        if (data.ok) {
+          setShortcutResult(button, data.message || "Готово. Ярлык AI POS создан на рабочем столе.", false);
+          return;
+        }
+        setShortcutResult(button, data.message || "Не удалось создать ярлык. Повторите попытку.", true);
       }
 
       function resetCreateWizard(mode) {
@@ -7027,6 +7087,12 @@
         for (var oni = 0; oni < osNavButtons.length; oni++) {
           osNavButtons[oni].addEventListener("click", function (event) {
             openOsSection(event.currentTarget.getAttribute("data-os-nav"));
+          });
+        }
+        var shortcutButtons = document.querySelectorAll("[data-shortcut-button]");
+        for (var sci = 0; sci < shortcutButtons.length; sci++) {
+          shortcutButtons[sci].addEventListener("click", function (event) {
+            createDesktopShortcut(event.currentTarget);
           });
         }
         document.getElementById("btnStartFromModal").addEventListener("click", function () {
