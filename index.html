@@ -148,6 +148,66 @@
       min-height: 100vh;
     }
 
+    .app[hidden] { display: none; }
+
+    .launch-notice {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+
+    .launch-notice[hidden] { display: none; }
+
+    .launch-notice-card {
+      width: 100%;
+      max-width: 560px;
+      padding: 1.75rem 1.9rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .launch-notice-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .launch-notice-brand span {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .launch-notice-lead {
+      margin: 0.6rem 0 0;
+      color: var(--ink-soft);
+      font-size: 0.94rem;
+      font-weight: 500;
+    }
+
+    .launch-notice-steps {
+      margin: 1.15rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--ink-soft);
+      font-size: 0.94rem;
+      font-weight: 500;
+    }
+
+    .launch-notice-steps li + li { margin-top: 0.4rem; }
+
+    .launch-notice-hint {
+      margin: 1.35rem 0 0;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
     .os-shell {
       display: grid;
       grid-template-columns: 268px minmax(0, 1fr);
@@ -2400,6 +2460,24 @@
   </style>
 </head>
 <body>
+  <div class="launch-notice" id="launchNotice" hidden>
+    <div class="launch-notice-card">
+      <div class="launch-notice-brand">
+        <img src="assets/branding/ai-pos-icon-v1.png" width="36" height="36" alt="" />
+        <span>AI POS</span>
+      </div>
+      <h1 class="page-title">Запустите AI POS</h1>
+      <p class="launch-notice-lead">Вы открыли страницу AI POS напрямую как файл. Для работы с проектами приложение нужно запускать через программу запуска AI POS.</p>
+      <p class="launch-notice-lead">Ваши проекты не пропали. Они будут доступны после правильного запуска.</p>
+      <p class="launch-notice-lead">Запустите AI POS одним из способов:</p>
+      <ol class="launch-notice-steps">
+        <li>через ярлык AI POS;</li>
+        <li>или файлом start_ai_pos.cmd в папке программы.</li>
+      </ol>
+      <p class="launch-notice-hint">Если ярлык открывает эту страницу вместо запуска AI POS, создайте новый ярлык с помощью create_ai_pos_shortcut.cmd.<br />Работа через открытие index.html отключена специально для защиты ваших проектов.</p>
+    </div>
+  </div>
+
   <div class="app is-home" id="appShell">
     <div class="os-shell">
       <aside class="os-sidebar" aria-label="Навигация AI POS">
@@ -7195,7 +7273,24 @@
         }
       }
 
+      function openedAsFile() {
+        return window.location.protocol === "file:";
+      }
+
+      function showLaunchNotice() {
+        // Хранилище браузера разделено по адресу страницы: под file:// проекты
+        // пользователя не видны, а созданные здесь не появятся при обычном запуске.
+        var notice = document.getElementById("launchNotice");
+        var shell = document.getElementById("appShell");
+        if (notice) notice.hidden = false;
+        if (shell) shell.hidden = true;
+      }
+
       function init() {
+        if (openedAsFile()) {
+          showLaunchNotice();
+          return;
+        }
         state.projects = loadProjects();
         state.customTemplates = loadCustomTemplates();
         state.lastOpenedId = loadLastOpened();
