@@ -3055,6 +3055,11 @@
               <span class="hint">Путь к папке проекта на диске</span>
               <input id="settingsWorkFolder" name="workFolder" type="text" readonly />
             </div>
+            <div class="field" style="margin-top:0.85rem">
+              <label for="settingsLaunchUrl">Адрес приложения</label>
+              <span class="hint">Сайт вашего приложения, например https://127.0.0.1:3000/</span>
+              <input id="settingsLaunchUrl" name="launchUrl" type="url" inputmode="url" placeholder="https://" autocomplete="off" />
+            </div>
             <div class="section-actions" style="margin-top:1rem">
               <button type="submit" class="btn btn-primary" id="btnSaveProjectSettings">Сохранить</button>
               <span class="section-note" id="settingsSaveNote" hidden style="margin:0">Сохранено</span>
@@ -3613,6 +3618,7 @@
         settingsPrimaryTool: document.getElementById("settingsPrimaryTool"),
         settingsAiModel: document.getElementById("settingsAiModel"),
         settingsWorkFolder: document.getElementById("settingsWorkFolder"),
+        settingsLaunchUrl: document.getElementById("settingsLaunchUrl"),
         settingsSaveNote: document.getElementById("settingsSaveNote"),
         btnCopyWork: document.getElementById("btnCopyWork"),
         assignmentTitle: document.getElementById("assignmentTitle"),
@@ -3988,6 +3994,9 @@
 
         project.materials = Array.isArray(project.materials) ? project.materials : [];
         project.workFolder = project.workFolder || "";
+        project.launchUrl = normalizeLaunchUrl(
+          project.launchUrl || project.launch_url || project.launchTarget || project.launch_target || ""
+        );
         if (!project.primaryTool && raw.preferredTool) project.primaryTool = raw.preferredTool;
         project.primaryTool = normalizePrimaryTool(project.primaryTool);
         project.aiModel = normalizeAiModel(project.aiModel);
@@ -4302,6 +4311,10 @@
       function normalizeAiModel(id) {
         var model = findAiModelById(id);
         return model ? model.id : "";
+      }
+
+      function normalizeLaunchUrl(raw) {
+        return String(raw || "").trim();
       }
 
       function resolvePrimaryToolId(project) {
@@ -6043,13 +6056,14 @@
       }
 
       /**
-       * Способ запуска берётся из данных проекта (launchUrl / launch_url / launchTarget / launch_target).
-       * Пока такого поля нет — кнопка остаётся неактивной; endpoint запуска будет отдельной задачей.
+       * Способ запуска берётся из адреса приложения в настройках проекта (launchUrl).
+       * Сейчас поддерживается только открытие сайта по http:// или https://.
        */
       function resolveProjectLaunch(project) {
         if (!project) return null;
-        var raw = project.launchUrl || project.launch_url || project.launchTarget || project.launch_target || "";
-        var value = String(raw || "").trim();
+        var value = normalizeLaunchUrl(
+          project.launchUrl || project.launch_url || project.launchTarget || project.launch_target || ""
+        );
         if (!value) return null;
         if (/^https?:\/\//i.test(value)) return { kind: "url", value: value };
         return { kind: "unsupported", value: value };
@@ -6061,9 +6075,15 @@
         var canOpen = !!(launch && launch.kind === "url");
         els.btnOpenApp.disabled = !canOpen;
         if (els.openAppHint) {
-          if (canOpen) els.openAppHint.textContent = "Приложение откроется в новом окне.";
-          else if (launch) els.openAppHint.textContent = "Для этого проекта запуск пока не поддерживается.";
-          else els.openAppHint.textContent = "Для этого проекта запуск не настроен.";
+          if (canOpen) {
+            els.openAppHint.textContent = "Приложение откроется в новом окне.";
+          } else if (launch && launch.kind === "unsupported") {
+            els.openAppHint.textContent =
+              "Сейчас можно открыть только адрес сайта (начинается с http:// или https://). Исправьте адрес в настройках проекта.";
+          } else {
+            els.openAppHint.textContent =
+              "Адрес приложения не указан. Задайте его в настройках проекта.";
+          }
         }
       }
 
@@ -6506,6 +6526,7 @@
         fillPrimaryToolSelect(els.settingsPrimaryTool, resolvePrimaryToolId(project));
         fillAiModelSelect(els.settingsAiModel, normalizeAiModel(project && project.aiModel));
         if (els.settingsWorkFolder) els.settingsWorkFolder.value = project.workFolder || "";
+        if (els.settingsLaunchUrl) els.settingsLaunchUrl.value = normalizeLaunchUrl(project && project.launchUrl);
         if (els.settingsSaveNote) els.settingsSaveNote.hidden = true;
       }
 
@@ -6515,6 +6536,7 @@
         if (!mutable) return;
         mutable.primaryTool = normalizePrimaryTool(els.settingsPrimaryTool && els.settingsPrimaryTool.value);
         mutable.aiModel = normalizeAiModel(els.settingsAiModel && els.settingsAiModel.value);
+        mutable.launchUrl = normalizeLaunchUrl(els.settingsLaunchUrl && els.settingsLaunchUrl.value);
         if (!mutable.isDemo) saveProjects();
         refreshWorkspace();
         if (els.settingsSaveNote) els.settingsSaveNote.hidden = false;
@@ -6857,6 +6879,7 @@
           assets: data.assets,
           constraints: data.constraints,
           workFolder: workFolder,
+          launchUrl: "",
           primaryTool: data.primaryTool,
           aiModel: data.aiModel,
           template: data.template,
