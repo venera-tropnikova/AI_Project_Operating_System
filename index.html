@@ -314,22 +314,6 @@
       flex-shrink: 0;
     }
 
-    .os-project-item[data-status="development"] {
-      --project-status: #e3942d;
-    }
-
-    .os-project-item[data-status="ready"] {
-      --project-status: #3d9a6a;
-    }
-
-    .os-project-item[data-status="active"] {
-      --project-status: #3b6cb5;
-    }
-
-    .os-project-item[data-status="paused"] {
-      --project-status: #9aa3b2;
-    }
-
     .os-project-icon {
       width: 28px;
       height: 28px;
@@ -470,104 +454,6 @@
       box-shadow: 0 0 0 3px color-mix(in srgb, #3d9a6a 22%, transparent);
     }
 
-    .desktop-stages {
-      padding: 0.35rem 0 1.15rem;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .desktop-stages-title {
-      margin: 0 0 1rem;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-    }
-
-    .desktop-stage-track {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 0.35rem;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      position: relative;
-    }
-
-    .desktop-stage-track::before {
-      content: "";
-      position: absolute;
-      left: 0.7rem;
-      right: 0.7rem;
-      top: 0.7rem;
-      height: 2px;
-      background: var(--line);
-      z-index: 0;
-    }
-
-    .desktop-stage {
-      position: relative;
-      z-index: 1;
-      flex: 1 1 0;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.45rem;
-      text-align: center;
-    }
-
-    .desktop-stage-mark {
-      width: 1.4rem;
-      height: 1.4rem;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      line-height: 1;
-      background: var(--surface);
-      border: 2px solid var(--line);
-      color: var(--ink-muted);
-      box-sizing: border-box;
-    }
-
-    .desktop-stage.is-done .desktop-stage-mark {
-      background: color-mix(in srgb, #3d9a6a 14%, var(--surface));
-      border-color: #3d9a6a;
-      color: #2f7a54;
-    }
-
-    .desktop-stage.is-current .desktop-stage-mark {
-      background: color-mix(in srgb, #3d9a6a 16%, var(--surface));
-      border-color: #3d9a6a;
-      color: #2f7a54;
-      box-shadow: 0 0 0 3px color-mix(in srgb, #3d9a6a 18%, transparent);
-    }
-
-    .desktop-stage.is-future .desktop-stage-mark {
-      background: var(--bg);
-      border-color: color-mix(in srgb, var(--line) 85%, var(--ink-muted));
-      color: var(--ink-muted);
-    }
-
-    .desktop-stage-name {
-      margin: 0;
-      font-size: 0.72rem;
-      font-weight: 550;
-      color: var(--ink-soft);
-      line-height: 1.25;
-      max-width: 5.8rem;
-    }
-
-    .desktop-stage.is-done .desktop-stage-name,
-    .desktop-stage.is-current .desktop-stage-name {
-      color: var(--ink);
-      font-weight: 650;
-    }
-
     .desktop-field.is-path .desktop-field-value {
       font-size: 0.88rem;
       font-weight: 500;
@@ -594,6 +480,57 @@
       margin: 0;
       font-size: 0.78rem;
       color: var(--ink-muted);
+    }
+
+    .desktop-start {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .desktop-start-example {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding-top: 0.25rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .desktop-start[hidden],
+    .desktop-info[hidden],
+    .desktop-actions[hidden] {
+      display: none;
+    }
+
+    .os-project-empty {
+      margin: 0;
+      padding: 0.4rem 0.55rem;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
+    .example-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.9rem;
+      margin: 0 0 1.1rem;
+      padding: 0.6rem 0.6rem 0.6rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .example-banner[hidden] {
+      display: none;
+    }
+
+    .example-banner-text {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--ink-soft);
     }
 
     .topbar { display: none; }
@@ -2190,11 +2127,6 @@
         padding: 1.1rem 1rem 2.5rem 1.25rem;
       }
 
-      .desktop-stage-name {
-        max-width: 4.2rem;
-        font-size: 0.66rem;
-      }
-
       .home-actions .btn,
       .desktop-actions .btn { width: 100%; }
 
@@ -2499,7 +2431,23 @@
       <div class="os-main">
     <section class="panel is-active" id="panelList" aria-label="Рабочий стол">
       <div class="desktop" id="desktopRoot">
-        <div class="desktop-info" aria-label="Активный проект">
+        <div class="desktop-start" id="desktopStart" hidden>
+          <div>
+            <h1 class="page-title">Здесь будут ваши проекты</h1>
+            <p class="page-lead">AI POS помогает вести проект по шагам: определить текущую задачу, проверить результат и перейти к следующему действию.</p>
+            <p class="page-lead">Создайте новый проект или подключите существующую папку.</p>
+          </div>
+          <div class="desktop-actions">
+            <button type="button" class="btn btn-primary" id="btnStartNewProject">Создать проект</button>
+            <button type="button" class="btn btn-secondary" id="btnStartExistingProject">Подключить существующую папку</button>
+          </div>
+          <div class="desktop-start-example">
+            <button type="button" class="btn btn-ghost" id="btnOpenExample">Посмотреть пример</button>
+            <p class="desktop-proto-note">Пример — готовый проект «Мой день». Он показывает, как устроена работа в AI POS. Изменения в примере не сохраняются и не затрагивают ваши проекты.</p>
+          </div>
+        </div>
+
+        <div class="desktop-info" id="desktopInfo" aria-label="Активный проект" hidden>
           <div class="desktop-field is-title">
             <p class="desktop-field-label">Проект</p>
             <p class="desktop-field-value" id="desktopProjectName">—</p>
@@ -2508,17 +2456,13 @@
               <span id="desktopProjectStatus">—</span>
             </p>
           </div>
-          <div class="desktop-stages" id="desktopStages" aria-label="Этапы проекта">
-            <p class="desktop-stages-title">Этапы проекта</p>
-            <ol class="desktop-stage-track" id="desktopStageTrack"></ol>
+          <div class="desktop-field">
+            <p class="desktop-field-label">Стадия проекта</p>
+            <p class="desktop-field-value" id="desktopProjectStage">—</p>
           </div>
           <div class="desktop-field">
-            <p class="desktop-field-label">Тип проекта</p>
-            <p class="desktop-field-value" id="desktopProjectType">—</p>
-          </div>
-          <div class="desktop-field">
-            <p class="desktop-field-label">Последнее обновление</p>
-            <p class="desktop-field-value" id="desktopLastUpdate">—</p>
+            <p class="desktop-field-label">Создан</p>
+            <p class="desktop-field-value" id="desktopProjectCreated">—</p>
           </div>
           <div class="desktop-field is-path">
             <p class="desktop-field-label">Путь к проекту</p>
@@ -2529,11 +2473,10 @@
           </div>
         </div>
 
-        <div class="desktop-actions">
+        <div class="desktop-actions" id="desktopActions" hidden>
           <button type="button" class="btn btn-primary" id="btnContinue">Продолжить работу</button>
           <button type="button" class="btn btn-secondary" id="btnNewProject">Новый проект</button>
         </div>
-        <p class="desktop-proto-note" id="desktopProtoNote" hidden></p>
       </div>
     </section>
 
@@ -2694,6 +2637,11 @@
             <button type="button" class="btn btn-ghost" id="btnBackToList">На главную</button>
             <button type="button" class="btn btn-secondary" id="btnNewFromWorkspace">Новый проект</button>
           </div>
+        </div>
+
+        <div class="example-banner" id="exampleBanner" hidden>
+          <p class="example-banner-text">Пример проекта. Изменения не сохраняются.</p>
+          <button type="button" class="btn btn-ghost" id="btnExitExample">Выйти из примера</button>
         </div>
 
         <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущий этап проекта">
@@ -3321,91 +3269,6 @@
         createdAt: "2026-07-25T09:00:00.000Z"
       };
 
-      /**
-       * Desktop prototype catalogue only.
-       * Does NOT enter state.projects / LAST_OPENED / getFocusProject.
-       * Display fields are prototype-only (not bound to Runtime).
-       */
-      var DESKTOP_STAGES_DEMO = {
-        stages: [
-          { name: "Архитектура", state: "done" },
-          { name: "Реализация", state: "current" },
-          { name: "Тестирование", state: "future" },
-          { name: "Документация", state: "future" },
-          { name: "Релиз", state: "future" }
-        ]
-      };
-
-      var DESKTOP_PROTOTYPE_PROJECTS = [
-        {
-          id: "proto-moy-den",
-          name: "Мой день",
-          typeLabel: "Веб-приложение",
-          icon: "web",
-          statusKey: "development",
-          stateLabel: "Проект в разработке",
-          moduleName: "Историческая справка",
-          path: "D:\\Cursor Проект Мой день",
-          stagesDemo: DESKTOP_STAGES_DEMO
-        },
-        {
-          id: "proto-ai-pos",
-          name: "AI Project Operating System",
-          typeLabel: "Программная система",
-          icon: "system",
-          brandIcon: true,
-          statusKey: "active",
-          stateLabel: "Проект на стадии разработки",
-          moduleName: "Рабочий стол",
-          path: "D:\\AI_Project_Operating_System",
-          stagesDemo: DESKTOP_STAGES_DEMO
-        },
-        {
-          id: "proto-presentation",
-          name: "Presentation AI",
-          typeLabel: "Презентация",
-          icon: "slides",
-          statusKey: "paused",
-          stateLabel: "Проект на стадии идеи",
-          moduleName: "Структура слайдов",
-          path: "—",
-          stagesDemo: DESKTOP_STAGES_DEMO
-        },
-        {
-          id: "proto-book",
-          name: "Нейросети для каждого",
-          typeLabel: "Книга",
-          icon: "book",
-          statusKey: "development",
-          stateLabel: "Проект на стадии планирования",
-          moduleName: "Введение",
-          path: "—",
-          stagesDemo: DESKTOP_STAGES_DEMO
-        },
-        {
-          id: "proto-sales",
-          name: "Анализ продаж",
-          typeLabel: "Excel / Аналитика",
-          icon: "chart",
-          statusKey: "active",
-          stateLabel: "Проект в работе",
-          moduleName: "Сводка за квартал",
-          path: "—",
-          stagesDemo: DESKTOP_STAGES_DEMO
-        },
-        {
-          id: "proto-bot",
-          name: "Ассистент продавца",
-          typeLabel: "AI-бот",
-          icon: "bot",
-          statusKey: "ready",
-          stateLabel: "Проект на стадии прототипа",
-          moduleName: "Диалог квалификации",
-          path: "—",
-          stagesDemo: DESKTOP_STAGES_DEMO
-        }
-      ];
-
       var state = {
         projects: [],
         currentId: null,
@@ -3420,7 +3283,8 @@
         // модель Review не расширяем, ключ — тот же, что у записи проверки.
         stageShots: {},
         detailLevel: "technical",
-        desktopPrototypeFocusId: null,
+        // Пример живёт только в текущем сеансе и не становится текущим проектом.
+        exampleMode: false,
         cliAnalysisByProject: {},
         cliFreshnessTimer: null,
         createWizard: {
@@ -3445,14 +3309,20 @@
         formError: document.getElementById("formError"),
         templatesGrid: document.getElementById("templatesGrid"),
         osProjectList: document.getElementById("osProjectList"),
-        desktopProjectType: document.getElementById("desktopProjectType"),
+        desktopStart: document.getElementById("desktopStart"),
+        desktopInfo: document.getElementById("desktopInfo"),
+        desktopActions: document.getElementById("desktopActions"),
         desktopProjectName: document.getElementById("desktopProjectName"),
         desktopProjectStatus: document.getElementById("desktopProjectStatus"),
-        desktopStageTrack: document.getElementById("desktopStageTrack"),
-        desktopLastUpdate: document.getElementById("desktopLastUpdate"),
+        desktopProjectStage: document.getElementById("desktopProjectStage"),
+        desktopProjectCreated: document.getElementById("desktopProjectCreated"),
         desktopProjectPath: document.getElementById("desktopProjectPath"),
         btnCopyProjectPath: document.getElementById("btnCopyProjectPath"),
-        desktopProtoNote: document.getElementById("desktopProtoNote"),
+        exampleBanner: document.getElementById("exampleBanner"),
+        btnExitExample: document.getElementById("btnExitExample"),
+        btnStartNewProject: document.getElementById("btnStartNewProject"),
+        btnStartExistingProject: document.getElementById("btnStartExistingProject"),
+        btnOpenExample: document.getElementById("btnOpenExample"),
         btnNewProject: document.getElementById("btnNewProject"),
         btnContinue: document.getElementById("btnContinue"),
         workspaceMeta: document.getElementById("workspaceMeta"),
@@ -3980,11 +3850,13 @@
       }
 
       function loadLastOpened() {
-        try { return localStorage.getItem(LAST_OPENED_KEY) || DEMO_PROJECT.id; }
-        catch (e) { return DEMO_PROJECT.id; }
+        try { return localStorage.getItem(LAST_OPENED_KEY) || ""; }
+        catch (e) { return ""; }
       }
 
       function saveLastOpened(id) {
+        // Пример не запоминается: иначе следующий запуск снова откроет его вместо проекта.
+        if (id === DEMO_PROJECT.id) return;
         state.lastOpenedId = id;
         try { localStorage.setItem(LAST_OPENED_KEY, id); } catch (e) {}
       }
@@ -4008,6 +3880,10 @@
         els.panelWorkspace.classList.toggle("is-active", name === "workspace");
         els.appShell.classList.toggle("is-home", name === "list");
         if (name === "list") {
+          if (state.exampleMode) {
+            state.exampleMode = false;
+            state.currentId = null;
+          }
           setOsNavActive("desktop");
           renderDesktop();
         }
@@ -4060,7 +3936,7 @@
         el.hidden = true;
       }
 
-      function openForm() {
+      function openForm(mode) {
         els.projectForm.reset();
         document.getElementById("fieldTemplate").value = "";
         state.selectedTemplate = "";
@@ -4068,7 +3944,7 @@
         els.formError.classList.remove("is-visible");
         fillPrimaryToolSelect(document.getElementById("fieldPrimaryTool"), "");
         fillAiModelSelect(document.getElementById("fieldAiModel"), "");
-        resetCreateWizard("new");
+        resetCreateWizard(mode === "existing" ? "existing" : "new");
         goWizardStep(1);
         renderTemplates();
         if (els.templatesBlock) els.templatesBlock.classList.add("is-collapsed");
@@ -4146,6 +4022,11 @@
 
       function findProject(id) {
         if (id === DEMO_PROJECT.id) return ensureDerived(DEMO_PROJECT);
+        return findRealProject(id);
+      }
+
+      function findRealProject(id) {
+        if (!id) return null;
         for (var i = 0; i < state.projects.length; i++) {
           if (state.projects[i].id === id) return ensureDerived(state.projects[i]);
         }
@@ -4153,10 +4034,11 @@
       }
 
       function getFocusProject() {
-        var project = findProject(state.lastOpenedId);
+        if (state.exampleMode) return ensureDerived(DEMO_PROJECT);
+        var project = findRealProject(state.lastOpenedId);
         if (project) return project;
         if (state.projects.length) return ensureDerived(state.projects[state.projects.length - 1]);
-        return ensureDerived(DEMO_PROJECT);
+        return null;
       }
 
       function currentProjectMutable() {
@@ -4669,158 +4551,112 @@
         ].filter(function (line) { return line !== null; }).join("\n");
       }
 
-      function desktopIconSvg(kind) {
+      function projectIconSvg() {
         var common = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
-        if (kind === "web") {
-          return "<svg " + common + "><rect x=\"4\" y=\"5\" width=\"16\" height=\"12\" rx=\"2\"/><path d=\"M4 9h16M9 19h6\"/></svg>";
-        }
-        if (kind === "slides") {
-          return "<svg " + common + "><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 10h8M8 14h5\"/></svg>";
-        }
-        if (kind === "book") {
-          return "<svg " + common + "><path d=\"M5 4h9a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 3V4z\"/><path d=\"M5 4v16\"/></svg>";
-        }
-        if (kind === "chart") {
-          return "<svg " + common + "><path d=\"M4 19V5M4 19h16\"/><path d=\"M8 15v-4M12 15V8M16 15v-7\"/></svg>";
-        }
-        if (kind === "bot") {
-          return "<svg " + common + "><rect x=\"5\" y=\"8\" width=\"14\" height=\"10\" rx=\"3\"/><path d=\"M12 5v3M9 13h.01M15 13h.01M9 17h6\"/></svg>";
-        }
         return "<svg " + common + "><rect x=\"5\" y=\"5\" width=\"14\" height=\"14\" rx=\"3\"/><path d=\"M9 12h6M12 9v6\"/></svg>";
       }
 
-      function findDesktopPrototype(id) {
-        for (var i = 0; i < DESKTOP_PROTOTYPE_PROJECTS.length; i++) {
-          if (DESKTOP_PROTOTYPE_PROJECTS[i].id === id) return DESKTOP_PROTOTYPE_PROJECTS[i];
-        }
-        return null;
-      }
-
-      function defaultDesktopPrototypeFocusId() {
-        return "proto-moy-den";
-      }
-
-      function getDesktopFocusPrototype() {
-        var id = state.desktopPrototypeFocusId || defaultDesktopPrototypeFocusId();
-        return findDesktopPrototype(id) || DESKTOP_PROTOTYPE_PROJECTS[0];
-      }
-
-      function setDesktopPrototypeFocus(protoId) {
-        // Visual-only: never touches LAST_OPENED, state.projects, or Workspace currentId.
-        if (!findDesktopPrototype(protoId)) return;
-        state.desktopPrototypeFocusId = protoId;
-        renderDesktop();
-      }
-
-      function formatDesktopLastUpdate() {
-        var now = new Date();
-        var hh = String(now.getHours()).padStart(2, "0");
-        var mm = String(now.getMinutes()).padStart(2, "0");
-        return "Сегодня, " + hh + ":" + mm;
-      }
-
-      function buildDesktopViewModel(proto) {
-        var stagesDemo = (proto && proto.stagesDemo) || DESKTOP_STAGES_DEMO;
-        return {
-          name: proto.name || "—",
-          typeLabel: proto.typeLabel || "—",
-          stateLabel: proto.stateLabel || "—",
-          lastUpdate: formatDesktopLastUpdate(),
-          path: proto.path || "—",
-          stagesDemo: stagesDemo
-        };
-      }
-
-      function stageMarkSymbol(state) {
-        if (state === "done") return "✓";
-        if (state === "current") return "●";
-        return "○";
-      }
-
-      function renderDesktopStages(stagesDemo) {
-        var demo = stagesDemo || DESKTOP_STAGES_DEMO;
-        if (!els.desktopStageTrack) return;
-        var stages = demo.stages || [];
-        var html = "";
-        for (var i = 0; i < stages.length; i++) {
-          var stage = stages[i];
-          var state = stage.state || "future";
-          var stateClass = state === "done" ? "is-done" : state === "current" ? "is-current" : "is-future";
-          html +=
-            '<li class="desktop-stage ' + stateClass + '">' +
-            '<span class="desktop-stage-mark" aria-hidden="true">' + stageMarkSymbol(state) + "</span>" +
-            '<p class="desktop-stage-name">' + escapeHtml(stage.name || "—") + "</p>" +
-            "</li>";
-        }
-        els.desktopStageTrack.innerHTML = html;
+      function osProjectItemHtml(id, name, secondLine, isFocus) {
+        return (
+          '<button type="button" class="os-project-item' + (isFocus ? " is-focus" : "") +
+          '" data-project-id="' + escapeHtml(id) + '" role="listitem">' +
+          '<span class="os-project-stripe" aria-hidden="true"></span>' +
+          '<span class="os-project-icon">' + projectIconSvg() + "</span>" +
+          '<span class="os-project-meta">' +
+          '<span class="os-project-name">' + escapeHtml(name || "—") + "</span>" +
+          '<span class="os-project-type">' + escapeHtml(secondLine || "—") + "</span>" +
+          "</span></button>"
+        );
       }
 
       function renderOsProjectList() {
         if (!els.osProjectList) return;
-        var focusId = (getDesktopFocusPrototype() || {}).id;
+
+        if (state.exampleMode) {
+          els.osProjectList.innerHTML = osProjectItemHtml(DEMO_PROJECT.id, DEMO_PROJECT.name, "Пример", true);
+          return;
+        }
+
+        if (!state.projects.length) {
+          els.osProjectList.innerHTML = '<p class="os-project-empty">Пока нет проектов</p>';
+          return;
+        }
+
+        var focusId = (getFocusProject() || {}).id;
         var html = "";
-        for (var i = 0; i < DESKTOP_PROTOTYPE_PROJECTS.length; i++) {
-          var p = DESKTOP_PROTOTYPE_PROJECTS[i];
-          var statusKey = p.statusKey || "development";
-          var iconHtml = p.brandIcon
-            ? '<img src="assets/branding/ai-pos-icon-v1.png" width="28" height="28" alt="" />'
-            : desktopIconSvg(p.icon || "system");
-          html +=
-            '<button type="button" class="os-project-item' + (p.id === focusId ? " is-focus" : "") +
-            '" data-proto-id="' + escapeHtml(p.id) +
-            '" data-status="' + escapeHtml(statusKey) +
-            '" role="listitem">' +
-            '<span class="os-project-stripe" aria-hidden="true"></span>' +
-            '<span class="os-project-icon">' + iconHtml + "</span>" +
-            '<span class="os-project-meta">' +
-            '<span class="os-project-name">' + escapeHtml(p.name) + "</span>" +
-            '<span class="os-project-type">' + escapeHtml(p.typeLabel) + "</span>" +
-            "</span></button>";
+        for (var i = 0; i < state.projects.length; i++) {
+          var p = state.projects[i];
+          html += osProjectItemHtml(p.id, p.name, p.stage || "—", p.id === focusId);
         }
         els.osProjectList.innerHTML = html;
-        var buttons = els.osProjectList.querySelectorAll("[data-proto-id]");
+
+        var buttons = els.osProjectList.querySelectorAll("[data-project-id]");
         for (var b = 0; b < buttons.length; b++) {
           buttons[b].addEventListener("click", function (event) {
-            setDesktopPrototypeFocus(event.currentTarget.getAttribute("data-proto-id"));
+            openProjectFromList(event.currentTarget.getAttribute("data-project-id"));
           });
         }
       }
 
-      function renderDesktop() {
-        if (!state.desktopPrototypeFocusId) {
-          state.desktopPrototypeFocusId = defaultDesktopPrototypeFocusId();
+      function openProjectFromList(projectId) {
+        if (!findRealProject(projectId)) return;
+        state.activeTab = "task";
+        openWorkspace(projectId);
+      }
+
+      function syncOsNavAvailability() {
+        // Разделы проекта бессмысленны, пока нет ни проекта, ни открытого примера.
+        var enabled = state.projects.length > 0 || state.exampleMode;
+        var items = document.querySelectorAll(".os-nav-item[data-os-nav]");
+        for (var i = 0; i < items.length; i++) {
+          var isDesktop = items[i].getAttribute("data-os-nav") === "desktop";
+          var off = !enabled && !isDesktop;
+          items[i].disabled = off;
+          items[i].classList.toggle("is-future", off);
         }
+      }
+
+      function syncExampleUi() {
+        if (els.exampleBanner) els.exampleBanner.hidden = !state.exampleMode;
         renderOsProjectList();
-        var proto = getDesktopFocusPrototype();
-        var model = buildDesktopViewModel(proto);
+        syncOsNavAvailability();
+      }
 
-        if (els.desktopProjectName) els.desktopProjectName.textContent = model.name;
-        if (els.desktopProjectType) els.desktopProjectType.textContent = model.typeLabel;
-        if (els.desktopProjectStatus) els.desktopProjectStatus.textContent = model.stateLabel;
-        renderDesktopStages(model.stagesDemo);
-        if (els.desktopLastUpdate) els.desktopLastUpdate.textContent = model.lastUpdate;
-        if (els.desktopProjectPath) els.desktopProjectPath.textContent = model.path;
+      function openExample() {
+        state.activeTab = "task";
+        openWorkspace(DEMO_PROJECT.id);
+      }
 
-        if (els.btnCopyProjectPath) {
-          var hasPath = !!(model.path && model.path !== "—");
-          els.btnCopyProjectPath.hidden = !hasPath;
-          els.btnCopyProjectPath.title = hasPath
-            ? "Скопировать путь к папке проекта"
-            : "";
+      function renderDesktop() {
+        syncExampleUi();
+
+        // Пример на рабочий стол не попадает: карточка описывает только реальный проект.
+        var project = state.projects.length ? getFocusProject() : null;
+        var hasProject = !!project;
+
+        if (els.desktopStart) els.desktopStart.hidden = hasProject;
+        if (els.desktopInfo) els.desktopInfo.hidden = !hasProject;
+        if (els.desktopActions) els.desktopActions.hidden = !hasProject;
+        if (!hasProject) return;
+
+        if (els.desktopProjectName) els.desktopProjectName.textContent = project.name || "—";
+        if (els.desktopProjectStatus) els.desktopProjectStatus.textContent = project.status || "—";
+        if (els.desktopProjectStage) els.desktopProjectStage.textContent = project.stage || "—";
+        if (els.desktopProjectCreated) {
+          els.desktopProjectCreated.textContent = project.createdAt ? formatDate(project.createdAt) : "—";
         }
 
-        if (els.desktopProtoNote) els.desktopProtoNote.hidden = true;
-
-        if (els.btnContinue) {
-          els.btnContinue.disabled = false;
-          els.btnContinue.title = "Открыть реальный текущий проект (LAST_OPENED)";
+        var path = String(project.workFolder || "").trim();
+        if (els.desktopProjectPath) els.desktopProjectPath.textContent = path || "Папка не указана";
+        if (els.btnCopyProjectPath) {
+          els.btnCopyProjectPath.hidden = !path;
+          els.btnCopyProjectPath.title = path ? "Скопировать путь к папке проекта" : "";
         }
       }
 
       function copyDesktopProjectPath() {
-        var proto = getDesktopFocusPrototype();
-        var model = buildDesktopViewModel(proto);
-        var path = model.path && model.path !== "—" ? model.path : "";
+        var project = getFocusProject();
+        var path = project ? String(project.workFolder || "").trim() : "";
         if (!path) return;
         function done() {
           if (!els.btnCopyProjectPath) return;
@@ -6505,6 +6341,7 @@
         var project = findProject(id);
         if (!project) return;
         state.currentId = id;
+        state.exampleMode = id === DEMO_PROJECT.id;
         state.stageIssuesOpen = false;
         saveLastOpened(id);
 
@@ -6522,6 +6359,7 @@
         renderSettings(project);
         setActiveTab(state.activeTab || "task", { force: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
+        syncExampleUi();
         if ((state.activeTab || "task") === "task") setOsNavActive("current-task");
       }
 
@@ -7066,6 +6904,7 @@
 
       function openStepDetails() {
         var project = getFocusProject();
+        if (!project) return;
         var view = deriveView(project);
         document.getElementById("stepModalLead").textContent = view.task ? view.task.name : view.nextLine2;
         document.getElementById("stepModalProject").textContent = project.name;
@@ -7082,8 +6921,20 @@
       }
 
       function bindEvents() {
-        document.getElementById("btnNewProject").addEventListener("click", openForm);
-        document.getElementById("btnNewFromWorkspace").addEventListener("click", openForm);
+        document.getElementById("btnNewProject").addEventListener("click", function () { openForm("new"); });
+        document.getElementById("btnNewFromWorkspace").addEventListener("click", function () { openForm("new"); });
+        if (els.btnStartNewProject) {
+          els.btnStartNewProject.addEventListener("click", function () { openForm("new"); });
+        }
+        if (els.btnStartExistingProject) {
+          els.btnStartExistingProject.addEventListener("click", function () { openForm("existing"); });
+        }
+        if (els.btnOpenExample) {
+          els.btnOpenExample.addEventListener("click", openExample);
+        }
+        if (els.btnExitExample) {
+          els.btnExitExample.addEventListener("click", function () { showPanel("list"); });
+        }
         document.getElementById("btnCancelForm").addEventListener("click", function () { showPanel("list"); });
         document.getElementById("btnCancelFormAlt").addEventListener("click", function () { showPanel("list"); });
         document.getElementById("btnBackToList").addEventListener("click", function () { showPanel("list"); });
@@ -7102,8 +6953,10 @@
         }
         document.getElementById("btnStartFromModal").addEventListener("click", function () {
           closeModal(els.stepModal);
+          var focus = getFocusProject();
+          if (!focus) return;
           state.activeTab = "task";
-          openWorkspace(getFocusProject().id);
+          openWorkspace(focus.id);
         });
         document.getElementById("btnCloseStep").addEventListener("click", function () { closeModal(els.stepModal); });
         document.getElementById("btnClearTemplate").addEventListener("click", function () {
@@ -7346,8 +7199,7 @@
         state.projects = loadProjects();
         state.customTemplates = loadCustomTemplates();
         state.lastOpenedId = loadLastOpened();
-        if (!findProject(state.lastOpenedId)) state.lastOpenedId = DEMO_PROJECT.id;
-        state.desktopPrototypeFocusId = defaultDesktopPrototypeFocusId();
+        if (!findRealProject(state.lastOpenedId)) state.lastOpenedId = null;
         fillTaskToolSelect();
         fillPrimaryToolSelects();
         initAppearanceControls();
