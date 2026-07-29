@@ -1,4 +1,5 @@
-﻿# Optional: create Desktop shortcut AI POS -> "Запустить AI POS.vbs"
+﻿# Optional: create Desktop shortcut AI POS -> start_ai_pos_silent.vbs
+# Технические файлы держим в ASCII-именах: русское название живёт в самом ярлыке.
 # Optional branding ICO; warns if missing and uses default icon.
 $ErrorActionPreference = "Stop"
 
@@ -8,15 +9,12 @@ function Write-User([string]$Text) {
 
 try {
     $root = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
-    $vbs = Join-Path $root "Запустить AI POS.vbs"
-    if (-not (Test-Path -LiteralPath $vbs)) {
-        $vbs = Join-Path $root "start_ai_pos_silent.vbs"
-    }
+    $vbs = Join-Path $root "start_ai_pos_silent.vbs"
     $ico = Join-Path $root "assets\branding\ai-pos-icon-v1.ico"
 
     if (-not (Test-Path -LiteralPath $vbs)) {
         Write-User "Не найден файл запуска AI POS в корне папки."
-        Write-User "Откройте папку AI POS и запустите «Запустить AI POS.vbs»."
+        Write-User "Откройте папку AI POS и запустите start_ai_pos.cmd."
         exit 1
     }
 
