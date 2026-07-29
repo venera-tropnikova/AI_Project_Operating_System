@@ -2212,6 +2212,31 @@
       background: var(--surface);
       box-shadow: var(--shadow-soft);
     }
+    .stage-context {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 2.4rem;
+      max-width: min(760px, 100%);
+      margin: 0 0 1.15rem;
+      padding: 0 0.15rem;
+    }
+    .stage-context-item { min-width: 150px; }
+    .stage-zone { margin: 0 0 1.35rem; }
+    .stage-zone:last-of-type { margin-bottom: 0; }
+    .stage-zone-title {
+      margin: 0 0 0.55rem;
+      font-size: 1.02rem;
+      font-weight: 750;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    /* Фокус экрана: текущее задание выделяется среди остальных зон. */
+    .stage-zone[data-zone="now"] .stage-flow {
+      border-color: var(--line-strong);
+      background: var(--accent-soft);
+    }
+    .history-list { display: grid; gap: 0.7rem; }
+    .history-list[hidden] { display: none !important; }
     .flow-row { padding: 1rem 0; border-bottom: 1px solid var(--line); }
     .flow-row:last-child { border-bottom: none; }
     .flow-row[hidden] { display: none !important; }
@@ -2508,8 +2533,8 @@
         <nav class="os-nav" aria-label="Основная навигация">
           <p class="os-nav-label">Разделы</p>
           <button type="button" class="os-nav-item is-active" data-os-nav="desktop" aria-current="page">Рабочий стол</button>
-          <button type="button" class="os-nav-item" data-os-nav="rules">Правила и контроль</button>
           <button type="button" class="os-nav-item" data-os-nav="current-task">Текущая задача</button>
+          <button type="button" class="os-nav-item" data-os-nav="rules">Правила и контроль</button>
           <button type="button" class="os-nav-item" data-os-nav="materials">Материалы</button>
           <button type="button" class="os-nav-item" data-os-nav="specialists">AI-специалисты</button>
           <button type="button" class="os-nav-item" data-os-nav="docs">Документация</button>
@@ -2739,123 +2764,152 @@
           <button type="button" class="btn btn-ghost" id="btnExitExample">Выйти из примера</button>
         </div>
 
-        <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущий этап проекта">
+        <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущая задача проекта">
           <p class="section-note" id="taskEmptyNote" hidden>Текущий этап ещё не определён.</p>
-          <div class="stage-flow">
-            <section class="flow-row">
+
+          <header class="stage-context">
+            <div class="stage-context-item">
               <span class="flow-label">Проект</span>
               <p class="flow-value" id="stageProjectName">—</p>
-            </section>
-
-            <section class="flow-row">
+            </div>
+            <div class="stage-context-item">
               <span class="flow-label">Модуль</span>
               <p class="flow-value" id="stageModuleName">—</p>
-            </section>
-
-            <section class="flow-row">
-              <span class="flow-label">Текущий этап</span>
-              <p class="flow-value" id="currentStageTitle">—</p>
-            </section>
-
-            <section class="flow-row">
-              <span class="flow-label">Необходимо сделать</span>
-              <p class="flow-text" id="taskGoalText">—</p>
-            </section>
-
-            <section class="flow-row">
-              <span class="flow-label">Ожидаемый результат</span>
-              <p class="flow-text" id="taskResultText">—</p>
-            </section>
-
-            <section class="flow-row" id="stageToolBlock">
-              <span class="flow-label">Где выполнить</span>
-              <div id="stagePrimaryToolReady">
-                <p class="flow-value" id="stagePrimaryToolName">—</p>
-                <p class="flow-meta">Рабочая папка: <span id="toolFolder">—</span></p>
-                <div class="flow-actions">
-                  <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
-                </div>
-                <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано</span>
-              </div>
-              <div id="stagePrimaryToolMissing" hidden>
-                <p class="flow-hint">Среда разработки для проекта не указана. Задайте её в настройках проекта.</p>
-                <div class="flow-actions">
-                  <button type="button" class="btn btn-secondary" id="btnOpenProjectSettings">Открыть настройки</button>
-                </div>
-              </div>
-              <div class="stage-hidden-support" aria-hidden="true">
-                <p id="toolWhy">—</p>
-                <p id="toolWhen">—</p>
-                <p id="toolAvoid">—</p>
-                <div class="tool-picks" id="toolPicks"></div>
-                <h3 id="assignmentTitle">Рабочее задание</h3>
-                <div class="work-editor" id="workBox" hidden></div>
-              </div>
-            </section>
-
-            <section class="flow-row" id="stageCheckBlock">
-              <span class="flow-label">Проверка результата</span>
-              <div class="flow-actions">
-                <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
-              </div>
-              <p class="flow-hint" id="openAppHint">Для этого проекта запуск не настроен.</p>
-              <ul class="check-list" id="reviewChecks"></ul>
-            </section>
-
-            <section class="flow-row" id="reviewCard">
-              <span class="flow-label">Результат проверки</span>
-              <div class="review-status" id="reviewStatus">Не проверено</div>
-              <div class="flow-actions">
-                <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
-                <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
-              </div>
-              <div class="flow-issues" id="stageIssuesBox" hidden>
-                <div class="field">
-                  <label for="reviewNotes">Описание замечаний</label>
-                  <textarea id="reviewNotes" rows="3" placeholder="Что именно нужно исправить"></textarea>
-                </div>
-                <div class="flow-actions" style="margin-top:0">
-                  <label class="btn btn-ghost file-btn">
-                    <span id="reviewShotBtnText">Прикрепить скриншот</span>
-                    <input type="file" id="reviewShotInput" accept="image/*" />
-                  </label>
-                  <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Передать на исправление</button>
-                </div>
-                <p class="flow-hint" id="reviewShotNote" hidden>
-                  <span id="reviewShotName"></span>
-                  <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
-                </p>
-                <p class="flow-hint">Связь скриншота с замечанием сохраняется только в текущей сессии.</p>
-              </div>
-              <p class="flow-hint" id="reviewHint">Отметьте пункты, которые вы проверили.</p>
-            </section>
-
-            <section class="flow-row" id="stageFixBlock" hidden>
-              <span class="flow-label">Задание на исправление</span>
-              <p class="flow-text" id="stageFixText">—</p>
-              <p class="flow-meta" id="stageFixShot" hidden></p>
-              <div class="flow-actions">
-                <button type="button" class="btn btn-primary" id="btnCopyFix">Скопировать задание на исправление</button>
-              </div>
-              <span class="copy-toast" id="copyFixToast" aria-live="polite">Задание скопировано</span>
-            </section>
-
-            <section class="flow-row" id="stageNextBlock" hidden>
-              <span class="flow-label" id="stageNextLabel">Следующее задание</span>
-              <p class="flow-text" id="stageNextText">—</p>
-              <div class="flow-actions">
-                <button type="button" class="btn btn-primary" id="btnCopyNext">Скопировать следующее задание</button>
-              </div>
-              <span class="copy-toast" id="copyNextToast" aria-live="polite">Задание скопировано</span>
-            </section>
-
-            <div class="stage-hidden-support" aria-hidden="true">
-              <p id="taskWhyText">—</p>
-              <p id="taskCanText">—</p>
-              <p id="taskAltText">—</p>
-              <ul class="restrict-list" id="dontList"></ul>
-              <ul class="risk-list" id="riskList"></ul>
             </div>
+          </header>
+
+          <section class="stage-zone" data-zone="done" aria-labelledby="zoneDoneTitle">
+            <h3 class="stage-zone-title" id="zoneDoneTitle">Что уже сделано</h3>
+            <div class="stage-flow">
+              <section class="flow-row" id="historyRow">
+                <div class="history-list" id="historyList" hidden></div>
+                <p class="flow-text" id="historyEmpty">Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="stage-zone" data-zone="now" aria-labelledby="zoneNowTitle">
+            <h3 class="stage-zone-title" id="zoneNowTitle">Что делается сейчас</h3>
+            <div class="stage-flow">
+              <section class="flow-row">
+                <span class="flow-label">Текущее задание</span>
+                <p class="flow-value" id="currentStageTitle">—</p>
+              </section>
+
+              <section class="flow-row">
+                <span class="flow-label">Необходимо сделать</span>
+                <p class="flow-text" id="taskGoalText">—</p>
+              </section>
+
+              <section class="flow-row" id="stageToolBlock">
+                <span class="flow-label">Где выполнить</span>
+                <div id="stagePrimaryToolReady">
+                  <p class="flow-value" id="stagePrimaryToolName">—</p>
+                  <p class="flow-meta">Рабочая папка: <span id="toolFolder">—</span></p>
+                  <div class="flow-actions">
+                    <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
+                  </div>
+                  <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано</span>
+                </div>
+                <div id="stagePrimaryToolMissing" hidden>
+                  <p class="flow-hint">Среда разработки для проекта не указана. Задайте её в настройках проекта.</p>
+                  <div class="flow-actions">
+                    <button type="button" class="btn btn-secondary" id="btnOpenProjectSettings">Открыть настройки</button>
+                  </div>
+                </div>
+                <div class="stage-hidden-support" aria-hidden="true">
+                  <p id="toolWhy">—</p>
+                  <p id="toolWhen">—</p>
+                  <p id="toolAvoid">—</p>
+                  <div class="tool-picks" id="toolPicks"></div>
+                  <h3 id="assignmentTitle">Рабочее задание</h3>
+                  <div class="work-editor" id="workBox" hidden></div>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="stage-zone" data-zone="result" aria-labelledby="zoneResultTitle">
+            <h3 class="stage-zone-title" id="zoneResultTitle">Какой результат ожидается</h3>
+            <div class="stage-flow">
+              <section class="flow-row">
+                <span class="flow-label">Ожидаемый результат</span>
+                <p class="flow-text" id="taskResultText">—</p>
+              </section>
+
+              <section class="flow-row" id="stageCheckBlock">
+                <span class="flow-label">Проверка результата</span>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
+                </div>
+                <p class="flow-hint" id="openAppHint">Для этого проекта запуск не настроен.</p>
+                <ul class="check-list" id="reviewChecks"></ul>
+              </section>
+
+              <section class="flow-row" id="reviewCard">
+                <span class="flow-label">Результат проверки</span>
+                <div class="review-status" id="reviewStatus">Не проверено</div>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
+                  <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
+                </div>
+                <div class="flow-issues" id="stageIssuesBox" hidden>
+                  <div class="field">
+                    <label for="reviewNotes">Описание замечаний</label>
+                    <textarea id="reviewNotes" rows="3" placeholder="Что именно нужно исправить"></textarea>
+                  </div>
+                  <div class="flow-actions" style="margin-top:0">
+                    <label class="btn btn-ghost file-btn">
+                      <span id="reviewShotBtnText">Прикрепить скриншот</span>
+                      <input type="file" id="reviewShotInput" accept="image/*" />
+                    </label>
+                    <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Передать на исправление</button>
+                  </div>
+                  <p class="flow-hint" id="reviewShotNote" hidden>
+                    <span id="reviewShotName"></span>
+                    <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
+                  </p>
+                  <p class="flow-hint">Связь скриншота с замечанием сохраняется только в текущей сессии.</p>
+                </div>
+                <p class="flow-hint" id="reviewHint">Отметьте пункты, которые вы проверили.</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="stage-zone" data-zone="next" aria-labelledby="zoneNextTitle">
+            <h3 class="stage-zone-title" id="zoneNextTitle">Что нужно сделать дальше</h3>
+            <div class="stage-flow">
+              <section class="flow-row" id="stageFixBlock" hidden>
+                <span class="flow-label">Задание на исправление</span>
+                <p class="flow-text" id="stageFixText">—</p>
+                <p class="flow-meta" id="stageFixShot" hidden></p>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-primary" id="btnCopyFix">Скопировать задание на исправление</button>
+                </div>
+                <span class="copy-toast" id="copyFixToast" aria-live="polite">Задание скопировано</span>
+              </section>
+
+              <section class="flow-row" id="stageNextBlock" hidden>
+                <span class="flow-label" id="stageNextLabel">Следующее задание</span>
+                <p class="flow-text" id="stageNextText">—</p>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-primary" id="btnCopyNext">Скопировать следующее задание</button>
+                </div>
+                <span class="copy-toast" id="copyNextToast" aria-live="polite">Задание скопировано</span>
+              </section>
+
+              <section class="flow-row" id="stageNextEmptyRow">
+                <p class="flow-text" id="stageNextEmpty">Следующий шаг появится после того, как результат текущего задания будет принят.</p>
+              </section>
+            </div>
+          </section>
+
+          <div class="stage-hidden-support" aria-hidden="true">
+            <p id="taskWhyText">—</p>
+            <p id="taskCanText">—</p>
+            <p id="taskAltText">—</p>
+            <ul class="restrict-list" id="dontList"></ul>
+            <ul class="risk-list" id="riskList"></ul>
           </div>
         </main>
 
@@ -3472,6 +3526,9 @@
         btnCliInsightRefresh: document.getElementById("btnCliInsightRefresh"),
         detailLevelSwitch: document.getElementById("detailLevelSwitch"),
         taskEmptyNote: document.getElementById("taskEmptyNote"),
+        historyList: document.getElementById("historyList"),
+        historyEmpty: document.getElementById("historyEmpty"),
+        stageNextEmptyRow: document.getElementById("stageNextEmptyRow"),
         taskGoalText: document.getElementById("taskGoalText"),
         taskWhyText: document.getElementById("taskWhyText"),
         taskResultText: document.getElementById("taskResultText"),
@@ -5998,6 +6055,26 @@
         if (els.stageNextText) els.stageNextText.textContent = nextStepText(project);
       }
 
+      // Пояснение показывается, пока в зоне нет ни следующего задания, ни задания на исправление.
+      function syncStageNextEmpty() {
+        if (!els.stageNextEmptyRow) return;
+        var hasNext = !!(els.stageNextBlock && !els.stageNextBlock.hidden);
+        var hasFix = !!(els.stageFixBlock && !els.stageFixBlock.hidden);
+        els.stageNextEmptyRow.hidden = hasNext || hasFix;
+      }
+
+      // Журнал выполненных заданий подключается отдельным этапом,
+      // поэтому пока зона всегда показывает пустое состояние.
+      function renderTaskHistory(project) {
+        if (!els.historyList || !els.historyEmpty) return;
+        els.historyList.innerHTML = "";
+        els.historyList.hidden = true;
+        els.historyEmpty.textContent = project && project.isDemo
+          ? "В примере проекта история заданий не сохраняется."
+          : "Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.";
+        els.historyEmpty.hidden = false;
+      }
+
       function getStageShot(project, task) {
         if (!project || !task) return null;
         return state.stageShots[reviewMapKey(project, task)] || null;
@@ -6081,6 +6158,7 @@
           if (els.stageFixBlock) els.stageFixBlock.hidden = true;
           if (els.stageNextBlock) els.stageNextBlock.hidden = true;
           if (els.reviewChecks) els.reviewChecks.innerHTML = "";
+          syncStageNextEmpty();
           return;
         }
         els.reviewCard.hidden = false;
@@ -6142,6 +6220,7 @@
         renderOpenAppButton(project);
         renderStageFixBlock(project, task, review);
         renderStageNextBlock(project, review);
+        syncStageNextEmpty();
       }
 
       function formatDateTime(iso) {
@@ -6159,6 +6238,7 @@
       function renderTaskTab(project, view) {
         var task = view.task;
         els.taskEmptyNote.hidden = !!task;
+        renderTaskHistory(project);
         if (els.stageProjectName) els.stageProjectName.textContent = project.name || "—";
         if (els.stageModuleName) els.stageModuleName.textContent = view.module ? view.module.name : "не выбран";
         if (!task) {
