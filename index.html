@@ -2287,6 +2287,61 @@
     }
     .history-status.is-error { color: var(--danger, #b42318); }
     .history-status[hidden] { display: none !important; }
+    .capture-preview {
+      margin-top: 0.85rem;
+      padding: 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .capture-preview[hidden] { display: none !important; }
+    .capture-preview img {
+      display: block;
+      max-width: min(100%, 520px);
+      max-height: 280px;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    .capture-window-picker {
+      margin-top: 0.85rem;
+      padding: 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .capture-window-picker[hidden] { display: none !important; }
+    .capture-window-list { display: grid; gap: 0.45rem; margin-top: 0.55rem; }
+    .capture-window-item {
+      text-align: left;
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--control-bg, #fff);
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+    }
+    .capture-window-item:hover { border-color: var(--line-strong); }
+    .capture-window-item-title { display: block; font-weight: 650; }
+    .capture-window-item-meta { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: var(--ink-muted); }
+    .capture-skip textarea { width: 100%; margin-top: 0.35rem; }
+    .history-shot-thumb {
+      display: inline-block;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+    .history-shot-thumb img {
+      display: block;
+      max-width: min(100%, 280px);
+      max-height: 160px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
     .flow-row { padding: 1rem 0; border-bottom: 1px solid var(--line); }
     .flow-row:last-child { border-bottom: none; }
     .flow-row[hidden] { display: none !important; }
@@ -2895,8 +2950,38 @@
                 <span class="flow-label">Проверка результата</span>
                 <div class="flow-actions">
                   <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
+                  <button type="button" class="btn btn-secondary" id="btnCaptureResult">Снять результат</button>
+                  <button type="button" class="btn btn-ghost" id="btnChooseCaptureWindow">Выбрать окно</button>
+                  <label class="btn btn-ghost file-btn">
+                    <span id="resultShotAttachText">Прикрепить снимок</span>
+                    <input type="file" id="resultShotInput" accept="image/png,image/*" />
+                  </label>
                 </div>
-                <p class="flow-hint" id="openAppHint">Для этого проекта запуск не настроен.</p>
+                <p class="flow-hint" id="openAppHint">Адрес приложения не указан. Задайте его в настройках проекта.</p>
+                <p class="flow-hint" id="captureWindowHint" hidden></p>
+                <p class="flow-hint" id="captureStatus" hidden aria-live="polite"></p>
+                <div class="capture-preview" id="capturePreview" hidden>
+                  <img id="capturePreviewImage" alt="Снимок результата" />
+                  <p class="flow-meta" id="capturePreviewMeta"></p>
+                  <button type="button" class="flow-inline-btn" id="btnClearCaptureVisual">Удалить снимок</button>
+                </div>
+                <div class="field capture-skip" id="captureSkipBox">
+                  <label class="check-list" style="display:block;margin:0.75rem 0 0">
+                    <input type="checkbox" id="captureSkipCheck" />
+                    Задание не меняет интерфейс
+                  </label>
+                  <div id="captureSkipReasonWrap" hidden style="margin-top:0.55rem">
+                    <label for="captureSkipReason">Почему визуальный результат не нужен</label>
+                    <textarea id="captureSkipReason" rows="2" placeholder="Кратко опишите причину"></textarea>
+                  </div>
+                </div>
+                <div class="capture-window-picker" id="captureWindowPicker" hidden>
+                  <p class="flow-label">Выберите окно приложения</p>
+                  <div class="capture-window-list" id="captureWindowList"></div>
+                  <div class="flow-actions">
+                    <button type="button" class="btn btn-ghost" id="btnCancelCaptureWindow">Отмена</button>
+                  </div>
+                </div>
                 <ul class="check-list" id="reviewChecks"></ul>
               </section>
 
@@ -3059,6 +3144,14 @@
               <label for="settingsLaunchUrl">Адрес приложения</label>
               <span class="hint">Сайт вашего приложения, например https://127.0.0.1:3000/</span>
               <input id="settingsLaunchUrl" name="launchUrl" type="url" inputmode="url" placeholder="https://" autocomplete="off" />
+            </div>
+            <div class="field" style="margin-top:0.85rem">
+              <label>Окно для снимка</label>
+              <span class="hint">Запоминается после выбора. Если окно закроется, AI POS попросит выбрать его снова.</span>
+              <p class="flow-meta" id="settingsCaptureWindowMeta">Не выбрано</p>
+              <div class="flow-actions" style="margin-top:0.45rem">
+                <button type="button" class="btn btn-ghost" id="btnClearCaptureWindow">Сбросить окно</button>
+              </div>
             </div>
             <div class="section-actions" style="margin-top:1rem">
               <button type="submit" class="btn btn-primary" id="btnSaveProjectSettings">Сохранить</button>
@@ -3619,7 +3712,25 @@
         settingsAiModel: document.getElementById("settingsAiModel"),
         settingsWorkFolder: document.getElementById("settingsWorkFolder"),
         settingsLaunchUrl: document.getElementById("settingsLaunchUrl"),
+        settingsCaptureWindowMeta: document.getElementById("settingsCaptureWindowMeta"),
+        btnClearCaptureWindow: document.getElementById("btnClearCaptureWindow"),
         settingsSaveNote: document.getElementById("settingsSaveNote"),
+        btnCaptureResult: document.getElementById("btnCaptureResult"),
+        btnChooseCaptureWindow: document.getElementById("btnChooseCaptureWindow"),
+        resultShotInput: document.getElementById("resultShotInput"),
+        resultShotAttachText: document.getElementById("resultShotAttachText"),
+        captureWindowHint: document.getElementById("captureWindowHint"),
+        captureStatus: document.getElementById("captureStatus"),
+        capturePreview: document.getElementById("capturePreview"),
+        capturePreviewImage: document.getElementById("capturePreviewImage"),
+        capturePreviewMeta: document.getElementById("capturePreviewMeta"),
+        btnClearCaptureVisual: document.getElementById("btnClearCaptureVisual"),
+        captureSkipCheck: document.getElementById("captureSkipCheck"),
+        captureSkipReasonWrap: document.getElementById("captureSkipReasonWrap"),
+        captureSkipReason: document.getElementById("captureSkipReason"),
+        captureWindowPicker: document.getElementById("captureWindowPicker"),
+        captureWindowList: document.getElementById("captureWindowList"),
+        btnCancelCaptureWindow: document.getElementById("btnCancelCaptureWindow"),
         btnCopyWork: document.getElementById("btnCopyWork"),
         assignmentTitle: document.getElementById("assignmentTitle"),
         workBox: document.getElementById("workBox"),
@@ -3824,7 +3935,8 @@
           checks: checks,
           notes: "",
           acceptedAt: null,
-          items: items
+          items: items,
+          visualDraft: null
         };
       }
 
@@ -3866,9 +3978,29 @@
           checks: checks,
           notes: source.notes || "",
           acceptedAt: source.acceptedAt || null,
-          items: items
+          items: items,
+          visualDraft: normalizeVisualDraft(source.visualDraft)
         };
         return task.review;
+      }
+
+      function normalizeVisualDraft(raw) {
+        if (!raw || typeof raw !== "object") return null;
+        var kind = String(raw.kind || "").trim();
+        if (kind !== "capture" && kind !== "attachment" && kind !== "none") return null;
+        return {
+          required: raw.required !== false && kind !== "none",
+          kind: kind,
+          file: raw.file ? String(raw.file) : null,
+          window_hwnd: raw.window_hwnd ? String(raw.window_hwnd) : null,
+          window_title: raw.window_title ? String(raw.window_title) : null,
+          process_name: raw.process_name ? String(raw.process_name) : null,
+          captured_at: raw.captured_at ? String(raw.captured_at) : null,
+          width: raw.width == null ? null : raw.width,
+          height: raw.height == null ? null : raw.height,
+          bytes: raw.bytes == null ? null : raw.bytes,
+          skip_reason: raw.skip_reason ? String(raw.skip_reason) : null
+        };
       }
 
       function persistTaskReview(project, task) {
@@ -3879,7 +4011,8 @@
           checks: task.review.checks,
           notes: task.review.notes || "",
           acceptedAt: task.review.acceptedAt || null,
-          items: task.review.items || defaultReviewItems(task, project)
+          items: task.review.items || defaultReviewItems(task, project),
+          visualDraft: normalizeVisualDraft(task.review.visualDraft)
         };
         saveJsonMap(REVIEW_KEY, map);
         if (!project.isDemo) saveProjects();
@@ -3997,6 +4130,9 @@
         project.launchUrl = normalizeLaunchUrl(
           project.launchUrl || project.launch_url || project.launchTarget || project.launch_target || ""
         );
+        project.captureWindowHwnd = String(project.captureWindowHwnd || "").trim();
+        project.captureWindowTitle = String(project.captureWindowTitle || "").trim();
+        project.captureWindowProcess = String(project.captureWindowProcess || "").trim();
         if (!project.primaryTool && raw.preferredTool) project.primaryTool = raw.preferredTool;
         project.primaryTool = normalizePrimaryTool(project.primaryTool);
         project.aiModel = normalizeAiModel(project.aiModel);
@@ -6094,6 +6230,356 @@
         window.open(launch.value, "_blank", "noopener");
       }
 
+      function setCaptureStatus(text, isError) {
+        if (!els.captureStatus) return;
+        els.captureStatus.textContent = text || "";
+        els.captureStatus.hidden = !text;
+        els.captureStatus.classList.toggle("is-error", !!isError);
+      }
+
+      function captureWindowLabel(project) {
+        if (!project || !project.captureWindowHwnd) return "";
+        var title = project.captureWindowTitle || "Окно приложения";
+        var proc = project.captureWindowProcess ? (" · " + project.captureWindowProcess) : "";
+        return title + proc;
+      }
+
+      function renderCaptureWindowSettings(project) {
+        if (!els.settingsCaptureWindowMeta) return;
+        if (project && project.captureWindowHwnd) {
+          els.settingsCaptureWindowMeta.textContent = captureWindowLabel(project);
+        } else {
+          els.settingsCaptureWindowMeta.textContent = "Не выбрано";
+        }
+      }
+
+      function saveCaptureWindow(project, hwnd, title, processName) {
+        if (!project || project.isDemo) return;
+        project.captureWindowHwnd = String(hwnd || "").trim();
+        project.captureWindowTitle = String(title || "").trim();
+        project.captureWindowProcess = String(processName || "").trim();
+        saveProjects();
+        renderCaptureWindowSettings(project);
+        if (els.captureWindowHint) {
+          if (project.captureWindowHwnd) {
+            els.captureWindowHint.hidden = false;
+            els.captureWindowHint.textContent = "Окно для снимка: " + captureWindowLabel(project);
+          } else {
+            els.captureWindowHint.hidden = true;
+            els.captureWindowHint.textContent = "";
+          }
+        }
+      }
+
+      function clearCaptureWindowSetting() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        saveCaptureWindow(mutable, "", "", "");
+        setCaptureStatus("Окно для снимка сброшено.", false);
+      }
+
+      function shotUrlFor(project, fileRel) {
+        var folder = project ? String(project.workFolder || "").trim() : "";
+        var file = String(fileRel || "").trim();
+        if (!folder || !file) return "";
+        return (
+          "/api/project-history/shot?project_path=" +
+          encodeURIComponent(folder) +
+          "&file=" +
+          encodeURIComponent(file)
+        );
+      }
+
+      function renderCaptureVisual(project, task) {
+        if (!project || !task) return;
+        var review = ensureTaskReview(project, task);
+        var draft = normalizeVisualDraft(review && review.visualDraft);
+        var accepted = !!(review && review.status === "accepted");
+
+        if (els.captureWindowHint) {
+          if (project.isDemo) {
+            els.captureWindowHint.hidden = false;
+            els.captureWindowHint.textContent = "В примере проекта снимки результата не сохраняются.";
+          } else if (!String(project.workFolder || "").trim()) {
+            els.captureWindowHint.hidden = false;
+            els.captureWindowHint.textContent =
+              "Для снимка нужна рабочая папка проекта. Укажите её в настройках.";
+          } else if (project.captureWindowHwnd) {
+            els.captureWindowHint.hidden = false;
+            els.captureWindowHint.textContent = "Окно для снимка: " + captureWindowLabel(project);
+          } else {
+            els.captureWindowHint.hidden = true;
+            els.captureWindowHint.textContent = "";
+          }
+        }
+
+        if (els.btnCaptureResult) {
+          els.btnCaptureResult.disabled = accepted || project.isDemo || !String(project.workFolder || "").trim();
+        }
+        if (els.btnChooseCaptureWindow) {
+          els.btnChooseCaptureWindow.disabled = accepted || project.isDemo || !String(project.workFolder || "").trim();
+        }
+        if (els.resultShotInput) els.resultShotInput.disabled = accepted || project.isDemo || !String(project.workFolder || "").trim();
+
+        if (els.captureSkipCheck) {
+          els.captureSkipCheck.disabled = accepted;
+          els.captureSkipCheck.checked = !!(draft && draft.kind === "none");
+        }
+        if (els.captureSkipReasonWrap) {
+          els.captureSkipReasonWrap.hidden = !(draft && draft.kind === "none");
+        }
+        if (els.captureSkipReason) {
+          els.captureSkipReason.disabled = accepted;
+          els.captureSkipReason.value = (draft && draft.kind === "none" && draft.skip_reason) || "";
+        }
+
+        if (els.capturePreview && els.capturePreviewImage) {
+          if (draft && (draft.kind === "capture" || draft.kind === "attachment") && draft.file) {
+            els.capturePreview.hidden = false;
+            els.capturePreviewImage.src = shotUrlFor(project, draft.file);
+            if (els.capturePreviewMeta) {
+              var meta = draft.kind === "capture" ? "Системный снимок" : "Прикреплённый снимок";
+              if (draft.captured_at) meta += " · " + (formatDateTime(draft.captured_at) || draft.captured_at);
+              els.capturePreviewMeta.textContent = meta;
+            }
+            if (els.btnClearCaptureVisual) els.btnClearCaptureVisual.hidden = accepted;
+          } else if (draft && draft.kind === "none") {
+            els.capturePreview.hidden = true;
+            els.capturePreviewImage.removeAttribute("src");
+            setCaptureStatus(
+              "Визуальный результат не требуется: " + (draft.skip_reason || "причина указана"),
+              false
+            );
+          } else {
+            els.capturePreview.hidden = true;
+            els.capturePreviewImage.removeAttribute("src");
+          }
+        }
+      }
+
+      function setVisualDraft(project, task, draft) {
+        var review = ensureTaskReview(project, task);
+        if (!review) return;
+        review.visualDraft = normalizeVisualDraft(draft);
+        persistTaskReview(project, task);
+        renderCaptureVisual(project, task);
+      }
+
+      function clearVisualDraft() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        setVisualDraft(mutable, task, null);
+        setCaptureStatus("Снимок удалён из проверки.", false);
+      }
+
+      function hideCaptureWindowPicker() {
+        if (els.captureWindowPicker) els.captureWindowPicker.hidden = true;
+        if (els.captureWindowList) els.captureWindowList.innerHTML = "";
+      }
+
+      async function openCaptureWindowPicker() {
+        var mutable = currentProjectMutable();
+        if (!mutable || mutable.isDemo) return;
+        if (!String(mutable.workFolder || "").trim()) {
+          setCaptureStatus("Сначала укажите рабочую папку проекта.", true);
+          return;
+        }
+        setCaptureStatus("Загружаю список окон…", false);
+        if (els.btnChooseCaptureWindow) els.btnChooseCaptureWindow.disabled = true;
+        var res = await postBridgeJson("/api/capture/windows", {
+          exclude_title: document.title || "AI POS"
+        });
+        if (els.btnChooseCaptureWindow) els.btnChooseCaptureWindow.disabled = false;
+        if (!res.data || !res.data.ok) {
+          setCaptureStatus((res.data && res.data.message) || "Не удалось получить список окон.", true);
+          return;
+        }
+        var windows = Array.isArray(res.data.windows) ? res.data.windows : [];
+        if (!windows.length) {
+          setCaptureStatus("Подходящих окон не найдено. Откройте приложение и повторите.", true);
+          return;
+        }
+        if (!els.captureWindowList || !els.captureWindowPicker) return;
+        var html = "";
+        for (var i = 0; i < windows.length; i++) {
+          var win = windows[i];
+          html +=
+            '<button type="button" class="capture-window-item" data-hwnd="' +
+            escapeHtml(String(win.hwnd || "")) +
+            '" data-title="' + escapeHtml(String(win.title || "")) +
+            '" data-process="' + escapeHtml(String(win.process_name || "")) +
+            '"><span class="capture-window-item-title">' +
+            escapeHtml(String(win.title || "Окно")) +
+            "</span><span class=\"capture-window-item-meta\">" +
+            escapeHtml(String(win.process_name || "")) +
+            (win.minimized ? " · свёрнуто" : "") +
+            "</span></button>";
+        }
+        els.captureWindowList.innerHTML = html;
+        els.captureWindowPicker.hidden = false;
+        setCaptureStatus("Выберите окно приложения.", false);
+      }
+
+      async function selectCaptureWindow(hwnd, title, processName) {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        hideCaptureWindowPicker();
+        saveCaptureWindow(mutable, hwnd, title, processName);
+        setCaptureStatus("Окно сохранено. Можно снять результат.", false);
+      }
+
+      async function captureResultShot() {
+        var mutable = currentProjectMutable();
+        if (!mutable || mutable.isDemo) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        var folder = String(mutable.workFolder || "").trim();
+        if (!folder) {
+          setCaptureStatus("Сначала укажите рабочую папку проекта.", true);
+          return;
+        }
+
+        var hwnd = String(mutable.captureWindowHwnd || "").trim();
+        if (hwnd) {
+          setCaptureStatus("Проверяю сохранённое окно…", false);
+          var probe = await postBridgeJson("/api/capture/probe", { hwnd: hwnd });
+          if (!probe.data || !probe.data.ok || probe.data.available === false) {
+            saveCaptureWindow(mutable, "", "", "");
+            setCaptureStatus("Сохранённое окно больше недоступно. Выберите окно снова.", true);
+            await openCaptureWindowPicker();
+            return;
+          }
+          // Refresh title/process if probe returned them.
+          if (probe.data.title || probe.data.process_name) {
+            saveCaptureWindow(
+              mutable,
+              probe.data.hwnd || hwnd,
+              probe.data.title || mutable.captureWindowTitle,
+              probe.data.process_name || mutable.captureWindowProcess
+            );
+            hwnd = String(mutable.captureWindowHwnd || hwnd);
+          }
+        } else {
+          await openCaptureWindowPicker();
+          return;
+        }
+
+        if (els.btnCaptureResult) els.btnCaptureResult.disabled = true;
+        setCaptureStatus("Делаю снимок…", false);
+        var res = await postBridgeJson("/api/capture/window", {
+          project_path: folder,
+          hwnd: hwnd,
+          label: task.name || "result"
+        });
+        if (els.btnCaptureResult) els.btnCaptureResult.disabled = false;
+        if (!res.data || !res.data.ok) {
+          if (res.data && res.data.need_reselect) {
+            saveCaptureWindow(mutable, "", "", "");
+            setCaptureStatus(res.data.message || "Выберите окно снова.", true);
+            await openCaptureWindowPicker();
+            return;
+          }
+          setCaptureStatus((res.data && res.data.message) || "Не удалось сделать снимок.", true);
+          return;
+        }
+        setVisualDraft(mutable, task, res.data.visual);
+        setCaptureStatus("Снимок сохранён.", false);
+      }
+
+      function onResultShotSelected(event) {
+        var input = event.currentTarget;
+        var file = input.files && input.files[0];
+        input.value = "";
+        if (!file) return;
+        var mutable = currentProjectMutable();
+        if (!mutable || mutable.isDemo) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        var folder = String(mutable.workFolder || "").trim();
+        if (!folder) {
+          setCaptureStatus("Сначала укажите рабочую папку проекта.", true);
+          return;
+        }
+        if ((file.type || "").indexOf("image/") !== 0) {
+          setCaptureStatus("Нужен файл изображения PNG.", true);
+          return;
+        }
+        setCaptureStatus("Сохраняю снимок…", false);
+        var reader = new FileReader();
+        reader.onload = function () {
+          var dataUrl = String(reader.result || "");
+          postBridgeJson("/api/capture/attach", {
+            project_path: folder,
+            image_base64: dataUrl,
+            filename: file.name || "attachment.png"
+          }).then(function (res) {
+            if (!res.data || !res.data.ok) {
+              setCaptureStatus((res.data && res.data.message) || "Не удалось прикрепить снимок.", true);
+              return;
+            }
+            setVisualDraft(mutable, task, res.data.visual);
+            setCaptureStatus("Снимок прикреплён.", false);
+          });
+        };
+        reader.onerror = function () {
+          setCaptureStatus("Не удалось прочитать файл снимка.", true);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function onCaptureSkipToggle() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        var checked = !!(els.captureSkipCheck && els.captureSkipCheck.checked);
+        if (els.captureSkipReasonWrap) els.captureSkipReasonWrap.hidden = !checked;
+        if (!checked) {
+          setVisualDraft(mutable, task, null);
+          setCaptureStatus("", false);
+          return;
+        }
+        var reason = els.captureSkipReason ? String(els.captureSkipReason.value || "").trim() : "";
+        if (!reason) {
+          setCaptureStatus("Укажите короткую причину, почему снимок не нужен.", true);
+          setVisualDraft(mutable, task, {
+            required: false,
+            kind: "none",
+            file: null,
+            skip_reason: "",
+            window_hwnd: null,
+            window_title: null,
+            process_name: null,
+            captured_at: null,
+            width: null,
+            height: null,
+            bytes: null
+          });
+          return;
+        }
+        setVisualDraft(mutable, task, {
+          required: false,
+          kind: "none",
+          file: null,
+          skip_reason: reason,
+          window_hwnd: null,
+          window_title: null,
+          process_name: null,
+          captured_at: new Date().toISOString(),
+          width: null,
+          height: null,
+          bytes: null
+        });
+        setCaptureStatus("Отметка сохранена для этой проверки.", false);
+      }
+
+      function onCaptureSkipReasonInput() {
+        if (!(els.captureSkipCheck && els.captureSkipCheck.checked)) return;
+        onCaptureSkipToggle();
+      }
+
       function nextStepText(project) {
         var mod = getActiveModule(project);
         if (mod && String(mod.nextAfterAccept || "").trim()) return String(mod.nextAfterAccept).trim();
@@ -6160,7 +6646,7 @@
         els.historyStatus.classList.toggle("is-error", !!isError);
       }
 
-      function historyEntryHtml(entry) {
+      function historyEntryHtml(entry, project) {
         var when = formatDateTime(entry.accepted_at) || entry.accepted_at || "";
         var moduleLine = entry.module_name
           ? ('<p class="history-card-meta">' + escapeHtml(entry.module_name) + "</p>")
@@ -6174,6 +6660,18 @@
             "</div>"
           );
         }
+        var shotHtml = "";
+        if (entry.visual && entry.visual.file && project && String(project.workFolder || "").trim()) {
+          shotHtml =
+            '<div class="history-card-block">' +
+            '<span class="history-card-label">Снимок</span>' +
+            '<button type="button" class="history-shot-thumb" data-shot-file="' +
+            escapeHtml(entry.visual.file) +
+            '"><img src="' +
+            escapeHtml(shotUrlFor(project, entry.visual.file)) +
+            '" alt="Снимок результата" /></button>' +
+            "</div>";
+        }
         return (
           '<article class="history-card">' +
           '<p class="history-card-title">' + escapeHtml(entry.task_name || "Задание") + "</p>" +
@@ -6182,17 +6680,19 @@
           block("Что сделано", entry.result_summary) +
           block("Как проверено", entry.verification_summary) +
           block("Дальше", entry.next_step) +
+          shotHtml +
           "</article>"
         );
       }
 
       function paintTaskHistory() {
         if (!els.historyList || !els.historyEmpty) return;
+        var project = findProject(state.currentId);
         var entries = Array.isArray(state.historyEntries) ? state.historyEntries : [];
         var expanded = !!state.historyExpanded;
         var visible = expanded ? entries : entries.slice(0, 3);
         var html = "";
-        for (var i = 0; i < visible.length; i++) html += historyEntryHtml(visible[i]);
+        for (var i = 0; i < visible.length; i++) html += historyEntryHtml(visible[i], project);
         els.historyList.innerHTML = html;
         els.historyList.hidden = !visible.length;
         els.historyEmpty.hidden = !!visible.length || !!state.historyLoading || !!state.historyError;
@@ -6439,6 +6939,7 @@
         }
 
         renderOpenAppButton(project);
+        renderCaptureVisual(project, task);
         renderStageFixBlock(project, task, review);
         renderStageNextBlock(project, review);
         syncStageNextEmpty();
@@ -6527,6 +7028,7 @@
         fillAiModelSelect(els.settingsAiModel, normalizeAiModel(project && project.aiModel));
         if (els.settingsWorkFolder) els.settingsWorkFolder.value = project.workFolder || "";
         if (els.settingsLaunchUrl) els.settingsLaunchUrl.value = normalizeLaunchUrl(project && project.launchUrl);
+        renderCaptureWindowSettings(project);
         if (els.settingsSaveNote) els.settingsSaveNote.hidden = true;
       }
 
@@ -6880,6 +7382,9 @@
           constraints: data.constraints,
           workFolder: workFolder,
           launchUrl: "",
+          captureWindowHwnd: "",
+          captureWindowTitle: "",
+          captureWindowProcess: "",
           primaryTool: data.primaryTool,
           aiModel: data.aiModel,
           template: data.template,
@@ -7505,11 +8010,39 @@
         document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGate);
         if (els.btnStageDone) els.btnStageDone.addEventListener("click", requestStageAcceptance);
         if (els.btnHistoryToggle) els.btnHistoryToggle.addEventListener("click", toggleHistoryExpanded);
+        if (els.historyList) {
+          els.historyList.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-shot-file]");
+            if (!btn || !els.historyList.contains(btn)) return;
+            var project = findProject(state.currentId);
+            var url = shotUrlFor(project, btn.getAttribute("data-shot-file"));
+            if (url) window.open(url, "_blank", "noopener");
+          });
+        }
         if (els.btnStageIssues) els.btnStageIssues.addEventListener("click", toggleStageIssues);
         if (els.btnSubmitIssues) els.btnSubmitIssues.addEventListener("click", submitStageIssues);
         if (els.reviewShotInput) els.reviewShotInput.addEventListener("change", onReviewShotSelected);
         if (els.btnRemoveShot) els.btnRemoveShot.addEventListener("click", removeStageShot);
         if (els.btnOpenApp) els.btnOpenApp.addEventListener("click", openProjectApp);
+        if (els.btnCaptureResult) els.btnCaptureResult.addEventListener("click", captureResultShot);
+        if (els.btnChooseCaptureWindow) els.btnChooseCaptureWindow.addEventListener("click", openCaptureWindowPicker);
+        if (els.btnCancelCaptureWindow) els.btnCancelCaptureWindow.addEventListener("click", hideCaptureWindowPicker);
+        if (els.captureWindowList) {
+          els.captureWindowList.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-hwnd]");
+            if (!btn || !els.captureWindowList.contains(btn)) return;
+            selectCaptureWindow(
+              btn.getAttribute("data-hwnd"),
+              btn.getAttribute("data-title"),
+              btn.getAttribute("data-process")
+            );
+          });
+        }
+        if (els.resultShotInput) els.resultShotInput.addEventListener("change", onResultShotSelected);
+        if (els.btnClearCaptureVisual) els.btnClearCaptureVisual.addEventListener("click", clearVisualDraft);
+        if (els.captureSkipCheck) els.captureSkipCheck.addEventListener("change", onCaptureSkipToggle);
+        if (els.captureSkipReason) els.captureSkipReason.addEventListener("input", onCaptureSkipReasonInput);
+        if (els.btnClearCaptureWindow) els.btnClearCaptureWindow.addEventListener("click", clearCaptureWindowSetting);
         if (els.btnCopyFix) els.btnCopyFix.addEventListener("click", copyFixAssignment);
         if (els.btnCopyNext) els.btnCopyNext.addEventListener("click", copyNextAssignment);
         if (els.detailLevelSwitch) {

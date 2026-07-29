@@ -8,6 +8,7 @@ Serves the UI and exposes a tiny localhost API:
 - Project folder pick / preview / create / inspect (Passport bootstrap)
 - Desktop shortcut creation (reuses tools/create_ai_pos_shortcut.ps1)
 - Project task history read (facts only; does not accept tasks)
+- Capture Service façade (window list / capture / shot serve)
 
 Does not determine stage. Does not replace Analyzer / Stage Engine.
 """
@@ -15,6 +16,7 @@ Does not determine stage. Does not replace Analyzer / Stage Engine.
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import re
@@ -22,10 +24,13 @@ import shutil
 import subprocess
 import sys
 import threading
+import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
+
+import capture_service
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -35,6 +40,7 @@ SHORTCUT_SCRIPT = TOOLS_DIR / "create_ai_pos_shortcut.ps1"
 TEMPLATE_DIR = ROOT / "Projects" / "TEMPLATE"
 ANALYSIS_REL = Path(".ai-pos") / "project_analysis.json"
 HISTORY_REL = Path(".ai-pos") / "history" / "history.json"
+HISTORY_SHOTS_REL = Path(".ai-pos") / "history" / "shots"
 HISTORY_SCHEMA = "ai-pos-task-history"
 HISTORY_VERSION = 1
 
@@ -54,6 +60,7 @@ API_KEYS = ("ok", "analysis", "message", "mode", "reason_codes")
 
 _PICK_LOCK = threading.Lock()
 _SHORTCUT_LOCK = threading.Lock()
+_SHOT_LOCK = threading.Lock()
 
 
 def parse_orchestrator_result(stdout: str) -> dict[str, Any] | None:
@@ -621,6 +628,209 @@ def read_project_history(project_path: str) -> dict[str, Any]:
     )
 
 
+def resolve_project_shots_dir(project_path: str) -> tuple[Path | None, Path | None, dict[str, Any] | None]:
+    """Return (project_root, shots_dir, error_payload)."""
+    root = resolve_existing_dir(project_path)
+    if root is None:
+        return None, None, simple_result(
+            ok=False,
+            message="Рабочая папка проекта не найдена. Проверьте путь в настройках проекта.",
+        )
+    try:
+        resolved_root = root.resolve()
+        shots_dir = (resolved_root / HISTORY_SHOTS_REL).resolve()
+        shots_dir.relative_to(resolved_root / ".ai-pos" / "history")
+    except (OSError, ValueError):
+        return None, None, simple_result(
+            ok=False,
+            message="Не удалось открыть папку снимков проекта. Повторите попытку.",
+        )
+    return resolved_root, shots_dir, None
+
+
+def safe_shot_basename(name: str) -> str | None:
+    text = _history_text(name)
+    if not text or "/" in text or "\\" in text or text in {".", ".."}:
+        return None
+    base = Path(text).name
+    if base != text:
+        return None
+    if not base.lower().endswith(".png"):
+        return None
+    if not re.fullmatch(r"[A-Za-z0-9._\-]+\.png", base):
+        return None
+    return base
+
+
+def shot_filename(prefix: str = "shot") -> str:
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    safe_prefix = re.sub(r"[^A-Za-z0-9_\-]+", "-", (prefix or "shot").strip())[:40].strip("-") or "shot"
+    return f"{stamp}-{safe_prefix}.png"
+
+
+def list_capture_windows(*, exclude_title: str = "") -> dict[str, Any]:
+    result = capture_service.list_windows(exclude_title=exclude_title)
+    if result.get("ok") is True:
+        result.setdefault("message", None)
+        result.setdefault("windows", [])
+    return result
+
+
+def probe_capture_window(hwnd: str) -> dict[str, Any]:
+    return capture_service.probe_window(str(hwnd or "").strip())
+
+
+def capture_project_window(
+    *,
+    project_path: str,
+    hwnd: str,
+    label: str = "result",
+) -> dict[str, Any]:
+    root, shots_dir, err = resolve_project_shots_dir(project_path)
+    if err is not None:
+        return err
+    assert root is not None and shots_dir is not None
+    hwnd_text = str(hwnd or "").strip()
+    if not hwnd_text:
+        return simple_result(ok=False, message="Сначала выберите окно приложения.")
+
+    probe = capture_service.probe_window(hwnd_text)
+    if probe.get("ok") is not True:
+        return simple_result(
+            ok=False,
+            message=probe.get("message") or "Не удалось проверить выбранное окно.",
+        )
+    if probe.get("available") is False:
+        return simple_result(
+            ok=False,
+            message="Сохранённое окно больше недоступно. Выберите окно снова.",
+            need_reselect=True,
+        )
+
+    with _SHOT_LOCK:
+        try:
+            shots_dir.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            return simple_result(
+                ok=False,
+                message="Не удалось создать папку для снимков. Проверьте права доступа.",
+            )
+        filename = shot_filename(label)
+        output_path = shots_dir / filename
+        result = capture_service.capture_window(hwnd_text, output_path)
+
+    if result.get("ok") is not True:
+        return simple_result(
+            ok=False,
+            message=result.get("message") or "Не удалось сделать снимок. Повторите попытку.",
+            need_reselect=bool(result.get("need_reselect")),
+        )
+    if not output_path.is_file():
+        return simple_result(ok=False, message="Снимок не был сохранён. Повторите попытку.")
+
+    rel = f"shots/{filename}"
+    return simple_result(
+        ok=True,
+        message="Снимок сохранён.",
+        visual={
+            "required": True,
+            "kind": "capture",
+            "file": rel,
+            "window_hwnd": str(result.get("hwnd") or hwnd_text),
+            "window_title": _history_text(result.get("title")) or None,
+            "process_name": _history_text(result.get("process_name")) or None,
+            "captured_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "width": result.get("width"),
+            "height": result.get("height"),
+            "bytes": result.get("bytes"),
+            "skip_reason": None,
+        },
+    )
+
+
+def attach_project_shot(
+    *,
+    project_path: str,
+    image_base64: str,
+    filename_hint: str = "",
+) -> dict[str, Any]:
+    root, shots_dir, err = resolve_project_shots_dir(project_path)
+    if err is not None:
+        return err
+    assert root is not None and shots_dir is not None
+    raw = (image_base64 or "").strip()
+    if "," in raw and raw.lower().startswith("data:"):
+        raw = raw.split(",", 1)[1]
+    if not raw:
+        return simple_result(ok=False, message="Не удалось прочитать файл снимка.")
+    try:
+        data = base64.b64decode(raw, validate=False)
+    except Exception:
+        return simple_result(ok=False, message="Не удалось прочитать файл снимка.")
+    if len(data) < 100:
+        return simple_result(ok=False, message="Файл снимка слишком маленький.")
+    if len(data) > 12 * 1024 * 1024:
+        return simple_result(ok=False, message="Снимок слишком большой. Выберите файл меньше 12 МБ.")
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        return simple_result(
+            ok=False,
+            message="Нужен снимок в формате PNG.",
+        )
+
+    hint = Path(_history_text(filename_hint) or "attachment").stem
+    filename = shot_filename(hint or "attachment")
+    with _SHOT_LOCK:
+        try:
+            shots_dir.mkdir(parents=True, exist_ok=True)
+            output_path = shots_dir / filename
+            output_path.write_bytes(data)
+        except OSError:
+            return simple_result(
+                ok=False,
+                message="Не удалось сохранить снимок. Проверьте права доступа.",
+            )
+
+    return simple_result(
+        ok=True,
+        message="Снимок прикреплён.",
+        visual={
+            "required": True,
+            "kind": "attachment",
+            "file": f"shots/{filename}",
+            "window_hwnd": None,
+            "window_title": None,
+            "process_name": None,
+            "captured_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "width": None,
+            "height": None,
+            "bytes": len(data),
+            "skip_reason": None,
+        },
+    )
+
+
+def resolve_shot_file(project_path: str, file_name: str) -> tuple[Path | None, dict[str, Any] | None]:
+    root, shots_dir, err = resolve_project_shots_dir(project_path)
+    if err is not None:
+        return None, err
+    assert shots_dir is not None
+    # Accept "shots/name.png" or bare "name.png".
+    raw = _history_text(file_name).replace("\\", "/")
+    if raw.startswith("shots/"):
+        raw = raw[6:]
+    base = safe_shot_basename(raw)
+    if base is None:
+        return None, simple_result(ok=False, message="Снимок не найден.")
+    try:
+        target = (shots_dir / base).resolve()
+        target.relative_to(shots_dir)
+    except (OSError, ValueError):
+        return None, simple_result(ok=False, message="Снимок не найден.")
+    if not target.is_file():
+        return None, simple_result(ok=False, message="Снимок не найден.")
+    return target, None
+
+
 def parse_shortcut_result(stdout: str) -> dict[str, Any] | None:
     for line in reversed((stdout or "").splitlines()):
         line = line.strip()
@@ -716,6 +926,21 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _send_bytes(
+        self,
+        status: int,
+        body: bytes,
+        *,
+        content_type: str,
+    ) -> None:
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(body)
+
     def _read_json_body(self) -> dict[str, Any]:
         length = int(self.headers.get("Content-Length") or "0")
         if length <= 0:
@@ -741,7 +966,8 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
         self.send_error(404)
 
     def do_GET(self) -> None:  # noqa: N802
-        path = urlparse(self.path).path
+        parsed = urlparse(self.path)
+        path = parsed.path
         if path == "/api/health":
             self._send_json(
                 200,
@@ -752,6 +978,24 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
                     "template": str(TEMPLATE_DIR),
                 },
             )
+            return
+        if path == "/api/project-history/shot":
+            query = parse_qs(parsed.query or "")
+            project_path = (query.get("project_path") or [""])[0]
+            file_name = (query.get("file") or [""])[0]
+            target, err = resolve_shot_file(project_path, file_name)
+            if err is not None or target is None:
+                self._send_json(404 if (err or {}).get("message") else 400, err or simple_result(ok=False, message="Снимок не найден."))
+                return
+            try:
+                body = target.read_bytes()
+            except OSError:
+                self._send_json(
+                    400,
+                    simple_result(ok=False, message="Не удалось открыть снимок."),
+                )
+                return
+            self._send_bytes(200, body, content_type="image/png")
             return
         if path in {"/", "/index.html"}:
             self.path = "/index.html"
@@ -864,6 +1108,36 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
+        if path == "/api/capture/windows":
+            result = list_capture_windows(
+                exclude_title=str(body.get("exclude_title") or "")
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/capture/probe":
+            result = probe_capture_window(str(body.get("hwnd") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/capture/window":
+            result = capture_project_window(
+                project_path=str(body.get("project_path") or ""),
+                hwnd=str(body.get("hwnd") or ""),
+                label=str(body.get("label") or "result"),
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/capture/attach":
+            result = attach_project_shot(
+                project_path=str(body.get("project_path") or ""),
+                image_base64=str(body.get("image_base64") or ""),
+                filename_hint=str(body.get("filename") or ""),
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
         if path == "/api/create-project":
             confirm = body.get("confirm") is True
             result = create_project_folder(
@@ -912,6 +1186,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"API: http://{args.host}:{args.port}/api/create-project")
     print(f"API: http://{args.host}:{args.port}/api/create-desktop-shortcut")
     print(f"API: http://{args.host}:{args.port}/api/project-history/read")
+    print(f"API: http://{args.host}:{args.port}/api/capture/windows")
+    print(f"API: http://{args.host}:{args.port}/api/capture/window")
+    print(f"API: http://{args.host}:{args.port}/api/capture/attach")
+    print(f"API: http://{args.host}:{args.port}/api/project-history/shot")
     print("Stop with Ctrl+C")
     try:
         server.serve_forever()
