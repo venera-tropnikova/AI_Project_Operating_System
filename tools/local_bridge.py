@@ -7,6 +7,7 @@ Serves the UI and exposes a tiny localhost API:
 - Orchestrator refresh-insight (unchanged contract)
 - Project folder pick / preview / create / inspect (Passport bootstrap)
 - Desktop shortcut creation (reuses tools/create_ai_pos_shortcut.ps1)
+- Project task history read (facts only; does not accept tasks)
 
 Does not determine stage. Does not replace Analyzer / Stage Engine.
 """
@@ -33,6 +34,9 @@ ORCHESTRATOR = TOOLS_DIR / "refresh_project_insight.py"
 SHORTCUT_SCRIPT = TOOLS_DIR / "create_ai_pos_shortcut.ps1"
 TEMPLATE_DIR = ROOT / "Projects" / "TEMPLATE"
 ANALYSIS_REL = Path(".ai-pos") / "project_analysis.json"
+HISTORY_REL = Path(".ai-pos") / "history" / "history.json"
+HISTORY_SCHEMA = "ai-pos-task-history"
+HISTORY_VERSION = 1
 
 RESULT_PREFIX = "AI_POS_ORCHESTRATOR_RESULT="
 SHORTCUT_RESULT_PREFIX = "AI_POS_SHORTCUT_RESULT="
@@ -472,6 +476,151 @@ def pick_directory(title: str = "Выберите папку") -> dict[str, Any]
     )
 
 
+def _history_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _normalize_history_entry(raw: Any) -> dict[str, Any] | None:
+    """Keep only display fields for a completed-task fact. Invalid rows are skipped."""
+    if not isinstance(raw, dict):
+        return None
+    entry_id = _history_text(raw.get("id"))
+    accepted_at = _history_text(raw.get("accepted_at"))
+    task_name = _history_text(raw.get("task_name"))
+    if not entry_id or not accepted_at or not task_name:
+        return None
+    visual_raw = raw.get("visual")
+    visual: dict[str, Any] | None = None
+    if isinstance(visual_raw, dict):
+        file_name = _history_text(visual_raw.get("file"))
+        visual = {
+            "required": bool(visual_raw.get("required")),
+            "kind": _history_text(visual_raw.get("kind")) or None,
+            "file": file_name or None,
+            "skip_reason": _history_text(visual_raw.get("skip_reason")) or None,
+        }
+    review_raw = raw.get("review")
+    review = None
+    if isinstance(review_raw, dict):
+        try:
+            items_total = int(review_raw.get("items_total") or 0)
+            items_confirmed = int(review_raw.get("items_confirmed") or 0)
+        except (TypeError, ValueError):
+            items_total = 0
+            items_confirmed = 0
+        review = {
+            "items_total": items_total,
+            "items_confirmed": items_confirmed,
+        }
+    return {
+        "id": entry_id,
+        "accepted_at": accepted_at,
+        "task_id": _history_text(raw.get("task_id")) or None,
+        "task_name": task_name,
+        "module_id": _history_text(raw.get("module_id")) or None,
+        "module_name": _history_text(raw.get("module_name")) or None,
+        "goal": _history_text(raw.get("goal")),
+        "expected_result": _history_text(raw.get("expected_result")),
+        "result_summary": _history_text(raw.get("result_summary")),
+        "verification_summary": _history_text(raw.get("verification_summary")),
+        "next_step": _history_text(raw.get("next_step")),
+        "review": review,
+        "visual": visual,
+    }
+
+
+def read_project_history(project_path: str) -> dict[str, Any]:
+    """
+    Read completed-task facts from <project>/.ai-pos/history/history.json.
+
+    Client passes only the project working folder. The journal path is assembled
+    on the server and never accepted from the client.
+    """
+    root = resolve_existing_dir(project_path)
+    if root is None:
+        return simple_result(
+            ok=False,
+            message="Рабочая папка проекта не найдена. Проверьте путь в настройках проекта.",
+            project_name=None,
+            entries=[],
+        )
+
+    history_path = root / HISTORY_REL
+    try:
+        resolved_root = root.resolve()
+        resolved_history = history_path.resolve()
+        resolved_history.relative_to(resolved_root / ".ai-pos" / "history")
+    except (OSError, ValueError):
+        return simple_result(
+            ok=False,
+            message="Не удалось открыть историю проекта. Повторите попытку.",
+            project_name=None,
+            entries=[],
+        )
+
+    if not resolved_history.is_file():
+        return simple_result(
+            ok=True,
+            message=None,
+            project_name=None,
+            entries=[],
+        )
+
+    try:
+        loaded = json.loads(resolved_history.read_text(encoding="utf-8"))
+    except OSError:
+        return simple_result(
+            ok=False,
+            message="Не удалось прочитать историю проекта. Повторите попытку.",
+            project_name=None,
+            entries=[],
+        )
+    except json.JSONDecodeError:
+        return simple_result(
+            ok=False,
+            message="История проекта повреждена. Записи сейчас недоступны.",
+            project_name=None,
+            entries=[],
+        )
+
+    if not isinstance(loaded, dict):
+        return simple_result(
+            ok=False,
+            message="История проекта повреждена. Записи сейчас недоступны.",
+            project_name=None,
+            entries=[],
+        )
+
+    schema = _history_text(loaded.get("schema"))
+    version = loaded.get("version")
+    entries_raw = loaded.get("entries")
+    if schema != HISTORY_SCHEMA or version != HISTORY_VERSION or not isinstance(entries_raw, list):
+        return simple_result(
+            ok=False,
+            message="История проекта повреждена. Записи сейчас недоступны.",
+            project_name=None,
+            entries=[],
+        )
+
+    entries: list[dict[str, Any]] = []
+    for item in entries_raw:
+        normalized = _normalize_history_entry(item)
+        if normalized is not None:
+            entries.append(normalized)
+
+    # Newest first for the current-task screen.
+    entries.sort(key=lambda row: row.get("accepted_at") or "", reverse=True)
+
+    return simple_result(
+        ok=True,
+        message=None,
+        project_name=_history_text(loaded.get("project_name")) or None,
+        entries=entries,
+    )
+
+
 def parse_shortcut_result(stdout: str) -> dict[str, Any] | None:
     for line in reversed((stdout or "").splitlines()):
         line = line.strip()
@@ -710,6 +859,11 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
+        if path == "/api/project-history/read":
+            result = read_project_history(str(body.get("project_path") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
         if path == "/api/create-project":
             confirm = body.get("confirm") is True
             result = create_project_folder(
@@ -757,6 +911,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"API: http://{args.host}:{args.port}/api/inspect-project-folder")
     print(f"API: http://{args.host}:{args.port}/api/create-project")
     print(f"API: http://{args.host}:{args.port}/api/create-desktop-shortcut")
+    print(f"API: http://{args.host}:{args.port}/api/project-history/read")
     print("Stop with Ctrl+C")
     try:
         server.serve_forever()

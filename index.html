@@ -2237,6 +2237,56 @@
     }
     .history-list { display: grid; gap: 0.7rem; }
     .history-list[hidden] { display: none !important; }
+    .history-card {
+      padding: 0.85rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-raised, var(--surface));
+    }
+    .history-card-title {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--ink);
+      overflow-wrap: break-word;
+    }
+    .history-card-meta {
+      margin: 0.35rem 0 0;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+    .history-card-block { margin-top: 0.65rem; }
+    .history-card-label {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .history-card-text {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: var(--ink-soft);
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+    .history-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.75rem;
+    }
+    .history-actions[hidden] { display: none !important; }
+    .history-status {
+      margin: 0.55rem 0 0;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+    .history-status.is-error { color: var(--danger, #b42318); }
+    .history-status[hidden] { display: none !important; }
     .flow-row { padding: 1rem 0; border-bottom: 1px solid var(--line); }
     .flow-row:last-child { border-bottom: none; }
     .flow-row[hidden] { display: none !important; }
@@ -2784,6 +2834,10 @@
               <section class="flow-row" id="historyRow">
                 <div class="history-list" id="historyList" hidden></div>
                 <p class="flow-text" id="historyEmpty">Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.</p>
+                <p class="history-status" id="historyStatus" hidden></p>
+                <div class="history-actions" id="historyActions" hidden>
+                  <button type="button" class="btn btn-ghost" id="btnHistoryToggle">Показать всю историю</button>
+                </div>
               </section>
             </div>
           </section>
@@ -3445,6 +3499,13 @@
         detailLevel: "technical",
         // Пример живёт только в текущем сеансе и не становится текущим проектом.
         exampleMode: false,
+        // Журнал выполненных заданий: только чтение на этом этапе.
+        historyEntries: [],
+        historyExpanded: false,
+        historyLoading: false,
+        historyError: "",
+        historyRequestSeq: 0,
+        historyProjectKey: "",
         cliAnalysisByProject: {},
         cliFreshnessTimer: null,
         createWizard: {
@@ -3528,6 +3589,9 @@
         taskEmptyNote: document.getElementById("taskEmptyNote"),
         historyList: document.getElementById("historyList"),
         historyEmpty: document.getElementById("historyEmpty"),
+        historyStatus: document.getElementById("historyStatus"),
+        historyActions: document.getElementById("historyActions"),
+        btnHistoryToggle: document.getElementById("btnHistoryToggle"),
         stageNextEmptyRow: document.getElementById("stageNextEmptyRow"),
         taskGoalText: document.getElementById("taskGoalText"),
         taskWhyText: document.getElementById("taskWhyText"),
@@ -6063,16 +6127,153 @@
         els.stageNextEmptyRow.hidden = hasNext || hasFix;
       }
 
-      // Журнал выполненных заданий подключается отдельным этапом,
-      // поэтому пока зона всегда показывает пустое состояние.
+      // Журнал выполненных заданий: на этом этапе только чтение и показ.
+      function historyProjectKey(project) {
+        if (!project) return "";
+        return String(project.id || "") + "|" + String(project.workFolder || "").trim();
+      }
+
+      function setHistoryStatus(text, isError) {
+        if (!els.historyStatus) return;
+        els.historyStatus.textContent = text || "";
+        els.historyStatus.hidden = !text;
+        els.historyStatus.classList.toggle("is-error", !!isError);
+      }
+
+      function historyEntryHtml(entry) {
+        var when = formatDateTime(entry.accepted_at) || entry.accepted_at || "";
+        var moduleLine = entry.module_name
+          ? ('<p class="history-card-meta">' + escapeHtml(entry.module_name) + "</p>")
+          : "";
+        function block(label, text) {
+          if (!text) return "";
+          return (
+            '<div class="history-card-block">' +
+            '<span class="history-card-label">' + escapeHtml(label) + "</span>" +
+            '<p class="history-card-text">' + escapeHtml(text) + "</p>" +
+            "</div>"
+          );
+        }
+        return (
+          '<article class="history-card">' +
+          '<p class="history-card-title">' + escapeHtml(entry.task_name || "Задание") + "</p>" +
+          (when ? ('<p class="history-card-meta">' + escapeHtml(when) + "</p>") : "") +
+          moduleLine +
+          block("Что сделано", entry.result_summary) +
+          block("Как проверено", entry.verification_summary) +
+          block("Дальше", entry.next_step) +
+          "</article>"
+        );
+      }
+
+      function paintTaskHistory() {
+        if (!els.historyList || !els.historyEmpty) return;
+        var entries = Array.isArray(state.historyEntries) ? state.historyEntries : [];
+        var expanded = !!state.historyExpanded;
+        var visible = expanded ? entries : entries.slice(0, 3);
+        var html = "";
+        for (var i = 0; i < visible.length; i++) html += historyEntryHtml(visible[i]);
+        els.historyList.innerHTML = html;
+        els.historyList.hidden = !visible.length;
+        els.historyEmpty.hidden = !!visible.length || !!state.historyLoading || !!state.historyError;
+        if (els.historyActions) {
+          els.historyActions.hidden = entries.length <= 3;
+        }
+        if (els.btnHistoryToggle) {
+          els.btnHistoryToggle.textContent = expanded ? "Свернуть" : "Показать всю историю";
+        }
+        if (state.historyLoading) {
+          setHistoryStatus("Загружаю историю…", false);
+        } else if (state.historyError) {
+          setHistoryStatus(state.historyError, true);
+        } else {
+          setHistoryStatus("", false);
+        }
+      }
+
       function renderTaskHistory(project) {
         if (!els.historyList || !els.historyEmpty) return;
-        els.historyList.innerHTML = "";
-        els.historyList.hidden = true;
-        els.historyEmpty.textContent = project && project.isDemo
-          ? "В примере проекта история заданий не сохраняется."
-          : "Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.";
-        els.historyEmpty.hidden = false;
+
+        if (project && project.isDemo) {
+          state.historyEntries = [];
+          state.historyExpanded = false;
+          state.historyLoading = false;
+          state.historyError = "";
+          state.historyProjectKey = historyProjectKey(project);
+          els.historyList.innerHTML = "";
+          els.historyList.hidden = true;
+          els.historyEmpty.textContent = "В примере проекта история заданий не сохраняется.";
+          els.historyEmpty.hidden = false;
+          if (els.historyActions) els.historyActions.hidden = true;
+          setHistoryStatus("", false);
+          return;
+        }
+
+        var folder = project ? String(project.workFolder || "").trim() : "";
+        if (!folder) {
+          state.historyEntries = [];
+          state.historyExpanded = false;
+          state.historyLoading = false;
+          state.historyError = "";
+          state.historyProjectKey = historyProjectKey(project);
+          els.historyList.innerHTML = "";
+          els.historyList.hidden = true;
+          els.historyEmpty.textContent =
+            "История заданий хранится в папке проекта. Укажите рабочую папку в настройках проекта.";
+          els.historyEmpty.hidden = false;
+          if (els.historyActions) els.historyActions.hidden = true;
+          setHistoryStatus("", false);
+          return;
+        }
+
+        var key = historyProjectKey(project);
+        var sameProject = key && key === state.historyProjectKey;
+        if (!sameProject) {
+          state.historyEntries = [];
+          state.historyExpanded = false;
+          state.historyError = "";
+        }
+        state.historyProjectKey = key;
+        state.historyLoading = true;
+        els.historyEmpty.textContent =
+          "Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.";
+        paintTaskHistory();
+        loadProjectHistory(project, key);
+      }
+
+      function loadProjectHistory(project, key) {
+        var seq = ++state.historyRequestSeq;
+        postBridgeJson("/api/project-history/read", {
+          project_path: String(project.workFolder || "").trim()
+        }).then(function (res) {
+          if (seq !== state.historyRequestSeq) return;
+          if (historyProjectKey(findProject(state.currentId)) !== key) return;
+          state.historyLoading = false;
+          if (!res || !res.data || !res.data.ok) {
+            state.historyEntries = [];
+            state.historyError =
+              (res && res.data && res.data.message) ||
+              "Не удалось загрузить историю проекта. Повторите попытку.";
+            paintTaskHistory();
+            return;
+          }
+          state.historyError = "";
+          state.historyEntries = Array.isArray(res.data.entries) ? res.data.entries : [];
+          paintTaskHistory();
+        }).catch(function () {
+          if (seq !== state.historyRequestSeq) return;
+          if (historyProjectKey(findProject(state.currentId)) !== key) return;
+          state.historyLoading = false;
+          state.historyEntries = [];
+          state.historyError = "Не удалось загрузить историю проекта. Повторите попытку.";
+          paintTaskHistory();
+        });
+      }
+
+      function toggleHistoryExpanded() {
+        if (!state.historyEntries || state.historyEntries.length <= 3) return;
+        state.historyExpanded = !state.historyExpanded;
+        paintTaskHistory();
       }
 
       function getStageShot(project, task) {
@@ -7280,6 +7481,7 @@
         document.getElementById("btnCancelGate").addEventListener("click", function () { closeModal(els.gateModal); });
         document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGate);
         if (els.btnStageDone) els.btnStageDone.addEventListener("click", requestStageAcceptance);
+        if (els.btnHistoryToggle) els.btnHistoryToggle.addEventListener("click", toggleHistoryExpanded);
         if (els.btnStageIssues) els.btnStageIssues.addEventListener("click", toggleStageIssues);
         if (els.btnSubmitIssues) els.btnSubmitIssues.addEventListener("click", submitStageIssues);
         if (els.reviewShotInput) els.reviewShotInput.addEventListener("change", onReviewShotSelected);
