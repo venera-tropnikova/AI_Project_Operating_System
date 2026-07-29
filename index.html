@@ -141,27 +141,462 @@
     button { cursor: pointer; border: none; background: none; }
 
     .app {
-      width: min(100% - 2.5rem, var(--max));
-      margin: 0 auto;
-      padding: 0 0 4rem;
-      /* horizontal inset kept via width min(100% - 2.5rem) */
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
     }
 
-    .app.is-home { width: min(100% - 2.5rem, var(--max-home)); }
-    .app.is-home .topbar { margin-bottom: 1rem; }
+    .os-shell {
+      display: grid;
+      grid-template-columns: 268px minmax(0, 1fr);
+      min-height: 100vh;
+      align-items: stretch;
+    }
 
-    .topbar {
+    .os-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.25rem 1rem 1.5rem;
+      background: var(--topbar-bg);
+      border-right: 1px solid var(--line);
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      overflow: auto;
+    }
+
+    .os-brand {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      min-height: var(--topbar-h);
-      margin: 0 0 2rem;
-      padding: 0.45rem 0.55rem;
-      border-bottom: 1px solid var(--line);
-      background: var(--topbar-bg);
-      border-radius: 12px;
+      gap: 0.7rem;
+      padding: 0.15rem 0.25rem;
     }
+
+    .os-brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid var(--brand-tile-border);
+      background: var(--brand-tile-bg);
+    }
+
+    .os-brand-text {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .os-brand-name {
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .os-brand-sub {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--ink-muted);
+      line-height: 1.3;
+    }
+
+    .os-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      margin-top: 0.35rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .os-nav-label {
+      margin: 0 0 0.35rem 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .os-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 2.35rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.92rem;
+      font-weight: 550;
+      color: var(--ink-soft);
+      cursor: pointer;
+    }
+
+    .os-nav-item.is-active {
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 650;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--line);
+    }
+
+    .os-nav-item.is-future {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    .os-nav-item:not(.is-active):not(.is-future):hover {
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      color: var(--ink);
+    }
+
+    .os-sidebar-section {
+      margin-top: 0;
+      padding-top: 0.15rem;
+      border-top: none;
+    }
+
+    .os-sidebar-section-title {
+      margin: 0 0 0.55rem 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .os-project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .os-project-item {
+      display: grid;
+      grid-template-columns: 3px 28px minmax(0, 1fr);
+      gap: 0.55rem;
+      align-items: center;
+      width: 100%;
+      padding: 0.5rem 0.55rem 0.5rem 0.4rem;
+      border-radius: 10px;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      color: inherit;
+    }
+
+    .os-project-item:hover {
+      background: color-mix(in srgb, var(--surface) 75%, transparent);
+    }
+
+    .os-project-item.is-focus {
+      background: var(--surface);
+      border-color: var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .os-project-stripe {
+      width: 3px;
+      align-self: stretch;
+      min-height: 2rem;
+      border-radius: 999px;
+      background: var(--project-status, #e3942d);
+      flex-shrink: 0;
+    }
+
+    .os-project-item[data-status="development"] {
+      --project-status: #e3942d;
+    }
+
+    .os-project-item[data-status="ready"] {
+      --project-status: #3d9a6a;
+    }
+
+    .os-project-item[data-status="active"] {
+      --project-status: #3b6cb5;
+    }
+
+    .os-project-item[data-status="paused"] {
+      --project-status: #9aa3b2;
+    }
+
+    .os-project-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--line);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .os-project-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .os-project-icon svg {
+      width: 15px;
+      height: 15px;
+      display: block;
+    }
+
+    .os-project-meta {
+      min-width: 0;
+    }
+
+    .os-project-name {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 650;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .os-project-type {
+      display: block;
+      margin-top: 0.1rem;
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .os-main {
+      min-width: 0;
+      min-height: 100vh;
+      padding: 1.5rem 1.75rem 3rem 3.5rem;
+      background: var(--bg);
+    }
+
+    .app.is-home .os-main {
+      padding-top: 1.75rem;
+    }
+
+    .app:not(.is-home) .os-main {
+      padding-top: 1.25rem;
+    }
+
+    .desktop {
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .desktop-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .desktop-field {
+      padding: 0.95rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .desktop-field:first-child {
+      padding-top: 0;
+    }
+
+    .desktop-field-label {
+      margin: 0 0 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .desktop-field-value {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .desktop-field.is-title {
+      padding-bottom: 1.15rem;
+      border-bottom: none;
+    }
+
+    .desktop-field.is-title .desktop-field-label {
+      margin-bottom: 0.4rem;
+    }
+
+    .desktop-field.is-title .desktop-field-value {
+      font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+      font-weight: 750;
+      letter-spacing: -0.035em;
+    }
+
+    .desktop-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0.7rem 0 0;
+      font-size: 0.95rem;
+      font-weight: 550;
+      color: var(--ink-soft);
+      line-height: 1.3;
+    }
+
+    .desktop-status-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: #3d9a6a;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px color-mix(in srgb, #3d9a6a 22%, transparent);
+    }
+
+    .desktop-stages {
+      padding: 0.35rem 0 1.15rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .desktop-stages-title {
+      margin: 0 0 1rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .desktop-stage-track {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: relative;
+    }
+
+    .desktop-stage-track::before {
+      content: "";
+      position: absolute;
+      left: 0.7rem;
+      right: 0.7rem;
+      top: 0.7rem;
+      height: 2px;
+      background: var(--line);
+      z-index: 0;
+    }
+
+    .desktop-stage {
+      position: relative;
+      z-index: 1;
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      text-align: center;
+    }
+
+    .desktop-stage-mark {
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+      background: var(--surface);
+      border: 2px solid var(--line);
+      color: var(--ink-muted);
+      box-sizing: border-box;
+    }
+
+    .desktop-stage.is-done .desktop-stage-mark {
+      background: color-mix(in srgb, #3d9a6a 14%, var(--surface));
+      border-color: #3d9a6a;
+      color: #2f7a54;
+    }
+
+    .desktop-stage.is-current .desktop-stage-mark {
+      background: color-mix(in srgb, #3d9a6a 16%, var(--surface));
+      border-color: #3d9a6a;
+      color: #2f7a54;
+      box-shadow: 0 0 0 3px color-mix(in srgb, #3d9a6a 18%, transparent);
+    }
+
+    .desktop-stage.is-future .desktop-stage-mark {
+      background: var(--bg);
+      border-color: color-mix(in srgb, var(--line) 85%, var(--ink-muted));
+      color: var(--ink-muted);
+    }
+
+    .desktop-stage-name {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 550;
+      color: var(--ink-soft);
+      line-height: 1.25;
+      max-width: 5.8rem;
+    }
+
+    .desktop-stage.is-done .desktop-stage-name,
+    .desktop-stage.is-current .desktop-stage-name {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .desktop-field.is-path .desktop-field-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+      word-break: break-all;
+    }
+
+    .desktop-path-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 0.45rem 0.75rem;
+    }
+
+    .desktop-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+    }
+
+    .desktop-proto-note {
+      margin: 0;
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+    }
+
+    .topbar { display: none; }
 
     .brand {
       display: inline-flex;
@@ -186,45 +621,7 @@
       flex-shrink: 0;
     }
 
-    .appearance-switch {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
-      padding: 0.2rem;
-      border-radius: 11px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-    }
-
-    .appearance-switch button {
-      box-sizing: border-box;
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
-      min-height: 36px;
-      padding: 0;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      font-size: 1rem;
-      line-height: 1;
-      color: var(--ink-muted);
-    }
-
-    .appearance-switch button:hover {
-      color: var(--ink);
-      background: var(--control-hover);
-    }
-
-    .appearance-switch button:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
-    }
-
-    .appearance-switch button.is-active {
-      color: var(--ink);
-      background: var(--accent-soft);
-      border-color: var(--line-strong);
-    }
+    .appearance-switch { display: none; }
 
     a {
       color: var(--accent);
@@ -302,22 +699,6 @@
       padding-bottom: 2rem;
     }
 
-    .greeting {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--ink-muted);
-      font-weight: 500;
-    }
-
-    .home-question {
-      margin: 0 0 1.6rem;
-      font-size: clamp(1.65rem, 4.5vw, 2rem);
-      font-weight: 750;
-      letter-spacing: -0.04em;
-      line-height: 1.18;
-      color: var(--ink);
-    }
-
     .home-label {
       margin: 0 0 0.35rem;
       font-size: 0.72rem;
@@ -325,17 +706,6 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-muted);
-    }
-
-    .home-mvp {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .home-mvp-row {
-      padding: 0.85rem 0;
-      border-top: 1px solid var(--line);
     }
 
     .home-mvp-row:last-of-type {
@@ -588,6 +958,11 @@
       display: none !important;
     }
 
+    /* Sidebar may open extended tabs while detailLevel stays basic */
+    #panelWorkspace[data-detail-level="basic"] .tab-panel[data-detail-level="extended"].is-active {
+      display: block !important;
+    }
+
     .crumb {
       display: inline-flex;
       align-items: center;
@@ -610,6 +985,21 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       max-width: min(220px, 42vw);
+    }
+
+    .crumb-task {
+      flex: 1 1 12rem;
+      min-width: 0;
+      max-width: 100%;
+      align-items: flex-start;
+    }
+
+    .crumb-task .crumb-text {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+      max-width: none;
+      line-height: 1.35;
     }
 
     .workspace-meta {
@@ -1769,6 +2159,24 @@
       margin-top: 1rem;
     }
 
+    @media (max-width: 960px) {
+      .os-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .os-sidebar {
+        position: relative;
+        max-height: none;
+        min-height: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .os-sidebar-section {
+        margin-top: 0.5rem;
+      }
+    }
+
     @media (max-width: 720px) {
       .templates-grid { grid-template-columns: repeat(2, 1fr); }
       .overview-grid,
@@ -1778,14 +2186,17 @@
     }
 
     @media (max-width: 640px) {
-      .app {
-        width: min(100% - 1.5rem, var(--max));
-        padding-top: 1.1rem;
+      .os-main {
+        padding: 1.1rem 1rem 2.5rem 1.25rem;
       }
 
-      .app.is-home { width: min(100% - 1.5rem, var(--max-home)); }
+      .desktop-stage-name {
+        max-width: 4.2rem;
+        font-size: 0.66rem;
+      }
 
-      .home-actions .btn { width: 100%; }
+      .home-actions .btn,
+      .desktop-actions .btn { width: 100%; }
 
       .form-head,
       .workspace-head { flex-direction: column; }
@@ -1795,58 +2206,334 @@
       .detail-level-switch { width: 100%; justify-content: stretch; }
       .detail-level-switch button { flex: 1; text-align: center; padding-left: 0.4rem; padding-right: 0.4rem; }
     }
+
+
+    /* Unified current-stage workspace */
+    .current-stage-screen { display: block; max-width: min(1120px, 100%); }
+    .current-stage-screen[hidden] { display: none !important; }
+    .stage-flow {
+      display: block;
+      max-width: min(760px, 100%);
+      padding: 0.25rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+    .flow-row { padding: 1rem 0; border-bottom: 1px solid var(--line); }
+    .flow-row:last-child { border-bottom: none; }
+    .flow-row[hidden] { display: none !important; }
+    .flow-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .flow-value {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      overflow-wrap: break-word;
+    }
+    .flow-text {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+    .flow-meta {
+      margin: 0.45rem 0 0;
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      word-break: break-word;
+    }
+    .flow-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.8rem; }
+    .flow-hint { margin: 0.55rem 0 0; font-size: 0.82rem; color: var(--ink-muted); }
+    .flow-issues { display: grid; gap: 0.6rem; margin-top: 0.85rem; }
+    .flow-issues textarea { width: 100%; }
+    .flow-inline-btn {
+      margin-left: 0.4rem;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--accent);
+      font: inherit;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .stage-hidden-support { display: none !important; }
+    .settings-form {
+      max-width: 420px;
+      margin-top: 0.75rem;
+      padding: 1rem 1.05rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+    .settings-form select,
+    .settings-form input,
+    .form-grid select {
+      width: 100%;
+      min-height: 2.4rem;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--control-bg, #fff);
+      color: var(--ink);
+      font: inherit;
+    }
+    .wizard-progress {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 0 0 1.15rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wizard-step-indicator {
+      margin: 0;
+      font-size: 0.82rem;
+      font-weight: 650;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .wizard-step-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .wizard-step {
+      max-width: 640px;
+    }
+    .wizard-scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+    @media (max-width: 720px) {
+      .wizard-scenario-grid { grid-template-columns: 1fr; }
+    }
+    .wizard-scenario-card {
+      text-align: left;
+      padding: 1.05rem 1.1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 55%, var(--surface));
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+      box-shadow: none;
+    }
+    .wizard-scenario-card strong {
+      display: block;
+      font-size: 1.05rem;
+      font-weight: 750;
+      margin-bottom: 0.35rem;
+    }
+    .wizard-scenario-card span {
+      display: block;
+      color: var(--ink-muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+    .wizard-scenario-card.is-active {
+      border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+    .wizard-path-box,
+    .wizard-inspect,
+    .wizard-confirm-box,
+    .wizard-auto-box {
+      margin-top: 0.75rem;
+      padding: 0.85rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--bg) 55%, var(--surface));
+    }
+    .wizard-path-box p,
+    .wizard-inspect p,
+    .wizard-confirm-box p,
+    .wizard-auto-box p {
+      margin: 0.2rem 0;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      word-break: break-word;
+    }
+    .wizard-path-value {
+      font-weight: 700;
+      color: var(--ink) !important;
+    }
+    .wizard-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.55rem;
+    }
+    .wizard-missing-list,
+    .wizard-auto-list {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+    }
+    .wizard-auto-list li { margin: 0.15rem 0; }
+    .field-confirm {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      margin-top: 0.85rem;
+    }
+    .field-confirm input {
+      margin-top: 0.2rem;
+    }
+    .wizard-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+      margin-top: 1.25rem;
+    }
+    .wizard-nav .wizard-nav-spacer { flex: 1 1 auto; }
+    .templates.is-collapsed .templates-grid,
+    .templates.is-collapsed .tpl-actions {
+      display: none;
+    }
+    .current-stage-screen .work-editor {
+      min-height: 160px;
+      max-height: min(38vh, 360px);
+      padding: 0.8rem 0.9rem;
+      font-size: 0.86rem;
+    }
+    .current-stage-screen .tool-picks {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0.4rem;
+      margin: 0;
+    }
+    .current-stage-screen .tool-pick {
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 70%, var(--surface));
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      font-weight: 550;
+      min-height: 2rem;
+      padding: 0.35rem 0.7rem;
+    }
+    .current-stage-screen .tool-pick.is-active {
+      order: -1;
+      flex: 1 0 100%;
+      background: var(--surface);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 700;
+      min-height: 2.6rem;
+      padding: 0.7rem 0.95rem;
+      box-shadow: var(--shadow-soft);
+      border-radius: 12px;
+    }
+    .current-stage-screen .tool-pick:not(.is-active):hover {
+      color: var(--ink);
+      border-color: color-mix(in srgb, var(--ink-muted) 35%, var(--line));
+      background: var(--surface);
+    }
+    .current-stage-screen .check-list { margin: 0.85rem 0 0; }
+    .current-stage-screen .check-list input { flex: 0 0 auto; }
+    .stage-flow .copy-toast { display: inline-block; margin-top: 0.45rem; }
+    #workspaceMeta { display: none !important; }
+    /* Проект, модуль и этап показаны первыми строками линейного экрана */
+    #crumbs { display: none !important; }
+    @media (max-width: 640px) {
+      .stage-flow { padding: 0.25rem 0.9rem; }
+      .flow-actions { gap: 0.45rem; }
+      .flow-actions .btn { width: 100%; }
+    }
+
   </style>
 </head>
 <body>
   <div class="app is-home" id="appShell">
-    <header class="topbar">
-      <div class="brand">
-        <img class="brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="38" height="38" alt="" />
-        AI POS
-      </div>
-      <div class="appearance-switch" id="appearanceSwitch" role="group" aria-label="Оформление">
-        <button type="button" data-appearance-choice="light" title="Светлая тема" aria-label="Светлая тема">☀</button>
-        <button type="button" data-appearance-choice="dark" title="Тёмная тема" aria-label="Тёмная тема">🌙</button>
-        <button type="button" data-appearance-choice="system" title="Как в системе" aria-label="Как в системе">💻</button>
-      </div>
-    </header>
-
-    <section class="panel is-active" id="panelList" aria-label="Главный экран">
-      <div class="home">
-        <div>
-          <p class="greeting" id="greetingTitle">Добрый вечер, Венера</p>
-        </div>
-
-        <div class="home-mvp" id="homeMvp">
-          <div class="home-mvp-row is-project">
-            <p class="home-label">Загружен проект</p>
-            <p class="home-mvp-value" id="homeProjectName">—</p>
-          </div>
-          <div class="home-mvp-row is-work">
-            <p class="home-label">Текущая работа</p>
-            <p class="home-mvp-value" id="homeCurrentWork">—</p>
-          </div>
-          <div class="home-mvp-row is-goal">
-            <p class="home-label">Цель</p>
-            <p class="home-mvp-value" id="homeGoal">—</p>
-          </div>
-          <div class="home-mvp-row is-next">
-            <p class="home-label">Следующий шаг</p>
-            <p class="home-mvp-value" id="homeNextStep">—</p>
-          </div>
-          <div class="home-mvp-row is-result">
-            <p class="home-label">Результат</p>
-            <p class="home-mvp-value" id="homeResult">—</p>
-            <p class="home-mvp-status" id="homeResultStatus">Не проверен</p>
+    <div class="os-shell">
+      <aside class="os-sidebar" aria-label="Навигация AI POS">
+        <div class="os-brand">
+          <img class="os-brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="36" height="36" alt="" />
+          <div class="os-brand-text">
+            <span class="os-brand-name">AI POS</span>
+            <span class="os-brand-sub">AI Project Operating System</span>
           </div>
         </div>
 
-        <div class="home-actions">
-          <button type="button" class="btn btn-primary btn-hero" id="btnContinue">Продолжить работу</button>
-          <button type="button" class="btn btn-secondary" id="btnNewProject">
-            <span aria-hidden="true">+</span> Новый проект
-          </button>
+        <div class="os-sidebar-section">
+          <p class="os-sidebar-section-title">Проекты</p>
+          <div class="os-project-list" id="osProjectList" role="list"></div>
         </div>
+
+        <nav class="os-nav" aria-label="Основная навигация">
+          <p class="os-nav-label">Разделы</p>
+          <button type="button" class="os-nav-item is-active" data-os-nav="desktop" aria-current="page">Рабочий стол</button>
+          <button type="button" class="os-nav-item" data-os-nav="rules">Правила и контроль</button>
+          <button type="button" class="os-nav-item" data-os-nav="current-task">Текущая задача</button>
+          <button type="button" class="os-nav-item" data-os-nav="materials">Материалы</button>
+          <button type="button" class="os-nav-item" data-os-nav="specialists">AI-специалисты</button>
+          <button type="button" class="os-nav-item" data-os-nav="docs">Документация</button>
+          <button type="button" class="os-nav-item" data-os-nav="settings">Настройки</button>
+        </nav>
+      </aside>
+
+      <div class="os-main">
+    <section class="panel is-active" id="panelList" aria-label="Рабочий стол">
+      <div class="desktop" id="desktopRoot">
+        <div class="desktop-info" aria-label="Активный проект">
+          <div class="desktop-field is-title">
+            <p class="desktop-field-label">Проект</p>
+            <p class="desktop-field-value" id="desktopProjectName">—</p>
+            <p class="desktop-status">
+              <span class="desktop-status-dot" aria-hidden="true"></span>
+              <span id="desktopProjectStatus">—</span>
+            </p>
+          </div>
+          <div class="desktop-stages" id="desktopStages" aria-label="Этапы проекта">
+            <p class="desktop-stages-title">Этапы проекта</p>
+            <ol class="desktop-stage-track" id="desktopStageTrack"></ol>
+          </div>
+          <div class="desktop-field">
+            <p class="desktop-field-label">Тип проекта</p>
+            <p class="desktop-field-value" id="desktopProjectType">—</p>
+          </div>
+          <div class="desktop-field">
+            <p class="desktop-field-label">Последнее обновление</p>
+            <p class="desktop-field-value" id="desktopLastUpdate">—</p>
+          </div>
+          <div class="desktop-field is-path">
+            <p class="desktop-field-label">Путь к проекту</p>
+            <div class="desktop-path-row">
+              <p class="desktop-field-value" id="desktopProjectPath">—</p>
+              <button type="button" class="btn btn-ghost" id="btnCopyProjectPath" hidden>Открыть папку</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="desktop-actions">
+          <button type="button" class="btn btn-primary" id="btnContinue">Продолжить работу</button>
+          <button type="button" class="btn btn-secondary" id="btnNewProject">Новый проект</button>
+        </div>
+        <p class="desktop-proto-note" id="desktopProtoNote" hidden></p>
       </div>
     </section>
 
@@ -1854,70 +2541,147 @@
       <div class="surface">
         <div class="form-head">
           <div>
-            <h1 class="page-title">Новый проект</h1>
-            <p class="page-lead">Опишите весь продукт. Модули и текущие задачи добавляются уже внутри проекта.</p>
+            <h1 class="page-title">Создать проект</h1>
+            <p class="page-lead">Мастер подключения проекта к AI POS. На диск пишем только после финального подтверждения.</p>
           </div>
-          <button type="button" class="btn btn-ghost" id="btnCancelForm">Назад</button>
-        </div>
-
-        <div class="templates">
-          <p class="home-label">Создать из шаблона</p>
-          <div class="templates-grid" id="templatesGrid"></div>
-          <div class="tpl-actions">
-            <button type="button" class="btn btn-ghost" id="btnClearTemplate">Без шаблона</button>
-            <button type="button" class="btn btn-ghost" id="btnSaveTemplate">Сохранить как свой шаблон</button>
-          </div>
+          <button type="button" class="btn btn-ghost" id="btnCancelForm">Закрыть</button>
         </div>
 
         <form id="projectForm" novalidate>
           <input type="hidden" id="fieldTemplate" value="" />
-          <div class="form-grid">
-            <div class="field" data-field="name">
-              <label for="fieldName">Название всего проекта</label>
-              <input id="fieldName" name="name" type="text" maxlength="120" required placeholder="Например: Мой день" />
-            </div>
-            <div class="field" data-field="idea">
-              <label for="fieldIdea">Главная идея продукта</label>
-              <textarea id="fieldIdea" name="idea" required placeholder="Какой продукт создаём целиком"></textarea>
-            </div>
-            <div class="field" data-field="result">
-              <label for="fieldResult">Итоговый результат всего проекта</label>
-              <textarea id="fieldResult" name="result" required placeholder="Что должно получиться, когда весь проект готов"></textarea>
-            </div>
-            <div class="field" data-field="audience">
-              <label for="fieldAudience">Для кого создаётся</label>
-              <textarea id="fieldAudience" name="audience" required></textarea>
-            </div>
-            <div class="field" data-field="assets">
-              <label for="fieldAssets">Что уже существует во всём проекте</label>
-              <textarea id="fieldAssets" name="assets" placeholder="Готовые модули, экраны, код, заметки"></textarea>
-            </div>
-            <div class="field" data-field="constraints">
-              <label for="fieldConstraints">Общие ограничения проекта</label>
-              <textarea id="fieldConstraints" name="constraints"></textarea>
-            </div>
-            <div class="field" data-field="workFolder">
-              <label for="fieldWorkFolder">Рабочая папка / репозиторий</label>
-              <span class="hint">Куда ИИ должен вносить изменения</span>
-              <input id="fieldWorkFolder" name="workFolder" type="text" placeholder="D:\путь\к\проекту" />
+          <input type="hidden" id="fieldParentFolder" value="" />
+          <input type="hidden" id="fieldWorkFolder" value="" />
+          <input type="hidden" id="fieldResult" name="result" value="" />
+          <input type="hidden" id="fieldAudience" name="audience" value="" />
+          <input type="hidden" id="fieldAssets" name="assets" value="" />
+          <input type="hidden" id="fieldConstraints" name="constraints" value="" />
+
+          <div class="wizard-progress">
+            <p class="wizard-step-indicator" id="wizardStepIndicator">Шаг 1 из 5</p>
+            <p class="wizard-step-title" id="wizardStepTitle">Выберите сценарий</p>
+          </div>
+
+          <div class="wizard-step" data-wizard-step="1">
+            <div class="wizard-scenario-grid" role="radiogroup" aria-label="Выберите сценарий">
+              <button type="button" class="wizard-scenario-card is-active" data-create-mode="new" aria-pressed="true">
+                <strong>Новый проект</strong>
+                <span>Создать отдельную папку и скопировать шаблон AI POS</span>
+              </button>
+              <button type="button" class="wizard-scenario-card" data-create-mode="existing" aria-pressed="false">
+                <strong>Существующий проект</strong>
+                <span>Подключить готовую папку без записи файлов на диск</span>
+              </button>
             </div>
           </div>
 
-          <div class="form-error" id="formError" role="alert">Заполните обязательные поля проекта: название, идея, результат и аудитория.</div>
+          <div class="wizard-step" data-wizard-step="2" hidden>
+            <div class="form-grid">
+              <div class="field" data-field="name">
+                <label for="fieldName">Название проекта</label>
+                <input id="fieldName" name="name" type="text" maxlength="120" required placeholder="Например: Мой день" />
+              </div>
+              <div class="field" data-field="idea">
+                <label for="fieldIdea">Опишите проект своими словами</label>
+                <textarea id="fieldIdea" name="idea" required placeholder="Что создаём или что уже есть в папке"></textarea>
+              </div>
+              <div class="field" data-field="materials">
+                <label for="fieldCreateMaterials">Прикрепить материалы</label>
+                <span class="hint">Документы, презентации, архивы, изображения</span>
+                <input id="fieldCreateMaterials" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.doc,.docx,.txt,.md,.markdown,.json,.zip,.rar,.7z,.ppt,.pptx,.fig,.sketch,.xd,image/*,text/*,application/pdf,application/json" />
+              </div>
+            </div>
+            <div class="templates is-collapsed" id="templatesBlock" style="margin-top:1rem">
+              <p class="home-label">
+                Быстрое заполнение идеи
+                <button type="button" class="btn btn-ghost" id="btnToggleTemplates" style="margin-left:0.5rem">Показать</button>
+              </p>
+              <div class="templates-grid" id="templatesGrid"></div>
+              <div class="tpl-actions">
+                <button type="button" class="btn btn-ghost" id="btnClearTemplate">Без шаблона</button>
+                <button type="button" class="btn btn-ghost" id="btnSaveTemplate">Сохранить как свой шаблон</button>
+              </div>
+            </div>
+          </div>
 
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Сформировать проект</button>
+          <div class="wizard-step" data-wizard-step="3" hidden>
+            <div id="createFolderNew" class="wizard-path-box">
+              <span class="field-label">Где создать проект?</span>
+              <p>Выберите родительскую папку. Итоговый путь появится ниже. Папка создаётся только на последнем шаге.</p>
+              <div class="wizard-row-actions">
+                <button type="button" class="btn btn-secondary" id="btnPickParentFolder">Выбрать родительскую папку</button>
+                <button type="button" class="btn btn-ghost" id="btnRefreshPreview">Обновить путь</button>
+              </div>
+              <p>Родительская папка: <span class="wizard-path-value" id="parentFolderLabel">не выбрана</span></p>
+              <p>Итоговый путь: <span class="wizard-path-value" id="previewProjectPath">—</span></p>
+              <p class="section-note" id="previewProjectNote" hidden style="margin:0.35rem 0 0"></p>
+            </div>
+
+            <div id="createFolderExisting" class="wizard-path-box" hidden>
+              <span class="field-label">Какую папку подключить?</span>
+              <p>Выберите готовую папку проекта. На этом шаге AI POS только проверяет содержимое и ничего не записывает.</p>
+              <div class="wizard-row-actions">
+                <button type="button" class="btn btn-secondary" id="btnPickProjectFolder">Выбрать папку проекта</button>
+                <button type="button" class="btn btn-ghost" id="btnInspectProjectFolder">Проверить содержимое</button>
+              </div>
+              <p>Папка: <span class="wizard-path-value" id="existingFolderLabel">не выбрана</span></p>
+              <div class="wizard-inspect" id="existingInspect" hidden></div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-wizard-step="4" hidden>
+            <div class="form-grid">
+              <div class="field" data-field="primaryTool">
+                <label for="fieldPrimaryTool">Среда разработки (IDE / программа)</label>
+                <span class="hint">Куда будет передаваться рабочее задание с экрана «Текущий этап»</span>
+                <select id="fieldPrimaryTool" name="primaryTool">
+                  <option value="">Не выбрана</option>
+                </select>
+              </div>
+              <div class="field" data-field="aiModel">
+                <label for="fieldAiModel">Модель ИИ</label>
+                <span class="hint">Предпочтительная модель в выбранной среде</span>
+                <select id="fieldAiModel" name="aiModel">
+                  <option value="">Не выбрана</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-wizard-step="5" hidden>
+            <div class="wizard-confirm-box">
+              <span class="field-label" id="confirmStepHeading">Проверьте и создайте</span>
+              <div id="createConfirmSummary">
+                <p>Заполните предыдущие шаги — здесь появится итог.</p>
+              </div>
+            </div>
+            <div class="wizard-auto-box" id="wizardAutoPrepBox">
+              <span class="field-label">AI POS подготовит автоматически</span>
+              <ul class="wizard-auto-list" id="wizardAutoPrepList"></ul>
+            </div>
+            <label class="field-confirm">
+              <input type="checkbox" id="fieldCreateConfirm" />
+              <span id="fieldCreateConfirmLabel">Подтверждаю создание папки проекта и копирование шаблона AI POS</span>
+            </label>
+          </div>
+
+          <div class="form-error" id="formError" role="alert">Заполните обязательные поля текущего шага.</div>
+
+          <div class="form-actions wizard-nav">
+            <button type="button" class="btn btn-ghost" id="btnWizardBack" hidden>Назад</button>
             <button type="button" class="btn btn-secondary" id="btnCancelFormAlt">Отмена</button>
+            <span class="wizard-nav-spacer" aria-hidden="true"></span>
+            <button type="button" class="btn btn-primary" id="btnWizardNext">Далее</button>
+            <button type="submit" class="btn btn-primary" id="btnSubmitProject" hidden>Создать проект</button>
           </div>
         </form>
       </div>
     </section>
 
-    <section class="panel" id="panelWorkspace" aria-label="Проект" data-detail-level="basic">
+    <section class="panel" id="panelWorkspace" aria-label="Проект" data-detail-level="technical">
       <div class="workspace-shell">
         <div class="workspace-head">
           <div class="workspace-title-block">
-            <nav class="crumbs" id="crumbs" aria-label="Иерархия проекта: Проект → Модуль → Задача">
+            <nav class="crumbs" id="crumbs" aria-label="Иерархия: Проект → Модуль → Текущий этап">
               <span class="crumb crumb-project"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbProject">—</span></span>
               <span class="crumb-sep" aria-hidden="true">→</span>
               <span class="crumb crumb-module"><span class="level-dot" aria-hidden="true"></span><span class="crumb-text" id="crumbModule">—</span></span>
@@ -1932,160 +2696,168 @@
           </div>
         </div>
 
-        <div class="detail-level-switch" id="detailLevelSwitch" role="radiogroup" aria-label="Уровень детализации">
-          <button type="button" role="radio" aria-checked="true" data-detail-choice="basic">Основной</button>
-          <button type="button" role="radio" aria-checked="false" data-detail-choice="extended">Расширенный</button>
-          <button type="button" role="radio" aria-checked="false" data-detail-choice="technical">Технический</button>
-        </div>
+        <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущий этап проекта">
+          <p class="section-note" id="taskEmptyNote" hidden>Текущий этап ещё не определён.</p>
+          <div class="stage-flow">
+            <section class="flow-row">
+              <span class="flow-label">Проект</span>
+              <p class="flow-value" id="stageProjectName">—</p>
+            </section>
 
-        <div class="workspace-actions" data-detail-level="extended">
-          <button type="button" class="btn btn-secondary" id="btnAddModule">Добавить модуль</button>
-          <button type="button" class="btn btn-secondary" id="btnAddTask">Добавить текущую задачу</button>
-        </div>
+            <section class="flow-row">
+              <span class="flow-label">Модуль</span>
+              <p class="flow-value" id="stageModuleName">—</p>
+            </section>
 
-        <nav class="tabs" id="workspaceTabs" aria-label="Разделы проекта">
-          <button type="button" class="tab-btn is-active" data-tab="overview">Обзор</button>
-          <button type="button" class="tab-btn" data-tab="rules" data-detail-level="extended">Правила и контроль</button>
-          <button type="button" class="tab-btn" data-tab="task">Текущая задача</button>
-          <button type="button" class="tab-btn" data-tab="work">Рабочее задание</button>
-          <button type="button" class="tab-btn" data-tab="materials" data-detail-level="extended">Материалы</button>
-          <button type="button" class="tab-btn" data-tab="team" data-detail-level="extended">AI-специалисты</button>
-        </nav>
+            <section class="flow-row">
+              <span class="flow-label">Текущий этап</span>
+              <p class="flow-value" id="currentStageTitle">—</p>
+            </section>
 
-        <div class="tab-panel is-active" id="tab-overview" data-tab-panel="overview">
-          <h3 class="section-heading lv-project">Обзор</h3>
-          <div class="overview-grid">
-            <div class="overview-item is-goal"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель</span><p id="ovGoal">—</p></div>
-            <div class="overview-item is-module"><span class="field-label">Текущая работа</span><p id="ovModule">—</p></div>
-            <div class="overview-item"><span class="field-label">Статус</span><p id="ovStatus">—</p></div>
-            <div class="overview-item" data-detail-level="technical">
-              <span class="field-label">Текущий этап (система)</span>
-              <p id="ovStage">—</p>
-              <p class="ov-stage-meta" id="ovStageMeta" hidden>
-                <span class="ov-stage-source" id="ovStageSource"></span>
-                <span class="ov-stage-freshness" id="ovStageFreshness"></span>
-              </p>
-              <p class="ov-stage-warn" id="ovStageWarn" hidden></p>
-            </div>
-            <div class="overview-item" data-detail-level="extended"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что готово</span><p id="ovReady">—</p></div>
-            <div class="overview-item" data-detail-level="extended"><span class="field-label"><span class="ico" aria-hidden="true">⚠</span>Требует внимания</span><p id="ovAttention">—</p></div>
-            <div class="overview-item wide is-task"><span class="field-label">Задача</span><p id="ovTask">—</p></div>
-            <div class="overview-item wide is-task"><span class="field-label"><span class="ico" aria-hidden="true">➡</span>Следующий шаг</span><p id="ovNext">—</p></div>
-            <div class="overview-item wide"><span class="field-label">Результат</span><p id="ovResult">—</p></div>
+            <section class="flow-row">
+              <span class="flow-label">Необходимо сделать</span>
+              <p class="flow-text" id="taskGoalText">—</p>
+            </section>
 
-            <div class="overview-item wide is-task" id="ovSystemNextBlock" data-detail-level="technical" hidden>
-              <span class="field-label">Следующее действие системы</span>
-              <p id="ovSystemNext">—</p>
-              <p class="ov-stage-meta" id="ovSystemNextMeta" hidden>
-                <span class="ov-stage-source" id="ovSystemNextSource"></span>
-                <span class="ov-stage-freshness" id="ovSystemNextFreshness"></span>
-              </p>
-              <p class="ov-stage-warn" id="ovSystemNextWarn" hidden></p>
-            </div>
-            <div class="overview-item wide" id="ovExecToolBlock" data-detail-level="extended" hidden>
-              <span class="field-label">Инструмент выполнения</span>
-              <p id="ovExecTool">—</p>
-            </div>
-            <div class="overview-item wide" id="ovSystemAttentionBlock" data-detail-level="technical" hidden>
-              <span class="field-label">Системные замечания</span>
-              <p class="ov-sys-attention-banner" id="ovSystemAttentionBanner" hidden></p>
-              <ul class="ov-sys-attention-list" id="ovSystemAttentionList" hidden></ul>
-              <p class="ov-sys-attention-empty" id="ovSystemAttentionEmpty" hidden>Нет системных замечаний</p>
-              <p class="ov-stage-meta" id="ovSystemAttentionMeta" hidden>
-                <span class="ov-stage-source" id="ovSystemAttentionSource"></span>
-                <span class="ov-stage-freshness" id="ovSystemAttentionFreshness"></span>
-              </p>
-              <p class="ov-stage-warn" id="ovSystemAttentionWarn" hidden></p>
-            </div>
-            <div class="overview-item wide" data-detail-level="technical">
-              <span class="field-label">Технические сведения</span>
-              <p id="ovTechInfo">—</p>
+            <section class="flow-row">
+              <span class="flow-label">Ожидаемый результат</span>
+              <p class="flow-text" id="taskResultText">—</p>
+            </section>
+
+            <section class="flow-row" id="stageToolBlock">
+              <span class="flow-label">Где выполнить</span>
+              <div id="stagePrimaryToolReady">
+                <p class="flow-value" id="stagePrimaryToolName">—</p>
+                <p class="flow-meta">Рабочая папка: <span id="toolFolder">—</span></p>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
+                </div>
+                <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано</span>
+              </div>
+              <div id="stagePrimaryToolMissing" hidden>
+                <p class="flow-hint">Среда разработки для проекта не указана. Задайте её в настройках проекта.</p>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-secondary" id="btnOpenProjectSettings">Открыть настройки</button>
+                </div>
+              </div>
+              <div class="stage-hidden-support" aria-hidden="true">
+                <p id="toolWhy">—</p>
+                <p id="toolWhen">—</p>
+                <p id="toolAvoid">—</p>
+                <div class="tool-picks" id="toolPicks"></div>
+                <h3 id="assignmentTitle">Рабочее задание</h3>
+                <div class="work-editor" id="workBox" hidden></div>
+              </div>
+            </section>
+
+            <section class="flow-row" id="stageCheckBlock">
+              <span class="flow-label">Проверка результата</span>
+              <div class="flow-actions">
+                <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
+              </div>
+              <p class="flow-hint" id="openAppHint">Для этого проекта запуск не настроен.</p>
+              <ul class="check-list" id="reviewChecks"></ul>
+            </section>
+
+            <section class="flow-row" id="reviewCard">
+              <span class="flow-label">Результат проверки</span>
+              <div class="review-status" id="reviewStatus">Не проверено</div>
+              <div class="flow-actions">
+                <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
+                <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
+              </div>
+              <div class="flow-issues" id="stageIssuesBox" hidden>
+                <div class="field">
+                  <label for="reviewNotes">Описание замечаний</label>
+                  <textarea id="reviewNotes" rows="3" placeholder="Что именно нужно исправить"></textarea>
+                </div>
+                <div class="flow-actions" style="margin-top:0">
+                  <label class="btn btn-ghost file-btn">
+                    <span id="reviewShotBtnText">Прикрепить скриншот</span>
+                    <input type="file" id="reviewShotInput" accept="image/*" />
+                  </label>
+                  <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Передать на исправление</button>
+                </div>
+                <p class="flow-hint" id="reviewShotNote" hidden>
+                  <span id="reviewShotName"></span>
+                  <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
+                </p>
+                <p class="flow-hint">Связь скриншота с замечанием сохраняется только в текущей сессии.</p>
+              </div>
+              <p class="flow-hint" id="reviewHint">Отметьте пункты, которые вы проверили.</p>
+            </section>
+
+            <section class="flow-row" id="stageFixBlock" hidden>
+              <span class="flow-label">Задание на исправление</span>
+              <p class="flow-text" id="stageFixText">—</p>
+              <p class="flow-meta" id="stageFixShot" hidden></p>
+              <div class="flow-actions">
+                <button type="button" class="btn btn-primary" id="btnCopyFix">Скопировать задание на исправление</button>
+              </div>
+              <span class="copy-toast" id="copyFixToast" aria-live="polite">Задание скопировано</span>
+            </section>
+
+            <section class="flow-row" id="stageNextBlock" hidden>
+              <span class="flow-label" id="stageNextLabel">Следующее задание</span>
+              <p class="flow-text" id="stageNextText">—</p>
+              <div class="flow-actions">
+                <button type="button" class="btn btn-primary" id="btnCopyNext">Скопировать следующее задание</button>
+              </div>
+              <span class="copy-toast" id="copyNextToast" aria-live="polite">Задание скопировано</span>
+            </section>
+
+            <div class="stage-hidden-support" aria-hidden="true">
+              <p id="taskWhyText">—</p>
+              <p id="taskCanText">—</p>
+              <p id="taskAltText">—</p>
+              <ul class="restrict-list" id="dontList"></ul>
+              <ul class="risk-list" id="riskList"></ul>
             </div>
           </div>
+        </main>
 
-          <section class="cli-insight" id="cliInsight" data-detail-level="technical" hidden aria-label="Анализ проекта из CLI, отдельно от поля «Текущая работа» в обзоре">
-            <div class="cli-insight-head">
-              <div class="cli-insight-title-row">
-                <h4 class="cli-insight-title">Анализ проекта</h4>
-                <span class="cli-insight-badge" id="cliInsightBadge" hidden>Не загружен</span>
-              </div>
-              <div class="cli-insight-actions">
-                <button type="button" class="btn btn-secondary" id="btnCliInsightRefresh">🔄 Обновить анализ</button>
-              </div>
-            </div>
-            <p class="cli-insight-freshness" id="cliInsightFreshness" hidden></p>
-            <p class="cli-insight-note" id="cliInsightNote">
-              Отдельно от поля «Текущая работа» выше. Нажмите «Обновить анализ» — AI POS сам пересчитает состояние по рабочей папке проекта.
-            </p>
-            <div id="cliInsightBody">
-              <p class="cli-insight-empty" id="cliInsightEmpty">Анализ ещё не обновлялся.</p>
-            </div>
+        <div class="tab-panel stage-hidden-support" id="tab-overview" data-tab-panel="overview" hidden aria-hidden="true">
+          <p id="ovGoal"></p>
+          <p id="ovModule"></p>
+          <p id="ovStatus"></p>
+          <p id="ovStage"></p>
+          <p id="ovStageMeta"><span id="ovStageSource"></span><span id="ovStageFreshness"></span></p>
+          <p id="ovStageWarn" hidden></p>
+          <p id="ovReady"></p>
+          <p id="ovAttention"></p>
+          <p id="ovTask"></p>
+          <p id="ovNext"></p>
+          <p id="ovResult"></p>
+          <p id="ovTechInfo"></p>
+          <div id="ovSystemNextBlock" hidden>
+            <p id="ovSystemNext"></p>
+            <p id="ovSystemNextMeta"><span id="ovSystemNextSource"></span><span id="ovSystemNextFreshness"></span></p>
+            <p id="ovSystemNextWarn" hidden></p>
+          </div>
+          <div id="ovExecToolBlock" hidden><p id="ovExecTool"></p></div>
+          <div id="ovSystemAttentionBlock" hidden>
+            <p id="ovSystemAttentionBanner"></p>
+            <ul id="ovSystemAttentionList"></ul>
+            <p id="ovSystemAttentionEmpty"></p>
+            <p id="ovSystemAttentionMeta"><span id="ovSystemAttentionSource"></span><span id="ovSystemAttentionFreshness"></span></p>
+            <p id="ovSystemAttentionWarn" hidden></p>
+          </div>
+          <section id="cliInsight" hidden>
+            <p id="cliInsightNote"></p>
+            <span id="cliInsightBadge"></span>
+            <span id="cliInsightFreshness"></span>
+            <div id="cliInsightBody"></div>
+            <button type="button" id="btnCliInsightRefresh" hidden>refresh</button>
           </section>
         </div>
-
         <div class="tab-panel" id="tab-rules" data-tab-panel="rules" data-detail-level="extended">
           <h3 class="section-heading lv-rules">Правила и контроль</h3>
           <p class="rules-sub">Правила управления проектом</p>
           <div class="rules-grid" id="rulesGrid"></div>
-          <p class="rules-note" id="rulesHonestNote">
-            Сейчас AI POS контролирует подготовку задания и проверку результата. Автоматическая сверка фактических изменений с Git diff будет добавлена после подключения локальной интеграции.
-          </p>
+          <p class="rules-note" id="rulesHonestNote">Сейчас AI POS контролирует подготовку задания и проверку результата.</p>
         </div>
-
-        <div class="tab-panel" id="tab-task" data-tab-panel="task">
-          <h3 class="section-heading lv-task">Текущая задача</h3>
-          <p class="section-note" id="taskEmptyNote" hidden>Текущая задача ещё не добавлена. Задача относится к модулю и не заменяет проект.</p>
-          <div class="task-stack" id="taskStack">
-            <div class="callout"><span class="field-label"><span class="ico" aria-hidden="true">🎯</span>Цель задачи</span><p id="taskGoalText">—</p></div>
-            <div class="callout" data-detail-level="extended"><span class="field-label"><span class="ico" aria-hidden="true">💡</span>Зачем выполнять сейчас</span><p id="taskWhyText">—</p></div>
-            <div class="callout callout-gain"><span class="field-label"><span class="ico" aria-hidden="true">✅</span>Что получим</span><p id="taskResultText">—</p></div>
-            <div class="callout" data-detail-level="extended"><span class="field-label">Что можно менять</span><p id="taskCanText">—</p></div>
-            <div class="callout callout-restrict" data-detail-level="extended">
-              <span class="field-label"><span class="ico" aria-hidden="true">🚫</span>Что нельзя менять</span>
-              <ul class="restrict-list" id="dontList"></ul>
-            </div>
-            <div class="callout callout-risk" data-detail-level="extended">
-              <span class="field-label"><span class="ico" aria-hidden="true">⚠️</span>Риски</span>
-              <ul class="risk-list" id="riskList"></ul>
-            </div>
-            <div class="callout" data-detail-level="extended"><span class="field-label">Альтернатива</span><p id="taskAltText">—</p></div>
-            <div class="review-card" id="reviewCard">
-              <span class="field-label">Проверка результата</span>
-              <div class="review-status" id="reviewStatus">Не проверено</div>
-              <ul class="check-list" id="reviewChecks" data-detail-level="extended"></ul>
-              <div class="field">
-                <label for="reviewNotes">Замечания после проверки</label>
-                <textarea id="reviewNotes" rows="3" placeholder="Что нужно исправить или уточнить"></textarea>
-              </div>
-              <div class="section-actions" style="margin-top:0.75rem">
-                <button type="button" class="btn btn-secondary" id="btnReviewReady">Результат готов</button>
-                <button type="button" class="btn btn-primary" id="btnReviewAccept">Принять</button>
-                <button type="button" class="btn btn-ghost" id="btnReviewNotes">Нужны изменения</button>
-                <button type="button" class="btn btn-ghost" id="btnNextTask" disabled title="Доступно после статуса «Принято»" data-detail-level="extended">К следующей задаче</button>
-              </div>
-              <p class="section-note" id="reviewHint" style="margin-top:0.65rem">Отметьте результат: готов, принять или нужны изменения.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-panel" id="tab-work" data-tab-panel="work">
-          <h3 class="section-heading lv-work"><span class="ico" aria-hidden="true">📋</span> Рабочее задание</h3>
-          <p class="section-note">Выберите инструмент — ниже появятся рекомендации и готовый контекст для ИИ. Перед копированием откроется контроль перед передачей задачи.</p>
-          <div class="tool-picks" id="toolPicks"></div>
-          <div class="tool-meta" data-detail-level="extended">
-            <div class="info-card"><span class="field-label"><span class="ico" aria-hidden="true">🤖</span>Зачем этот инструмент</span><p id="toolWhy">—</p></div>
-            <div class="info-card"><span class="field-label">Когда использовать</span><p id="toolWhen">—</p></div>
-            <div class="info-card"><span class="field-label">Когда не использовать</span><p id="toolAvoid">—</p></div>
-            <div class="info-card" data-detail-level="technical"><span class="field-label">Рабочая папка / репозиторий</span><p id="toolFolder">—</p></div>
-          </div>
-          <h4 class="assignment-title" id="assignmentTitle"><span class="ico" aria-hidden="true">📋</span> Рабочее задание</h4>
-          <div class="work-editor" id="workBox" aria-label="Рабочее задание"></div>
-          <div class="section-actions">
-            <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
-            <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано</span>
-          </div>
-        </div>
-
+        <div class="tab-panel stage-hidden-support" id="tab-task" data-tab-panel="task" hidden aria-hidden="true"></div>
+        <div class="tab-panel stage-hidden-support" id="tab-work" data-tab-panel="work" hidden aria-hidden="true"></div>
         <div class="tab-panel" id="tab-materials" data-tab-panel="materials" data-detail-level="extended">
           <h3 class="section-heading lv-materials"><span class="ico" aria-hidden="true">📂</span> Материалы</h3>
           <p class="section-note">Вложения сохраняются в проекте и могут входить в контекст рабочего задания.</p>
@@ -2103,9 +2875,46 @@
           <p class="section-note">Роли ИИ, которые помогают планировать, создавать, проверять и документировать проект.</p>
           <div class="team-grid" id="teamList"></div>
         </div>
+
+        <div class="tab-panel" id="tab-docs" data-tab-panel="docs">
+          <h3 class="section-heading">Документация</h3>
+          <p class="section-note">Раздел будет создан на следующем этапе</p>
+        </div>
+
+        <div class="tab-panel" id="tab-settings" data-tab-panel="settings">
+          <h3 class="section-heading">Настройки</h3>
+          <p class="section-note">Параметры текущего проекта.</p>
+          <form id="projectSettingsForm" class="settings-form" novalidate>
+            <div class="field">
+              <label for="settingsPrimaryTool">Основной инструмент</label>
+              <span class="hint">Используется на экране «Текущий этап» для передачи задания</span>
+              <select id="settingsPrimaryTool" name="primaryTool">
+                <option value="">Не выбран</option>
+              </select>
+            </div>
+            <div class="field" style="margin-top:0.85rem">
+              <label for="settingsAiModel">Модель ИИ</label>
+              <span class="hint">Предпочтительная модель в основном инструменте</span>
+              <select id="settingsAiModel" name="aiModel">
+                <option value="">Не выбрана</option>
+              </select>
+            </div>
+            <div class="field" style="margin-top:0.85rem">
+              <label for="settingsWorkFolder">Рабочая папка</label>
+              <span class="hint">Путь к папке проекта на диске</span>
+              <input id="settingsWorkFolder" name="workFolder" type="text" readonly />
+            </div>
+            <div class="section-actions" style="margin-top:1rem">
+              <button type="submit" class="btn btn-primary" id="btnSaveProjectSettings">Сохранить</button>
+              <span class="section-note" id="settingsSaveNote" hidden style="margin:0">Сохранено</span>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
-  </div>
+      </div><!-- /.os-main -->
+    </div><!-- /.os-shell -->
+  </div><!-- /#appShell -->
 
   <div class="modal" id="stepModal" role="dialog" aria-modal="true" hidden>
     <div class="modal-card">
@@ -2184,8 +2993,8 @@
 
   <div class="modal" id="gateModal" role="dialog" aria-modal="true" hidden>
     <div class="modal-card gate-card">
-      <div class="modal-top"><h3>Передать задачу ИИ</h3></div>
-      <p>Контроль перед передачей задачи. Подтвердите границы, затем скопируйте задание.</p>
+      <div class="modal-top"><h3 id="gateTitle">Передать задачу ИИ</h3></div>
+      <p id="gateLead">Контроль перед передачей задачи. Подтвердите границы, затем скопируйте задание.</p>
       <div class="gate-meta">
         <div><strong>Проект</strong><p id="gateProject">—</p></div>
         <div><strong>Модуль</strong><p id="gateModule">—</p></div>
@@ -2258,6 +3067,55 @@
           "запрещённые области не затронуты",
           "критерии проверки результата отмечены и приняты"
         ]
+      };
+
+      // Наборы критериев проверки по типу проекта (project.template).
+      // Конкретный набор задачи всегда важнее: task.reviewItems перекрывает пресет.
+      var REVIEW_PRESETS = {
+        web: [
+          { id: "browserChecked", label: "Проверено в браузере." },
+          { id: "mobileChecked", label: "Проверено на мобильной ширине." },
+          { id: "statesChecked", label: "Состояния интерфейса отображаются корректно." },
+          { id: "noConsoleErrors", label: "Новые ошибки в консоли отсутствуют." },
+          { id: "resultOk", label: "Ожидаемый результат достигнут." }
+        ],
+        presentation: [
+          { id: "showMode", label: "Проверено в режиме показа." },
+          { id: "alignment", label: "Выравнивание элементов сохранено." },
+          { id: "noShifts", label: "Смещений блоков и текста нет." },
+          { id: "readable", label: "Текст читается на слайде." },
+          { id: "resultOk", label: "Ожидаемый результат достигнут." }
+        ],
+        document: [
+          { id: "structure", label: "Структура разделов соответствует плану." },
+          { id: "styleOk", label: "Единый стиль и оформление сохранены." },
+          { id: "textChecked", label: "Текст перечитан на ошибки." },
+          { id: "resultOk", label: "Ожидаемый результат достигнут." }
+        ],
+        script: [
+          { id: "runsOk", label: "Запуск проходит без ошибок." },
+          { id: "outputOk", label: "Вывод соответствует ожидаемому." },
+          { id: "edgeCases", label: "Краевые случаи проверены." },
+          { id: "resultOk", label: "Ожидаемый результат достигнут." }
+        ],
+        bot: [
+          { id: "mainScenario", label: "Основной сценарий диалога работает." },
+          { id: "unexpectedInput", label: "Неожиданный ввод обрабатывается." },
+          { id: "noLogErrors", label: "Ошибок в логах нет." },
+          { id: "resultOk", label: "Ожидаемый результат достигнут." }
+        ]
+      };
+
+      var REVIEW_KIND_BY_TEMPLATE = {
+        "web-app": "web",
+        pwa: "web",
+        landing: "web",
+        "chrome-ext": "web",
+        powerpoint: "presentation",
+        book: "document",
+        python: "script",
+        "ai-agent": "bot",
+        "telegram-bot": "bot"
       };
 
       var DEMO_REVIEW_ITEMS = [
@@ -2348,6 +3206,17 @@
         { id: "gemini", name: "Gemini", why: "Мультимодальный разбор референсов и материалов.", strengths: "Изображения, документы, обзор.", avoid: "Не как единственный источник архитектуры." },
         { id: "grok", name: "Grok", why: "Быстрая проверка альтернатив по задаче.", strengths: "Скорость, короткий ревью.", avoid: "Не для финальной реализации критичного модуля без сверки." },
         { id: "other", name: "Другие AI", why: "Любой другой инструмент под задачу.", strengths: "Гибкость.", avoid: "Не смешивать несколько ИИ без единой постановки." }
+      ];
+
+      var AI_MODELS = [
+        { id: "auto", name: "Авто (инструмент сам выбирает)" },
+        { id: "gpt-4.1", name: "GPT-4.1" },
+        { id: "gpt-4o", name: "GPT-4o" },
+        { id: "claude-sonnet", name: "Claude Sonnet" },
+        { id: "claude-opus", name: "Claude Opus" },
+        { id: "gemini-pro", name: "Gemini Pro" },
+        { id: "cursor-default", name: "Модель по умолчанию Cursor" },
+        { id: "other", name: "Другая модель" }
       ];
 
       var BUILTIN_TEMPLATES = [
@@ -2441,6 +3310,7 @@
         assets: "Каркас главной страницы; заготовки блоков дня; модуль «Историческая справка» в черновике; три проверенные даты.",
         constraints: "Локальный прототип; модульная структура; не ломать уже работающие части проекта ради одного модуля.",
         workFolder: "D:\\Cursor Проект Мой день",
+        primaryTool: "cursor",
         status: "В работе",
         stage: "Разработка",
         modules: [DEMO_MODULE],
@@ -2451,6 +3321,91 @@
         createdAt: "2026-07-25T09:00:00.000Z"
       };
 
+      /**
+       * Desktop prototype catalogue only.
+       * Does NOT enter state.projects / LAST_OPENED / getFocusProject.
+       * Display fields are prototype-only (not bound to Runtime).
+       */
+      var DESKTOP_STAGES_DEMO = {
+        stages: [
+          { name: "Архитектура", state: "done" },
+          { name: "Реализация", state: "current" },
+          { name: "Тестирование", state: "future" },
+          { name: "Документация", state: "future" },
+          { name: "Релиз", state: "future" }
+        ]
+      };
+
+      var DESKTOP_PROTOTYPE_PROJECTS = [
+        {
+          id: "proto-moy-den",
+          name: "Мой день",
+          typeLabel: "Веб-приложение",
+          icon: "web",
+          statusKey: "development",
+          stateLabel: "Проект в разработке",
+          moduleName: "Историческая справка",
+          path: "D:\\Cursor Проект Мой день",
+          stagesDemo: DESKTOP_STAGES_DEMO
+        },
+        {
+          id: "proto-ai-pos",
+          name: "AI Project Operating System",
+          typeLabel: "Программная система",
+          icon: "system",
+          brandIcon: true,
+          statusKey: "active",
+          stateLabel: "Проект на стадии разработки",
+          moduleName: "Рабочий стол",
+          path: "D:\\AI_Project_Operating_System",
+          stagesDemo: DESKTOP_STAGES_DEMO
+        },
+        {
+          id: "proto-presentation",
+          name: "Presentation AI",
+          typeLabel: "Презентация",
+          icon: "slides",
+          statusKey: "paused",
+          stateLabel: "Проект на стадии идеи",
+          moduleName: "Структура слайдов",
+          path: "—",
+          stagesDemo: DESKTOP_STAGES_DEMO
+        },
+        {
+          id: "proto-book",
+          name: "Нейросети для каждого",
+          typeLabel: "Книга",
+          icon: "book",
+          statusKey: "development",
+          stateLabel: "Проект на стадии планирования",
+          moduleName: "Введение",
+          path: "—",
+          stagesDemo: DESKTOP_STAGES_DEMO
+        },
+        {
+          id: "proto-sales",
+          name: "Анализ продаж",
+          typeLabel: "Excel / Аналитика",
+          icon: "chart",
+          statusKey: "active",
+          stateLabel: "Проект в работе",
+          moduleName: "Сводка за квартал",
+          path: "—",
+          stagesDemo: DESKTOP_STAGES_DEMO
+        },
+        {
+          id: "proto-bot",
+          name: "Ассистент продавца",
+          typeLabel: "AI-бот",
+          icon: "bot",
+          statusKey: "ready",
+          stateLabel: "Проект на стадии прототипа",
+          moduleName: "Диалог квалификации",
+          path: "—",
+          stagesDemo: DESKTOP_STAGES_DEMO
+        }
+      ];
+
       var state = {
         projects: [],
         currentId: null,
@@ -2458,10 +3413,26 @@
         selectedTool: "cursor",
         selectedTemplate: "",
         customTemplates: [],
-        activeTab: "overview",
-        detailLevel: "basic",
+        activeTab: "task",
+        stageIssuesOpen: false,
+        gatePurpose: "copy",
+        // Привязка скриншота к замечанию живёт только в текущей сессии:
+        // модель Review не расширяем, ключ — тот же, что у записи проверки.
+        stageShots: {},
+        detailLevel: "technical",
+        desktopPrototypeFocusId: null,
         cliAnalysisByProject: {},
-        cliFreshnessTimer: null
+        cliFreshnessTimer: null,
+        createWizard: {
+          mode: "new",
+          step: 1,
+          parentPath: "",
+          projectPath: "",
+          preview: null,
+          inspect: null,
+          busy: false,
+          previewSeq: 0
+        }
       };
 
       var els = {
@@ -2473,16 +3444,20 @@
         projectForm: document.getElementById("projectForm"),
         formError: document.getElementById("formError"),
         templatesGrid: document.getElementById("templatesGrid"),
-        greetingTitle: document.getElementById("greetingTitle"),
-        homeProjectName: document.getElementById("homeProjectName"),
-        homeCurrentWork: document.getElementById("homeCurrentWork"),
-        homeGoal: document.getElementById("homeGoal"),
-        homeNextStep: document.getElementById("homeNextStep"),
-        homeResult: document.getElementById("homeResult"),
-        homeResultStatus: document.getElementById("homeResultStatus"),
+        osProjectList: document.getElementById("osProjectList"),
+        desktopProjectType: document.getElementById("desktopProjectType"),
+        desktopProjectName: document.getElementById("desktopProjectName"),
+        desktopProjectStatus: document.getElementById("desktopProjectStatus"),
+        desktopStageTrack: document.getElementById("desktopStageTrack"),
+        desktopLastUpdate: document.getElementById("desktopLastUpdate"),
+        desktopProjectPath: document.getElementById("desktopProjectPath"),
+        btnCopyProjectPath: document.getElementById("btnCopyProjectPath"),
+        desktopProtoNote: document.getElementById("desktopProtoNote"),
         btnNewProject: document.getElementById("btnNewProject"),
         btnContinue: document.getElementById("btnContinue"),
         workspaceMeta: document.getElementById("workspaceMeta"),
+        currentStageTitle: document.getElementById("currentStageTitle"),
+        currentStageScreen: document.getElementById("currentStageScreen"),
         ovGoal: document.getElementById("ovGoal"),
         ovModule: document.getElementById("ovModule"),
         ovStatus: document.getElementById("ovStatus"),
@@ -2521,7 +3496,6 @@
         btnCliInsightRefresh: document.getElementById("btnCliInsightRefresh"),
         detailLevelSwitch: document.getElementById("detailLevelSwitch"),
         taskEmptyNote: document.getElementById("taskEmptyNote"),
-        taskStack: document.getElementById("taskStack"),
         taskGoalText: document.getElementById("taskGoalText"),
         taskWhyText: document.getElementById("taskWhyText"),
         taskResultText: document.getElementById("taskResultText"),
@@ -2534,6 +3508,16 @@
         toolWhen: document.getElementById("toolWhen"),
         toolAvoid: document.getElementById("toolAvoid"),
         toolFolder: document.getElementById("toolFolder"),
+        stagePrimaryToolName: document.getElementById("stagePrimaryToolName"),
+        stagePrimaryToolReady: document.getElementById("stagePrimaryToolReady"),
+        stagePrimaryToolMissing: document.getElementById("stagePrimaryToolMissing"),
+        btnOpenProjectSettings: document.getElementById("btnOpenProjectSettings"),
+        projectSettingsForm: document.getElementById("projectSettingsForm"),
+        settingsPrimaryTool: document.getElementById("settingsPrimaryTool"),
+        settingsAiModel: document.getElementById("settingsAiModel"),
+        settingsWorkFolder: document.getElementById("settingsWorkFolder"),
+        settingsSaveNote: document.getElementById("settingsSaveNote"),
+        btnCopyWork: document.getElementById("btnCopyWork"),
         assignmentTitle: document.getElementById("assignmentTitle"),
         workBox: document.getElementById("workBox"),
         materialsList: document.getElementById("materialsList"),
@@ -2545,15 +3529,37 @@
         reviewChecks: document.getElementById("reviewChecks"),
         reviewNotes: document.getElementById("reviewNotes"),
         reviewHint: document.getElementById("reviewHint"),
-        btnReviewReady: document.getElementById("btnReviewReady"),
-        btnReviewNotes: document.getElementById("btnReviewNotes"),
-        btnReviewAccept: document.getElementById("btnReviewAccept"),
-        btnNextTask: document.getElementById("btnNextTask"),
+        stageProjectName: document.getElementById("stageProjectName"),
+        stageCheckBlock: document.getElementById("stageCheckBlock"),
+        stageModuleName: document.getElementById("stageModuleName"),
+        btnOpenApp: document.getElementById("btnOpenApp"),
+        openAppHint: document.getElementById("openAppHint"),
+        btnStageDone: document.getElementById("btnStageDone"),
+        btnStageIssues: document.getElementById("btnStageIssues"),
+        stageIssuesBox: document.getElementById("stageIssuesBox"),
+        btnSubmitIssues: document.getElementById("btnSubmitIssues"),
+        reviewShotInput: document.getElementById("reviewShotInput"),
+        reviewShotBtnText: document.getElementById("reviewShotBtnText"),
+        reviewShotNote: document.getElementById("reviewShotNote"),
+        reviewShotName: document.getElementById("reviewShotName"),
+        btnRemoveShot: document.getElementById("btnRemoveShot"),
+        stageFixBlock: document.getElementById("stageFixBlock"),
+        stageFixText: document.getElementById("stageFixText"),
+        stageFixShot: document.getElementById("stageFixShot"),
+        btnCopyFix: document.getElementById("btnCopyFix"),
+        copyFixToast: document.getElementById("copyFixToast"),
+        stageNextBlock: document.getElementById("stageNextBlock"),
+        stageNextLabel: document.getElementById("stageNextLabel"),
+        stageNextText: document.getElementById("stageNextText"),
+        btnCopyNext: document.getElementById("btnCopyNext"),
+        copyNextToast: document.getElementById("copyNextToast"),
         copyToast: document.getElementById("copyToast"),
         stepModal: document.getElementById("stepModal"),
         moduleModal: document.getElementById("moduleModal"),
         taskModal: document.getElementById("taskModal"),
         gateModal: document.getElementById("gateModal"),
+        gateTitle: document.getElementById("gateTitle"),
+        gateLead: document.getElementById("gateLead"),
         gateProject: document.getElementById("gateProject"),
         gateModule: document.getElementById("gateModule"),
         gateTask: document.getElementById("gateTask"),
@@ -2566,7 +3572,32 @@
         taskForm: document.getElementById("taskForm"),
         taskModule: document.getElementById("taskModule"),
         taskTool: document.getElementById("taskTool"),
-        workspaceTabs: document.getElementById("workspaceTabs")
+        workspaceTabs: document.getElementById("workspaceTabs"),
+        createFolderNew: document.getElementById("createFolderNew"),
+        createFolderExisting: document.getElementById("createFolderExisting"),
+        parentFolderLabel: document.getElementById("parentFolderLabel"),
+        previewProjectPath: document.getElementById("previewProjectPath"),
+        previewProjectNote: document.getElementById("previewProjectNote"),
+        existingFolderLabel: document.getElementById("existingFolderLabel"),
+        existingInspect: document.getElementById("existingInspect"),
+        createConfirmSummary: document.getElementById("createConfirmSummary"),
+        fieldCreateConfirm: document.getElementById("fieldCreateConfirm"),
+        fieldCreateConfirmLabel: document.getElementById("fieldCreateConfirmLabel"),
+        btnSubmitProject: document.getElementById("btnSubmitProject"),
+        btnWizardBack: document.getElementById("btnWizardBack"),
+        btnWizardNext: document.getElementById("btnWizardNext"),
+        wizardStepIndicator: document.getElementById("wizardStepIndicator"),
+        wizardStepTitle: document.getElementById("wizardStepTitle"),
+        wizardAutoPrepList: document.getElementById("wizardAutoPrepList"),
+        wizardAutoPrepBox: document.getElementById("wizardAutoPrepBox"),
+        confirmStepHeading: document.getElementById("confirmStepHeading"),
+        fieldCreateMaterials: document.getElementById("fieldCreateMaterials"),
+        btnPickParentFolder: document.getElementById("btnPickParentFolder"),
+        btnRefreshPreview: document.getElementById("btnRefreshPreview"),
+        btnPickProjectFolder: document.getElementById("btnPickProjectFolder"),
+        btnInspectProjectFolder: document.getElementById("btnInspectProjectFolder"),
+        btnToggleTemplates: document.getElementById("btnToggleTemplates"),
+        templatesBlock: document.getElementById("templatesBlock")
       };
 
       function uid(prefix) {
@@ -2591,14 +3622,6 @@
         if (bytes < 1024) return bytes + " B";
         if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
         return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-      }
-
-      function greetingText() {
-        var hour = new Date().getHours();
-        var part = "Добрый вечер";
-        if (hour >= 5 && hour < 12) part = "Доброе утро";
-        else if (hour >= 12 && hour < 18) part = "Добрый день";
-        return part + ", Венера";
       }
 
       function linesFromCannot(text) {
@@ -2669,9 +3692,17 @@
         return project;
       }
 
-      function defaultReviewItems(task) {
+      function reviewPresetFor(project) {
+        var kind = REVIEW_KIND_BY_TEMPLATE[String((project && project.template) || "").trim()];
+        var preset = kind ? REVIEW_PRESETS[kind] : null;
+        return preset ? preset.slice() : null;
+      }
+
+      function defaultReviewItems(task, project) {
         if (task && Array.isArray(task.reviewItems) && task.reviewItems.length) return task.reviewItems.slice();
         if (task && task.id === DEMO_TASK.id) return DEMO_REVIEW_ITEMS.slice();
+        var preset = reviewPresetFor(project);
+        if (preset) return preset;
         return [
           { id: "resultOk", label: "Ожидаемый результат задачи достигнут." },
           { id: "scopeOk", label: "Изменения уложились в разрешённую область." },
@@ -2681,8 +3712,8 @@
         ];
       }
 
-      function emptyReviewState(task) {
-        var items = defaultReviewItems(task);
+      function emptyReviewState(task, project) {
+        var items = defaultReviewItems(task, project);
         var checks = {};
         for (var i = 0; i < items.length; i++) checks[items[i].id] = false;
         return {
@@ -2716,7 +3747,7 @@
       function ensureTaskReview(project, task) {
         if (!task) return null;
         var stored = loadJsonMap(REVIEW_KEY)[reviewMapKey(project, task)];
-        var base = emptyReviewState(task);
+        var base = emptyReviewState(task, project);
         var source = task.review && typeof task.review === "object" ? task.review : stored;
         if (!source) {
           task.review = base;
@@ -2745,7 +3776,7 @@
           checks: task.review.checks,
           notes: task.review.notes || "",
           acceptedAt: task.review.acceptedAt || null,
-          items: task.review.items || defaultReviewItems(task)
+          items: task.review.items || defaultReviewItems(task, project)
         };
         saveJsonMap(REVIEW_KEY, map);
         if (!project.isDemo) saveProjects();
@@ -2860,6 +3891,9 @@
 
         project.materials = Array.isArray(project.materials) ? project.materials : [];
         project.workFolder = project.workFolder || "";
+        if (!project.primaryTool && raw.preferredTool) project.primaryTool = raw.preferredTool;
+        project.primaryTool = normalizePrimaryTool(project.primaryTool);
+        project.aiModel = normalizeAiModel(project.aiModel);
         project.stage = project.stage || "Анализ";
         project.status = project.status || "В работе";
         ensureProjectRules(project);
@@ -2973,8 +4007,47 @@
         els.panelForm.classList.toggle("is-active", name === "form");
         els.panelWorkspace.classList.toggle("is-active", name === "workspace");
         els.appShell.classList.toggle("is-home", name === "list");
-        if (name === "list") renderHome();
+        if (name === "list") {
+          setOsNavActive("desktop");
+          renderDesktop();
+        }
         if (!options || !options.keepScroll) window.scrollTo(0, 0);
+      }
+
+      function setOsNavActive(navId) {
+        var items = document.querySelectorAll(".os-nav-item[data-os-nav]");
+        for (var i = 0; i < items.length; i++) {
+          var on = items[i].getAttribute("data-os-nav") === navId;
+          items[i].classList.toggle("is-active", on);
+          if (on) items[i].setAttribute("aria-current", "page");
+          else items[i].removeAttribute("aria-current");
+        }
+      }
+
+      function openOsSection(navId) {
+        var section = navId || "desktop";
+        if (section === "desktop") {
+          setOsNavActive("desktop");
+          showPanel("list");
+          return;
+        }
+        var tabByNav = {
+          rules: "rules",
+          "current-task": "task",
+          assignment: "work",
+          materials: "materials",
+          specialists: "team",
+          docs: "docs",
+          settings: "settings"
+        };
+        var tabId = tabByNav[section];
+        if (!tabId) return;
+        var project = getFocusProject();
+        if (!project) return;
+        state.activeTab = tabId;
+        openWorkspace(project.id);
+        setActiveTab(tabId, { force: true });
+        setOsNavActive(section);
       }
 
       function openModal(el) {
@@ -2993,9 +4066,14 @@
         state.selectedTemplate = "";
         clearFieldErrors();
         els.formError.classList.remove("is-visible");
+        fillPrimaryToolSelect(document.getElementById("fieldPrimaryTool"), "");
+        fillAiModelSelect(document.getElementById("fieldAiModel"), "");
+        resetCreateWizard("new");
+        goWizardStep(1);
         renderTemplates();
+        if (els.templatesBlock) els.templatesBlock.classList.add("is-collapsed");
+        if (els.btnToggleTemplates) els.btnToggleTemplates.textContent = "Показать";
         showPanel("form");
-        document.getElementById("fieldName").focus();
       }
 
       function clearFieldErrors() {
@@ -3089,9 +4167,393 @@
         return null;
       }
 
+      function findToolById(id) {
+        var key = String(id || "").trim();
+        if (!key) return null;
+        for (var i = 0; i < AI_TOOLS.length; i++) {
+          if (AI_TOOLS[i].id === key) return AI_TOOLS[i];
+        }
+        return null;
+      }
+
+      function normalizePrimaryTool(id) {
+        var tool = findToolById(id);
+        return tool ? tool.id : "";
+      }
+
+      function findAiModelById(id) {
+        var key = String(id || "").trim();
+        if (!key) return null;
+        for (var i = 0; i < AI_MODELS.length; i++) {
+          if (AI_MODELS[i].id === key) return AI_MODELS[i];
+        }
+        return null;
+      }
+
+      function normalizeAiModel(id) {
+        var model = findAiModelById(id);
+        return model ? model.id : "";
+      }
+
+      function resolvePrimaryToolId(project) {
+        return normalizePrimaryTool(project && project.primaryTool);
+      }
+
       function getTool(id) {
-        for (var i = 0; i < AI_TOOLS.length; i++) if (AI_TOOLS[i].id === id) return AI_TOOLS[i];
-        return AI_TOOLS[0];
+        return findToolById(id) || AI_TOOLS[0];
+      }
+
+      function fillPrimaryToolSelect(selectEl, selectedId) {
+        if (!selectEl) return;
+        var html = '<option value="">Не выбрана</option>';
+        for (var i = 0; i < AI_TOOLS.length; i++) {
+          html +=
+            '<option value="' + escapeHtml(AI_TOOLS[i].id) + '">' +
+            escapeHtml(AI_TOOLS[i].name) +
+            "</option>";
+        }
+        selectEl.innerHTML = html;
+        var next = normalizePrimaryTool(selectedId);
+        selectEl.value = next || "";
+      }
+
+      function fillAiModelSelect(selectEl, selectedId) {
+        if (!selectEl) return;
+        var html = '<option value="">Не выбрана</option>';
+        for (var i = 0; i < AI_MODELS.length; i++) {
+          html +=
+            '<option value="' + escapeHtml(AI_MODELS[i].id) + '">' +
+            escapeHtml(AI_MODELS[i].name) +
+            "</option>";
+        }
+        selectEl.innerHTML = html;
+        var next = normalizeAiModel(selectedId);
+        selectEl.value = next || "";
+      }
+
+      function fillPrimaryToolSelects() {
+        fillPrimaryToolSelect(document.getElementById("fieldPrimaryTool"), "");
+        fillPrimaryToolSelect(els.settingsPrimaryTool, "");
+        fillAiModelSelect(document.getElementById("fieldAiModel"), "");
+        fillAiModelSelect(els.settingsAiModel, "");
+      }
+
+      function postBridgeJson(path, body) {
+        return fetch(path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body || {})
+        }).then(function (resp) {
+          return resp.json().then(function (data) {
+            return { status: resp.status, data: data || {} };
+          }).catch(function () {
+            return { status: resp.status, data: { ok: false, message: "Некорректный ответ Local Bridge." } };
+          });
+        }).catch(function () {
+          return {
+            status: 0,
+            data: {
+              ok: false,
+              message: "Local Bridge не отвечает. Запустите: python tools/local_bridge.py"
+            }
+          };
+        });
+      }
+
+      function resetCreateWizard(mode) {
+        state.createWizard = {
+          mode: mode === "existing" ? "existing" : "new",
+          step: state.createWizard && state.createWizard.step ? state.createWizard.step : 1,
+          parentPath: "",
+          projectPath: "",
+          preview: null,
+          inspect: null,
+          busy: false,
+          previewSeq: 0
+        };
+        document.getElementById("fieldParentFolder").value = "";
+        document.getElementById("fieldWorkFolder").value = "";
+        if (els.fieldCreateConfirm) els.fieldCreateConfirm.checked = false;
+        if (els.fieldCreateMaterials) els.fieldCreateMaterials.value = "";
+        syncCreateModeUi();
+        updateCreateSummary();
+      }
+
+      var WIZARD_STEP_TITLES = {
+        1: "Выберите сценарий",
+        2: "Опишите проект",
+        3: "Папка проекта",
+        4: "Среда разработки",
+        5: "Подтверждение"
+      };
+
+      function goWizardStep(step) {
+        var next = Math.max(1, Math.min(5, Number(step) || 1));
+        state.createWizard.step = next;
+        var panels = els.projectForm.querySelectorAll("[data-wizard-step]");
+        for (var i = 0; i < panels.length; i++) {
+          var id = Number(panels[i].getAttribute("data-wizard-step"));
+          panels[i].hidden = id !== next;
+        }
+        if (els.wizardStepIndicator) els.wizardStepIndicator.textContent = "Шаг " + next + " из 5";
+        if (els.wizardStepTitle) els.wizardStepTitle.textContent = WIZARD_STEP_TITLES[next] || "";
+        if (els.btnWizardBack) els.btnWizardBack.hidden = next <= 1;
+        if (els.btnWizardNext) els.btnWizardNext.hidden = next >= 5;
+        if (els.btnSubmitProject) els.btnSubmitProject.hidden = next < 5;
+        els.formError.classList.remove("is-visible");
+        syncCreateModeUi();
+        if (next === 2) {
+          var nameEl = document.getElementById("fieldName");
+          if (nameEl) nameEl.focus();
+        } else if (next === 5) {
+          updateCreateSummary();
+        }
+      }
+
+      function validateWizardStep(step) {
+        clearFieldErrors();
+        var ok = true;
+        var data = getFormData();
+        if (step === 2) {
+          if (!data.name) {
+            var nameField = els.projectForm.querySelector('[data-field="name"]');
+            if (nameField) nameField.classList.add("is-invalid");
+            ok = false;
+          }
+          if (!data.idea) {
+            var ideaField = els.projectForm.querySelector('[data-field="idea"]');
+            if (ideaField) ideaField.classList.add("is-invalid");
+            ok = false;
+          }
+        } else if (step === 3) {
+          if (state.createWizard.mode === "new") {
+            if (!state.createWizard.parentPath) ok = false;
+            if (!(state.createWizard.preview && state.createWizard.preview.can_create)) ok = false;
+          } else if (!state.createWizard.projectPath) {
+            ok = false;
+          }
+        }
+        els.formError.classList.toggle("is-visible", !ok);
+        if (!ok) {
+          els.formError.textContent = step === 3
+            ? (state.createWizard.mode === "new"
+              ? "Выберите родительскую папку и дождитесь доступного итогового пути."
+              : "Выберите папку существующего проекта.")
+            : "Заполните обязательные поля текущего шага.";
+        }
+        return ok;
+      }
+
+      function ensurePassportDefaults() {
+        var name = document.getElementById("fieldName").value.trim();
+        var idea = document.getElementById("fieldIdea").value.trim();
+        var resultEl = document.getElementById("fieldResult");
+        var audienceEl = document.getElementById("fieldAudience");
+        var assetsEl = document.getElementById("fieldAssets");
+        if (resultEl && !resultEl.value.trim()) {
+          resultEl.value = idea
+            ? ("Рабочий результат по описанию проекта «" + name + "».")
+            : ("Рабочий результат проекта «" + (name || "без названия") + "».");
+        }
+        if (audienceEl && !audienceEl.value.trim()) {
+          audienceEl.value = "Уточняется";
+        }
+        if (assetsEl && els.fieldCreateMaterials && els.fieldCreateMaterials.files && els.fieldCreateMaterials.files.length) {
+          var names = [];
+          for (var i = 0; i < els.fieldCreateMaterials.files.length; i++) {
+            names.push(els.fieldCreateMaterials.files[i].name);
+          }
+          var prefix = assetsEl.value.trim();
+          var attached = "Прикреплённые материалы: " + names.join(", ");
+          assetsEl.value = prefix ? (prefix + "\n" + attached) : attached;
+        }
+      }
+
+      function syncCreateModeUi() {
+        var mode = state.createWizard.mode;
+        var buttons = document.querySelectorAll("[data-create-mode]");
+        for (var i = 0; i < buttons.length; i++) {
+          var on = buttons[i].getAttribute("data-create-mode") === mode;
+          buttons[i].classList.toggle("is-active", on);
+          buttons[i].setAttribute("aria-pressed", on ? "true" : "false");
+        }
+        if (els.createFolderNew) els.createFolderNew.hidden = mode !== "new";
+        if (els.createFolderExisting) els.createFolderExisting.hidden = mode !== "existing";
+        if (els.btnSubmitProject) {
+          els.btnSubmitProject.textContent = mode === "existing" ? "Подключить проект" : "Создать проект";
+        }
+        if (els.fieldCreateConfirmLabel) {
+          els.fieldCreateConfirmLabel.textContent = mode === "existing"
+            ? "Подтверждаю подключение существующей папки без записи файлов на диск"
+            : "Подтверждаю создание папки проекта и копирование шаблона AI POS";
+        }
+        if (els.confirmStepHeading) {
+          els.confirmStepHeading.textContent = mode === "existing"
+            ? "Проверьте и подключите"
+            : "Проверьте и создайте";
+        }
+        if (els.parentFolderLabel) {
+          els.parentFolderLabel.textContent = state.createWizard.parentPath || "не выбрана";
+        }
+        if (els.existingFolderLabel) {
+          els.existingFolderLabel.textContent = state.createWizard.projectPath || "не выбрана";
+        }
+        if (els.previewProjectPath) {
+          var previewPath = state.createWizard.preview && state.createWizard.preview.project_path
+            ? state.createWizard.preview.project_path
+            : "—";
+          els.previewProjectPath.textContent = previewPath;
+        }
+        if (els.previewProjectNote) {
+          var note = "";
+          var preview = state.createWizard.preview;
+          if (preview && preview.ok === false) note = preview.message || "";
+          else if (preview && preview.exists) note = "Папка уже существует — создание без перезаписи невозможно. Смените имя или подключите как существующий проект.";
+          else if (preview && preview.can_create) note = "После подтверждения будет создана папка и скопирован Projects/TEMPLATE.";
+          els.previewProjectNote.hidden = !note;
+          els.previewProjectNote.textContent = note;
+        }
+        renderExistingInspect(state.createWizard.inspect);
+        updateCreateSummary();
+      }
+
+      function renderExistingInspect(inspect) {
+        if (!els.existingInspect) return;
+        if (!inspect || !inspect.ok) {
+          els.existingInspect.hidden = true;
+          els.existingInspect.innerHTML = "";
+          return;
+        }
+        var missing = inspect.missing_files || [];
+        var present = inspect.present_files || [];
+        var html = "<p><strong>Проверка шаблона AI POS</strong> (без записи на диск)</p>";
+        html += "<p>Найдено файлов шаблона: " + present.length + "</p>";
+        if (missing.length) {
+          html += "<p>Не хватает:</p><ul class=\"wizard-missing-list\">";
+          for (var i = 0; i < missing.length; i++) {
+            html += "<li>" + escapeHtml(missing[i]) + "</li>";
+          }
+          html += "</ul>";
+          html += "<p class=\"section-note\" style=\"margin:0.45rem 0 0\">Файлы не создаются автоматически. Добавление — отдельным подтверждением позже.</p>";
+        } else {
+          html += "<p>Обязательные файлы шаблона на месте.</p>";
+        }
+        if (inspect.has_ai_pos) html += "<p>Каталог .ai-pos найден.</p>";
+        else html += "<p>Каталог .ai-pos пока отсутствует.</p>";
+        els.existingInspect.innerHTML = html;
+        els.existingInspect.hidden = false;
+      }
+
+      function renderAutoPrepList(mode) {
+        if (!els.wizardAutoPrepList) return;
+        var items = mode === "existing"
+          ? [
+              "Карточку проекта в AI POS (Passport)",
+              "Связку workFolder с выбранной папкой",
+              "Сохранение среды разработки и модели ИИ",
+              "Список недостающих документов — только для информации, без записи"
+            ]
+          : [
+              "Отдельную папку проекта по итоговому пути",
+              "Документы шаблона: PROJECT_CONTEXT.md, ROADMAP.md, ARCHITECTURE.md, DESIGN_RULES.md, DECISIONS.md, DATA_SCHEMA.md",
+              "Каталог .ai-pos с project_stage.json и project_analysis.json",
+              "Карточку проекта в AI POS со средой разработки и моделью ИИ"
+            ];
+        var html = "";
+        for (var i = 0; i < items.length; i++) {
+          html += "<li>" + escapeHtml(items[i]) + "</li>";
+        }
+        els.wizardAutoPrepList.innerHTML = html;
+      }
+
+      function updateCreateSummary() {
+        if (!els.createConfirmSummary) return;
+        var data = getFormData();
+        var mode = state.createWizard.mode;
+        var tool = findToolById(data.primaryTool);
+        var model = findAiModelById(data.aiModel);
+        var path = mode === "new"
+          ? ((state.createWizard.preview && state.createWizard.preview.project_path) || "не выбран")
+          : (state.createWizard.projectPath || "не выбрана");
+        var html = "<p><strong>Сценарий:</strong> " + (mode === "existing" ? "Существующий проект" : "Новый проект") + "</p>";
+        html += "<p><strong>Название:</strong> " + escapeHtml(data.name || "—") + "</p>";
+        html += "<p><strong>Описание:</strong> " + escapeHtml(data.idea || "—") + "</p>";
+        html += "<p><strong>Путь:</strong> " + escapeHtml(path) + "</p>";
+        html += "<p><strong>Среда разработки:</strong> " + escapeHtml(tool ? tool.name : "не выбрана") + "</p>";
+        html += "<p><strong>Модель ИИ:</strong> " + escapeHtml(model ? model.name : "не выбрана") + "</p>";
+        if (mode === "new") {
+          html += "<p>На диск будет записано только после подтверждения ниже.</p>";
+        } else {
+          html += "<p>Запись файлов в выбранную папку на этом шаге не выполняется.</p>";
+        }
+        els.createConfirmSummary.innerHTML = html;
+        renderAutoPrepList(mode);
+      }
+
+      function setCreateBusy(busy) {
+        state.createWizard.busy = !!busy;
+        if (els.btnSubmitProject) els.btnSubmitProject.disabled = !!busy;
+        if (els.btnWizardNext) els.btnWizardNext.disabled = !!busy;
+        if (els.btnWizardBack) els.btnWizardBack.disabled = !!busy;
+        if (els.btnPickParentFolder) els.btnPickParentFolder.disabled = !!busy;
+        if (els.btnPickProjectFolder) els.btnPickProjectFolder.disabled = !!busy;
+        if (els.btnRefreshPreview) els.btnRefreshPreview.disabled = !!busy;
+        if (els.btnInspectProjectFolder) els.btnInspectProjectFolder.disabled = !!busy;
+      }
+
+      async function pickFolderViaBridge(title) {
+        setCreateBusy(true);
+        var res = await postBridgeJson("/api/pick-folder", { title: title || "Выберите папку" });
+        setCreateBusy(false);
+        if (res.data && res.data.cancelled) return null;
+        if (!res.data || !res.data.ok || !res.data.path) {
+          window.alert((res.data && res.data.message) || "Не удалось выбрать папку.");
+          return null;
+        }
+        return res.data.path;
+      }
+
+      async function refreshNewProjectPreview() {
+        var name = document.getElementById("fieldName").value.trim();
+        var parent = state.createWizard.parentPath;
+        if (!parent) {
+          state.createWizard.preview = null;
+          document.getElementById("fieldWorkFolder").value = "";
+          syncCreateModeUi();
+          return;
+        }
+        var seq = (state.createWizard.previewSeq || 0) + 1;
+        state.createWizard.previewSeq = seq;
+        setCreateBusy(true);
+        var res = await postBridgeJson("/api/preview-new-project", {
+          parent_path: parent,
+          project_name: name || "new-project"
+        });
+        if (seq !== state.createWizard.previewSeq) return;
+        setCreateBusy(false);
+        state.createWizard.preview = res.data || null;
+        if (res.data && res.data.ok && res.data.project_path && res.data.can_create) {
+          document.getElementById("fieldWorkFolder").value = res.data.project_path;
+        } else {
+          document.getElementById("fieldWorkFolder").value = "";
+        }
+        syncCreateModeUi();
+      }
+
+      async function inspectSelectedProjectFolder() {
+        var path = state.createWizard.projectPath;
+        if (!path) {
+          window.alert("Сначала выберите папку проекта.");
+          return;
+        }
+        setCreateBusy(true);
+        var res = await postBridgeJson("/api/inspect-project-folder", { project_path: path });
+        setCreateBusy(false);
+        state.createWizard.inspect = res.data || null;
+        if (!res.data || !res.data.ok) {
+          window.alert((res.data && res.data.message) || "Не удалось проверить папку.");
+        }
+        syncCreateModeUi();
       }
 
       function materialsDigest(project) {
@@ -3207,74 +4669,206 @@
         ].filter(function (line) { return line !== null; }).join("\n");
       }
 
-      function renderHome() {
-        els.greetingTitle.textContent = greetingText();
-        var project = getFocusProject();
-        var view = deriveView(project);
-        var mod = view.module;
-        var task = view.task;
-        var review = ensureTaskReview(project, task);
-
-        if (els.homeProjectName) els.homeProjectName.textContent = project.name || "—";
-
-        if (els.homeCurrentWork) {
-          els.homeCurrentWork.textContent = (task && task.name)
-            ? task.name
-            : (mod && mod.name ? mod.name : "Работа ещё не выбрана");
+      function desktopIconSvg(kind) {
+        var common = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+        if (kind === "web") {
+          return "<svg " + common + "><rect x=\"4\" y=\"5\" width=\"16\" height=\"12\" rx=\"2\"/><path d=\"M4 9h16M9 19h6\"/></svg>";
         }
-
-        if (els.homeGoal) {
-          els.homeGoal.textContent = (task && task.goal)
-            ? task.goal
-            : (mod && mod.purpose ? mod.purpose : "Цель ещё не указана");
+        if (kind === "slides") {
+          return "<svg " + common + "><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 10h8M8 14h5\"/></svg>";
         }
-
-        if (els.homeNextStep) {
-          var nextText = null;
-          var cache = getCliAnalysisCache(project.id);
-          if (cache && cache.kind === "ok" && cache.data) {
-            nextText = extractSystemNextStepText(cache.data);
-          }
-          if (!nextText && task && task.name) nextText = task.name;
-          if (!nextText && view.nextLine2) nextText = view.nextLine2;
-          els.homeNextStep.textContent = nextText || "Уточните следующий шаг работы";
+        if (kind === "book") {
+          return "<svg " + common + "><path d=\"M5 4h9a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 3V4z\"/><path d=\"M5 4v16\"/></svg>";
         }
-
-        if (els.homeResult) {
-          els.homeResult.textContent = (task && task.expectedResult)
-            ? task.expectedResult
-            : "Результат ещё не сформулирован";
+        if (kind === "chart") {
+          return "<svg " + common + "><path d=\"M4 19V5M4 19h16\"/><path d=\"M8 15v-4M12 15V8M16 15v-7\"/></svg>";
         }
-
-        if (els.homeResultStatus) {
-          var status = review && review.status ? review.status : "unchecked";
-          var label = "Не проверен";
-          if (status === "accepted") label = "Принят";
-          else if (status === "ready") label = "Результат готов";
-          else if (status === "notes") label = "Нужны изменения";
-          els.homeResultStatus.textContent = label;
-          els.homeResultStatus.className = "home-mvp-status" +
-            (status === "accepted" ? " is-accepted" : status === "notes" || status === "ready" ? " is-notes" : "");
+        if (kind === "bot") {
+          return "<svg " + common + "><rect x=\"5\" y=\"8\" width=\"14\" height=\"10\" rx=\"3\"/><path d=\"M12 5v3M9 13h.01M15 13h.01M9 17h6\"/></svg>";
         }
-
-        if (els.btnContinue) els.btnContinue.className = "btn btn-primary btn-hero";
-        if (els.btnNewProject) els.btnNewProject.className = "btn btn-secondary";
+        return "<svg " + common + "><rect x=\"5\" y=\"5\" width=\"14\" height=\"14\" rx=\"3\"/><path d=\"M9 12h6M12 9v6\"/></svg>";
       }
 
-      function setActiveTab(tabId) {
-        var next = tabId || "overview";
-        if (state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
+      function findDesktopPrototype(id) {
+        for (var i = 0; i < DESKTOP_PROTOTYPE_PROJECTS.length; i++) {
+          if (DESKTOP_PROTOTYPE_PROJECTS[i].id === id) return DESKTOP_PROTOTYPE_PROJECTS[i];
+        }
+        return null;
+      }
+
+      function defaultDesktopPrototypeFocusId() {
+        return "proto-moy-den";
+      }
+
+      function getDesktopFocusPrototype() {
+        var id = state.desktopPrototypeFocusId || defaultDesktopPrototypeFocusId();
+        return findDesktopPrototype(id) || DESKTOP_PROTOTYPE_PROJECTS[0];
+      }
+
+      function setDesktopPrototypeFocus(protoId) {
+        // Visual-only: never touches LAST_OPENED, state.projects, or Workspace currentId.
+        if (!findDesktopPrototype(protoId)) return;
+        state.desktopPrototypeFocusId = protoId;
+        renderDesktop();
+      }
+
+      function formatDesktopLastUpdate() {
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, "0");
+        var mm = String(now.getMinutes()).padStart(2, "0");
+        return "Сегодня, " + hh + ":" + mm;
+      }
+
+      function buildDesktopViewModel(proto) {
+        var stagesDemo = (proto && proto.stagesDemo) || DESKTOP_STAGES_DEMO;
+        return {
+          name: proto.name || "—",
+          typeLabel: proto.typeLabel || "—",
+          stateLabel: proto.stateLabel || "—",
+          lastUpdate: formatDesktopLastUpdate(),
+          path: proto.path || "—",
+          stagesDemo: stagesDemo
+        };
+      }
+
+      function stageMarkSymbol(state) {
+        if (state === "done") return "✓";
+        if (state === "current") return "●";
+        return "○";
+      }
+
+      function renderDesktopStages(stagesDemo) {
+        var demo = stagesDemo || DESKTOP_STAGES_DEMO;
+        if (!els.desktopStageTrack) return;
+        var stages = demo.stages || [];
+        var html = "";
+        for (var i = 0; i < stages.length; i++) {
+          var stage = stages[i];
+          var state = stage.state || "future";
+          var stateClass = state === "done" ? "is-done" : state === "current" ? "is-current" : "is-future";
+          html +=
+            '<li class="desktop-stage ' + stateClass + '">' +
+            '<span class="desktop-stage-mark" aria-hidden="true">' + stageMarkSymbol(state) + "</span>" +
+            '<p class="desktop-stage-name">' + escapeHtml(stage.name || "—") + "</p>" +
+            "</li>";
+        }
+        els.desktopStageTrack.innerHTML = html;
+      }
+
+      function renderOsProjectList() {
+        if (!els.osProjectList) return;
+        var focusId = (getDesktopFocusPrototype() || {}).id;
+        var html = "";
+        for (var i = 0; i < DESKTOP_PROTOTYPE_PROJECTS.length; i++) {
+          var p = DESKTOP_PROTOTYPE_PROJECTS[i];
+          var statusKey = p.statusKey || "development";
+          var iconHtml = p.brandIcon
+            ? '<img src="assets/branding/ai-pos-icon-v1.png" width="28" height="28" alt="" />'
+            : desktopIconSvg(p.icon || "system");
+          html +=
+            '<button type="button" class="os-project-item' + (p.id === focusId ? " is-focus" : "") +
+            '" data-proto-id="' + escapeHtml(p.id) +
+            '" data-status="' + escapeHtml(statusKey) +
+            '" role="listitem">' +
+            '<span class="os-project-stripe" aria-hidden="true"></span>' +
+            '<span class="os-project-icon">' + iconHtml + "</span>" +
+            '<span class="os-project-meta">' +
+            '<span class="os-project-name">' + escapeHtml(p.name) + "</span>" +
+            '<span class="os-project-type">' + escapeHtml(p.typeLabel) + "</span>" +
+            "</span></button>";
+        }
+        els.osProjectList.innerHTML = html;
+        var buttons = els.osProjectList.querySelectorAll("[data-proto-id]");
+        for (var b = 0; b < buttons.length; b++) {
+          buttons[b].addEventListener("click", function (event) {
+            setDesktopPrototypeFocus(event.currentTarget.getAttribute("data-proto-id"));
+          });
+        }
+      }
+
+      function renderDesktop() {
+        if (!state.desktopPrototypeFocusId) {
+          state.desktopPrototypeFocusId = defaultDesktopPrototypeFocusId();
+        }
+        renderOsProjectList();
+        var proto = getDesktopFocusPrototype();
+        var model = buildDesktopViewModel(proto);
+
+        if (els.desktopProjectName) els.desktopProjectName.textContent = model.name;
+        if (els.desktopProjectType) els.desktopProjectType.textContent = model.typeLabel;
+        if (els.desktopProjectStatus) els.desktopProjectStatus.textContent = model.stateLabel;
+        renderDesktopStages(model.stagesDemo);
+        if (els.desktopLastUpdate) els.desktopLastUpdate.textContent = model.lastUpdate;
+        if (els.desktopProjectPath) els.desktopProjectPath.textContent = model.path;
+
+        if (els.btnCopyProjectPath) {
+          var hasPath = !!(model.path && model.path !== "—");
+          els.btnCopyProjectPath.hidden = !hasPath;
+          els.btnCopyProjectPath.title = hasPath
+            ? "Скопировать путь к папке проекта"
+            : "";
+        }
+
+        if (els.desktopProtoNote) els.desktopProtoNote.hidden = true;
+
+        if (els.btnContinue) {
+          els.btnContinue.disabled = false;
+          els.btnContinue.title = "Открыть реальный текущий проект (LAST_OPENED)";
+        }
+      }
+
+      function copyDesktopProjectPath() {
+        var proto = getDesktopFocusPrototype();
+        var model = buildDesktopViewModel(proto);
+        var path = model.path && model.path !== "—" ? model.path : "";
+        if (!path) return;
+        function done() {
+          if (!els.btnCopyProjectPath) return;
+          var prev = els.btnCopyProjectPath.textContent;
+          els.btnCopyProjectPath.textContent = "Путь скопирован";
+          window.setTimeout(function () {
+            els.btnCopyProjectPath.textContent = prev || "Открыть папку";
+          }, 1400);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(path).then(done).catch(function () {
+            window.prompt("Скопируйте путь к папке:", path);
+          });
+        } else {
+          window.prompt("Скопируйте путь к папке:", path);
+        }
+      }
+
+      function renderHome() {
+        renderDesktop();
+      }
+
+      function setActiveTab(tabId, options) {
+        var next = tabId || "task";
+        var force = !!(options && options.force);
+        if (!force && state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
           next = "overview";
         }
         state.activeTab = next;
-        var buttons = els.workspaceTabs.querySelectorAll("[data-tab]");
+
+        var stageTabs = { task: true, work: true, overview: true };
+        var showStage = !!stageTabs[state.activeTab];
+        if (els.currentStageScreen) els.currentStageScreen.hidden = !showStage;
+
+        var buttons = els.workspaceTabs ? els.workspaceTabs.querySelectorAll("[data-tab]") : [];
         for (var i = 0; i < buttons.length; i++) {
           buttons[i].classList.toggle("is-active", buttons[i].getAttribute("data-tab") === state.activeTab);
         }
         var panels = els.panelWorkspace.querySelectorAll("[data-tab-panel]");
         for (var p = 0; p < panels.length; p++) {
-          panels[p].classList.toggle("is-active", panels[p].getAttribute("data-tab-panel") === state.activeTab);
+          var panelId = panels[p].getAttribute("data-tab-panel");
+          var isStageStub = !!stageTabs[panelId];
+          var active = !isStageStub && panelId === state.activeTab;
+          panels[p].classList.toggle("is-active", active);
+          if (isStageStub) panels[p].hidden = true;
+          else panels[p].hidden = !active;
         }
+
       }
 
       function loadDetailLevel() {
@@ -3317,6 +4911,7 @@
         document.getElementById("crumbProject").textContent = project.name;
         document.getElementById("crumbModule").textContent = view.module ? view.module.name : "не выбран";
         document.getElementById("crumbTask").textContent = view.task ? view.task.name : "не выбрана";
+        if (els.currentStageTitle) els.currentStageTitle.textContent = view.task ? view.task.name : (view.stage || "Текущий этап");
         var status = project.status || "В работе";
         var review = view.task ? ensureTaskReview(project, view.task) : null;
         if (review && review.status === "accepted") status = "Задача принята";
@@ -3710,6 +5305,7 @@
       }
 
       function renderOverview(project, view) {
+        if (!els.ovGoal || !els.ovModule) return;
         var review = view.task ? ensureTaskReview(project, view.task) : null;
         var goalText = (view.module && view.module.purpose) || project.idea || "—";
         if (view.task && view.task.goal) goalText = view.task.goal;
@@ -4351,12 +5947,170 @@
           '<article class="rules-card allow"><h4>Критерии принятия результата</h4>' + listHtml(rules.acceptance) + "</article>";
       }
 
+      /**
+       * Способ запуска берётся из данных проекта (launchUrl / launch_url / launchTarget / launch_target).
+       * Пока такого поля нет — кнопка остаётся неактивной; endpoint запуска будет отдельной задачей.
+       */
+      function resolveProjectLaunch(project) {
+        if (!project) return null;
+        var raw = project.launchUrl || project.launch_url || project.launchTarget || project.launch_target || "";
+        var value = String(raw || "").trim();
+        if (!value) return null;
+        if (/^https?:\/\//i.test(value)) return { kind: "url", value: value };
+        return { kind: "unsupported", value: value };
+      }
+
+      function renderOpenAppButton(project) {
+        if (!els.btnOpenApp) return;
+        var launch = resolveProjectLaunch(project);
+        var canOpen = !!(launch && launch.kind === "url");
+        els.btnOpenApp.disabled = !canOpen;
+        if (els.openAppHint) {
+          if (canOpen) els.openAppHint.textContent = "Приложение откроется в новом окне.";
+          else if (launch) els.openAppHint.textContent = "Для этого проекта запуск пока не поддерживается.";
+          else els.openAppHint.textContent = "Для этого проекта запуск не настроен.";
+        }
+      }
+
+      function openProjectApp() {
+        var project = findProject(state.currentId);
+        var launch = resolveProjectLaunch(project);
+        if (!launch || launch.kind !== "url") return;
+        window.open(launch.value, "_blank", "noopener");
+      }
+
+      function nextStepText(project) {
+        var mod = getActiveModule(project);
+        if (mod && String(mod.nextAfterAccept || "").trim()) return String(mod.nextAfterAccept).trim();
+        if (mod && String(mod.remaining || "").trim()) return String(mod.remaining).trim();
+        return "Определить следующую точечную задачу модуля.";
+      }
+
+      function buildNextAssignmentText(project) {
+        var mod = getActiveModule(project);
+        var toolId = resolvePrimaryToolId(project);
+        var tool = toolId ? getTool(toolId) : null;
+        var lines = [
+          "СЛЕДУЮЩЕЕ ЗАДАНИЕ",
+          "",
+          "ПРОЕКТ",
+          project.name || "—",
+          "",
+          "МОДУЛЬ",
+          mod ? mod.name : "не выбран",
+          "",
+          "ЧТО СДЕЛАТЬ ДАЛЬШЕ",
+          nextStepText(project),
+          "",
+          "ГДЕ ВЫПОЛНЯТЬ РАБОТУ",
+          (tool ? tool.name : "среда разработки не указана") +
+            "; рабочая папка: " + (project.workFolder || "не указана")
+        ];
+        return lines.join("\n");
+      }
+
+      function renderStageNextBlock(project, review) {
+        if (!els.stageNextBlock) return;
+        var accepted = !!(review && review.status === "accepted");
+        els.stageNextBlock.hidden = !accepted;
+        if (!accepted) return;
+        var toolId = resolvePrimaryToolId(project);
+        var tool = toolId ? getTool(toolId) : null;
+        if (els.stageNextLabel) {
+          els.stageNextLabel.textContent = tool
+            ? ("Следующее задание для " + tool.name)
+            : "Следующее задание";
+        }
+        if (els.stageNextText) els.stageNextText.textContent = nextStepText(project);
+      }
+
+      function getStageShot(project, task) {
+        if (!project || !task) return null;
+        return state.stageShots[reviewMapKey(project, task)] || null;
+      }
+
+      function buildFixAssignmentText(project, task, review) {
+        var mod = getActiveModule(project);
+        var toolId = resolvePrimaryToolId(project);
+        var tool = toolId ? getTool(toolId) : null;
+        var shot = getStageShot(project, task);
+        var lines = [
+          "ЗАДАНИЕ НА ИСПРАВЛЕНИЕ",
+          "",
+          "ПРОЕКТ",
+          project.name || "—",
+          "",
+          "МОДУЛЬ",
+          mod ? mod.name : "не выбран",
+          "",
+          "ТЕКУЩИЙ ЭТАП",
+          task.name || "—",
+          "",
+          "ЧТО ИСПРАВИТЬ",
+          (review && review.notes) || "—",
+          "",
+          "ОЖИДАЕМЫЙ РЕЗУЛЬТАТ",
+          task.expectedResult || "—",
+          "",
+          "ГДЕ ВЫПОЛНЯТЬ РАБОТУ",
+          (tool ? tool.name : "среда разработки не указана") +
+            "; рабочая папка: " + (project.workFolder || "не указана")
+        ];
+        if (shot) {
+          lines = lines.concat([
+            "",
+            "СКРИНШОТ С ЗАМЕЧАНИЕМ",
+            "",
+            "Файл:",
+            shot.name,
+            "",
+            "Расположение:",
+            shot.location,
+            "",
+            "Изучи скриншот перед внесением изменений."
+          ]);
+        }
+        return lines.join("\n");
+      }
+
+      function renderStageFixBlock(project, task, review) {
+        if (!els.stageFixBlock) return;
+        var needsFix = !!(review && review.status === "notes");
+        els.stageFixBlock.hidden = !needsFix;
+        if (!needsFix) return;
+        if (els.stageFixText) els.stageFixText.textContent = review.notes || "—";
+        var shot = getStageShot(project, task);
+        if (els.stageFixShot) {
+          els.stageFixShot.hidden = !shot;
+          els.stageFixShot.textContent = shot ? ("Скриншот с замечанием: " + shot.name) : "";
+        }
+      }
+
+      function renderStageShot(project, task) {
+        var shot = getStageShot(project, task);
+        if (els.reviewShotBtnText) {
+          els.reviewShotBtnText.textContent = shot ? "Заменить скриншот" : "Прикрепить скриншот";
+        }
+        if (els.reviewShotNote) {
+          els.reviewShotNote.hidden = !shot;
+          if (els.reviewShotName) {
+            els.reviewShotName.textContent = shot ? ("Прикреплён скриншот: " + shot.name) : "";
+          }
+          if (els.btnRemoveShot) els.btnRemoveShot.hidden = !shot;
+        }
+      }
+
       function renderReviewBlock(project, task) {
         if (!task) {
           if (els.reviewCard) els.reviewCard.hidden = true;
+          if (els.stageCheckBlock) els.stageCheckBlock.hidden = true;
+          if (els.stageFixBlock) els.stageFixBlock.hidden = true;
+          if (els.stageNextBlock) els.stageNextBlock.hidden = true;
+          if (els.reviewChecks) els.reviewChecks.innerHTML = "";
           return;
         }
         els.reviewCard.hidden = false;
+        if (els.stageCheckBlock) els.stageCheckBlock.hidden = false;
         var review = ensureTaskReview(project, task);
         els.reviewStatus.textContent = reviewStatusLabel(review.status);
         els.reviewStatus.className = "review-status" +
@@ -4391,19 +6145,29 @@
           });
         }
 
-        if (els.btnReviewReady) els.btnReviewReady.disabled = review.status === "accepted";
-        els.btnReviewAccept.disabled = review.status === "accepted";
-        els.btnReviewNotes.disabled = review.status === "accepted";
-        els.btnNextTask.disabled = review.status !== "accepted";
-        if (review.status === "accepted") {
-          els.reviewHint.textContent = "Результат принят" + (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ". Состояние проекта обновлено.";
-        } else if (review.status === "ready") {
-          els.reviewHint.textContent = "Результат отмечен как готовый. Нажмите «Принять», если всё верно, или «Нужны изменения».";
-        } else if (review.status === "notes") {
-          els.reviewHint.textContent = "Замечание сохранено и добавлено в рабочее задание. Исправьте и снова отметьте «Результат готов».";
-        } else {
-          els.reviewHint.textContent = "Когда работа сделана: «Результат готов» → «Принять». Если нужно правки — «Нужны изменения».";
+        var accepted = review.status === "accepted";
+        var allChecked = allReviewChecksDone(review);
+        if (els.btnStageDone) els.btnStageDone.disabled = accepted || !allChecked;
+        if (els.btnStageIssues) els.btnStageIssues.disabled = accepted;
+        if (els.stageIssuesBox) {
+          els.stageIssuesBox.hidden = accepted || !state.stageIssuesOpen;
         }
+        renderStageShot(project, task);
+        syncSubmitIssuesButton();
+        if (accepted) {
+          els.reviewHint.textContent = "Результат принят" +
+            (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ".";
+        } else if (review.status === "notes") {
+          els.reviewHint.textContent = "Задание на исправление готово. После исправления заново отметьте пункты проверки.";
+        } else if (allChecked) {
+          els.reviewHint.textContent = "Все пункты отмечены. Можно принять результат.";
+        } else {
+          els.reviewHint.textContent = "Отметьте пункты, которые вы проверили. Кнопка «✔ Всё выполнено» станет доступна, когда отмечены все пункты.";
+        }
+
+        renderOpenAppButton(project);
+        renderStageFixBlock(project, task, review);
+        renderStageNextBlock(project, review);
       }
 
       function formatDateTime(iso) {
@@ -4421,7 +6185,8 @@
       function renderTaskTab(project, view) {
         var task = view.task;
         els.taskEmptyNote.hidden = !!task;
-        els.taskStack.hidden = !task;
+        if (els.stageProjectName) els.stageProjectName.textContent = project.name || "—";
+        if (els.stageModuleName) els.stageModuleName.textContent = view.module ? view.module.name : "не выбран";
         if (!task) {
           els.taskGoalText.textContent = "—";
           els.taskWhyText.textContent = "—";
@@ -4435,6 +6200,11 @@
         }
 
         els.taskGoalText.textContent = task.goal || "—";
+        if (task.subtask && String(task.subtask).trim()) {
+          els.taskGoalText.textContent = (task.goal || "").trim()
+            ? (String(task.goal).trim() + "\n\n" + String(task.subtask).trim())
+            : String(task.subtask).trim();
+        }
         els.taskWhyText.textContent = task.whyNow || "—";
         els.taskResultText.textContent = task.expectedResult || view.stageOutcome || "—";
         els.taskCanText.textContent = task.canChange || "—";
@@ -4453,33 +6223,46 @@
       }
 
       function renderTools(project) {
-        var html = "";
-        for (var i = 0; i < AI_TOOLS.length; i++) {
-          var t = AI_TOOLS[i];
-          var active = state.selectedTool === t.id ? " is-active" : "";
-          html += '<button type="button" class="tool-pick' + active + '" data-tool="' + escapeHtml(t.id) + '">' + escapeHtml(t.name) + "</button>";
-        }
-        els.toolPicks.innerHTML = html;
-        var buttons = els.toolPicks.querySelectorAll("[data-tool]");
-        for (var b = 0; b < buttons.length; b++) {
-          buttons[b].addEventListener("click", function (event) {
-            state.selectedTool = event.currentTarget.getAttribute("data-tool");
-            var mutable = currentProjectMutable();
-            var mod = mutable ? getActiveModule(mutable) : null;
-            var task = mod ? getActiveTask(mod) : null;
-            if (task) task.recommendedTool = state.selectedTool;
-            if (mutable && !mutable.isDemo) saveProjects();
-            var fresh = ensureDerived(mutable || project);
-            renderTools(fresh);
-            renderAssignment(fresh);
-          });
-        }
+        var toolId = resolvePrimaryToolId(project);
+        state.selectedTool = toolId;
+        var hasTool = !!toolId;
+        var hasTask = !!getActiveTask(getActiveModule(project));
+        if (els.stagePrimaryToolReady) els.stagePrimaryToolReady.hidden = !hasTool;
+        if (els.stagePrimaryToolMissing) els.stagePrimaryToolMissing.hidden = hasTool;
+        if (els.btnCopyWork) els.btnCopyWork.disabled = !hasTool || !hasTask;
+        if (els.toolPicks) els.toolPicks.innerHTML = "";
 
-        var tool = getTool(state.selectedTool);
-        els.toolWhy.textContent = tool.why;
-        els.toolWhen.textContent = tool.strengths;
-        els.toolAvoid.textContent = tool.avoid;
         els.toolFolder.textContent = project.workFolder || "не указана";
+        if (hasTool) {
+          var tool = getTool(toolId);
+          if (els.stagePrimaryToolName) els.stagePrimaryToolName.textContent = tool.name;
+          els.toolWhy.textContent = tool.why;
+          els.toolWhen.textContent = tool.strengths;
+          els.toolAvoid.textContent = tool.avoid;
+        } else {
+          if (els.stagePrimaryToolName) els.stagePrimaryToolName.textContent = "—";
+          els.toolWhy.textContent = "—";
+          els.toolWhen.textContent = "—";
+          els.toolAvoid.textContent = "—";
+        }
+      }
+
+      function renderSettings(project) {
+        fillPrimaryToolSelect(els.settingsPrimaryTool, resolvePrimaryToolId(project));
+        fillAiModelSelect(els.settingsAiModel, normalizeAiModel(project && project.aiModel));
+        if (els.settingsWorkFolder) els.settingsWorkFolder.value = project.workFolder || "";
+        if (els.settingsSaveNote) els.settingsSaveNote.hidden = true;
+      }
+
+      function onSaveProjectSettings(event) {
+        event.preventDefault();
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        mutable.primaryTool = normalizePrimaryTool(els.settingsPrimaryTool && els.settingsPrimaryTool.value);
+        mutable.aiModel = normalizeAiModel(els.settingsAiModel && els.settingsAiModel.value);
+        if (!mutable.isDemo) saveProjects();
+        refreshWorkspace();
+        if (els.settingsSaveNote) els.settingsSaveNote.hidden = false;
       }
 
       function sectionKind(title) {
@@ -4547,7 +6330,17 @@
       }
 
       function renderAssignment(project) {
-        var tool = getTool(state.selectedTool);
+        var toolId = resolvePrimaryToolId(project);
+        state.selectedTool = toolId;
+        if (!toolId) {
+          els.assignmentTitle.innerHTML =
+            '<span class="ico" aria-hidden="true">📋</span> Рабочее задание';
+          els.workBox.setAttribute("data-plain", "");
+          els.workBox.innerHTML = "";
+          els.copyToast.classList.remove("is-visible");
+          return;
+        }
+        var tool = getTool(toolId);
         var plain = buildAssignment(project, tool);
         els.assignmentTitle.innerHTML =
           '<span class="ico" aria-hidden="true">📋</span> Рабочее задание для ' + escapeHtml(tool.name);
@@ -4633,14 +6426,14 @@
         return type.indexOf("text/") === 0 || type === "application/json" || /\.(txt|md|markdown|json|csv)$/.test(name);
       }
 
-      function ingestFile(file, mutable) {
+      function ingestFile(file, mutable, level) {
         var item = {
           id: uid("file"),
           name: file.name,
           type: file.type || "application/octet-stream",
           size: file.size || 0,
           kind: materialKind(file),
-          level: "проект",
+          level: level || "проект",
           contentText: "",
           dataUrl: ""
         };
@@ -4712,11 +6505,11 @@
         var project = findProject(id);
         if (!project) return;
         state.currentId = id;
+        state.stageIssuesOpen = false;
         saveLastOpened(id);
 
         var view = deriveView(project);
-        var task = view.task;
-        state.selectedTool = (task && task.recommendedTool) || state.selectedTool || "cursor";
+        state.selectedTool = resolvePrimaryToolId(project);
 
         renderHeader(project, view);
         renderOverview(project, view);
@@ -4726,8 +6519,10 @@
         renderAssignment(project);
         renderMaterials(project);
         renderTeam(project);
-        setActiveTab(state.activeTab || "overview");
+        renderSettings(project);
+        setActiveTab(state.activeTab || "task", { force: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
+        if ((state.activeTab || "task") === "task") setOsNavActive("current-task");
       }
 
       function getFormData() {
@@ -4739,29 +6534,62 @@
           assets: document.getElementById("fieldAssets").value.trim(),
           constraints: document.getElementById("fieldConstraints").value.trim(),
           workFolder: document.getElementById("fieldWorkFolder").value.trim(),
-          template: document.getElementById("fieldTemplate").value.trim()
+          parentFolder: document.getElementById("fieldParentFolder").value.trim(),
+          primaryTool: normalizePrimaryTool(document.getElementById("fieldPrimaryTool").value),
+          aiModel: normalizeAiModel(document.getElementById("fieldAiModel").value),
+          template: document.getElementById("fieldTemplate").value.trim(),
+          confirmed: !!(els.fieldCreateConfirm && els.fieldCreateConfirm.checked)
         };
       }
 
       function validateForm(data) {
         clearFieldErrors();
         var ok = true;
-        var required = ["name", "idea", "result", "audience"];
-        for (var i = 0; i < required.length; i++) {
-          if (!data[required[i]]) {
-            var field = els.projectForm.querySelector('[data-field="' + required[i] + '"]');
-            if (field) field.classList.add("is-invalid");
-            ok = false;
-          }
+        if (!data.name || !data.idea) ok = false;
+        if (!data.confirmed) ok = false;
+        if (state.createWizard.mode === "new") {
+          if (!state.createWizard.parentPath) ok = false;
+          if (!(state.createWizard.preview && state.createWizard.preview.can_create)) ok = false;
+        } else {
+          if (!state.createWizard.projectPath) ok = false;
         }
+        els.formError.textContent = "Проверьте шаги мастера и подтвердите действие.";
         els.formError.classList.toggle("is-visible", !ok);
         return ok;
       }
 
-      function onSubmitForm(event) {
+      async function onSubmitForm(event) {
         event.preventDefault();
+        if (state.createWizard.busy) return;
+        if (state.createWizard.step !== 5) {
+          goWizardStep(5);
+          return;
+        }
+        ensurePassportDefaults();
         var data = getFormData();
         if (!validateForm(data)) return;
+
+        var workFolder = "";
+        if (state.createWizard.mode === "new") {
+          setCreateBusy(true);
+          var created = await postBridgeJson("/api/create-project", {
+            parent_path: state.createWizard.parentPath,
+            project_name: data.name,
+            confirm: true
+          });
+          setCreateBusy(false);
+          if (!created.data || !created.data.ok || !created.data.project_path) {
+            window.alert((created.data && created.data.message) || "Не удалось создать папку проекта.");
+            return;
+          }
+          if (!created.data.wrote) {
+            window.alert("Создание на диске не выполнено. Подтвердите действие и повторите.");
+            return;
+          }
+          workFolder = created.data.project_path;
+        } else {
+          workFolder = state.createWizard.projectPath;
+        }
 
         var project = ensureDerived({
           id: uid("proj"),
@@ -4771,7 +6599,9 @@
           audience: data.audience,
           assets: data.assets,
           constraints: data.constraints,
-          workFolder: data.workFolder,
+          workFolder: workFolder,
+          primaryTool: data.primaryTool,
+          aiModel: data.aiModel,
           template: data.template,
           modules: [],
           activeModuleId: "",
@@ -4784,6 +6614,7 @@
 
         state.projects.push(project);
         saveProjects();
+        state.activeTab = "task";
         openWorkspace(project.id);
       }
 
@@ -4838,62 +6669,21 @@
         document.getElementById("taskName").focus();
       }
 
-      function markReviewReady() {
+      /**
+       * Принятие результата. Галочки критериев проставляет только пользователь,
+       * поэтому здесь они не изменяются, а служат условием принятия.
+       */
+      function acceptStageResult() {
         var mutable = currentProjectMutable();
         if (!mutable) return;
         var mod = getActiveModule(mutable);
         var task = getActiveTask(mod);
         if (!task) return;
         var review = ensureTaskReview(mutable, task);
-        review.notes = els.reviewNotes.value.trim();
-        for (var i = 0; i < review.items.length; i++) {
-          review.checks[review.items[i].id] = true;
-        }
-        review.status = "ready";
-        review.acceptedAt = null;
-        task.workflowStatus = "Результат готов";
-        persistTaskReview(mutable, task);
-        refreshWorkspace();
-      }
-
-      function markReviewNotes() {
-        var mutable = currentProjectMutable();
-        if (!mutable) return;
-        var mod = getActiveModule(mutable);
-        var task = getActiveTask(mod);
-        if (!task) return;
-        var review = ensureTaskReview(mutable, task);
-        review.notes = els.reviewNotes.value.trim();
-        if (!review.notes) {
-          window.alert("Кратко опишите, что нужно изменить.");
-          els.reviewNotes.focus();
-          return;
-        }
-        review.status = "notes";
-        review.acceptedAt = null;
-        task.workflowStatus = "Нужны изменения";
-        persistTaskReview(mutable, task);
-        refreshWorkspace();
-        setActiveTab("work");
-      }
-
-      function markReviewAccepted() {
-        var mutable = currentProjectMutable();
-        if (!mutable) return;
-        var mod = getActiveModule(mutable);
-        var task = getActiveTask(mod);
-        if (!task) return;
-        var review = ensureTaskReview(mutable, task);
-        review.notes = els.reviewNotes.value.trim();
-        if (review.status !== "ready" && !allReviewChecksDone(review)) {
-          window.alert("Сначала нажмите «Результат готов» или отметьте критерии приёмки (расширенный уровень).");
-          return;
-        }
-        for (var i = 0; i < review.items.length; i++) {
-          review.checks[review.items[i].id] = true;
-        }
+        if (!allReviewChecksDone(review)) return;
         review.status = "accepted";
         review.acceptedAt = new Date().toISOString();
+        review.notes = "";
         task.workflowStatus = "Готово";
         if (mod) {
           mod.remaining = "Сформулировать следующую точечную доработку модуля";
@@ -4902,8 +6692,166 @@
         }
         persistTaskReview(mutable, task);
         if (!mutable.isDemo) saveProjects();
+        state.stageIssuesOpen = false;
+        delete state.stageShots[reviewMapKey(mutable, task)];
+        if (els.reviewNotes) els.reviewNotes.value = "";
         refreshWorkspace();
-        setActiveTab("overview");
+      }
+
+      function requestStageAcceptance() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        var review = ensureTaskReview(mutable, task);
+        if (review.status === "accepted" || !allReviewChecksDone(review)) return;
+        var draft = els.reviewNotes ? els.reviewNotes.value.trim() : "";
+        if (state.stageIssuesOpen && draft && draft !== (review.notes || "")) {
+          var keepGoing = window.confirm(
+            "Описание замечаний не будет сохранено. Принять результат?"
+          );
+          if (!keepGoing) return;
+          els.reviewNotes.value = "";
+        }
+        openActionGate("accept");
+      }
+
+      function toggleStageIssues() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        state.stageIssuesOpen = !state.stageIssuesOpen;
+        renderReviewBlock(mutable, task);
+        if (state.stageIssuesOpen && els.reviewNotes) els.reviewNotes.focus();
+      }
+
+      function syncSubmitIssuesButton() {
+        if (!els.btnSubmitIssues) return;
+        var text = els.reviewNotes ? els.reviewNotes.value.trim() : "";
+        els.btnSubmitIssues.disabled = !text;
+      }
+
+      /**
+       * Передача на исправление. Отметки проверки снимаются: принять прежний
+       * результат без нового цикла проверки нельзя.
+       */
+      function submitStageIssues() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var mod = getActiveModule(mutable);
+        var task = getActiveTask(mod);
+        if (!task) return;
+        var notes = els.reviewNotes ? els.reviewNotes.value.trim() : "";
+        if (!notes) return;
+        var review = ensureTaskReview(mutable, task);
+        review.notes = notes;
+        review.status = "notes";
+        review.acceptedAt = null;
+        for (var i = 0; i < review.items.length; i++) {
+          review.checks[review.items[i].id] = false;
+        }
+        task.workflowStatus = "Нужны изменения";
+        persistTaskReview(mutable, task);
+        if (!mutable.isDemo) saveProjects();
+        state.stageIssuesOpen = false;
+        refreshWorkspace();
+      }
+
+      function copyFixAssignment() {
+        var project = currentProjectMutable() || findProject(state.currentId);
+        if (!project) return;
+        var task = getActiveTask(getActiveModule(project));
+        if (!task) return;
+        var review = ensureTaskReview(project, task);
+        copyTextWithToast(buildFixAssignmentText(project, task, review), els.copyFixToast);
+      }
+
+      function showStageShotProblem(message) {
+        if (!els.reviewShotNote) return;
+        els.reviewShotNote.hidden = false;
+        if (els.reviewShotName) els.reviewShotName.textContent = message;
+        if (els.btnRemoveShot) els.btnRemoveShot.hidden = true;
+      }
+
+      /**
+       * Скриншот попадает в материалы проекта существующим способом.
+       * Привязка «замечание → файл» хранится только в состоянии интерфейса,
+       * поэтому файл считается прикреплённым лишь после успешной загрузки.
+       */
+      function onReviewShotSelected(event) {
+        var input = event.currentTarget;
+        var file = input.files && input.files[0];
+        input.value = "";
+        if (!file) return;
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        if ((file.type || "").indexOf("image/") !== 0) {
+          showStageShotProblem("Нужен файл изображения: снимок экрана в png или jpg.");
+          return;
+        }
+        // Изображение хранится в материалах в виде текста, он примерно на треть
+        // объёмнее файла, поэтому предел по файлу ниже предела хранения.
+        var maxShotBytes = Math.floor(MAX_DATA_URL * 0.7);
+        if (file.size > maxShotBytes) {
+          showStageShotProblem(
+            "Скриншот слишком большой. Прикрепите файл размером до " +
+              Math.floor(maxShotBytes / 1024) + " КБ."
+          );
+          return;
+        }
+        if (!mutable.materials) mutable.materials = [];
+        ingestFile(file, mutable, "замечание").then(function () {
+          var stored = mutable.materials[mutable.materials.length - 1];
+          if (!stored || stored.name !== file.name || !stored.dataUrl) {
+            if (stored && stored.name === file.name) mutable.materials.pop();
+            showStageShotProblem("Не удалось прикрепить скриншот. Попробуйте другой файл.");
+            return;
+          }
+          state.stageShots[reviewMapKey(mutable, task)] = {
+            name: stored.name,
+            location: "Материалы проекта AI POS → раздел «Материалы» → " + stored.name
+          };
+          if (!mutable.isDemo) saveProjects();
+          renderReviewBlock(mutable, task);
+        }).catch(function () {
+          showStageShotProblem("Не удалось прикрепить скриншот. Попробуйте другой файл.");
+        });
+      }
+
+      function removeStageShot() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        delete state.stageShots[reviewMapKey(mutable, task)];
+        renderReviewBlock(mutable, task);
+      }
+
+      function copyTextWithToast(text, toast) {
+        if (!text) return;
+        function showOk() {
+          if (!toast) return;
+          toast.classList.add("is-visible");
+          window.setTimeout(function () {
+            toast.classList.remove("is-visible");
+          }, 1800);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(showOk).catch(function () {
+            fallbackCopy(text, showOk);
+          });
+        } else {
+          fallbackCopy(text, showOk);
+        }
+      }
+
+      function copyNextAssignment() {
+        var project = currentProjectMutable() || findProject(state.currentId);
+        if (!project) return;
+        copyTextWithToast(buildNextAssignmentText(project), els.copyNextToast);
       }
 
       function syncGateConfirmButton() {
@@ -4915,16 +6863,40 @@
         els.btnConfirmGate.disabled = !all;
       }
 
-      function openActionGate() {
+      var GATE_TEXTS = {
+        copy: {
+          title: "Передать задачу ИИ",
+          lead: "Контроль перед передачей задачи. Подтвердите границы, затем скопируйте задание.",
+          confirm: "Скопировать и продолжить"
+        },
+        accept: {
+          title: "Принять результат",
+          lead: "Вы подтверждаете, что результат проверен и соответствует ожидаемому результату. " +
+            "После подтверждения текущая задача будет завершена, а система подготовит следующее задание.",
+          confirm: "Подтвердить принятие"
+        }
+      };
+
+      function openActionGate(purpose) {
         var project = currentProjectMutable() || findProject(state.currentId);
         if (!project) return;
         project = ensureDerived(project);
+        if (!resolvePrimaryToolId(project)) {
+          window.alert("Сначала укажите основной инструмент в настройках проекта.");
+          return;
+        }
         var mod = getActiveModule(project);
         var task = getActiveTask(mod);
         if (!task) {
           window.alert("Сначала добавьте текущую задачу.");
           return;
         }
+
+        state.gatePurpose = purpose === "accept" ? "accept" : "copy";
+        var texts = GATE_TEXTS[state.gatePurpose];
+        if (els.gateTitle) els.gateTitle.textContent = texts.title;
+        if (els.gateLead) els.gateLead.textContent = texts.lead;
+        els.btnConfirmGate.textContent = texts.confirm;
 
         els.gateProject.textContent = project.name;
         els.gateModule.textContent = mod ? mod.name : "не выбран";
@@ -4955,7 +6927,7 @@
         openModal(els.gateModal);
       }
 
-      function confirmActionGateAndCopy() {
+      function confirmActionGate() {
         var project = currentProjectMutable() || findProject(state.currentId);
         if (!project) return;
         project = ensureDerived(project);
@@ -4966,7 +6938,7 @@
         var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
         for (var i = 0; i < boxes.length; i++) {
           if (!boxes[i].checked) {
-            window.alert("Нужно подтвердить все пункты контроля перед копированием.");
+            window.alert("Нужно подтвердить все пункты контроля.");
             return;
           }
         }
@@ -4984,7 +6956,8 @@
         };
         saveJsonMap(GATE_KEY, map);
         closeModal(els.gateModal);
-        copyWorkText();
+        if (state.gatePurpose === "accept") acceptStageResult();
+        else copyWorkText();
       }
 
       function onSubmitModule(event) {
@@ -5114,11 +7087,22 @@
         document.getElementById("btnCancelForm").addEventListener("click", function () { showPanel("list"); });
         document.getElementById("btnCancelFormAlt").addEventListener("click", function () { showPanel("list"); });
         document.getElementById("btnBackToList").addEventListener("click", function () { showPanel("list"); });
+
         document.getElementById("btnContinue").addEventListener("click", function () {
-          openWorkspace(getFocusProject().id);
+          openOsSection("current-task");
         });
+        if (els.btnCopyProjectPath) {
+          els.btnCopyProjectPath.addEventListener("click", copyDesktopProjectPath);
+        }
+        var osNavButtons = document.querySelectorAll(".os-nav-item[data-os-nav]");
+        for (var oni = 0; oni < osNavButtons.length; oni++) {
+          osNavButtons[oni].addEventListener("click", function (event) {
+            openOsSection(event.currentTarget.getAttribute("data-os-nav"));
+          });
+        }
         document.getElementById("btnStartFromModal").addEventListener("click", function () {
           closeModal(els.stepModal);
+          state.activeTab = "task";
           openWorkspace(getFocusProject().id);
         });
         document.getElementById("btnCloseStep").addEventListener("click", function () { closeModal(els.stepModal); });
@@ -5128,17 +7112,104 @@
           renderTemplates();
         });
         document.getElementById("btnSaveTemplate").addEventListener("click", saveAsCustomTemplate);
-        document.getElementById("btnCopyWork").addEventListener("click", openActionGate);
-        document.getElementById("btnAddModule").addEventListener("click", openAddModule);
-        document.getElementById("btnAddTask").addEventListener("click", function () { openAddTask(false); });
+        document.getElementById("btnCopyWork").addEventListener("click", function () {
+          openActionGate("copy");
+        });
+        if (els.btnOpenProjectSettings) {
+          els.btnOpenProjectSettings.addEventListener("click", function () {
+            openOsSection("settings");
+          });
+        }
+        if (els.projectSettingsForm) {
+          els.projectSettingsForm.addEventListener("submit", onSaveProjectSettings);
+        }
+        var modeButtons = document.querySelectorAll("[data-create-mode]");
+        for (var mi = 0; mi < modeButtons.length; mi++) {
+          modeButtons[mi].addEventListener("click", function (event) {
+            var mode = event.currentTarget.getAttribute("data-create-mode");
+            resetCreateWizard(mode);
+            if (state.createWizard.step === 1) syncCreateModeUi();
+          });
+        }
+        if (els.btnWizardNext) {
+          els.btnWizardNext.addEventListener("click", function () {
+            var step = state.createWizard.step || 1;
+            if (!validateWizardStep(step)) return;
+            if (step === 2) ensurePassportDefaults();
+            goWizardStep(step + 1);
+          });
+        }
+        if (els.btnWizardBack) {
+          els.btnWizardBack.addEventListener("click", function () {
+            goWizardStep((state.createWizard.step || 1) - 1);
+          });
+        }
+        if (els.btnPickParentFolder) {
+          els.btnPickParentFolder.addEventListener("click", async function () {
+            var path = await pickFolderViaBridge("Выберите родительскую папку для нового проекта");
+            if (!path) return;
+            state.createWizard.parentPath = path;
+            document.getElementById("fieldParentFolder").value = path;
+            await refreshNewProjectPreview();
+          });
+        }
+        if (els.btnRefreshPreview) {
+          els.btnRefreshPreview.addEventListener("click", function () {
+            refreshNewProjectPreview();
+          });
+        }
+        if (els.btnPickProjectFolder) {
+          els.btnPickProjectFolder.addEventListener("click", async function () {
+            var path = await pickFolderViaBridge("Выберите папку существующего проекта");
+            if (!path) return;
+            state.createWizard.projectPath = path;
+            document.getElementById("fieldWorkFolder").value = path;
+            if (!document.getElementById("fieldName").value.trim()) {
+              var parts = path.replace(/[\\/]+$/, "").split(/[\\/]/);
+              document.getElementById("fieldName").value = parts[parts.length - 1] || "";
+            }
+            await inspectSelectedProjectFolder();
+          });
+        }
+        if (els.btnInspectProjectFolder) {
+          els.btnInspectProjectFolder.addEventListener("click", function () {
+            inspectSelectedProjectFolder();
+          });
+        }
+        if (els.btnToggleTemplates) {
+          els.btnToggleTemplates.addEventListener("click", function () {
+            if (!els.templatesBlock) return;
+            var collapsed = els.templatesBlock.classList.toggle("is-collapsed");
+            els.btnToggleTemplates.textContent = collapsed ? "Показать" : "Скрыть";
+          });
+        }
+        document.getElementById("fieldName").addEventListener("input", function () {
+          updateCreateSummary();
+          if (state.createWizard.mode === "new" && state.createWizard.parentPath) {
+            refreshNewProjectPreview();
+          }
+        });
+        document.getElementById("fieldPrimaryTool").addEventListener("change", updateCreateSummary);
+        document.getElementById("fieldAiModel").addEventListener("change", updateCreateSummary);
+        if (els.fieldCreateConfirm) {
+          els.fieldCreateConfirm.addEventListener("change", updateCreateSummary);
+        }
+        var btnAddModule = document.getElementById("btnAddModule");
+        var btnAddTask = document.getElementById("btnAddTask");
+        if (btnAddModule) btnAddModule.addEventListener("click", openAddModule);
+        if (btnAddTask) btnAddTask.addEventListener("click", function () { openAddTask(false); });
         document.getElementById("btnCancelModule").addEventListener("click", function () { closeModal(els.moduleModal); });
         document.getElementById("btnCancelTask").addEventListener("click", function () { closeModal(els.taskModal); });
         document.getElementById("btnCancelGate").addEventListener("click", function () { closeModal(els.gateModal); });
-        document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGateAndCopy);
-        if (els.btnReviewReady) els.btnReviewReady.addEventListener("click", markReviewReady);
-        els.btnReviewNotes.addEventListener("click", markReviewNotes);
-        els.btnReviewAccept.addEventListener("click", markReviewAccepted);
-        els.btnNextTask.addEventListener("click", function () { openAddTask(true); });
+        document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGate);
+        if (els.btnStageDone) els.btnStageDone.addEventListener("click", requestStageAcceptance);
+        if (els.btnStageIssues) els.btnStageIssues.addEventListener("click", toggleStageIssues);
+        if (els.btnSubmitIssues) els.btnSubmitIssues.addEventListener("click", submitStageIssues);
+        if (els.reviewShotInput) els.reviewShotInput.addEventListener("change", onReviewShotSelected);
+        if (els.btnRemoveShot) els.btnRemoveShot.addEventListener("click", removeStageShot);
+        if (els.btnOpenApp) els.btnOpenApp.addEventListener("click", openProjectApp);
+        if (els.btnCopyFix) els.btnCopyFix.addEventListener("click", copyFixAssignment);
+        if (els.btnCopyNext) els.btnCopyNext.addEventListener("click", copyNextAssignment);
         if (els.detailLevelSwitch) {
           els.detailLevelSwitch.addEventListener("click", function (event) {
             var btn = event.target.closest("[data-detail-choice]");
@@ -5172,17 +7243,7 @@
             applyDetailLevel(buttons[next].getAttribute("data-detail-choice"));
           });
         }
-        els.reviewNotes.addEventListener("change", function () {
-          var mutable = currentProjectMutable();
-          if (!mutable) return;
-          var mod = getActiveModule(mutable);
-          var task = getActiveTask(mod);
-          if (!task) return;
-          var review = ensureTaskReview(mutable, task);
-          if (review.status === "accepted") return;
-          review.notes = els.reviewNotes.value;
-          persistTaskReview(mutable, task);
-        });
+        els.reviewNotes.addEventListener("input", syncSubmitIssuesButton);
         els.gateChecks.addEventListener("change", syncGateConfirmButton);
         els.moduleForm.addEventListener("submit", onSubmitModule);
         els.taskForm.addEventListener("submit", onSubmitTask);
@@ -5194,7 +7255,7 @@
         }
         els.projectForm.addEventListener("submit", onSubmitForm);
 
-        var tabButtons = els.workspaceTabs.querySelectorAll("[data-tab]");
+        var tabButtons = els.workspaceTabs ? els.workspaceTabs.querySelectorAll("[data-tab]") : [];
         for (var t = 0; t < tabButtons.length; t++) {
           tabButtons[t].addEventListener("click", function (event) {
             setActiveTab(event.currentTarget.getAttribute("data-tab"));
@@ -5286,12 +7347,14 @@
         state.customTemplates = loadCustomTemplates();
         state.lastOpenedId = loadLastOpened();
         if (!findProject(state.lastOpenedId)) state.lastOpenedId = DEMO_PROJECT.id;
+        state.desktopPrototypeFocusId = defaultDesktopPrototypeFocusId();
         fillTaskToolSelect();
+        fillPrimaryToolSelects();
         initAppearanceControls();
-        applyDetailLevel(loadDetailLevel(), { persist: false });
+        applyDetailLevel("technical", { persist: false });
         bindEvents();
         renderTemplates();
-        renderHome();
+        renderDesktop();
         showPanel("list");
       }
 
