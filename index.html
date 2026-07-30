@@ -559,8 +559,473 @@
 
     .desktop-start[hidden],
     .desktop-info[hidden],
-    .desktop-actions[hidden] {
-      display: none;
+    .desktop-actions[hidden],
+    .system-home[hidden] {
+      display: none !important;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .system-home {
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .pm-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      width: 100%;
+      min-height: 2.4rem;
+      column-gap: 0.75rem;
+    }
+
+    .pm-topbar-side {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .pm-topbar-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      min-width: 0;
+    }
+
+    .pm-title {
+      margin: 0;
+      font-size: 1.55rem;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .pm-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem 1.1rem;
+    }
+
+    .pm-search {
+      position: relative;
+      flex: 1 1 18rem;
+      min-width: 14rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .pm-search-field {
+      position: relative;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .pm-search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      line-height: 1;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .pm-search input {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 2.4rem;
+      margin: 0;
+      padding: 0.45rem 0.85rem 0.45rem 2.15rem;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface, #fff);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.9rem;
+    }
+
+    .pm-search input:focus {
+      outline: none;
+      border-color: color-mix(in srgb, #233a8b 40%, var(--line));
+      box-shadow: 0 0 0 3px color-mix(in srgb, #233a8b 12%, transparent);
+    }
+
+    .pm-search-find {
+      min-height: 2.4rem;
+      padding: 0.4rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #233a8b;
+      color: #fff;
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .pm-search-find:hover {
+      background: #1e3175;
+    }
+
+    .pm-search-find:focus {
+      outline: none;
+    }
+
+    .pm-search-find:focus-visible {
+      box-shadow: 0 0 0 3px color-mix(in srgb, #233a8b 18%, transparent);
+    }
+
+    .pm-table-wrap {
+      width: 100%;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface, #fff);
+    }
+
+    .pm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .pm-table th {
+      padding: 0.45rem 0.55rem 0.45rem 0.8rem;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
+      border-bottom: 1px solid #1e3175;
+      background: #233a8b;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .pm-th {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      max-width: 100%;
+    }
+
+    .pm-th-label {
+      line-height: 1.2;
+      color: #fff;
+    }
+
+    .pm-th-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.35rem;
+      height: 1.35rem;
+      margin: 0;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+      font-size: 0.58rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .pm-th-btn:hover,
+    .pm-th-btn[aria-expanded="true"] {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .pm-th-btn.is-active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.16);
+      box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.85);
+    }
+
+    .pm-th-menu {
+      position: absolute;
+      top: calc(100% + 0.25rem);
+      left: 0;
+      z-index: 60;
+      min-width: 13.5rem;
+      padding: 0.25rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 22px color-mix(in srgb, #1b2437 14%, transparent);
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .pm-th-menu[hidden] {
+      display: none !important;
+    }
+
+    .pm-th-menu-search {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 0.2rem;
+      padding: 0.42rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+
+    .pm-th-menu-search:focus {
+      outline: none;
+      border-color: color-mix(in srgb, #233a8b 40%, var(--line));
+      box-shadow: 0 0 0 2px color-mix(in srgb, #233a8b 14%, transparent);
+    }
+
+    .pm-th-menu-divider {
+      height: 1px;
+      margin: 0.2rem 0.15rem 0.25rem;
+      background: var(--line);
+    }
+
+    .pm-th-menu button {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.45rem 0.6rem;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 500;
+      text-align: left;
+      text-transform: none;
+      letter-spacing: normal;
+      cursor: pointer;
+    }
+
+    .pm-th-menu button:hover,
+    .pm-th-menu button:focus-visible {
+      background: color-mix(in srgb, #233a8b 8%, transparent);
+      outline: none;
+    }
+
+    .pm-th-menu button.is-active {
+      background: color-mix(in srgb, #233a8b 10%, transparent);
+      color: #233a8b;
+      font-weight: 650;
+    }
+
+    .pm-table td {
+      padding: 0.7rem 0.8rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+      vertical-align: middle;
+    }
+
+    .pm-table tbody tr {
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+
+    .pm-table tbody tr:hover {
+      background: color-mix(in srgb, #233a8b 5%, transparent);
+    }
+
+    .pm-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .pm-col-icon {
+      width: 2.6rem;
+    }
+
+    .pm-col-menu {
+      width: 2.8rem;
+      text-align: right;
+    }
+
+    .pm-row-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft, #eef2fb);
+      color: var(--accent, #233a8b);
+      border: 1px solid var(--line);
+    }
+
+    .pm-row-icon svg {
+      width: 15px;
+      height: 15px;
+      display: block;
+    }
+
+    .pm-row-name {
+      display: block;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .pm-row-status {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+
+    .pm-col-path {
+      max-width: 16rem;
+    }
+
+    .pm-row-path {
+      display: block;
+      max-width: 16rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 550;
+      color: var(--ink-soft);
+    }
+
+    .pm-row-path.is-empty,
+    .pm-row-empty {
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    .pm-col-github {
+      width: 6.5rem;
+      white-space: nowrap;
+    }
+
+    .pm-github-link {
+      display: inline-flex;
+      align-items: center;
+      color: #233a8b;
+      font-size: 0.84rem;
+      font-weight: 650;
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, #233a8b 35%, transparent);
+    }
+
+    .pm-github-link:hover {
+      color: #1e3175;
+      border-bottom-color: #1e3175;
+    }
+
+    .pm-row-updated {
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    .pm-menu-wrap {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .pm-menu-btn {
+      width: 2rem;
+      height: 2rem;
+      margin: 0;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink-muted);
+      font: inherit;
+      font-size: 1.15rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .pm-menu-btn:hover,
+    .pm-menu-btn[aria-expanded="true"] {
+      color: var(--ink);
+      background: color-mix(in srgb, #233a8b 7%, transparent);
+      border-color: color-mix(in srgb, #233a8b 14%, transparent);
+    }
+
+    .pm-row-menu {
+      position: absolute;
+      top: calc(100% + 0.2rem);
+      right: 0;
+      z-index: 50;
+      min-width: 12.5rem;
+      padding: 0.3rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 12px 28px color-mix(in srgb, #233a8b 14%, transparent);
+    }
+
+    .pm-row-menu[hidden] {
+      display: none !important;
+    }
+
+    .pm-row-menu button {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.5rem 0.65rem;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.86rem;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .pm-row-menu button:hover,
+    .pm-row-menu button:focus-visible {
+      background: color-mix(in srgb, #233a8b 7%, transparent);
+      outline: none;
+    }
+
+    .pm-row-menu button.is-danger {
+      color: #b42318;
+    }
+
+    .system-projects-empty {
+      margin: 0;
+      padding: 1.25rem 1rem;
+      color: var(--ink-muted);
+      font-size: 0.92rem;
+    }
+
+    #desktopRoot:has(#systemHome:not([hidden])) {
+      max-width: none;
     }
 
     .os-project-empty {
@@ -2650,6 +3115,80 @@
       <div class="os-main">
     <section class="panel is-active" id="panelList" aria-label="Рабочий стол">
       <div class="desktop" id="desktopRoot">
+        <div class="system-home" id="systemHome">
+          <div class="pm-topbar">
+            <div class="pm-topbar-side" aria-hidden="true"></div>
+            <div class="pm-topbar-center">
+              <h1 class="page-title pm-title">Проекты</h1>
+            </div>
+            <div class="pm-topbar-side" aria-hidden="true"></div>
+          </div>
+
+          <div class="pm-toolbar">
+            <div class="pm-search">
+              <div class="pm-search-field">
+                <span class="visually-hidden">Поиск проектов</span>
+                <span class="pm-search-icon" aria-hidden="true">🔍</span>
+                <input type="search" id="pmSearch" placeholder="Поиск проекта..." autocomplete="off" />
+              </div>
+              <button type="button" class="pm-search-find" id="btnPmSearch">Найти</button>
+            </div>
+          </div>
+
+          <section class="pm-table-wrap" aria-label="Список проектов">
+            <table class="pm-table" id="pmTable">
+              <thead>
+                <tr>
+                  <th scope="col" class="pm-col-icon"><span class="visually-hidden">Иконка</span></th>
+                  <th scope="col" class="pm-th-cell">
+                    <div class="pm-th">
+                      <span class="pm-th-label">Проект</span>
+                      <button type="button" class="pm-th-btn" data-pm-header="name" aria-label="Фильтр и сортировка по проекту" aria-haspopup="menu" aria-expanded="false">▼</button>
+                      <div class="pm-th-menu" data-pm-header-menu="name" role="menu" hidden>
+                        <input type="search" class="pm-th-menu-search" id="pmNameMenuSearch" placeholder="Поиск проекта..." autocomplete="off" aria-label="Поиск проекта по названию" />
+                        <div class="pm-th-menu-divider" aria-hidden="true"></div>
+                        <button type="button" role="menuitem" data-pm-header-action="sort" data-pm-value="name">Сортировка А → Я</button>
+                        <button type="button" role="menuitem" data-pm-header-action="sort" data-pm-value="name-desc">Сортировка Я → А</button>
+                      </div>
+                    </div>
+                  </th>
+                  <th scope="col" class="pm-th-cell">
+                    <div class="pm-th">
+                      <span class="pm-th-label">Статус</span>
+                      <button type="button" class="pm-th-btn" data-pm-header="status" aria-label="Фильтр по статусу" aria-haspopup="menu" aria-expanded="false">▼</button>
+                      <div class="pm-th-menu" data-pm-header-menu="status" role="menu" hidden>
+                        <button type="button" role="menuitem" data-pm-header-action="filter" data-pm-value="all">Все</button>
+                        <button type="button" role="menuitem" data-pm-header-action="filter" data-pm-value="Создан">Создан</button>
+                        <button type="button" role="menuitem" data-pm-header-action="filter" data-pm-value="В стадии разработки">В стадии разработки</button>
+                        <button type="button" role="menuitem" data-pm-header-action="filter" data-pm-value="Завершён">Завершён</button>
+                      </div>
+                    </div>
+                  </th>
+                  <th scope="col" class="pm-th-cell pm-col-path">
+                    <span class="pm-th-label">Размещение</span>
+                  </th>
+                  <th scope="col" class="pm-th-cell pm-col-github">
+                    <span class="pm-th-label">GitHub</span>
+                  </th>
+                  <th scope="col" class="pm-th-cell">
+                    <div class="pm-th">
+                      <span class="pm-th-label">Последнее обновление</span>
+                      <button type="button" class="pm-th-btn" data-pm-header="updated" aria-label="Сортировка по обновлению" aria-haspopup="menu" aria-expanded="false">▼</button>
+                      <div class="pm-th-menu" data-pm-header-menu="updated" role="menu" hidden>
+                        <button type="button" role="menuitem" data-pm-header-action="sort" data-pm-value="updated">Сначала новые</button>
+                        <button type="button" role="menuitem" data-pm-header-action="sort" data-pm-value="updated-asc">Сначала старые</button>
+                      </div>
+                    </div>
+                  </th>
+                  <th scope="col" class="pm-col-menu"><span class="visually-hidden">Меню</span></th>
+                </tr>
+              </thead>
+              <tbody id="pmTableBody"></tbody>
+            </table>
+            <p class="system-projects-empty" id="systemProjectsEmpty" hidden>Пока нет проектов.</p>
+          </section>
+        </div>
+
         <div class="desktop-start" id="desktopStart" hidden>
           <div>
             <h1 class="page-title">Здесь будут ваши проекты</h1>
@@ -3615,6 +4154,14 @@
           inspect: null,
           busy: false,
           previewSeq: 0
+        },
+        projectsUi: {
+          query: "",
+          nameQuery: "",
+          statusFilter: "all",
+          sort: "updated",
+          openMenuId: null,
+          openHeaderMenu: null
         }
       };
 
@@ -3628,6 +4175,12 @@
         formError: document.getElementById("formError"),
         templatesGrid: document.getElementById("templatesGrid"),
         osProjectList: document.getElementById("osProjectList"),
+        systemHome: document.getElementById("systemHome"),
+        pmSearch: document.getElementById("pmSearch"),
+        btnPmSearch: document.getElementById("btnPmSearch"),
+        pmTable: document.getElementById("pmTable"),
+        pmTableBody: document.getElementById("pmTableBody"),
+        systemProjectsEmpty: document.getElementById("systemProjectsEmpty"),
         desktopStart: document.getElementById("desktopStart"),
         desktopInfo: document.getElementById("desktopInfo"),
         desktopActions: document.getElementById("desktopActions"),
@@ -4405,6 +4958,15 @@
         return null;
       }
 
+      /** Живая запись в state.projects (не копия migrate/ensureDerived). */
+      function findProjectRecord(id) {
+        if (!id) return null;
+        for (var i = 0; i < state.projects.length; i++) {
+          if (state.projects[i].id === id) return state.projects[i];
+        }
+        return null;
+      }
+
       function getFocusProject() {
         if (state.exampleMode) return ensureDerived(DEMO_PROJECT);
         var project = findRealProject(state.lastOpenedId);
@@ -5028,6 +5590,7 @@
         if (els.exampleBanner) els.exampleBanner.hidden = !state.exampleMode;
         renderOsProjectList();
         syncOsNavAvailability();
+        renderProjectsTable();
       }
 
       function openExample() {
@@ -5035,31 +5598,340 @@
         openWorkspace(DEMO_PROJECT.id);
       }
 
+      function twoDigits(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function projectNavStatusLabel(project) {
+        var status = String((project && project.status) || "").trim().toLowerCase();
+        if (status.indexOf("заверш") >= 0) return "Завершён";
+        if (
+          status === "в работе" ||
+          status.indexOf("в стадии разработ") >= 0 ||
+          status.indexOf("разработ") >= 0
+        ) {
+          return "В стадии разработки";
+        }
+        return "Создан";
+      }
+
+      function parseProjectDate(value) {
+        if (!value) return null;
+        var d = new Date(value);
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      function formatExactDateTime(value) {
+        var d = parseProjectDate(value);
+        if (!d) return "";
+        return (
+          twoDigits(d.getDate()) + "." +
+          twoDigits(d.getMonth() + 1) + "." +
+          d.getFullYear() + " " +
+          twoDigits(d.getHours()) + ":" +
+          twoDigits(d.getMinutes())
+        );
+      }
+
+      function formatRelativeUpdate(value) {
+        var d = parseProjectDate(value);
+        if (!d) return "—";
+        var now = new Date();
+        var startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var startTarget = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        var diffDays = Math.round((startToday - startTarget) / 86400000);
+        if (diffDays <= 0) return "Сегодня";
+        if (diffDays === 1) return "Вчера";
+        if (diffDays < 7) return diffDays + " дней назад";
+        return (
+          twoDigits(d.getDate()) + "." +
+          twoDigits(d.getMonth() + 1) + "." +
+          d.getFullYear()
+        );
+      }
+
+      function projectListSummary(project) {
+        return String((project && project.idea) || "").trim();
+      }
+
+      function applyPmSearchQuery() {
+        state.projectsUi.query = els.pmSearch ? String(els.pmSearch.value || "") : "";
+        renderProjectsTable();
+      }
+
+      function getFilteredSortedProjects() {
+        var query = String(state.projectsUi.query || "").trim().toLowerCase();
+        var nameQuery = String(state.projectsUi.nameQuery || "").trim().toLowerCase();
+        var filter = state.projectsUi.statusFilter || "all";
+        var sort = state.projectsUi.sort || "updated";
+        var list = state.projects.slice();
+        var filtered = [];
+        for (var i = 0; i < list.length; i++) {
+          var project = list[i];
+          var status = projectNavStatusLabel(project);
+          if (filter !== "all" && status !== filter) continue;
+          var name = String(project.name || "").toLowerCase();
+          if (nameQuery && name.indexOf(nameQuery) < 0) continue;
+          if (query) {
+            var summary = projectListSummary(project).toLowerCase();
+            if (name.indexOf(query) < 0 && summary.indexOf(query) < 0) continue;
+          }
+          filtered.push(project);
+        }
+        function dateMs(value) {
+          var d = parseProjectDate(value);
+          return d ? d.getTime() : 0;
+        }
+        filtered.sort(function (a, b) {
+          if (sort === "name") {
+            return String(a.name || "").localeCompare(String(b.name || ""), "ru", { sensitivity: "base" });
+          }
+          if (sort === "name-desc") {
+            return String(b.name || "").localeCompare(String(a.name || ""), "ru", { sensitivity: "base" });
+          }
+          if (sort === "updated-asc") {
+            return dateMs(a.updatedAt || a.createdAt) - dateMs(b.updatedAt || b.createdAt);
+          }
+          return dateMs(b.updatedAt || b.createdAt) - dateMs(a.updatedAt || a.createdAt);
+        });
+        return filtered;
+      }
+
+      function syncPmHeaderMenus() {
+        if (!els.pmTable) return;
+        var sort = state.projectsUi.sort || "updated";
+        var filter = state.projectsUi.statusFilter || "all";
+        var nameQuery = String(state.projectsUi.nameQuery || "").trim();
+        var buttons = els.pmTable.querySelectorAll(".pm-th-btn[data-pm-header]");
+        for (var i = 0; i < buttons.length; i++) {
+          var key = buttons[i].getAttribute("data-pm-header");
+          var open = state.projectsUi.openHeaderMenu === key;
+          buttons[i].setAttribute("aria-expanded", open ? "true" : "false");
+          var active = false;
+          if (key === "status") active = filter !== "all";
+          else if (key === "name") active = !!nameQuery || sort === "name" || sort === "name-desc";
+          else if (key === "updated") active = sort === "updated-asc";
+          buttons[i].classList.toggle("is-active", active);
+        }
+        var menus = els.pmTable.querySelectorAll("[data-pm-header-menu]");
+        for (var m = 0; m < menus.length; m++) {
+          var menuKey = menus[m].getAttribute("data-pm-header-menu");
+          menus[m].hidden = state.projectsUi.openHeaderMenu !== menuKey;
+          var items = menus[m].querySelectorAll("[data-pm-header-action]");
+          for (var a = 0; a < items.length; a++) {
+            var action = items[a].getAttribute("data-pm-header-action");
+            var value = items[a].getAttribute("data-pm-value");
+            var on = false;
+            if (action === "filter") on = filter === value;
+            if (action === "sort") on = sort === value;
+            items[a].classList.toggle("is-active", on);
+          }
+        }
+        var nameSearch = document.getElementById("pmNameMenuSearch");
+        if (nameSearch && document.activeElement !== nameSearch) {
+          nameSearch.value = state.projectsUi.nameQuery || "";
+        }
+      }
+
+      function closePmHeaderMenus() {
+        state.projectsUi.openHeaderMenu = null;
+        syncPmHeaderMenus();
+      }
+
+      function closePmMenus() {
+        state.projectsUi.openMenuId = null;
+        if (!els.pmTableBody) return;
+        var menus = els.pmTableBody.querySelectorAll(".pm-row-menu");
+        for (var i = 0; i < menus.length; i++) menus[i].hidden = true;
+        var buttons = els.pmTableBody.querySelectorAll(".pm-menu-btn");
+        for (var b = 0; b < buttons.length; b++) buttons[b].setAttribute("aria-expanded", "false");
+      }
+
+      function pmRowHtml(project) {
+        var name = project.name || "Проект";
+        var status = projectNavStatusLabel(project);
+        var path = String(project.workFolder || "").trim();
+        var github = String(project.githubUrl || "").trim();
+        var updated = project.updatedAt || project.createdAt || "";
+        var menuOpen = state.projectsUi.openMenuId === project.id;
+        var pathHtml = path
+          ? '<span class="pm-row-path" title="' + escapeHtml(path) + '">' + escapeHtml(path) + "</span>"
+          : '<span class="pm-row-path is-empty">—</span>';
+        var githubHtml = github
+          ? '<a class="pm-github-link" href="' + escapeHtml(github) +
+            '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(github) +
+            '">Открыть</a>'
+          : '<span class="pm-row-empty">—</span>';
+        return (
+          '<tr class="pm-row" data-project-id="' + escapeHtml(project.id) + '" tabindex="0">' +
+          '<td class="pm-col-icon"><span class="pm-row-icon" aria-hidden="true">' + projectIconSvg() + "</span></td>" +
+          '<td><span class="pm-row-name">' + escapeHtml(name) + "</span></td>" +
+          '<td><span class="pm-row-status">' + escapeHtml(status) + "</span></td>" +
+          '<td class="pm-col-path">' + pathHtml + "</td>" +
+          '<td class="pm-col-github">' + githubHtml + "</td>" +
+          '<td><span class="pm-row-updated" title="' + escapeHtml(formatExactDateTime(updated)) + '">' +
+          escapeHtml(formatRelativeUpdate(updated)) + "</span></td>" +
+          '<td class="pm-col-menu"><div class="pm-menu-wrap">' +
+          '<button type="button" class="pm-menu-btn" data-pm-menu="' + escapeHtml(project.id) +
+          '" aria-label="Меню проекта" aria-haspopup="menu" aria-expanded="' + (menuOpen ? "true" : "false") + '">⋮</button>' +
+          '<div class="pm-row-menu" role="menu"' + (menuOpen ? "" : " hidden") + ">" +
+          '<button type="button" role="menuitem" data-pm-action="rename">Переименовать</button>' +
+          '<button type="button" role="menuitem" data-pm-action="description">Изменить описание</button>' +
+          '<button type="button" role="menuitem" data-pm-action="status">Изменить статус</button>' +
+          '<button type="button" role="menuitem" class="is-danger" data-pm-action="delete">Удалить проект</button>' +
+          "</div></div></td></tr>"
+        );
+      }
+
+      function bindPmTableEvents() {
+        if (!els.pmTableBody) return;
+        var rows = els.pmTableBody.querySelectorAll(".pm-row");
+        for (var i = 0; i < rows.length; i++) {
+          rows[i].addEventListener("click", function (event) {
+            if (event.target.closest(".pm-menu-wrap, .pm-github-link")) return;
+            var id = event.currentTarget.getAttribute("data-project-id");
+            if (id) openProjectFromList(id);
+          });
+          rows[i].addEventListener("keydown", function (event) {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            if (event.target.closest(".pm-menu-wrap, .pm-github-link")) return;
+            event.preventDefault();
+            var id = event.currentTarget.getAttribute("data-project-id");
+            if (id) openProjectFromList(id);
+          });
+        }
+        var githubLinks = els.pmTableBody.querySelectorAll(".pm-github-link");
+        for (var g = 0; g < githubLinks.length; g++) {
+          githubLinks[g].addEventListener("click", function (event) {
+            event.stopPropagation();
+          });
+        }
+        var menuButtons = els.pmTableBody.querySelectorAll(".pm-menu-btn");
+        for (var m = 0; m < menuButtons.length; m++) {
+          menuButtons[m].addEventListener("click", function (event) {
+            event.stopPropagation();
+            var id = event.currentTarget.getAttribute("data-pm-menu");
+            var open = state.projectsUi.openMenuId !== id;
+            state.projectsUi.openHeaderMenu = null;
+            state.projectsUi.openMenuId = open ? id : null;
+            renderProjectsTable();
+          });
+        }
+        var actions = els.pmTableBody.querySelectorAll("[data-pm-action]");
+        for (var a = 0; a < actions.length; a++) {
+          actions[a].addEventListener("click", function (event) {
+            event.stopPropagation();
+            var row = event.currentTarget.closest(".pm-row");
+            var id = row ? row.getAttribute("data-project-id") : null;
+            var action = event.currentTarget.getAttribute("data-pm-action");
+            handlePmAction(id, action);
+          });
+        }
+      }
+
+      function refreshProjectsHome() {
+        renderOsProjectList();
+        renderProjectsTable();
+        syncOsNavAvailability();
+      }
+
+      function handlePmAction(projectId, action) {
+        var project = findProjectRecord(projectId);
+        if (!project || !action) return;
+        closePmMenus();
+        if (action === "rename") {
+          var nextName = window.prompt("Новое название проекта", project.name || "");
+          if (nextName === null) return;
+          nextName = String(nextName).trim();
+          if (!nextName) return;
+          project.name = nextName;
+          project.updatedAt = new Date().toISOString();
+          saveProjects();
+          refreshProjectsHome();
+          return;
+        }
+        if (action === "description") {
+          var current = projectListSummary(project);
+          var nextDesc = window.prompt("Краткое описание проекта", current || "");
+          if (nextDesc === null) return;
+          project.idea = String(nextDesc).trim();
+          project.updatedAt = new Date().toISOString();
+          saveProjects();
+          refreshProjectsHome();
+          return;
+        }
+        if (action === "status") {
+          var choice = window.prompt(
+            "Статус проекта:\n1 — Создан\n2 — В стадии разработки\n3 — Завершён",
+            "2"
+          );
+          if (choice === null) return;
+          var map = {
+            "1": "Создан",
+            "2": "В стадии разработки",
+            "3": "Завершён",
+            создан: "Создан",
+            "в стадии разработки": "В стадии разработки",
+            завершён: "Завершён",
+            завершен: "Завершён"
+          };
+          var key = String(choice).trim().toLowerCase();
+          var nextStatus = map[key] || map[String(choice).trim()];
+          if (!nextStatus) return;
+          project.status = nextStatus;
+          project.updatedAt = new Date().toISOString();
+          if (nextStatus === "Завершён") project.completedAt = new Date().toISOString();
+          saveProjects();
+          refreshProjectsHome();
+          return;
+        }
+        if (action === "delete") {
+          var ok = window.confirm('Удалить проект «' + (project.name || "Без названия") + "» из списка AI POS?");
+          if (!ok) return;
+          state.projects = state.projects.filter(function (p) { return p.id !== project.id; });
+          if (state.currentId === project.id) state.currentId = null;
+          saveProjects();
+          refreshProjectsHome();
+        }
+      }
+
+      function renderProjectsTable() {
+        if (!els.pmTableBody) return;
+        var list = getFilteredSortedProjects();
+        if (!state.projects.length) {
+          els.pmTableBody.innerHTML = "";
+          if (els.systemProjectsEmpty) {
+            els.systemProjectsEmpty.hidden = false;
+            els.systemProjectsEmpty.textContent = "Пока нет проектов.";
+          }
+          syncPmHeaderMenus();
+          return;
+        }
+        if (!list.length) {
+          els.pmTableBody.innerHTML = "";
+          if (els.systemProjectsEmpty) {
+            els.systemProjectsEmpty.hidden = false;
+            els.systemProjectsEmpty.textContent = "Нет проектов по текущему фильтру или поиску.";
+          }
+          syncPmHeaderMenus();
+          return;
+        }
+        if (els.systemProjectsEmpty) els.systemProjectsEmpty.hidden = true;
+        var html = "";
+        for (var i = 0; i < list.length; i++) html += pmRowHtml(list[i]);
+        els.pmTableBody.innerHTML = html;
+        bindPmTableEvents();
+        syncPmHeaderMenus();
+      }
+
       function renderDesktop() {
         syncExampleUi();
-
-        // Пример на рабочий стол не попадает: карточка описывает только реальный проект.
-        var project = state.projects.length ? getFocusProject() : null;
-        var hasProject = !!project;
-
-        if (els.desktopStart) els.desktopStart.hidden = hasProject;
-        if (els.desktopInfo) els.desktopInfo.hidden = !hasProject;
-        if (els.desktopActions) els.desktopActions.hidden = !hasProject;
-        if (!hasProject) return;
-
-        if (els.desktopProjectName) els.desktopProjectName.textContent = project.name || "—";
-        if (els.desktopProjectStatus) els.desktopProjectStatus.textContent = project.status || "—";
-        if (els.desktopProjectStage) els.desktopProjectStage.textContent = project.stage || "—";
-        if (els.desktopProjectCreated) {
-          els.desktopProjectCreated.textContent = project.createdAt ? formatDate(project.createdAt) : "—";
-        }
-
-        var path = String(project.workFolder || "").trim();
-        if (els.desktopProjectPath) els.desktopProjectPath.textContent = path || "Папка не указана";
-        if (els.btnCopyProjectPath) {
-          els.btnCopyProjectPath.hidden = !path;
-          els.btnCopyProjectPath.title = path ? "Скопировать путь к папке проекта" : "";
-        }
+        if (els.systemHome) els.systemHome.hidden = false;
+        if (els.desktopStart) els.desktopStart.hidden = true;
+        if (els.desktopInfo) els.desktopInfo.hidden = true;
+        if (els.desktopActions) els.desktopActions.hidden = true;
+        if (els.pmSearch) els.pmSearch.value = state.projectsUi.query || "";
+        renderProjectsTable();
       }
 
       function copyDesktopProjectPath() {
@@ -7876,6 +8748,87 @@
         if (els.btnStartExistingProject) {
           els.btnStartExistingProject.addEventListener("click", function () { openForm("existing"); });
         }
+        if (els.pmSearch) {
+          els.pmSearch.addEventListener("input", function () {
+            if (!String(els.pmSearch.value || "").trim()) {
+              state.projectsUi.query = "";
+              renderProjectsTable();
+            }
+          });
+          els.pmSearch.addEventListener("keydown", function (event) {
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            applyPmSearchQuery();
+          });
+        }
+        if (els.btnPmSearch) {
+          els.btnPmSearch.addEventListener("click", function (event) {
+            event.preventDefault();
+            applyPmSearchQuery();
+          });
+        }
+        var pmNameMenuSearch = document.getElementById("pmNameMenuSearch");
+        if (pmNameMenuSearch) {
+          pmNameMenuSearch.addEventListener("click", function (event) {
+            event.stopPropagation();
+          });
+          pmNameMenuSearch.addEventListener("input", function () {
+            state.projectsUi.nameQuery = pmNameMenuSearch.value || "";
+            renderProjectsTable();
+          });
+          pmNameMenuSearch.addEventListener("keydown", function (event) {
+            event.stopPropagation();
+          });
+        }
+        if (els.pmTable) {
+          els.pmTable.addEventListener("click", function (event) {
+            var headerBtn = event.target.closest(".pm-th-btn[data-pm-header]");
+            if (headerBtn && els.pmTable.contains(headerBtn)) {
+              event.preventDefault();
+              event.stopPropagation();
+              var key = headerBtn.getAttribute("data-pm-header");
+              state.projectsUi.openMenuId = null;
+              state.projectsUi.openHeaderMenu =
+                state.projectsUi.openHeaderMenu === key ? null : key;
+              renderProjectsTable();
+              if (state.projectsUi.openHeaderMenu === "name") {
+                var focusSearch = document.getElementById("pmNameMenuSearch");
+                if (focusSearch) focusSearch.focus();
+              }
+              return;
+            }
+            var headerAction = event.target.closest("[data-pm-header-action]");
+            if (headerAction && els.pmTable.contains(headerAction)) {
+              event.preventDefault();
+              event.stopPropagation();
+              var action = headerAction.getAttribute("data-pm-header-action");
+              var value = headerAction.getAttribute("data-pm-value");
+              if (action === "filter") state.projectsUi.statusFilter = value || "all";
+              if (action === "sort") state.projectsUi.sort = value || "updated";
+              closePmHeaderMenus();
+              renderProjectsTable();
+            }
+          });
+        }
+        document.addEventListener("click", function (event) {
+          var inRowMenu = event.target.closest(".pm-menu-wrap");
+          var inHeaderMenu = event.target.closest(".pm-th, .pm-th-menu");
+          if (state.projectsUi.openMenuId && !inRowMenu) {
+            closePmMenus();
+            renderProjectsTable();
+          }
+          if (state.projectsUi.openHeaderMenu && !inHeaderMenu) {
+            closePmHeaderMenus();
+          }
+        });
+        document.addEventListener("keydown", function (event) {
+          if (event.key !== "Escape") return;
+          if (state.projectsUi.openMenuId) {
+            closePmMenus();
+            renderProjectsTable();
+          }
+          if (state.projectsUi.openHeaderMenu) closePmHeaderMenus();
+        });
         if (els.btnOpenExample) {
           els.btnOpenExample.addEventListener("click", openExample);
         }
