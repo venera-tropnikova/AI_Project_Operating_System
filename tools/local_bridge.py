@@ -8,6 +8,7 @@ Serves the UI and exposes a tiny localhost API:
 - Project folder pick / preview / create / inspect (Passport bootstrap)
 - Desktop shortcut creation (reuses tools/create_ai_pos_shortcut.ps1)
 - Project task history read (facts only; does not accept tasks)
+- Project passport read/write (.ai-pos/project_passport.json)
 - Capture Service façade (window list / capture / shot serve)
 
 Does not determine stage. Does not replace Analyzer / Stage Engine.
@@ -45,6 +46,18 @@ HISTORY_REL = Path(".ai-pos") / "history" / "history.json"
 HISTORY_SHOTS_REL = Path(".ai-pos") / "history" / "shots"
 HISTORY_SCHEMA = "ai-pos-task-history"
 HISTORY_VERSION = 1
+PASSPORT_REL = Path(".ai-pos") / "project_passport.json"
+PASSPORT_SCHEMA = "ai-pos.project_passport/v1"
+PASSPORT_VERSION = 1
+PASSPORT_REQUIRED_FIELDS = (
+    "name",
+    "summary",
+    "goal",
+    "audience",
+    "expected_result",
+    "status",
+)
+_PASSPORT_LOCK = threading.Lock()
 
 RESULT_PREFIX = "AI_POS_ORCHESTRATOR_RESULT="
 SHORTCUT_RESULT_PREFIX = "AI_POS_SHORTCUT_RESULT="
@@ -627,6 +640,246 @@ def read_project_history(project_path: str) -> dict[str, Any]:
         message=None,
         project_name=_history_text(loaded.get("project_name")) or None,
         entries=entries,
+    )
+
+
+def _passport_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _normalize_passport_modules(raw: Any) -> list[dict[str, Any]]:
+    if not isinstance(raw, list):
+        return []
+    modules: list[dict[str, Any]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        name = _passport_text(item.get("name"))
+        if not name:
+            continue
+        mod_id = _passport_text(item.get("id")) or None
+        description = _passport_text(item.get("description"))
+        status = _passport_text(item.get("status"))
+        row: dict[str, Any] = {
+            "id": mod_id,
+            "name": name,
+            "description": description or None,
+        }
+        if status:
+            row["status"] = status
+        modules.append(row)
+    return modules
+
+
+def normalize_project_passport(raw: Any) -> dict[str, Any] | None:
+    if not isinstance(raw, dict):
+        return None
+    schema = _passport_text(raw.get("schema"))
+    version = raw.get("version")
+    if schema != PASSPORT_SCHEMA or version != PASSPORT_VERSION:
+        return None
+
+    capabilities_raw = raw.get("capabilities")
+    capabilities: list[str] = []
+    if isinstance(capabilities_raw, list):
+        for item in capabilities_raw:
+            text = _passport_text(item)
+            if text:
+                capabilities.append(text)
+
+    missing_raw = raw.get("missing_fields")
+    missing_fields: list[str] = []
+    if isinstance(missing_raw, list):
+        for item in missing_raw:
+            key = _passport_text(item)
+            if key and key not in missing_fields:
+                missing_fields.append(key)
+
+    project_id = _passport_text(raw.get("project_id"))
+
+    return {
+        "schema": PASSPORT_SCHEMA,
+        "version": PASSPORT_VERSION,
+        "project_id": project_id,
+        "name": _passport_text(raw.get("name")),
+        "summary": _passport_text(raw.get("summary")),
+        "goal": _passport_text(raw.get("goal")),
+        "audience": _passport_text(raw.get("audience")),
+        "expected_result": _passport_text(raw.get("expected_result")),
+        "capabilities": capabilities,
+        "status": _passport_text(raw.get("status")),
+        "modules": _normalize_passport_modules(raw.get("modules")),
+        "missing_fields": missing_fields,
+    }
+
+
+def compute_missing_passport_fields(passport: dict[str, Any]) -> list[str]:
+    missing: list[str] = []
+    for key in PASSPORT_REQUIRED_FIELDS:
+        if not _passport_text(passport.get(key)):
+            missing.append(key)
+    return missing
+
+
+def build_project_passport(
+    *,
+    project_id: str = "",
+    name: str = "",
+    summary: str = "",
+    goal: str = "",
+    audience: str = "",
+    expected_result: str = "",
+    capabilities: list[str] | None = None,
+    status: str = "",
+    modules: list[dict[str, Any]] | None = None,
+    missing_fields: list[str] | None = None,
+) -> dict[str, Any]:
+    passport = normalize_project_passport(
+        {
+            "schema": PASSPORT_SCHEMA,
+            "version": PASSPORT_VERSION,
+            "project_id": project_id,
+            "name": name,
+            "summary": summary,
+            "goal": goal,
+            "audience": audience,
+            "expected_result": expected_result,
+            "capabilities": capabilities or [],
+            "status": status,
+            "modules": modules or [],
+            "missing_fields": missing_fields if missing_fields is not None else [],
+        }
+    )
+    assert passport is not None
+    if missing_fields is None:
+        passport["missing_fields"] = compute_missing_passport_fields(passport)
+    return passport
+
+
+def resolve_project_passport_path(
+    project_path: str,
+) -> tuple[Path | None, Path | None, dict[str, Any] | None]:
+    root = resolve_existing_dir(project_path)
+    if root is None:
+        return None, None, simple_result(
+            ok=False,
+            message="Рабочая папка проекта не найдена. Проверьте путь в настройках проекта.",
+            passport=None,
+        )
+    try:
+        resolved_root = root.resolve()
+        passport_path = (root / PASSPORT_REL).resolve()
+        passport_path.parent.relative_to(resolved_root / ".ai-pos")
+    except (OSError, ValueError):
+        return None, None, simple_result(
+            ok=False,
+            message="Не удалось открыть паспорт проекта. Повторите попытку.",
+            passport=None,
+        )
+    return resolved_root, passport_path, None
+
+
+def read_project_passport(project_path: str) -> dict[str, Any]:
+    """Read descriptive project passport from <project>/.ai-pos/project_passport.json."""
+    _root, passport_path, err = resolve_project_passport_path(project_path)
+    if err is not None or passport_path is None:
+        return err or simple_result(ok=False, message="Не удалось открыть паспорт проекта.", passport=None)
+
+    if not passport_path.is_file():
+        return simple_result(
+            ok=True,
+            message=None,
+            passport=None,
+            exists=False,
+        )
+
+    try:
+        loaded = json.loads(passport_path.read_text(encoding="utf-8"))
+    except OSError:
+        return simple_result(
+            ok=False,
+            message="Не удалось прочитать паспорт проекта. Повторите попытку.",
+            passport=None,
+        )
+    except json.JSONDecodeError:
+        return simple_result(
+            ok=False,
+            message="Паспорт проекта повреждён. Откройте настройки и сохраните сведения заново.",
+            passport=None,
+        )
+
+    passport = normalize_project_passport(loaded)
+    if passport is None:
+        return simple_result(
+            ok=False,
+            message="Паспорт проекта повреждён. Откройте настройки и сохраните сведения заново.",
+            passport=None,
+        )
+
+    return simple_result(
+        ok=True,
+        message=None,
+        passport=passport,
+        exists=True,
+    )
+
+
+def write_project_passport(project_path: str, passport_raw: Any) -> dict[str, Any]:
+    """Write project passport. Does not touch Stage Engine, history, or PROJECT_CONTEXT.md."""
+    root, passport_path, err = resolve_project_passport_path(project_path)
+    if err is not None or root is None or passport_path is None:
+        return err or simple_result(ok=False, message="Не удалось сохранить паспорт проекта.", passport=None)
+
+    if isinstance(passport_raw, dict):
+        payload = dict(passport_raw)
+        payload["schema"] = PASSPORT_SCHEMA
+        payload["version"] = PASSPORT_VERSION
+        if "missing_fields" not in payload:
+            payload["missing_fields"] = compute_missing_passport_fields(
+                {
+                    "name": payload.get("name"),
+                    "summary": payload.get("summary"),
+                    "goal": payload.get("goal"),
+                    "audience": payload.get("audience"),
+                    "expected_result": payload.get("expected_result"),
+                    "status": payload.get("status"),
+                }
+            )
+        passport = normalize_project_passport(payload)
+    else:
+        passport = None
+
+    if passport is None:
+        return simple_result(
+            ok=False,
+            message="Не удалось сохранить паспорт: проверьте заполненные поля.",
+            passport=None,
+        )
+
+    with _PASSPORT_LOCK:
+        try:
+            passport_path.parent.mkdir(parents=True, exist_ok=True)
+            tmp_path = passport_path.with_suffix(".json.tmp")
+            tmp_path.write_text(
+                json.dumps(passport, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            tmp_path.replace(passport_path)
+        except OSError:
+            return simple_result(
+                ok=False,
+                message="Не удалось сохранить паспорт проекта. Проверьте права доступа.",
+                passport=None,
+            )
+
+    return simple_result(
+        ok=True,
+        message="Сведения о проекте сохранены.",
+        passport=passport,
+        exists=True,
+        wrote=True,
     )
 
 
@@ -1213,10 +1466,23 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
+        if path == "/api/project-passport/read":
+            result = read_project_passport(str(body.get("project_path") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
         if path == "/api/project-stage/read":
             result = read_project_stage(str(body.get("project_path") or ""))
             self._send_json(200 if result.get("ok") else 400, result)
             return
+        if path == "/api/project-passport/write":
+            result = write_project_passport(
+                str(body.get("project_path") or ""),
+                body.get("passport"),
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
 
         if path == "/api/capture/windows":
             result = list_capture_windows(
@@ -1297,6 +1563,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"API: http://{args.host}:{args.port}/api/create-desktop-shortcut")
     print(f"API: http://{args.host}:{args.port}/api/project-history/read")
     print(f"API: http://{args.host}:{args.port}/api/project-stage/read")
+    print(f"API: http://{args.host}:{args.port}/api/project-passport/read")
+    print(f"API: http://{args.host}:{args.port}/api/project-passport/write")
     print(f"API: http://{args.host}:{args.port}/api/capture/windows")
     print(f"API: http://{args.host}:{args.port}/api/capture/window")
     print(f"API: http://{args.host}:{args.port}/api/capture/attach")
