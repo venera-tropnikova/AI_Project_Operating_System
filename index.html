@@ -5584,6 +5584,94 @@
         localStorage.setItem(TEMPLATES_KEY, JSON.stringify(state.customTemplates));
       }
 
+      /** Защита от push во время apply/popstate. Create/Connect в history не входят. */
+      var navHistoryApplying = false;
+
+      function projectExistsForNav(projectId) {
+        if (!projectId) return false;
+        return !!(findRealProject(projectId) || findProject(projectId));
+      }
+
+      function captureNavState() {
+        var onWorkspace =
+          els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
+        if (onWorkspace && projectExistsForNav(state.currentId)) {
+          return {
+            aiPos: true,
+            view: "workspace",
+            projectId: state.currentId,
+            tab: state.activeTab || "overview"
+          };
+        }
+        return {
+          aiPos: true,
+          view: "system",
+          projectId: null,
+          tab: null
+        };
+      }
+
+      function navStatesEqual(a, b) {
+        if (!a || !b) return false;
+        return (
+          a.view === b.view &&
+          (a.projectId || null) === (b.projectId || null) &&
+          (a.tab || null) === (b.tab || null)
+        );
+      }
+
+      function pushNavState(force) {
+        if (!window.history || !window.history.pushState) return;
+        if (navHistoryApplying && !force) return;
+        var next = captureNavState();
+        var cur = window.history.state && window.history.state.aiPos ? window.history.state : null;
+        if (!force && navStatesEqual(cur, next)) return;
+        window.history.pushState(next, "", window.location.pathname + window.location.search);
+      }
+
+      function replaceNavState() {
+        if (!window.history || !window.history.replaceState) return;
+        window.history.replaceState(
+          captureNavState(),
+          "",
+          window.location.pathname + window.location.search
+        );
+      }
+
+      function applyNavState(nav, options) {
+        var opts = options || {};
+        navHistoryApplying = true;
+        try {
+          var openOpts = {
+            skipHistory: true,
+            keepScroll: !!opts.keepScroll
+          };
+          if (!nav || !nav.aiPos || nav.view === "system") {
+            openSystemHome(openOpts);
+            return;
+          }
+          if (nav.view === "workspace") {
+            var projectId = nav.projectId || null;
+            if (projectExistsForNav(projectId)) {
+              state.activeTab = nav.tab || "overview";
+              openWorkspace(projectId, !!opts.keepScroll, openOpts);
+              return;
+            }
+            openSystemHome(openOpts);
+            return;
+          }
+          openSystemHome(openOpts);
+        } finally {
+          navHistoryApplying = false;
+        }
+      }
+
+      function commitNavHistory(options) {
+        var opts = options || {};
+        if (opts.skipHistory || navHistoryApplying) replaceNavState();
+        else pushNavState();
+      }
+
       function showPanel(name, options) {
         els.panelList.classList.toggle("is-active", name === "list");
         els.panelForm.classList.toggle("is-active", name === "form");
@@ -5648,7 +5736,7 @@
       function openOsSection(navId) {
         var section = navId || "desktop";
         if (section === "home" || section === "desktop") {
-          showPanel("list");
+          openSystemHome();
           return;
         }
         var tabByNav = {
@@ -5667,7 +5755,7 @@
         if (!project) return;
         state.activeTab = tabId;
         openWorkspace(project.id);
-        setActiveTab(tabId, { force: true });
+        setActiveTab(tabId, { force: true, skipHistory: true });
         setOsNavActive(section);
       }
 
@@ -5935,14 +6023,17 @@
       }
 
       function openSystemHome(options) {
-        showPanel("list", options);
+        var opts = options || {};
+        showPanel("list", opts);
+        commitNavHistory(opts);
       }
 
       function openProjectOverview(projectId, options) {
+        var opts = options || {};
         if (!projectId) return;
         if (!findRealProject(projectId) && !findProject(projectId)) return;
         state.activeTab = "overview";
-        openWorkspace(projectId, options && options.keepScroll);
+        openWorkspace(projectId, opts.keepScroll, opts);
       }
 
       function folderBaseName(path) {
@@ -7685,8 +7776,10 @@
       }
 
       function setActiveTab(tabId, options) {
+        var opts = options || {};
+        var prev = state.activeTab;
         var next = tabId || "task";
-        var force = !!(options && options.force);
+        var force = !!opts.force;
         if (!force && state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
           next = "overview";
         }
@@ -7710,6 +7803,17 @@
           else panels[p].hidden = !active;
         }
 
+        var onWorkspace =
+          els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
+        if (
+          onWorkspace &&
+          prev !== state.activeTab &&
+          !opts.skipHistory &&
+          !navHistoryApplying
+        ) {
+          setOsNavActive(navIdForActiveTab(state.activeTab));
+          pushNavState();
+        }
       }
 
       function loadDetailLevel() {
@@ -10012,7 +10116,8 @@
         openWorkspace(project.id, true);
       }
 
-      function openWorkspace(id, keepScroll) {
+      function openWorkspace(id, keepScroll, options) {
+        var opts = options || {};
         var project = findProject(id);
         if (!project) return;
         state.currentId = id;
@@ -10032,12 +10137,13 @@
         renderMaterials(project);
         renderTeam(project);
         renderSettings(project);
-        setActiveTab(state.activeTab || "task", { force: true });
+        setActiveTab(state.activeTab || "task", { force: true, skipHistory: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
         syncExampleUi();
         syncProjectChrome();
         setOsNavActive(navIdForActiveTab(state.activeTab || "task"));
         loadAndRenderStageTrack(project);
+        commitNavHistory(opts);
       }
 
       function getFormData() {
@@ -10797,9 +10903,12 @@
 
         if (els.osBackToProjects) {
           els.osBackToProjects.addEventListener("click", function () {
-            openOsSection("home");
+            openSystemHome();
           });
         }
+        window.addEventListener("popstate", function (event) {
+          applyNavState(event.state, { skipHistory: true, keepScroll: false });
+        });
         if (els.osNavProject) {
           els.osNavProject.addEventListener("click", function (event) {
             var btn = event.target.closest("[data-os-nav]");
@@ -11129,6 +11238,7 @@
         renderTemplates();
         renderDesktop();
         showPanel("list");
+        replaceNavState();
       }
 
       init();
