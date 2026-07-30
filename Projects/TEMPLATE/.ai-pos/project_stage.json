@@ -2,6 +2,28 @@
   "schema": "ai-pos.project_stage/v1",
   "stage": "IDEA",
   "stage_label": "Идея",
+  "stage_model": [
+    {
+      "id": "IDEA",
+      "label": "Идея"
+    },
+    {
+      "id": "INTAKE",
+      "label": "Подключение"
+    },
+    {
+      "id": "DISCOVERY",
+      "label": "Изучение"
+    },
+    {
+      "id": "PLANNING",
+      "label": "Планирование"
+    },
+    {
+      "id": "EXECUTION",
+      "label": "Выполнение"
+    }
+  ],
   "confidence_state": "CONFIRMED",
   "evidence": [
     {

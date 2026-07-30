@@ -28,6 +28,8 @@ import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
+
+from project_stage_engine import STAGE_MODEL as ENGINE_STAGE_MODEL
 from urllib.parse import parse_qs, urlparse
 
 import capture_service
@@ -628,6 +630,109 @@ def read_project_history(project_path: str) -> dict[str, Any]:
     )
 
 
+def engine_stage_model() -> list[dict[str, str]]:
+    model: list[dict[str, str]] = []
+    for item in ENGINE_STAGE_MODEL:
+        stage_id = str(item.get("id") or "").strip()
+        label = str(item.get("label") or "").strip()
+        if stage_id and label:
+            model.append({"id": stage_id, "label": label})
+    return model
+
+
+def normalize_stage_model(raw: Any) -> list[dict[str, str]]:
+    if not isinstance(raw, list) or not raw:
+        return engine_stage_model()
+    model: list[dict[str, str]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        stage_id = str(item.get("id") or "").strip()
+        label = str(item.get("label") or "").strip()
+        if stage_id and label:
+            model.append({"id": stage_id, "label": label})
+    return model if model else engine_stage_model()
+
+
+def read_project_stage(project_path: str) -> dict[str, Any]:
+    """
+    Read Stage Engine state for the project folder.
+    stage_model always comes from the engine model (file may omit it on older writes).
+    """
+    root = resolve_existing_dir(project_path)
+    if root is None:
+        return simple_result(
+            ok=False,
+            message="Рабочая папка проекта не найдена. Проверьте путь в настройках проекта.",
+            stage=None,
+            stage_label=None,
+            stage_model=engine_stage_model(),
+            exists=False,
+        )
+
+    stage_path = root / Path(".ai-pos") / "project_stage.json"
+    model = engine_stage_model()
+    if not stage_path.is_file():
+        return simple_result(
+            ok=True,
+            message=None,
+            stage=None,
+            stage_label=None,
+            stage_model=model,
+            exists=False,
+        )
+
+    try:
+        loaded = json.loads(stage_path.read_text(encoding="utf-8"))
+    except OSError:
+        return simple_result(
+            ok=False,
+            message="Не удалось прочитать состояние проекта. Повторите попытку.",
+            stage=None,
+            stage_label=None,
+            stage_model=model,
+            exists=True,
+        )
+    except json.JSONDecodeError:
+        return simple_result(
+            ok=False,
+            message="Файл состояния проекта повреждён.",
+            stage=None,
+            stage_label=None,
+            stage_model=model,
+            exists=True,
+        )
+
+    if not isinstance(loaded, dict):
+        return simple_result(
+            ok=False,
+            message="Файл состояния проекта повреждён.",
+            stage=None,
+            stage_label=None,
+            stage_model=model,
+            exists=True,
+        )
+
+    stage = str(loaded.get("stage") or "").strip() or None
+    stage_label = str(loaded.get("stage_label") or "").strip() or None
+    if not stage_label and stage:
+        for item in model:
+            if item["id"] == stage:
+                stage_label = item["label"]
+                break
+    file_model = normalize_stage_model(loaded.get("stage_model"))
+
+    return simple_result(
+        ok=True,
+        message=None,
+        stage=stage,
+        stage_label=stage_label,
+        stage_model=file_model,
+        exists=True,
+        confidence_state=str(loaded.get("confidence_state") or "").strip() or None,
+    )
+
+
 def resolve_project_shots_dir(project_path: str) -> tuple[Path | None, Path | None, dict[str, Any] | None]:
     """Return (project_root, shots_dir, error_payload)."""
     root = resolve_existing_dir(project_path)
@@ -1108,6 +1213,11 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
+        if path == "/api/project-stage/read":
+            result = read_project_stage(str(body.get("project_path") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
         if path == "/api/capture/windows":
             result = list_capture_windows(
                 exclude_title=str(body.get("exclude_title") or "")
@@ -1186,6 +1296,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"API: http://{args.host}:{args.port}/api/create-project")
     print(f"API: http://{args.host}:{args.port}/api/create-desktop-shortcut")
     print(f"API: http://{args.host}:{args.port}/api/project-history/read")
+    print(f"API: http://{args.host}:{args.port}/api/project-stage/read")
     print(f"API: http://{args.host}:{args.port}/api/capture/windows")
     print(f"API: http://{args.host}:{args.port}/api/capture/window")
     print(f"API: http://{args.host}:{args.port}/api/capture/attach")
