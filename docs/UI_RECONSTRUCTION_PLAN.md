@@ -3,14 +3,55 @@
 | Поле | Значение |
 |---|---|
 | Document Type | UI reconstruction plan (факт + план переноса) |
-| Status | Active working plan |
-| Date | 2026-07-30 |
+| Status | **Active** |
+| Date (canonical update) | 2026-07-31 |
 | Branch (clean UI) | `ui/split-index` @ `D:\AI_POS_UI_SPLIT` |
-| Source WIP | `D:\AI_Project_Operating_System` `master` @ `96e0498` + dirty `index.html` |
+| Current HEAD | `33d79d9f67e02b6b1c6e3776c4ca6163f48d18c0` (`33d79d9`) |
+| Base (pre UI chain) | `96e0498` — Bridge passport API already in history |
+| Source WIP (reference) | `D:\AI_Project_Operating_System` dirty `index.html` (вырезки, не цель коммитов) |
 | Canon | `Governance/CONSTITUTION.md` (приоритет при конфликте) |
 | Related | ADR-0002 Freeze; Observations #5–#6; `Standards/DEVELOPMENT_STANDARD.md`; `Standards/REVIEW_STANDARD.md`; User First |
 
-**Режим документа:** только фиксация аудита и порядка работ. Код этим файлом не изменяется.
+**Режим документа:** фиксация аудита, статусов и порядка работ. Код этим файлом не изменяется.
+
+**NEXT_TASK:** `UI-09` — итоговая приёмка UI Reconstruction (без изменения продуктового кода).
+
+---
+
+## 0. Каноническая сводка статусов (актуально)
+
+Единственная каноническая таблица текущего состояния Core UI Reconstruction.
+
+| ID | Название | Статус | Коммит (short) | Примечание |
+|---|---|---|---|---|
+| **UI-01** | Главная «Проекты» | **Completed** | `9d892e5` | follow-up: скрытая `#btnOpenExample` в `#desktopStart` — вне Core |
+| **UI-02** | Project Chrome | **Completed** | `fbf0992` | |
+| **docs** | План UI Reconstruction | **Completed** *(снимок)* | `6005bd9` | этот файл обновляется отдельно |
+| **UI-03** | Connect + identity + passport | **Completed** | `f1507c8` | |
+| **UI-04** | Stage track (`stage_model`) | **Completed** | `5505371` | полный overview — группа I |
+| **polish** | Текст пустой текущей задачи | **Completed** | `8add727` | не отдельный UI-ID плана |
+| **UI-05** | Shell / boot / layout | **Deferred, optional** | — | не выполнена; backlog |
+| **UI-06a** | Standalone Create (write-first) | **Completed** | `82b3a64` | |
+| **UI-06b** | Create Storytelling | **Deferred, optional** | — | не выполнена; backlog |
+| **UI-07** | History navigation | **Completed** | `85c0d9f` | |
+| **UI-08** | ensureMoyDen / demo hygiene | **Completed** | `33d79d9` | |
+| **I** | Project Overview / паспорт-инфографика | **Partial** | часть в `5505371` | backlog |
+| **K** | Полное снятие sidebar / layout cleanup | **Deferred** | — | связана с UI-05; backlog |
+| **UI-09** | Итоговая приёмка UI Reconstruction | **Next** | — | без изменения продуктового кода |
+
+**Не выдавать за выполненные:** UI-05, UI-06b, незакрытую часть группы I, группу K.
+
+### Критерий завершения основной (Core) реконструкции
+
+**Core UI Reconstruction считается завершённой после успешного закрытия UI-09.**
+
+UI-05, UI-06b, группа I и группа K находятся в **отдельном backlog** и **не блокируют** закрытие Core UI Reconstruction, пока пользователь явно не переведёт одну из них в обязательный scope.
+
+### Порядок после UI-09
+
+1. Решение пользователя о закрытии Core UI Reconstruction (по результатам UI-09).
+2. Затем — выбор **одной** задачи из backlog (UI-05, UI-06b, I, K или иной явный scope).
+3. **Не** назначать автоматически первой UI-05, UI-06b, I или K.
 
 ---
 
@@ -36,237 +77,203 @@
 | Анализ | Analyzer / Orchestrator via Bridge | Показывать сводку; не назначать стадию |
 | Идентичность проекта | `passport.project_id` ↔ `project.id` в списке | Один проект — один id; антидубли по id и нормализованному пути |
 
-### 1.3. Целевая карта экранов (эталон из грязного UI + канон)
+### 1.3. Целевая карта экранов (Core + backlog)
 
 ```text
-[Boot — опционально] → Главная «Проекты» (таблица)
-                         ↓ открытие строки
-                    Project Chrome (верхняя оболочка)
-                         ├── Обзор / Текущая задача / Правила / …
-                         └── ← Проекты
+Главная «Проекты» (таблица)     ← UI-01 Completed
+        ↓ открытие строки
+Project Chrome                    ← UI-02 Completed
+  ├── Обзор / Текущая задача / …  ← stage track UI-04; полный overview = группа I (Partial)
+  └── ← Проекты + History API     ← UI-07 Completed
 
-Отдельно (ещё не в clean ветке):
-  Подключить существующий (pick → loading → review)
-  Создать новый (create-story + мастер + folder)
-  Passport sync / stage track на обзоре
+Отдельно в Core:
+  Подключить существующий         ← UI-03 Completed
+  Создать новый (write-first)     ← UI-06a Completed
+  Demo hygiene                    ← UI-08 Completed
+
+Backlog (не блокирует Core):
+  Boot / sidebar cleanup          ← UI-05 Deferred, optional
+  Create Storytelling             ← UI-06b Deferred, optional
+  Overview passport-инфографика   ← группа I Partial
+  Полное снятие sidebar           ← группа K Deferred (с UI-05)
 ```
 
 ### 1.4. Обязательные правила переноса
 
 1. Один коммит = одна законченная логическая UI-задача (`DEVELOPMENT_STANDARD`).
-2. Backend/Bridge, уже в HEAD (`stage_model`, passport API), **не** включать повторно в UI-коммиты.
+2. Backend/Bridge, уже в истории (`stage_model`, passport API), **не** включать повторно в UI-коммиты.
 3. Не копировать целиком грязный `index.html`; переносить минимальный HTML/CSS/JS вручную.
 4. Не подсаживать тестовые проекты и не писать в `localStorage` без действия пользователя.
 5. Перед «значимым» UI-коммитом — предъявление результата (`REVIEW_STANDARD`); Observation #6 учитывать для сценариев с folder picker.
+6. UI-09 **не** меняет продуктовый код: только приёмка и отдельные fix-задачи при дефектах.
 
 ---
 
-## 2. Что уже чисто перенесено и закоммичено
+## 2. Карта групп источника (справочно)
 
-**Ветка:** `ui/split-index`
-**Коммит:** `4851044` — `feat(projects): add projects home and local management`
-**База:** `96e0498` (passport Bridge API уже в истории)
+Источник: dirty main `index.html` на момент аудита 2026-07-30. Статусы ниже — относительно clean-ветки на HEAD `33d79d9`.
 
-| ID | Содержание | Статус |
+| Группа | Условное имя | Статус в clean-ветке |
 |---|---|---|
-| **UI-01** | Главная «Проекты»: `#systemHome`, таблица `#pmTable`, empty state, поиск/фильтр/сортировка, меню строки, `loadProjects`/`saveProjects`, `findProjectRecord` для живых мутаций | **Committed** |
-
-**Не входит в UI-01 (намеренно):** connect/create, Passport client, `project_id` antidupe, `stage_model`, create-story, history nav, ensureMoyDen, boot, Project Chrome.
+| A | Connect existing | Covered by **UI-03 Completed** |
+| B | Identity / anti-dupe | Covered by **UI-03 Completed** (ensureMoyDen не переносился) |
+| C | Passport client | Covered by **UI-03 Completed** (+ Create UI-06a) |
+| D | Stage track UI | Covered by **UI-04 Completed** |
+| E | Project Chrome | Covered by **UI-02 Completed** |
+| F | Boot / enter shell | **UI-05 Deferred, optional** |
+| G | Create-story | **UI-06a Completed**; storytelling → **UI-06b Deferred** |
+| H | History navigation | Covered by **UI-07 Completed** |
+| I | Overview infographic | **Partial** (см. §3) |
+| J | ensureMoyDen seed | Covered by **UI-08 Completed** (не переносить as-is; demo изолирован) |
+| K | Sidebar removal / full layout | **Deferred**; связана с UI-05 |
+| L | Косметика / leftover | не UI-задача Core |
 
 ---
 
-## 3. Текущее незакоммиченное состояние Project Chrome
+## 3. Задачи плана (детали)
 
-**Дерево:** `D:\AI_POS_UI_SPLIT`
-**Относительно HEAD `4851044`:** dirty `index.html` (~+212 / −4)
+### UI-01 — Projects home — Completed (`9d892e5`)
 
-| Элемент | Факт |
+Главная «Проекты»: таблица, empty state, поиск/фильтр/сортировка, меню строки, `loadProjects` / `saveProjects`.
+
+### UI-02 — Project Chrome — Completed (`fbf0992`)
+
+Верхняя оболочка открытого проекта: имя, разделы, активный раздел, «← Проекты».
+
+### UI-03 — Connect + identity + passport — Completed (`f1507c8`)
+
+Подключение папки: pick → review → confirm; антидубли; `passport.project_id` ↔ `project.id`; write-first.
+
+### UI-04 — Stage track — Completed (`5505371`)
+
+Трек стадий только из Bridge `stage_model`; пустая модель скрывает трек.
+
+### UI-05 — Shell / boot / layout — Deferred, optional
+
+Boot и/или упрощение sidebar без поломки UI-01/02. **Не выполнена.** Не смешивать с create-story. Входит в backlog после UI-09.
+
+### UI-06a — Standalone Create (write-first) — Completed (`82b3a64`)
+
+Законченный сценарий создания без storytelling и без 5-step wizard: папка на диске, passport, карточка только после успешной регистрации; recovery/retry.
+
+### UI-06b — Create Storytelling / содержательный экран создания проекта — Deferred, optional
+
+**Не выполнена.** Содержательный слой поверх/рядом с созданием проекта:
+
+- `#createStoryScreen`;
+- компоновка 60/40;
+- форма описания проекта;
+- материалы под карточками;
+- textarea;
+- микрофон;
+- компактная строка интеллектуальных помощников.
+
+Запрет плана сохраняется: не коммитить незавершённый storytelling WIP. Входит в backlog после UI-09.
+
+### UI-07 — History navigation — Completed (`85c0d9f`)
+
+Back/Forward между system home и стабильными разделами workspace; Create/Connect вне history — by design.
+
+### UI-08 — ensureMoyDen / Observation #6 hygiene — Completed (`33d79d9`)
+
+Session-demo изолирован от реальной папки и Bridge; автоseed ensureMoyDen не переносился.
+
+### Группа I — Project Overview / паспорт-инфографика — Partial
+
+| | |
 |---|---|
-| HTML | `#projectChrome`, `#osBackToProjects`, `#osNavProjectName`, `#osNavProject` + разделы как в эталоне |
-| CSS | `.project-chrome*`, `.project-section-nav*`, `.ai-pos-level-nav*` |
-| JS | `syncProjectChrome`, `navIdForActiveTab`; правки `showPanel` / `setOsNavActive` / `openOsSection` / `openWorkspace` |
-| History | **нет** `pushNavState` / browser history |
-| Проверка | READY по аудиту: имя проекта, активный раздел, ← Проекты, повторное открытие, сохранность таблицы |
-| Staging | **пусто** (не подготовлен) |
-| Побочный шум | `tools/__pycache__/…` — не часть задачи |
+| **Уже выполнено** | stage track из `stage_model` (UI-04) |
+| **Осталось** | passport-about; информационные карточки; целостный обзор проекта |
+| **Статус** | Partial; backlog (не блокирует Core) |
 
-**Следующий шаг по Chrome:** подготовить staging **только** `index.html` → коммит **UI-02** (после явного подтверждения).
+### Группа K — Полное снятие старого sidebar и завершение layout cleanup — Deferred
+
+Связана с UI-05. Backlog; не блокирует Core.
 
 ---
 
-## 4. Оставшиеся изменения основного `index.html` (группировка)
+## 4. UI-09 — итоговая приёмка UI Reconstruction — Next
 
-Источник: dirty `D:\AI_Project_Operating_System\index.html` vs HEAD `96e0498` (~+6385 / −1875, ~49 hunks). Backend passport/stage уже committed — ниже только **UI-остаток**.
+| | |
+|---|---|
+| **Статус** | **Next** (обязательный этап закрытия Core) |
+| **Продуктовый код** | **не изменять** |
+| **Суть** | Интеграционная визуальная и функциональная проверка уже реализованных UI-01–UI-08 |
 
-| Группа | Условное имя | Содержание в dirty UI | Завершённость в источнике |
-|---|---|---|---|
-| A | Connect existing | pick → loading → review → confirm; notices/conflicts | COMPLETE (сценарий) |
-| B | Identity / anti-dupe | `project_id`, normalize path, find by id/path | MIXED (connect ок; ensureMoyDen ломает) |
-| C | Passport client | read/write Bridge, cache, settings/overview sync | COMPLETE как клиент API |
-| D | Stage track UI | `readStageFromBridge`, `renderStageTrack`, `stage_model` | COMPLETE (модель с Bridge) |
-| E | Project Chrome | верхняя панель + разделы | COMPLETE в dirty; **уже переносится** в split как UI-02 WIP |
-| F | Boot / enter shell | `#bootScreen`, shellLevel, enterAppShell | MIXED |
-| G | Create-story | storytelling UI поверх 5-step wizard | INCOMPLETE / MIXED |
-| H | History navigation | `pushNavState` / `applyNavState` / popstate | MIXED (тянет shell) |
-| I | Overview infographic | desktop info cards, passport about | MIXED с C/D |
-| J | ensureMoyDen seed | автозапись «Мой день» в localStorage | INCOMPLETE / риск #6 |
-| K | Sidebar removal / full layout | is-projects-full, без постоянного sidebar | MIXED с E/F/G |
-| L | Косметика / leftover | мёртвые els, PNG вне HTML и т.п. | не UI-задача |
+### Критерии приёмки UI-09
 
-Mega-hunks в dirty файле (особенно CSS H00) **смешивают** E+F+G+D — в clean ветке переносить только вырезками.
+1. Главная «Проекты» открывается корректно.
+2. Project Chrome работает.
+3. Connect связывает `project.id` с `passport.project_id`.
+4. Create создаёт проект по write-first сценарию.
+5. Stage track получает `stage_model` через Bridge.
+6. Пустое состояние текущей задачи корректно.
+7. Переходы System Home ↔ Workspace работают через History API.
+8. Demo не обращается к реальной папке проекта.
+9. Интерфейс проверен в браузере и на целевой ширине телефона.
+10. Нет блокирующих ошибок консоли.
+11. Результаты проверки предъявлены скриншотами.
+12. Найденные дефекты оформляются **отдельными fix-задачами**, а не скрытыми правками внутри UI-09.
 
 ---
 
-## 5. Карта зависимостей
+## 5. Карта зависимостей (актуально)
 
 ```text
 Committed Bridge
-  ├─ /api/project-stage/read + stage_model  →  UI-04 Stage track
-  └─ /api/project-passport/* + project_id     →  UI-03 Passport+Identity+Connect
+  ├─ /api/project-stage/read + stage_model  →  UI-04 Completed
+  └─ /api/project-passport/* + project_id     →  UI-03 / UI-06a Completed
 
-UI-01 Projects home (done)
-  └─ UI-02 Project Chrome (WIP in split)
-        └─ optional later: UI-05 shell cleanup (sidebar/boot) without breaking home
-
-UI-03 Connect + identity + passport client  (A+B+C together — иначе бессмысленно)
-  ├─ needs Bridge passport (done)
-  └─ feeds overview passport display (I)
-
-UI-04 Stage track on overview (D)
-  ├─ needs Bridge stage (done)
-  └─ ideally after or with overview surface (I)
-
-UI-06 Create-new / create-story (G) — after connect OR parallel only if isolated
-UI-07 History nav (H) — after stable shell/chrome
-UI-08 ensureMoyDen (J) — fix or delete; do not ship as-is
+UI-01 … UI-04, UI-06a, UI-07, UI-08  →  Completed
+        ↓
+UI-09 итоговая приёмка Core          →  Next (no product code)
+        ↓
+Решение пользователя о закрытии Core
+        ↓
+Backlog (выбор пользователя, не автопорядок):
+  UI-05 (optional) | UI-06b (optional) | группа I (Partial) | группа K (Deferred)
 ```
 
 ---
 
-## 6. Переносить / переработать / отложить / не переносить
-
-| Решение | Группы | Комментарий |
-|---|---|---|
-| **Переносить (в worktree вручную)** | E→UI-02; A+B+C→UI-03; D→UI-04; части I | Минимальные срезы; без копирования всего файла |
-| **Переработать** | G create-story; J MoyDen; рассинхрон passport write fail на create | Не тащить «как есть» |
-| **Отложить** | F boot (если не нужен); H history; K полное удаление sidebar; mobile overflow shell | Отдельные задачи |
-| **Не переносить** | L косметика без функции; повтор Bridge backend; `_verify_*`, Health Candidate docs в UI-коммиты; `__pycache__`; fixture timestamp noise | |
-
----
-
-## 7–8. Порядок дальнейших коммитов (UI-02+)
-
-### UI-02 — Project Chrome (следующий)
-
-| | |
-|---|---|
-| **Цель** | Верхняя оболочка открытого проекта: имя, разделы, активный раздел, ← Проекты |
-| **Файлы** | только `index.html` в `D:\AI_POS_UI_SPLIT` |
-| **Зависимости** | UI-01 |
-| **Критерии готовности** | открытие из таблицы показывает chrome; имя верно; переходы по существующим экранам; возврат на «Проекты»; home/search/sort/menu целы; нет page errors; нет history/passport/stage/create в diff |
-| **Запреты** | `pushNavState`; connect/create; Passport; `project_id` antidupe; `stage_model`; create-story; ensureMoyDen; boot; `__pycache__` |
-| **Статус** | код READY в WIP split; коммит не создан |
-
-### UI-03 — Connect existing + identity + passport client
-
-| | |
-|---|---|
-| **Цель** | Подключение папки: pick→review→confirm; антидубли; запись passport + `project_id` |
-| **Файлы** | `index.html` (UI only) |
-| **Зависимости** | Bridge passport (HEAD); UI-01; желательно UI-02 |
-| **Критерии** | нет дублей; failed write не добавляет карточку; human errors; REVIEW_STANDARD / #6 учтены для picker |
-| **Запреты** | повторный backend; create-story; stage track; history; ensureMoyDen as-is |
-
-### UI-04 — Stage track (`stage_model`)
-
-| | |
-|---|---|
-| **Цель** | Показать трек стадий с Bridge на обзоре/инфографике |
-| **Файлы** | `index.html` |
-| **Зависимости** | Bridge stage_model (HEAD); поверхность обзора |
-| **Критерии** | только `stage_model` с API; пустая модель → скрыть трек; label map допустим |
-| **Запреты** | собственный hardcoded список стадий как источник истины; запись stage UI-ом |
-
-### UI-05 — Shell / boot / layout (опционально)
-
-| | |
-|---|---|
-| **Цель** | Boot и/или упрощение sidebar без поломки UI-01/02 |
-| **Зависимости** | UI-02 |
-| **Отложить**, если не даёт пользовательской ясности | |
-| **Запреты** | смешивать с create-story |
-
-### UI-06 — Create new / create-story
-
-| | |
-|---|---|
-| **Цель** | Законченный сценарий создания (не обёртка над старым 5-step) |
-| **Зависимости** | folder APIs Bridge; желательно UI-03 для согласованного passport/`project_id` |
-| **Критерии** | проект не считается созданным до реальной папки; passport write failure не оставляет «ложную» карточку |
-| **Запреты** | коммитить незавершённый storytelling WIP |
-
-### UI-07 — History navigation
-
-| | |
-|---|---|
-| **Цель** | Back/forward по экранам без ломки chrome/home |
-| **Зависимости** | стабильные UI-01…UI-02 (+ shell) |
-| **Запреты** | тащить вместе с create/connect |
-
-### UI-08 — ensureMoyDen / Observation #6 hygiene
-
-| | |
-|---|---|
-| **Цель** | Убрать или исправить автоseed; не обходить picker записью в storage |
-| **Зависимости** | UI-03 identity |
-| **Решение** | переработать или удалить; **не** переносить as-is |
-
----
-
-## 9. Риски (Governance / Passport / project_id / stage_model / Bridge / localStorage)
+## 6. Риски (Governance / Passport / project_id / stage_model / Bridge / localStorage)
 
 | Риск | Суть | Митигация в плане |
 |---|---|---|
 | **Две истины стадии** | `project.stage` (local) vs Engine `stage_model` | UI-04 только читает Bridge; подпись «Текущая работа» не выдавать за Engine |
-| **Двойная идентичность** | `project.id` vs `passport.project_id` | UI-03: единый lookup; запрет ensureMoyDen с новым uid |
-| **Passport ≠ localStorage** | write fail + push card; applyPassport не синхронизирует id | UI-03/06: write-first; мутации через живую запись |
-| **Observation #6** | folder picker / fake storage для «предъявления» | Не сидировать storage в тестах как «продуктовый» путь; для create/connect — честный UI или явная оговорка |
-| **Layered Knowledge / Freeze** | UI не меняет Accepted-контракты Stage/Analyzer | Только потребление уже committed Bridge API |
-| **User First** | технические сообщения Bridge | human messages в UI; не светить JSON/CLI |
-| **Смешанный mega-diff** | один dirty index ломает «1 коммит = 1 задача» | только worktree + ручной перенос |
-| **localStorage как истина файлов** | список ≠ паспорт на диске | passport cache с Bridge; список — UX-индекс |
+| **Двойная идентичность** | `project.id` vs `passport.project_id` | UI-03: единый lookup; ensureMoyDen as-is не переносить |
+| **Passport ≠ localStorage** | write fail + push card | UI-03/06a: write-first; мутации через живую запись |
+| **Observation #6** | folder picker / fake storage | Не сидировать storage как продуктовый путь |
+| **Layered Knowledge / Freeze** | UI не меняет Accepted-контракты | Только потребление committed Bridge API |
+| **User First** | технические сообщения Bridge | human messages в UI |
+| **Смешанный mega-diff** | один dirty index | только worktree + ручной перенос |
+| **localStorage как истина файлов** | список ≠ паспорт на диске | passport с Bridge; список — UX-индекс |
 
 ---
 
-## 10. Посторонние и временные файлы (не в UI-коммиты)
-
-### Основной проект (`D:\AI_Project_Operating_System`)
+## 7. Посторонние и временные файлы (не в UI-коммиты)
 
 | Путь | Действие |
 |---|---|
-| `index.html` (грязная гора) | источник для вырезок; **не** коммитить целиком |
-| `tools/local_bridge.py` (cosmetic leftover) | не смешивать с UI |
-| `Projects/**/project_stage.json` timestamp noise | исключить |
-| `assets/icons/android-chrome-192x192.png` | отдельно / не UI-02 |
 | `tools/__pycache__/**` | никогда |
+| Fixture passport noise / timestamp noise | исключить |
+| Temp screenshots вне репо | ок для REVIEW UI-09; не коммитить без решения |
+| Грязный main `index.html` | только источник вырезок |
 | `Governance/PROJECT_HEALTH_CANDIDATE_*.md` | отдельный Governance-контур |
-| `_nav_check.js`, `_verify_*_out/` | временные evidence; не коммитить без решения |
-
-### Worktree (`D:\AI_POS_UI_SPLIT`)
-
-| Путь | Действие |
-|---|---|
-| `tools/__pycache__/**` | не staging |
-| Temp screenshots вне репо | ок для REVIEW; не коммитить |
-| Этот файл `docs/UI_RECONSTRUCTION_PLAN.md` | документация плана; коммитить отдельно от UI-кода по желанию |
+| Этот файл | документация плана; коммитить отдельно от продуктового UI-кода |
 
 ---
 
-## Сводка состояния (на момент аудита)
+## 8. Предыдущий статус (исторический снимок, не канон)
 
-| Дерево | Ветка | HEAD | UI commit | WIP |
+> Снимок на момент первого аудита плана (2026-07-30). Сохранён для истории решений.
+> **Не использовать как текущий статус.** Канон — §0.
+
+| Дерево | Ветка | HEAD (тогда) | UI commit | WIP |
 |---|---|---|---|---|
 | Split | `ui/split-index` | `4851044` (UI-01) | UI-02 chrome unstaged | `index.html` + pycache |
-| Main | `master` | `96e0498` | — | огромный dirty `index.html` + extras |
+| Main | `master` | `96e0498` | — | огромный dirty `index.html` |
 
-**Архитектурный вывод:** clean-ветка правильно разлагает dirty UI; контракты Bridge уже в истории; следующий чистый шаг — **UI-02 Project Chrome**, затем связка connect/passport/identity (**UI-03**), затем stage track (**UI-04**). Create-story, history и MoyDen не готовы к прямому переносу.
+Тогдашний вывод: следующий чистый шаг — UI-02 Project Chrome, затем UI-03, затем UI-04. Create-story, history и MoyDen не готовы к прямому переносу. UI-02 описывался как WIP (~+212 / −4) без `pushNavState`.
+
+Группировка dirty UI (A–L) и исходные критерии UI-02…UI-08 из аудита сохраняют смысл как контекст разбиения; актуальные статусы — только в §0–§4.
