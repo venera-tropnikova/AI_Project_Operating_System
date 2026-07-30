@@ -4,9 +4,10 @@
 |---|---|
 | Document Type | UI reconstruction plan (факт + план переноса) |
 | Status | **Active** |
+| Core UI Reconstruction | **Completed** |
 | Date (canonical update) | 2026-07-31 |
 | Branch (clean UI) | `ui/split-index` @ `D:\AI_POS_UI_SPLIT` |
-| Current HEAD | `33d79d9f67e02b6b1c6e3776c4ca6163f48d18c0` (`33d79d9`) |
+| Current HEAD | `c503b47cf505d47508b0ecd7dee281261320bfd1` (`c503b47`) |
 | Base (pre UI chain) | `96e0498` — Bridge passport API already in history |
 | Source WIP (reference) | `D:\AI_Project_Operating_System` dirty `index.html` (вырезки, не цель коммитов) |
 | Canon | `Governance/CONSTITUTION.md` (приоритет при конфликте) |
@@ -14,19 +15,19 @@
 
 **Режим документа:** фиксация аудита, статусов и порядка работ. Код этим файлом не изменяется.
 
-**NEXT_TASK:** `UI-09` — итоговая приёмка UI Reconstruction (без изменения продуктового кода).
+**NEXT_TASK:** нет обязательной задачи Core. Далее — только явный выбор пользователя из backlog (UI-05, UI-06b, I, K); автопорядок не назначается.
 
 ---
 
 ## 0. Каноническая сводка статусов (актуально)
 
-Единственная каноническая таблица текущего состояния Core UI Reconstruction.
+Единственная каноническая таблица текущего состояния UI Reconstruction.
 
 | ID | Название | Статус | Коммит (short) | Примечание |
 |---|---|---|---|---|
-| **UI-01** | Главная «Проекты» | **Completed** | `9d892e5` | follow-up: скрытая `#btnOpenExample` в `#desktopStart` — вне Core |
+| **UI-01** | Главная «Проекты» | **Completed** | `9d892e5` | вход в demo восстановлен в `c503b47` (UI-09-FIX-01) |
 | **UI-02** | Project Chrome | **Completed** | `fbf0992` | |
-| **docs** | План UI Reconstruction | **Completed** *(снимок)* | `6005bd9` | этот файл обновляется отдельно |
+| **docs** | План UI Reconstruction | **Completed** *(снимок)* | `6005bd9` | этот файл обновляется отдельно (`5ce8b67` и далее) |
 | **UI-03** | Connect + identity + passport | **Completed** | `f1507c8` | |
 | **UI-04** | Stage track (`stage_model`) | **Completed** | `5505371` | полный overview — группа I |
 | **polish** | Текст пустой текущей задачи | **Completed** | `8add727` | не отдельный UI-ID плана |
@@ -37,20 +38,24 @@
 | **UI-08** | ensureMoyDen / demo hygiene | **Completed** | `33d79d9` | |
 | **I** | Project Overview / паспорт-инфографика | **Partial** | часть в `5505371` | backlog |
 | **K** | Полное снятие sidebar / layout cleanup | **Deferred** | — | связана с UI-05; backlog |
-| **UI-09** | Итоговая приёмка UI Reconstruction | **Next** | — | без изменения продуктового кода |
+| **UI-09** | Итоговая приёмка UI Reconstruction | **Completed** | `c503b47` | **PASS** на `c503b47`; дефект D-DEMO-ENTRY устранён в `c503b47` (UI-09-FIX-01) |
+
+**Core UI Reconstruction: Completed** (после UI-09 PASS).
 
 **Не выдавать за выполненные:** UI-05, UI-06b, незакрытую часть группы I, группу K.
 
 ### Критерий завершения основной (Core) реконструкции
 
-**Core UI Reconstruction считается завершённой после успешного закрытия UI-09.**
+**Core UI Reconstruction — Completed:** UI-09 закрыт с результатом **PASS** на HEAD `c503b47`.
 
-UI-05, UI-06b, группа I и группа K находятся в **отдельном backlog** и **не блокируют** закрытие Core UI Reconstruction, пока пользователь явно не переведёт одну из них в обязательный scope.
+Первичный прогон UI-09 выявил дефект **D-DEMO-ENTRY** (кнопка «Посмотреть пример» была недоступна на главной «Проекты»). Устранён отдельной fix-задачей **UI-09-FIX-01** в коммите `c503b47`; повторная приёмка UI-09 — **PASS**.
 
-### Порядок после UI-09
+UI-05, UI-06b, группа I и группа K остаются в **отдельном backlog** и **не входят** в Completed Core, пока пользователь явно не переведёт одну из них в обязательный scope.
 
-1. Решение пользователя о закрытии Core UI Reconstruction (по результатам UI-09).
-2. Затем — выбор **одной** задачи из backlog (UI-05, UI-06b, I, K или иной явный scope).
+### Порядок после закрытия Core
+
+1. Core UI Reconstruction закрыта (UI-09 PASS @ `c503b47`).
+2. Далее — выбор **одной** задачи из backlog (UI-05, UI-06b, I, K или иной явный scope) только по решению пользователя.
 3. **Не** назначать автоматически первой UI-05, UI-06b, I или K.
 
 ---
@@ -111,7 +116,7 @@ Backlog (не блокирует Core):
 
 ## 2. Карта групп источника (справочно)
 
-Источник: dirty main `index.html` на момент аудита 2026-07-30. Статусы ниже — относительно clean-ветки на HEAD `33d79d9`.
+Источник: dirty main `index.html` на момент аудита 2026-07-30. Статусы ниже — относительно clean-ветки на HEAD `c503b47` (Core Completed).
 
 | Группа | Условное имя | Статус в clean-ветке |
 |---|---|---|
@@ -192,13 +197,21 @@ Session-demo изолирован от реальной папки и Bridge; а
 
 ---
 
-## 4. UI-09 — итоговая приёмка UI Reconstruction — Next
+## 4. UI-09 — итоговая приёмка UI Reconstruction — Completed
 
 | | |
 |---|---|
-| **Статус** | **Next** (обязательный этап закрытия Core) |
-| **Продуктовый код** | **не изменять** |
-| **Суть** | Интеграционная визуальная и функциональная проверка уже реализованных UI-01–UI-08 |
+| **Статус** | **Completed** |
+| **Результат** | **PASS** на `c503b47` |
+| **Продуктовый код в приёмке** | не изменять; дефекты — отдельными fix |
+| **Суть** | Интеграционная визуальная и функциональная проверка UI-01–UI-08 |
+| **Fix в рамках закрытия** | `c503b47` — UI-09-FIX-01: вход в demo на главной «Проекты» |
+
+### Результат приёмки
+
+- UI-09 **PASS** подтверждён повторным прогоном на HEAD `c503b47`.
+- Дефект **D-DEMO-ENTRY** (недоступная кнопка «Посмотреть пример» из‑за всегда скрытого `#desktopStart`) **устранён** в `c503b47`: кнопка `#btnOpenExample` перенесена в toolbar главной «Проекты»; `openExample` и изоляция demo не менялись.
+- Core UI Reconstruction после этого — **Completed**.
 
 ### Критерии приёмки UI-09
 
@@ -226,9 +239,9 @@ Committed Bridge
 
 UI-01 … UI-04, UI-06a, UI-07, UI-08  →  Completed
         ↓
-UI-09 итоговая приёмка Core          →  Next (no product code)
+UI-09 итоговая приёмка Core          →  Completed (PASS @ c503b47)
         ↓
-Решение пользователя о закрытии Core
+Core UI Reconstruction               →  Completed
         ↓
 Backlog (выбор пользователя, не автопорядок):
   UI-05 (optional) | UI-06b (optional) | группа I (Partial) | группа K (Deferred)
