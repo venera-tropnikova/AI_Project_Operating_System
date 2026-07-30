@@ -227,6 +227,62 @@
       top: 0;
       max-height: 100vh;
       overflow: auto;
+      z-index: 30;
+    }
+
+    /* UI-05: shell modes — keep sidebar, drop duplicate section nav where chrome owns it */
+    .app.is-workspace .os-nav,
+    .app.is-form .os-nav {
+      display: none;
+    }
+
+    .app.is-home .os-nav-item:not([data-os-nav="desktop"]) {
+      display: none;
+    }
+
+    .os-sidebar-backdrop {
+      display: none;
+    }
+
+    .os-mobile-bar {
+      display: none;
+      align-items: center;
+      gap: 0.65rem;
+      margin: 0 0 0.85rem;
+      min-width: 0;
+    }
+
+    .os-sidebar-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-height: 2.25rem;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .os-sidebar-toggle:hover {
+      background: var(--surface-soft, var(--surface));
+    }
+
+    .os-mobile-bar-title {
+      min-width: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .os-brand {
@@ -427,7 +483,7 @@
     .os-main {
       min-width: 0;
       min-height: 100vh;
-      padding: 1.5rem 1.75rem 3rem 3.5rem;
+      padding: 1.5rem 1.75rem 3rem 1.75rem;
       background: var(--bg);
     }
 
@@ -435,7 +491,8 @@
       padding-top: 1.75rem;
     }
 
-    .app:not(.is-home) .os-main {
+    .app.is-workspace .os-main,
+    .app.is-form .os-main {
       padding-top: 1.25rem;
     }
 
@@ -2791,12 +2848,44 @@
         grid-template-columns: 1fr;
       }
 
+      .os-mobile-bar {
+        display: flex;
+      }
+
+      .os-sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 35;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: rgba(20, 28, 40, 0.42);
+        cursor: pointer;
+      }
+
+      .app.is-sidebar-open .os-sidebar-backdrop {
+        display: block;
+      }
+
       .os-sidebar {
-        position: relative;
-        max-height: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: min(288px, 86vw);
+        max-height: 100vh;
         min-height: 0;
-        border-right: none;
-        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        border-bottom: none;
+        transform: translateX(-105%);
+        transition: transform 0.2s ease;
+        box-shadow: none;
+      }
+
+      .app.is-sidebar-open .os-sidebar {
+        transform: translateX(0);
+        box-shadow: 8px 0 28px rgba(20, 28, 40, 0.18);
       }
 
       .os-sidebar-section {
@@ -3656,7 +3745,8 @@
 
   <div class="app is-home" id="appShell">
     <div class="os-shell">
-      <aside class="os-sidebar" aria-label="Навигация AI POS">
+      <button type="button" class="os-sidebar-backdrop" id="osSidebarBackdrop" tabindex="-1" aria-label="Закрыть меню"></button>
+      <aside class="os-sidebar" id="osSidebar" aria-label="Навигация AI POS">
         <div class="os-brand">
           <img class="os-brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="36" height="36" alt="" />
           <div class="os-brand-text">
@@ -3670,7 +3760,7 @@
           <div class="os-project-list" id="osProjectList" role="list"></div>
         </div>
 
-        <nav class="os-nav" aria-label="Основная навигация">
+        <nav class="os-nav" id="osNav" aria-label="Основная навигация">
           <p class="os-nav-label">Разделы</p>
           <button type="button" class="os-nav-item is-active" data-os-nav="desktop" aria-current="page">Рабочий стол</button>
           <button type="button" class="os-nav-item" data-os-nav="current-task">Текущая задача</button>
@@ -3683,6 +3773,12 @@
       </aside>
 
       <div class="os-main">
+        <div class="os-mobile-bar" id="osMobileBar">
+          <button type="button" class="os-sidebar-toggle" id="btnOsSidebarToggle" aria-controls="osSidebar" aria-expanded="false">
+            Меню
+          </button>
+          <span class="os-mobile-bar-title" id="osMobileBarTitle">Проекты</span>
+        </div>
         <header class="project-chrome" id="projectChrome" hidden>
           <div class="project-chrome-top">
             <button type="button" class="ai-pos-level-nav" data-os-nav="home" id="osBackToProjects" aria-label="К списку проектов" title="К списку проектов">
@@ -4950,6 +5046,10 @@
         projectForm: document.getElementById("projectForm"),
         formError: document.getElementById("formError"),
         templatesGrid: document.getElementById("templatesGrid"),
+        osSidebar: document.getElementById("osSidebar"),
+        osSidebarBackdrop: document.getElementById("osSidebarBackdrop"),
+        btnOsSidebarToggle: document.getElementById("btnOsSidebarToggle"),
+        osMobileBarTitle: document.getElementById("osMobileBarTitle"),
         osProjectList: document.getElementById("osProjectList"),
         projectChrome: document.getElementById("projectChrome"),
         osNavProject: document.getElementById("osNavProject"),
@@ -5732,11 +5832,52 @@
         else pushNavState();
       }
 
+      function setOsSidebarOpen(open) {
+        if (!els.appShell) return;
+        var next = !!open;
+        els.appShell.classList.toggle("is-sidebar-open", next);
+        if (els.btnOsSidebarToggle) {
+          els.btnOsSidebarToggle.setAttribute("aria-expanded", next ? "true" : "false");
+        }
+      }
+
+      function closeOsSidebar() {
+        setOsSidebarOpen(false);
+      }
+
+      function toggleOsSidebar() {
+        if (!els.appShell) return;
+        setOsSidebarOpen(!els.appShell.classList.contains("is-sidebar-open"));
+      }
+
+      function syncShellMode(panelName) {
+        if (!els.appShell) return;
+        els.appShell.classList.toggle("is-home", panelName === "list");
+        els.appShell.classList.toggle("is-workspace", panelName === "workspace");
+        els.appShell.classList.toggle("is-form", panelName === "form");
+        syncMobileBarTitle(panelName);
+      }
+
+      function syncMobileBarTitle(panelName) {
+        if (!els.osMobileBarTitle) return;
+        if (panelName === "form") {
+          els.osMobileBarTitle.textContent = "Создание проекта";
+          return;
+        }
+        if (panelName === "workspace") {
+          var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+          els.osMobileBarTitle.textContent = (project && project.name) || "Проект";
+          return;
+        }
+        els.osMobileBarTitle.textContent = "Проекты";
+      }
+
       function showPanel(name, options) {
         els.panelList.classList.toggle("is-active", name === "list");
         els.panelForm.classList.toggle("is-active", name === "form");
         els.panelWorkspace.classList.toggle("is-active", name === "workspace");
-        els.appShell.classList.toggle("is-home", name === "list");
+        syncShellMode(name);
+        closeOsSidebar();
         syncProjectChrome();
         if (name === "list") {
           if (state.exampleMode) {
@@ -5757,6 +5898,9 @@
         if (!project) project = findProject(state.currentId);
         if (els.osNavProjectName) {
           els.osNavProjectName.textContent = project ? (project.name || "Проект") : "—";
+        }
+        if (els.osMobileBarTitle && els.appShell && els.appShell.classList.contains("is-workspace")) {
+          els.osMobileBarTitle.textContent = (project && project.name) || "Проект";
         }
       }
 
@@ -10822,6 +10966,16 @@
       }
 
       function bindEvents() {
+        if (els.btnOsSidebarToggle) {
+          els.btnOsSidebarToggle.addEventListener("click", function () {
+            toggleOsSidebar();
+          });
+        }
+        if (els.osSidebarBackdrop) {
+          els.osSidebarBackdrop.addEventListener("click", function () {
+            closeOsSidebar();
+          });
+        }
         document.getElementById("btnNewProject").addEventListener("click", function () { openForm("new"); });
         document.getElementById("btnNewFromWorkspace").addEventListener("click", function () { openForm("new"); });
         if (els.btnStartNewProject) {
@@ -11037,6 +11191,10 @@
         });
         document.addEventListener("keydown", function (event) {
           if (event.key !== "Escape") return;
+          if (els.appShell && els.appShell.classList.contains("is-sidebar-open")) {
+            closeOsSidebar();
+            return;
+          }
           if (state.projectsUi.openMenuId) {
             closePmMenus();
             renderProjectsTable();
@@ -11388,8 +11546,10 @@
         applyDetailLevel("technical", { persist: false });
         bindEvents();
         renderTemplates();
+        // UI-05 boot: always enter shell on Projects home (list), sidebar closed.
         renderDesktop();
         showPanel("list");
+        closeOsSidebar();
         replaceNavState();
       }
 
