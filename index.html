@@ -3240,12 +3240,58 @@
     #panelForm.is-connect-existing .wizard-nav,
     #panelForm.is-connect-existing #wizardScenarioGrid,
     #panelForm.is-connect-existing #createStoryScreen,
-    #panelForm.is-connect-existing #formError {
+    #panelForm.is-connect-existing #formError,
+    #panelForm.is-create-new .wizard-progress,
+    #panelForm.is-create-new .wizard-step,
+    #panelForm.is-create-new .wizard-nav,
+    #panelForm.is-create-new #wizardScenarioGrid,
+    #panelForm.is-create-new #createStoryScreen,
+    #panelForm.is-create-new #formError {
       display: none !important;
     }
 
     #panelForm.is-connect-existing #connectExistingFlow {
       display: block;
+    }
+
+    #panelForm.is-create-new #createNewFlow {
+      display: block;
+    }
+
+    .create-new-flow {
+      display: none;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0.25rem 0 1.25rem;
+    }
+
+    .create-new-flow .connect-review-field {
+      margin: 0;
+    }
+
+    .create-recovery-box {
+      margin: 0 0 1rem;
+      padding: 0.85rem 0.95rem;
+      border-radius: 12px;
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      color: #9a3412;
+    }
+
+    .create-recovery-box p {
+      margin: 0 0 0.45rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .create-recovery-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .create-recovery-path {
+      word-break: break-word;
+      font-weight: 650;
+      color: #7c2d12;
     }
 
     .connect-existing {
@@ -3656,6 +3702,7 @@
               <button type="button" class="pm-search-find" id="btnPmSearch">Найти</button>
             </div>
             <div class="pm-toolbar-actions">
+              <button type="button" class="btn btn-secondary" id="btnPmCreate">Создать</button>
               <button type="button" class="btn btn-primary" id="btnPmConnect">Подключить</button>
             </div>
           </div>
@@ -3858,6 +3905,71 @@
               <div class="connect-actions">
                 <button type="button" class="btn btn-secondary" id="btnConnectReviewBack">Назад</button>
                 <button type="button" class="btn btn-primary" id="btnConnectConfirm">Подтвердить и подключить</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="createNewFlow" class="create-new-flow" hidden>
+            <div id="createBasicsScreen">
+              <p class="connect-lead">Укажите название и кратко опишите идею. Папка на диске появится только после подтверждения.</p>
+              <div class="connect-review-fields">
+                <div class="connect-review-field">
+                  <label for="createFieldName">Название проекта</label>
+                  <input id="createFieldName" type="text" maxlength="120" placeholder="Например: Мой день" autocomplete="off" />
+                </div>
+                <div class="connect-review-field">
+                  <label for="createFieldIdea">Идея проекта</label>
+                  <textarea id="createFieldIdea" rows="4" placeholder="Что хотите создать"></textarea>
+                </div>
+              </div>
+              <div class="connect-review-error" id="createFlowErrorBasics" hidden role="alert"></div>
+              <div class="connect-actions">
+                <button type="button" class="btn btn-secondary" id="btnCreateCancelBasics">Отмена</button>
+                <button type="button" class="btn btn-primary" id="btnCreateBasicsNext">Далее →</button>
+              </div>
+            </div>
+
+            <div id="createFolderScreen" hidden>
+              <p class="connect-lead">Выберите родительскую папку. AI POS покажет итоговый путь до записи на диск.</p>
+              <div class="connect-folder-card">
+                <span class="connect-folder-label">Родительская папка</span>
+                <div class="connect-folder-row">
+                  <div class="connect-folder-path is-empty" id="createParentPathDisplay" aria-live="polite">Не выбрана</div>
+                  <button type="button" class="btn btn-secondary" id="btnCreatePickParent">Выбрать папку</button>
+                </div>
+                <div class="connect-folder-meta" id="createPreviewMeta" hidden>
+                  <p>Итоговый путь: <strong id="createPreviewPath">—</strong></p>
+                  <p class="connect-folder-status" id="createPreviewStatus"></p>
+                </div>
+                <p class="connect-note" id="createPreviewNote">Папка создаётся только после подтверждения.</p>
+              </div>
+              <div class="connect-review-error" id="createFlowErrorFolder" hidden role="alert"></div>
+              <div class="connect-actions">
+                <button type="button" class="btn btn-secondary" id="btnCreateFolderBack">Назад</button>
+                <button type="button" class="btn btn-primary" id="btnCreateFolderNext" disabled>Далее →</button>
+              </div>
+            </div>
+
+            <div id="createConfirmScreen" hidden>
+              <p class="connect-lead">Проверьте данные. После подтверждения будет создана папка и зарегистрирован проект в AI POS.</p>
+              <div id="createConfirmSummary" class="connect-folder-card"></div>
+              <div class="connect-review-error" id="createFlowErrorConfirm" hidden role="alert"></div>
+              <div class="connect-actions">
+                <button type="button" class="btn btn-secondary" id="btnCreateConfirmBack">Назад</button>
+                <button type="button" class="btn btn-primary" id="btnCreateConfirm">Создать проект</button>
+              </div>
+            </div>
+
+            <div id="createRecoveryScreen" hidden>
+              <p class="connect-lead">Папка на диске уже создана, но регистрация проекта в AI POS не завершена.</p>
+              <div class="create-recovery-box" id="createRecoveryBox" role="alert">
+                <p id="createRecoveryMessage">Не удалось сохранить сведения о проекте.</p>
+                <p>Путь: <span class="create-recovery-path" id="createRecoveryPath">—</span></p>
+                <p>Можно повторить только регистрацию — папка заново создаваться не будет.</p>
+              </div>
+              <div class="connect-actions">
+                <button type="button" class="btn btn-secondary" id="btnCreateRecoveryCancel">К списку проектов</button>
+                <button type="button" class="btn btn-primary" id="btnCreatePassportRetry">Повторить регистрацию</button>
               </div>
             </div>
           </div>
@@ -4761,7 +4873,10 @@
           connectReadError: "",
           connectPassport: null,
           connectPassportExists: false,
-          connectExistingProjectId: ""
+          connectExistingProjectId: "",
+          createStage: "basics",
+          createProjectId: "",
+          createRecovery: null
         },
         projectsUi: {
           query: "",
@@ -4979,8 +5094,36 @@
         templatesBlock: document.getElementById("templatesBlock"),
         formPageTitle: document.getElementById("formPageTitle"),
         formPageLead: document.getElementById("formPageLead"),
+        btnPmCreate: document.getElementById("btnPmCreate"),
         btnPmConnect: document.getElementById("btnPmConnect"),
         connectExistingFlow: document.getElementById("connectExistingFlow"),
+        createNewFlow: document.getElementById("createNewFlow"),
+        createBasicsScreen: document.getElementById("createBasicsScreen"),
+        createFolderScreen: document.getElementById("createFolderScreen"),
+        createConfirmScreen: document.getElementById("createConfirmScreen"),
+        createRecoveryScreen: document.getElementById("createRecoveryScreen"),
+        createFieldName: document.getElementById("createFieldName"),
+        createFieldIdea: document.getElementById("createFieldIdea"),
+        createParentPathDisplay: document.getElementById("createParentPathDisplay"),
+        createPreviewMeta: document.getElementById("createPreviewMeta"),
+        createPreviewPath: document.getElementById("createPreviewPath"),
+        createPreviewStatus: document.getElementById("createPreviewStatus"),
+        createPreviewNote: document.getElementById("createPreviewNote"),
+        createConfirmSummary: document.getElementById("createConfirmSummary"),
+        createFlowErrorBasics: document.getElementById("createFlowErrorBasics"),
+        createFlowErrorFolder: document.getElementById("createFlowErrorFolder"),
+        createFlowErrorConfirm: document.getElementById("createFlowErrorConfirm"),
+        createRecoveryMessage: document.getElementById("createRecoveryMessage"),
+        createRecoveryPath: document.getElementById("createRecoveryPath"),
+        btnCreateCancelBasics: document.getElementById("btnCreateCancelBasics"),
+        btnCreateBasicsNext: document.getElementById("btnCreateBasicsNext"),
+        btnCreatePickParent: document.getElementById("btnCreatePickParent"),
+        btnCreateFolderBack: document.getElementById("btnCreateFolderBack"),
+        btnCreateFolderNext: document.getElementById("btnCreateFolderNext"),
+        btnCreateConfirmBack: document.getElementById("btnCreateConfirmBack"),
+        btnCreateConfirm: document.getElementById("btnCreateConfirm"),
+        btnCreateRecoveryCancel: document.getElementById("btnCreateRecoveryCancel"),
+        btnCreatePassportRetry: document.getElementById("btnCreatePassportRetry"),
         connectPickScreen: document.getElementById("connectPickScreen"),
         connectLoadingScreen: document.getElementById("connectLoadingScreen"),
         connectReviewScreen: document.getElementById("connectReviewScreen"),
@@ -5547,7 +5690,9 @@
         fillPrimaryToolSelect(document.getElementById("fieldPrimaryTool"), "");
         fillAiModelSelect(document.getElementById("fieldAiModel"), "");
         resetCreateWizard(mode === "existing" ? "existing" : "new");
-        goWizardStep(1);
+        if (mode !== "existing" && mode !== "new") {
+          goWizardStep(1);
+        }
         renderTemplates();
         if (els.templatesBlock) els.templatesBlock.classList.add("is-collapsed");
         if (els.btnToggleTemplates) els.btnToggleTemplates.textContent = "Показать";
@@ -5953,6 +6098,348 @@
         syncConnectFolderUi();
       }
 
+      function clearCreateFlowErrors() {
+        var ids = [
+          els.createFlowErrorBasics,
+          els.createFlowErrorFolder,
+          els.createFlowErrorConfirm
+        ];
+        for (var i = 0; i < ids.length; i++) {
+          if (!ids[i]) continue;
+          ids[i].hidden = true;
+          ids[i].textContent = "";
+        }
+      }
+
+      function showCreateFlowError(el, message) {
+        clearCreateFlowErrors();
+        if (!el) return;
+        el.hidden = false;
+        el.textContent = message || "Не удалось выполнить действие. Повторите попытку.";
+      }
+
+      function syncCreateFolderUi() {
+        var parent = state.createWizard.parentPath || "";
+        var preview = state.createWizard.preview;
+        var path = preview && preview.project_path ? preview.project_path : "";
+        var canCreate = !!(preview && preview.can_create && path);
+        if (els.createParentPathDisplay) {
+          els.createParentPathDisplay.textContent = parent || "Не выбрана";
+          els.createParentPathDisplay.classList.toggle("is-empty", !parent);
+        }
+        if (els.createPreviewMeta) els.createPreviewMeta.hidden = !parent;
+        if (els.createPreviewPath) els.createPreviewPath.textContent = path || "—";
+        if (els.createPreviewStatus) {
+          if (!parent) els.createPreviewStatus.textContent = "";
+          else if (canCreate) els.createPreviewStatus.textContent = "Путь доступен для создания";
+          else if (preview && preview.exists) els.createPreviewStatus.textContent = "Папка с таким именем уже существует";
+          else els.createPreviewStatus.textContent = (preview && preview.message) || "Путь пока недоступен";
+        }
+        if (els.createPreviewNote) {
+          if (canCreate) {
+            els.createPreviewNote.textContent = "После подтверждения будет создана папка и скопирован шаблон AI POS.";
+          } else if (preview && preview.exists) {
+            els.createPreviewNote.textContent = "Смените название или выберите другую родительскую папку.";
+          } else {
+            els.createPreviewNote.textContent = "Папка создаётся только после подтверждения.";
+          }
+        }
+        if (els.btnCreateFolderNext) {
+          els.btnCreateFolderNext.disabled = !canCreate || !!state.createWizard.busy;
+        }
+      }
+
+      function updateCreateConfirmSummary() {
+        if (!els.createConfirmSummary) return;
+        var name = els.createFieldName ? els.createFieldName.value.trim() : "";
+        var idea = els.createFieldIdea ? els.createFieldIdea.value.trim() : "";
+        var path = state.createWizard.preview && state.createWizard.preview.project_path
+          ? state.createWizard.preview.project_path
+          : "—";
+        els.createConfirmSummary.innerHTML =
+          "<p><strong>Название:</strong> " + escapeHtml(name || "—") + "</p>" +
+          "<p><strong>Идея:</strong> " + escapeHtml(idea || "—") + "</p>" +
+          "<p><strong>Путь:</strong> " + escapeHtml(path) + "</p>" +
+          "<p>На диск будет записано только после нажатия «Создать проект».</p>";
+      }
+
+      function setCreateStage(stage) {
+        state.createWizard.createStage = stage || "basics";
+        syncCreateModeUi();
+      }
+
+      function syncCreateNewUi() {
+        var isNew = state.createWizard.mode === "new";
+        var stage = state.createWizard.createStage || "basics";
+        if (els.panelForm) els.panelForm.classList.toggle("is-create-new", isNew);
+        if (els.createNewFlow) els.createNewFlow.hidden = !isNew;
+        if (!isNew) return;
+        if (els.createBasicsScreen) els.createBasicsScreen.hidden = stage !== "basics";
+        if (els.createFolderScreen) els.createFolderScreen.hidden = stage !== "folder";
+        if (els.createConfirmScreen) els.createConfirmScreen.hidden = stage !== "confirm";
+        if (els.createRecoveryScreen) els.createRecoveryScreen.hidden = stage !== "recovery";
+        if (els.formPageTitle) {
+          if (stage === "recovery") els.formPageTitle.textContent = "Регистрация не завершена";
+          else if (stage === "confirm") els.formPageTitle.textContent = "Подтвердите создание";
+          else if (stage === "folder") els.formPageTitle.textContent = "Где создать проект";
+          else els.formPageTitle.textContent = "Создать проект";
+        }
+        if (els.formPageLead) {
+          els.formPageLead.hidden = true;
+          els.formPageLead.textContent = "";
+        }
+        if (els.panelForm) {
+          els.panelForm.setAttribute("aria-label", "Создание нового проекта");
+        }
+        syncCreateFolderUi();
+        if (stage === "confirm") updateCreateConfirmSummary();
+        if (stage === "recovery" && state.createWizard.createRecovery) {
+          var rec = state.createWizard.createRecovery;
+          if (els.createRecoveryPath) els.createRecoveryPath.textContent = rec.workFolder || "—";
+          if (els.createRecoveryMessage) {
+            els.createRecoveryMessage.textContent = rec.message ||
+              "Папка создана, но регистрация проекта не завершена.";
+          }
+        }
+      }
+
+      function buildPassportFromProjectForm(data, modules, projectId) {
+        var passport = normalizePassportClient({
+          project_id: projectId || "",
+          name: data.name || "",
+          summary: data.idea || "",
+          goal: data.idea || "",
+          audience: data.audience || "",
+          expected_result: data.result || "",
+          capabilities: [],
+          status: data.status || "В работе",
+          modules: modules || [],
+          missing_fields: []
+        });
+        passport.missing_fields = computeMissingPassportFields(passport);
+        return passport;
+      }
+
+      function readCreateFlowDraft() {
+        var name = els.createFieldName ? els.createFieldName.value.trim() : "";
+        var idea = els.createFieldIdea ? els.createFieldIdea.value.trim() : "";
+        return {
+          name: name,
+          idea: idea,
+          result: idea
+            ? ("Рабочий результат по описанию проекта «" + name + "».")
+            : ("Рабочий результат проекта «" + (name || "без названия") + "»."),
+          audience: "Уточняется",
+          status: "В работе"
+        };
+      }
+
+      function validateCreateBasics() {
+        var draft = readCreateFlowDraft();
+        if (!draft.name || !draft.idea) {
+          showCreateFlowError(
+            els.createFlowErrorBasics,
+            "Укажите название и идею проекта — без этого создать проект нельзя."
+          );
+          return false;
+        }
+        clearCreateFlowErrors();
+        return true;
+      }
+
+      async function refreshCreatePreview() {
+        var name = els.createFieldName ? els.createFieldName.value.trim() : "";
+        var parent = state.createWizard.parentPath;
+        if (!parent) {
+          state.createWizard.preview = null;
+          document.getElementById("fieldWorkFolder").value = "";
+          syncCreateFolderUi();
+          return;
+        }
+        var seq = (state.createWizard.previewSeq || 0) + 1;
+        state.createWizard.previewSeq = seq;
+        setCreateBusy(true);
+        var res = await postBridgeJson("/api/preview-new-project", {
+          parent_path: parent,
+          project_name: name || "new-project"
+        });
+        if (seq !== state.createWizard.previewSeq) return;
+        setCreateBusy(false);
+        state.createWizard.preview = res.data || null;
+        if (res.data && res.data.ok && res.data.project_path && res.data.can_create) {
+          document.getElementById("fieldWorkFolder").value = res.data.project_path;
+        } else {
+          document.getElementById("fieldWorkFolder").value = "";
+        }
+        syncCreateFolderUi();
+      }
+
+      function finalizeCreatedProject(projectId, draft, workFolder, passport) {
+        if (findProjectByProjectId(projectId) || findProjectsByWorkFolder(workFolder).length) {
+          openProjectOverview(projectId);
+          return;
+        }
+        var project = ensureDerived({
+          id: projectId,
+          name: draft.name,
+          idea: draft.idea,
+          result: draft.result || "",
+          audience: draft.audience || "",
+          assets: "",
+          constraints: "",
+          workFolder: workFolder,
+          githubUrl: "",
+          launchUrl: "",
+          captureWindowHwnd: "",
+          captureWindowTitle: "",
+          captureWindowProcess: "",
+          primaryTool: "",
+          aiModel: "",
+          template: "",
+          modules: [],
+          activeModuleId: "",
+          materials: [],
+          status: draft.status || "В работе",
+          stage: "Анализ",
+          isDemo: false,
+          createdAt: new Date().toISOString()
+        });
+        setCachedPassport(project, passport);
+        applyPassportToProjectFields(project, passport);
+        state.projects.push(project);
+        saveProjects();
+        state.createWizard.createRecovery = null;
+        openProjectOverview(project.id);
+      }
+
+      async function confirmCreateNewProject() {
+        if (state.createWizard.busy) return;
+        if (state.createWizard.createRecovery) {
+          setCreateStage("recovery");
+          return;
+        }
+        if (!validateCreateBasics()) {
+          setCreateStage("basics");
+          return;
+        }
+        var draft = readCreateFlowDraft();
+        var preview = state.createWizard.preview;
+        var path = preview && preview.project_path ? String(preview.project_path).trim() : "";
+        if (!state.createWizard.parentPath || !preview || !preview.can_create || !path) {
+          showCreateFlowError(
+            els.createFlowErrorConfirm,
+            "Сначала выберите доступный путь для новой папки проекта."
+          );
+          setCreateStage("folder");
+          return;
+        }
+        if (findProjectsByWorkFolder(path).length) {
+          showCreateFlowError(
+            els.createFlowErrorConfirm,
+            "Проект с этим путём уже есть в AI POS. Выберите другое название или папку."
+          );
+          return;
+        }
+
+        var projectId = state.createWizard.createProjectId || uid("proj");
+        state.createWizard.createProjectId = projectId;
+        var passport = buildPassportFromProjectForm(draft, [], projectId);
+
+        setCreateBusy(true);
+        var created = await postBridgeJson("/api/create-project", {
+          parent_path: state.createWizard.parentPath,
+          project_name: draft.name,
+          confirm: true
+        });
+        setCreateBusy(false);
+
+        if (!created.data || !created.data.ok || !created.data.project_path) {
+          showCreateFlowError(
+            els.createFlowErrorConfirm,
+            (created.data && created.data.message) ||
+              "Не удалось создать папку проекта. Проверьте путь и права доступа, затем повторите."
+          );
+          return;
+        }
+        if (!created.data.wrote) {
+          showCreateFlowError(
+            els.createFlowErrorConfirm,
+            "Создание на диске не выполнено. Подтвердите действие и повторите."
+          );
+          return;
+        }
+
+        var workFolder = created.data.project_path;
+        if (normalizeWorkFolderPath(workFolder) !== normalizeWorkFolderPath(path)) {
+          // Bridge may normalize path; still accept created path, but block if already registered.
+          path = workFolder;
+        }
+        if (findProjectsByWorkFolder(workFolder).length) {
+          showCreateFlowError(
+            els.createFlowErrorConfirm,
+            "Проект с этим путём уже есть в AI POS. Карточка не добавлена повторно."
+          );
+          return;
+        }
+
+        setCreateBusy(true);
+        var written = await writePassportToBridge(workFolder, passport);
+        setCreateBusy(false);
+        if (!written.ok) {
+          state.createWizard.createRecovery = {
+            workFolder: workFolder,
+            projectId: projectId,
+            passport: passport,
+            draft: draft,
+            message:
+              (written.message || "Не удалось сохранить сведения о проекте.") +
+              " Папка создана, но регистрация проекта не завершена."
+          };
+          setCreateStage("recovery");
+          return;
+        }
+        if (written.passport) {
+          passport = normalizePassportClient(written.passport);
+          if (!passportProjectId(passport)) passport.project_id = projectId;
+        }
+        finalizeCreatedProject(projectId, draft, workFolder, passport);
+      }
+
+      async function retryCreatePassportRegistration() {
+        if (state.createWizard.busy) return;
+        var rec = state.createWizard.createRecovery;
+        if (!rec || !rec.workFolder || !rec.projectId || !rec.passport) {
+          showCreateFlowError(
+            els.createFlowErrorConfirm,
+            "Нет данных для повторной регистрации. Начните создание заново."
+          );
+          setCreateStage("basics");
+          return;
+        }
+        if (findProjectByProjectId(rec.projectId) || findProjectsByWorkFolder(rec.workFolder).length) {
+          state.createWizard.createRecovery = null;
+          openProjectOverview(rec.projectId);
+          return;
+        }
+        setCreateBusy(true);
+        var written = await writePassportToBridge(rec.workFolder, rec.passport);
+        setCreateBusy(false);
+        if (!written.ok) {
+          if (els.createRecoveryMessage) {
+            els.createRecoveryMessage.textContent =
+              (written.message || "Не удалось сохранить сведения о проекте.") +
+              " Папка уже создана — повторите регистрацию ещё раз.";
+          }
+          if (els.createRecoveryPath) els.createRecoveryPath.textContent = rec.workFolder;
+          return;
+        }
+        var passport = written.passport
+          ? normalizePassportClient(written.passport)
+          : normalizePassportClient(rec.passport);
+        if (!passportProjectId(passport)) passport.project_id = rec.projectId;
+        finalizeCreatedProject(rec.projectId, rec.draft || readCreateFlowDraft(), rec.workFolder, passport);
+      }
+
       function emptyPassport() {
         return {
           schema: "ai-pos.project_passport/v1",
@@ -6315,15 +6802,22 @@
           connectReadError: "",
           connectPassport: null,
           connectPassportExists: false,
-          connectExistingProjectId: ""
+          connectExistingProjectId: "",
+          createStage: "basics",
+          createProjectId: "",
+          createRecovery: null
         };
         document.getElementById("fieldParentFolder").value = "";
         document.getElementById("fieldWorkFolder").value = "";
         if (els.fieldCreateConfirm) els.fieldCreateConfirm.checked = false;
         if (els.fieldCreateMaterials) els.fieldCreateMaterials.value = "";
+        if (els.createFieldName) els.createFieldName.value = "";
+        if (els.createFieldIdea) els.createFieldIdea.value = "";
         clearConnectReviewFields();
         hideConnectAlreadyNotice();
         syncConnectFolderUi();
+        clearCreateFlowErrors();
+        syncCreateFolderUi();
         syncCreateModeUi();
         updateCreateSummary();
       }
@@ -6421,22 +6915,23 @@
       function syncCreateModeUi() {
         var mode = state.createWizard.mode;
         var isExisting = mode === "existing";
+        var isNew = mode === "new";
         var buttons = document.querySelectorAll("[data-create-mode]");
         for (var i = 0; i < buttons.length; i++) {
           var on = buttons[i].getAttribute("data-create-mode") === mode;
           buttons[i].classList.toggle("is-active", on);
           buttons[i].setAttribute("aria-pressed", on ? "true" : "false");
         }
-        if (els.createFolderNew) els.createFolderNew.hidden = mode !== "new";
+        if (els.createFolderNew) els.createFolderNew.hidden = true;
         if (els.createFolderExisting) els.createFolderExisting.hidden = true;
-        if (!isExisting && els.formPageTitle) {
+        if (!isExisting && !isNew && els.formPageTitle) {
           els.formPageTitle.textContent = "Создать проект";
         }
-        if (!isExisting && els.formPageLead) {
+        if (!isExisting && !isNew && els.formPageLead) {
           els.formPageLead.hidden = false;
           els.formPageLead.textContent = "Мастер подключения проекта к AI POS. На диск пишем только после финального подтверждения.";
         }
-        if (!isExisting && els.panelForm) {
+        if (!isExisting && !isNew && els.panelForm) {
           els.panelForm.setAttribute("aria-label", "Создание проекта");
         }
         if (els.btnSubmitProject) {
@@ -6476,6 +6971,7 @@
         renderExistingInspect(state.createWizard.inspect);
         updateCreateSummary();
         syncConnectExistingUi();
+        syncCreateNewUi();
       }
 
       function renderExistingInspect(inspect) {
@@ -6566,6 +7062,19 @@
         if (els.btnConnectConfirm) els.btnConnectConfirm.disabled = !!busy;
         if (els.btnConnectAnalyze) {
           els.btnConnectAnalyze.disabled = !!busy || !state.createWizard.projectPath;
+        }
+        if (els.btnCreateBasicsNext) els.btnCreateBasicsNext.disabled = !!busy;
+        if (els.btnCreateCancelBasics) els.btnCreateCancelBasics.disabled = !!busy;
+        if (els.btnCreatePickParent) els.btnCreatePickParent.disabled = !!busy;
+        if (els.btnCreateFolderBack) els.btnCreateFolderBack.disabled = !!busy;
+        if (els.btnCreateConfirmBack) els.btnCreateConfirmBack.disabled = !!busy;
+        if (els.btnCreateConfirm) els.btnCreateConfirm.disabled = !!busy;
+        if (els.btnCreateRecoveryCancel) els.btnCreateRecoveryCancel.disabled = !!busy;
+        if (els.btnCreatePassportRetry) els.btnCreatePassportRetry.disabled = !!busy;
+        if (els.btnCreateFolderNext) {
+          var preview = state.createWizard.preview;
+          var canCreate = !!(preview && preview.can_create && preview.project_path);
+          els.btnCreateFolderNext.disabled = !!busy || !canCreate;
         }
       }
 
@@ -9571,6 +10080,15 @@
           await confirmConnectExistingProject();
           return;
         }
+        if (state.createWizard.mode === "new") {
+          // Dedicated Create flow — never use the legacy 5-step submit path.
+          if (state.createWizard.createStage === "recovery") {
+            await retryCreatePassportRegistration();
+          } else {
+            await confirmCreateNewProject();
+          }
+          return;
+        }
         if (state.createWizard.step !== 5) {
           goWizardStep(5);
           return;
@@ -9578,58 +10096,7 @@
         ensurePassportDefaults();
         var data = getFormData();
         if (!validateForm(data)) return;
-
-        var workFolder = "";
-        if (state.createWizard.mode === "new") {
-          setCreateBusy(true);
-          var created = await postBridgeJson("/api/create-project", {
-            parent_path: state.createWizard.parentPath,
-            project_name: data.name,
-            confirm: true
-          });
-          setCreateBusy(false);
-          if (!created.data || !created.data.ok || !created.data.project_path) {
-            window.alert((created.data && created.data.message) || "Не удалось создать папку проекта.");
-            return;
-          }
-          if (!created.data.wrote) {
-            window.alert("Создание на диске не выполнено. Подтвердите действие и повторите.");
-            return;
-          }
-          workFolder = created.data.project_path;
-        } else {
-          workFolder = state.createWizard.projectPath;
-        }
-
-        var project = ensureDerived({
-          id: uid("proj"),
-          name: data.name,
-          idea: data.idea,
-          result: data.result,
-          audience: data.audience,
-          assets: data.assets,
-          constraints: data.constraints,
-          workFolder: workFolder,
-          launchUrl: "",
-          captureWindowHwnd: "",
-          captureWindowTitle: "",
-          captureWindowProcess: "",
-          primaryTool: data.primaryTool,
-          aiModel: data.aiModel,
-          template: data.template,
-          modules: [],
-          activeModuleId: "",
-          materials: [],
-          status: "В работе",
-          stage: "Анализ",
-          isDemo: false,
-          createdAt: new Date().toISOString()
-        });
-
-        state.projects.push(project);
-        saveProjects();
-        state.activeTab = "task";
-        openWorkspace(project.id);
+        window.alert("Создание проекта доступно через кнопку «Создать» на экране проектов.");
       }
 
       function fillTaskToolSelect() {
@@ -10105,8 +10572,91 @@
         if (els.btnStartExistingProject) {
           els.btnStartExistingProject.addEventListener("click", function () { openForm("existing"); });
         }
+        if (els.btnPmCreate) {
+          els.btnPmCreate.addEventListener("click", function () { openForm("new"); });
+        }
         if (els.btnPmConnect) {
           els.btnPmConnect.addEventListener("click", function () { openForm("existing"); });
+        }
+        if (els.btnCreateCancelBasics) {
+          els.btnCreateCancelBasics.addEventListener("click", function () { openSystemHome(); });
+        }
+        if (els.btnCreateBasicsNext) {
+          els.btnCreateBasicsNext.addEventListener("click", function () {
+            if (!validateCreateBasics()) return;
+            setCreateStage("folder");
+            if (state.createWizard.parentPath) refreshCreatePreview();
+          });
+        }
+        if (els.btnCreatePickParent) {
+          els.btnCreatePickParent.addEventListener("click", async function () {
+            var path = await pickFolderViaBridge("Выберите родительскую папку для нового проекта");
+            if (!path) return;
+            state.createWizard.parentPath = path;
+            document.getElementById("fieldParentFolder").value = path;
+            await refreshCreatePreview();
+          });
+        }
+        if (els.btnCreateFolderBack) {
+          els.btnCreateFolderBack.addEventListener("click", function () {
+            clearCreateFlowErrors();
+            setCreateStage("basics");
+          });
+        }
+        if (els.btnCreateFolderNext) {
+          els.btnCreateFolderNext.addEventListener("click", function () {
+            var preview = state.createWizard.preview;
+            if (!preview || !preview.can_create || !preview.project_path) {
+              showCreateFlowError(
+                els.createFlowErrorFolder,
+                "Выберите родительскую папку и дождитесь доступного итогового пути."
+              );
+              return;
+            }
+            if (findProjectsByWorkFolder(preview.project_path).length) {
+              showCreateFlowError(
+                els.createFlowErrorFolder,
+                "Проект с этим путём уже есть в AI POS. Смените название или папку."
+              );
+              return;
+            }
+            clearCreateFlowErrors();
+            setCreateStage("confirm");
+          });
+        }
+        if (els.btnCreateConfirmBack) {
+          els.btnCreateConfirmBack.addEventListener("click", function () {
+            clearCreateFlowErrors();
+            setCreateStage("folder");
+          });
+        }
+        if (els.btnCreateConfirm) {
+          els.btnCreateConfirm.addEventListener("click", function () {
+            confirmCreateNewProject();
+          });
+        }
+        if (els.btnCreateRecoveryCancel) {
+          els.btnCreateRecoveryCancel.addEventListener("click", function () {
+            openSystemHome();
+          });
+        }
+        if (els.btnCreatePassportRetry) {
+          els.btnCreatePassportRetry.addEventListener("click", function () {
+            retryCreatePassportRegistration();
+          });
+        }
+        if (els.createFieldName) {
+          els.createFieldName.addEventListener("input", function () {
+            if (state.createWizard.createStage === "folder" || state.createWizard.createStage === "confirm") {
+              if (state.createWizard.parentPath) refreshCreatePreview();
+            }
+            if (state.createWizard.createStage === "confirm") updateCreateConfirmSummary();
+          });
+        }
+        if (els.createFieldIdea) {
+          els.createFieldIdea.addEventListener("input", function () {
+            if (state.createWizard.createStage === "confirm") updateCreateConfirmSummary();
+          });
         }
         if (els.btnConnectPickFolder) {
           els.btnConnectPickFolder.addEventListener("click", async function () {
