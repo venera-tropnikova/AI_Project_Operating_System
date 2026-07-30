@@ -757,6 +757,14 @@
       gap: 0.85rem 1.1rem;
     }
 
+    .pm-toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-left: auto;
+    }
+
     .pm-search {
       position: relative;
       flex: 1 1 18rem;
@@ -3117,6 +3125,256 @@
       gap: 0.5rem;
       margin-top: 0.55rem;
     }
+    /* Connect existing project — compact 2-screen flow */
+    #panelForm.is-connect-existing .wizard-progress,
+    #panelForm.is-connect-existing .wizard-step,
+    #panelForm.is-connect-existing .wizard-nav,
+    #panelForm.is-connect-existing #wizardScenarioGrid,
+    #panelForm.is-connect-existing #createStoryScreen,
+    #panelForm.is-connect-existing #formError {
+      display: none !important;
+    }
+
+    #panelForm.is-connect-existing #connectExistingFlow {
+      display: block;
+    }
+
+    .connect-existing {
+      display: none;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0.25rem 0 1.25rem;
+    }
+
+    .connect-lead {
+      margin: 0 0 1.25rem;
+      font-size: 1rem;
+      line-height: 1.45;
+      color: #6b7280;
+      letter-spacing: -0.01em;
+    }
+
+    .connect-folder-card {
+      padding: 1.1rem 1.15rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 8px 28px color-mix(in srgb, #233a8b 5%, transparent);
+    }
+
+    .connect-folder-label {
+      display: block;
+      margin: 0 0 0.55rem;
+      font-size: 0.88rem;
+      font-weight: 650;
+      color: #374151;
+      letter-spacing: -0.015em;
+    }
+
+    .connect-folder-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: stretch;
+    }
+
+    .connect-folder-path {
+      flex: 1 1 220px;
+      min-height: 2.6rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fafbfc;
+      color: #111827;
+      font-size: 0.92rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .connect-folder-path.is-empty {
+      color: #9ca3af;
+    }
+
+    .connect-folder-meta {
+      margin-top: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eef2f7;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .connect-folder-meta p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #4b5563;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .connect-folder-meta strong {
+      color: #111827;
+      font-weight: 650;
+    }
+
+    .connect-folder-status {
+      color: #1f6b4a !important;
+      font-weight: 600;
+    }
+
+    .connect-folder-meta[hidden] {
+      display: none !important;
+    }
+
+    .connect-note {
+      margin: 0.85rem 0 0;
+      font-size: 0.84rem;
+      color: #9ca3af;
+    }
+
+    .connect-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+
+    .connect-actions .btn[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .connect-loading {
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+
+    .connect-loading-title {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 650;
+      color: #111827;
+      letter-spacing: -0.02em;
+    }
+
+    .connect-loading-text {
+      margin: 0.55rem 0 0;
+      font-size: 0.95rem;
+      color: #6b7280;
+    }
+
+    .connect-review-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
+    }
+
+    .connect-review-lead {
+      margin: 0 0 1.1rem;
+      font-size: 0.95rem;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .connect-review-error {
+      margin: 0 0 1rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: 12px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .connect-review-error[hidden] {
+      display: none !important;
+    }
+
+    .connect-already-notice {
+      margin: 0 0 1rem;
+      padding: 0.85rem 0.95rem;
+      border-radius: 12px;
+      background: #f3f6ff;
+      border: 1px solid color-mix(in srgb, #233a8b 18%, #e5e7eb);
+      color: #1f2937;
+    }
+
+    .connect-already-notice[hidden] {
+      display: none !important;
+    }
+
+    .connect-already-title {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 650;
+      color: #111827;
+      letter-spacing: -0.015em;
+    }
+
+    .connect-already-text {
+      margin: 0.35rem 0 0.75rem;
+      font-size: 0.9rem;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .connect-already-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .connect-review-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .connect-review-field label {
+      display: block;
+      margin: 0 0 0.3rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #4b5563;
+    }
+
+    .connect-review-field input,
+    .connect-review-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fafbfc;
+      padding: 0.7rem 0.85rem;
+      font: inherit;
+      font-size: 0.95rem;
+      color: #111827;
+      line-height: 1.4;
+    }
+
+    .connect-review-field textarea {
+      min-height: 4.5rem;
+      resize: vertical;
+    }
+
+    .connect-review-field input:focus,
+    .connect-review-field textarea:focus {
+      outline: none;
+      border-color: color-mix(in srgb, #233a8b 35%, #e5e7eb);
+      background: #fff;
+      box-shadow: 0 0 0 4px color-mix(in srgb, #233a8b 8%, transparent);
+    }
+
+    .connect-review-empty-hint {
+      margin: 0.25rem 0 0;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
     .wizard-missing-list,
     .wizard-auto-list {
       margin: 0.35rem 0 0;
@@ -3288,6 +3546,9 @@
               </div>
               <button type="button" class="pm-search-find" id="btnPmSearch">Найти</button>
             </div>
+            <div class="pm-toolbar-actions">
+              <button type="button" class="btn btn-primary" id="btnPmConnect">Подключить</button>
+            </div>
           </div>
 
           <section class="pm-table-wrap" aria-label="Список проектов">
@@ -3403,8 +3664,8 @@
       <div class="surface">
         <div class="form-head">
           <div>
-            <h1 class="page-title">Создать проект</h1>
-            <p class="page-lead">Мастер подключения проекта к AI POS. На диск пишем только после финального подтверждения.</p>
+            <h1 class="page-title" id="formPageTitle">Создать проект</h1>
+            <p class="page-lead" id="formPageLead">Мастер подключения проекта к AI POS. На диск пишем только после финального подтверждения.</p>
           </div>
           <button type="button" class="btn btn-ghost" id="btnCancelForm">Закрыть</button>
         </div>
@@ -3417,6 +3678,80 @@
           <input type="hidden" id="fieldAudience" name="audience" value="" />
           <input type="hidden" id="fieldAssets" name="assets" value="" />
           <input type="hidden" id="fieldConstraints" name="constraints" value="" />
+
+          <div id="connectExistingFlow" class="connect-existing" hidden>
+            <div id="connectPickScreen">
+              <p class="connect-lead" id="connectPickLead">
+                Выберите папку проекта. AI POS изучит её содержимое<br />
+                и подготовит описание текущего состояния.
+              </p>
+              <div class="connect-folder-card">
+                <span class="connect-folder-label" id="connectFolderHeading">Папка проекта</span>
+                <div class="connect-folder-row">
+                  <div class="connect-folder-path is-empty" id="connectFolderPathDisplay" aria-live="polite">Не выбрана</div>
+                  <button type="button" class="btn btn-secondary" id="btnConnectPickFolder">Выбрать папку</button>
+                </div>
+                <div class="connect-folder-meta" id="connectFolderMeta" hidden>
+                  <p>Название папки: <strong id="connectFolderName">—</strong></p>
+                  <p>Полный путь: <span id="connectFolderFullPath">—</span></p>
+                  <p class="connect-folder-status" id="connectFolderStatus">Папка доступна</p>
+                </div>
+                <p class="connect-note">Файлы проекта не изменяются.</p>
+              </div>
+              <div class="connect-actions">
+                <button type="button" class="btn btn-secondary" id="btnConnectCancel">Отмена</button>
+                <button type="button" class="btn btn-primary" id="btnConnectAnalyze" disabled>Подключить и проанализировать →</button>
+              </div>
+            </div>
+
+            <div id="connectLoadingScreen" class="connect-loading" hidden>
+              <p class="connect-loading-title">Изучаем папку проекта…</p>
+              <p class="connect-loading-text">Читаем сведения из файлов. Запись на диск не выполняется.</p>
+            </div>
+
+            <div id="connectReviewScreen" hidden>
+              <p class="connect-review-lead">Проверьте найденные данные. Пустые поля можно заполнить вручную. Сохранение — только после подтверждения.</p>
+              <div class="connect-review-error" id="connectReviewError" hidden role="alert"></div>
+              <div class="connect-already-notice" id="connectAlreadyNotice" hidden role="status">
+                <p class="connect-already-title">Этот проект уже подключён</p>
+                <p class="connect-already-text" id="connectAlreadyText">Проект уже есть в AI POS. Повторное подключение не требуется.</p>
+                <div class="connect-already-actions">
+                  <button type="button" class="btn btn-primary" id="btnConnectOpenExisting">Открыть проект</button>
+                  <button type="button" class="btn btn-secondary" id="btnConnectAlreadyCancel">Отмена</button>
+                </div>
+              </div>
+              <div class="connect-review-fields" id="connectReviewFields">
+                <div class="connect-review-field">
+                  <label for="connectFieldName">Название</label>
+                  <input id="connectFieldName" type="text" maxlength="120" placeholder="Не найдено" autocomplete="off" />
+                </div>
+                <div class="connect-review-field">
+                  <label for="connectFieldSummary">Краткое описание</label>
+                  <textarea id="connectFieldSummary" rows="3" placeholder="Не найдено"></textarea>
+                </div>
+                <div class="connect-review-field">
+                  <label for="connectFieldGoal">Цель</label>
+                  <textarea id="connectFieldGoal" rows="3" placeholder="Не найдено"></textarea>
+                </div>
+                <div class="connect-review-field">
+                  <label for="connectFieldAudience">Для кого создаётся</label>
+                  <input id="connectFieldAudience" type="text" maxlength="200" placeholder="Не найдено" autocomplete="off" />
+                </div>
+                <div class="connect-review-field">
+                  <label for="connectFieldExpected">Ожидаемый результат</label>
+                  <textarea id="connectFieldExpected" rows="3" placeholder="Не найдено"></textarea>
+                </div>
+                <div class="connect-review-field">
+                  <label for="connectFieldStatus">Статус</label>
+                  <input id="connectFieldStatus" type="text" maxlength="120" placeholder="Не найдено" autocomplete="off" />
+                </div>
+              </div>
+              <div class="connect-actions">
+                <button type="button" class="btn btn-secondary" id="btnConnectReviewBack">Назад</button>
+                <button type="button" class="btn btn-primary" id="btnConnectConfirm">Подтвердить и подключить</button>
+              </div>
+            </div>
+          </div>
 
           <div class="wizard-progress">
             <p class="wizard-step-indicator" id="wizardStepIndicator">Шаг 1 из 5</p>
@@ -4298,6 +4633,8 @@
         historyError: "",
         historyRequestSeq: 0,
         historyProjectKey: "",
+        passportByFolder: {},
+        passportRequestSeq: 0,
         cliAnalysisByProject: {},
         cliFreshnessTimer: null,
         createWizard: {
@@ -4308,7 +4645,12 @@
           preview: null,
           inspect: null,
           busy: false,
-          previewSeq: 0
+          previewSeq: 0,
+          connectStage: "pick",
+          connectReadError: "",
+          connectPassport: null,
+          connectPassportExists: false,
+          connectExistingProjectId: ""
         },
         projectsUi: {
           query: "",
@@ -4523,7 +4865,36 @@
         btnPickProjectFolder: document.getElementById("btnPickProjectFolder"),
         btnInspectProjectFolder: document.getElementById("btnInspectProjectFolder"),
         btnToggleTemplates: document.getElementById("btnToggleTemplates"),
-        templatesBlock: document.getElementById("templatesBlock")
+        templatesBlock: document.getElementById("templatesBlock"),
+        formPageTitle: document.getElementById("formPageTitle"),
+        formPageLead: document.getElementById("formPageLead"),
+        btnPmConnect: document.getElementById("btnPmConnect"),
+        connectExistingFlow: document.getElementById("connectExistingFlow"),
+        connectPickScreen: document.getElementById("connectPickScreen"),
+        connectLoadingScreen: document.getElementById("connectLoadingScreen"),
+        connectReviewScreen: document.getElementById("connectReviewScreen"),
+        connectFolderPathDisplay: document.getElementById("connectFolderPathDisplay"),
+        connectFolderMeta: document.getElementById("connectFolderMeta"),
+        connectFolderName: document.getElementById("connectFolderName"),
+        connectFolderFullPath: document.getElementById("connectFolderFullPath"),
+        connectFolderStatus: document.getElementById("connectFolderStatus"),
+        connectReviewError: document.getElementById("connectReviewError"),
+        connectAlreadyNotice: document.getElementById("connectAlreadyNotice"),
+        connectAlreadyText: document.getElementById("connectAlreadyText"),
+        connectReviewFields: document.getElementById("connectReviewFields"),
+        connectFieldName: document.getElementById("connectFieldName"),
+        connectFieldSummary: document.getElementById("connectFieldSummary"),
+        connectFieldGoal: document.getElementById("connectFieldGoal"),
+        connectFieldAudience: document.getElementById("connectFieldAudience"),
+        connectFieldExpected: document.getElementById("connectFieldExpected"),
+        connectFieldStatus: document.getElementById("connectFieldStatus"),
+        btnConnectPickFolder: document.getElementById("btnConnectPickFolder"),
+        btnConnectCancel: document.getElementById("btnConnectCancel"),
+        btnConnectAnalyze: document.getElementById("btnConnectAnalyze"),
+        btnConnectReviewBack: document.getElementById("btnConnectReviewBack"),
+        btnConnectConfirm: document.getElementById("btnConnectConfirm"),
+        btnConnectOpenExisting: document.getElementById("btnConnectOpenExisting"),
+        btnConnectAlreadyCancel: document.getElementById("btnConnectAlreadyCancel")
       };
 
       function uid(prefix) {
@@ -5306,6 +5677,518 @@
         setShortcutResult(button, data.message || "Не удалось создать ярлык. Повторите попытку.", true);
       }
 
+      function openSystemHome(options) {
+        showPanel("list", options);
+      }
+
+      function openProjectOverview(projectId, options) {
+        if (!projectId) return;
+        if (!findRealProject(projectId) && !findProject(projectId)) return;
+        state.activeTab = "overview";
+        openWorkspace(projectId, options && options.keepScroll);
+      }
+
+      function folderBaseName(path) {
+        var cleaned = String(path || "").replace(/[\\/]+$/, "");
+        if (!cleaned) return "";
+        var parts = cleaned.split(/[\\/]/);
+        return parts[parts.length - 1] || "";
+      }
+
+      function normalizeWorkFolderPath(path) {
+        var text = String(path || "").trim();
+        if (!text) return "";
+        text = text.replace(/\//g, "\\");
+        text = text.replace(/\\+/g, "\\");
+        text = text.replace(/[\\]+$/, "");
+        return text.toLowerCase();
+      }
+
+      function hideConnectAlreadyNotice() {
+        state.createWizard.connectExistingProjectId = "";
+        if (els.connectAlreadyNotice) els.connectAlreadyNotice.hidden = true;
+        if (els.connectAlreadyText) {
+          els.connectAlreadyText.textContent =
+            "Проект уже есть в AI POS. Повторное подключение не требуется.";
+        }
+      }
+
+      function showConnectAlreadyNotice(project) {
+        state.createWizard.connectExistingProjectId = project && project.id ? project.id : "";
+        if (els.connectReviewError) {
+          els.connectReviewError.hidden = true;
+          els.connectReviewError.textContent = "";
+        }
+        var title = (project && String(project.name || "").trim()) || "без названия";
+        if (els.connectAlreadyText) {
+          els.connectAlreadyText.textContent =
+            "Проект «" + title + "» уже есть в AI POS. Повторное подключение не требуется.";
+        }
+        if (els.connectAlreadyNotice) els.connectAlreadyNotice.hidden = false;
+      }
+
+      function showConnectConflict(message) {
+        hideConnectAlreadyNotice();
+        if (els.connectReviewError) {
+          els.connectReviewError.hidden = false;
+          els.connectReviewError.textContent = message || "Подключение остановлено из‑за конфликта данных.";
+        }
+      }
+
+      function passportProjectId(passport) {
+        if (!passport || typeof passport !== "object") return "";
+        return String(passport.project_id || passport.projectId || "").trim();
+      }
+
+      function findProjectByProjectId(projectId) {
+        var needle = String(projectId || "").trim();
+        if (!needle) return null;
+        for (var i = 0; i < state.projects.length; i++) {
+          var p = state.projects[i];
+          var id = String((p && p.id) || "").trim();
+          var alt = String((p && (p.projectId || p.project_id)) || "").trim();
+          if (id === needle || alt === needle) return p;
+        }
+        return null;
+      }
+
+      function findProjectsByWorkFolder(folder) {
+        var needle = normalizeWorkFolderPath(folder);
+        var found = [];
+        if (!needle) return found;
+        for (var i = 0; i < state.projects.length; i++) {
+          var wf = normalizeWorkFolderPath(state.projects[i].workFolder);
+          if (wf && wf === needle) found.push(state.projects[i]);
+        }
+        return found;
+      }
+
+      function clearConnectReviewFields() {
+        if (els.connectFieldName) els.connectFieldName.value = "";
+        if (els.connectFieldSummary) els.connectFieldSummary.value = "";
+        if (els.connectFieldGoal) els.connectFieldGoal.value = "";
+        if (els.connectFieldAudience) els.connectFieldAudience.value = "";
+        if (els.connectFieldExpected) els.connectFieldExpected.value = "";
+        if (els.connectFieldStatus) els.connectFieldStatus.value = "";
+        if (els.connectReviewError) {
+          els.connectReviewError.hidden = true;
+          els.connectReviewError.textContent = "";
+        }
+        hideConnectAlreadyNotice();
+      }
+
+      function fillConnectReviewFields(passport) {
+        var p = passport || emptyPassport();
+        if (els.connectFieldName) els.connectFieldName.value = p.name || "";
+        if (els.connectFieldSummary) els.connectFieldSummary.value = p.summary || "";
+        if (els.connectFieldGoal) els.connectFieldGoal.value = p.goal || "";
+        if (els.connectFieldAudience) els.connectFieldAudience.value = p.audience || "";
+        if (els.connectFieldExpected) els.connectFieldExpected.value = p.expected_result || "";
+        if (els.connectFieldStatus) els.connectFieldStatus.value = p.status || "";
+      }
+
+      function readConnectReviewDraft() {
+        return {
+          name: els.connectFieldName ? els.connectFieldName.value.trim() : "",
+          summary: els.connectFieldSummary ? els.connectFieldSummary.value.trim() : "",
+          goal: els.connectFieldGoal ? els.connectFieldGoal.value.trim() : "",
+          audience: els.connectFieldAudience ? els.connectFieldAudience.value.trim() : "",
+          expected_result: els.connectFieldExpected ? els.connectFieldExpected.value.trim() : "",
+          status: els.connectFieldStatus ? els.connectFieldStatus.value.trim() : ""
+        };
+      }
+
+      function syncConnectFolderUi() {
+        var path = state.createWizard.projectPath || "";
+        var hasPath = !!path;
+        if (els.connectFolderPathDisplay) {
+          els.connectFolderPathDisplay.textContent = hasPath ? path : "Не выбрана";
+          els.connectFolderPathDisplay.classList.toggle("is-empty", !hasPath);
+        }
+        if (els.connectFolderMeta) els.connectFolderMeta.hidden = !hasPath;
+        if (els.connectFolderName) els.connectFolderName.textContent = hasPath ? (folderBaseName(path) || "—") : "—";
+        if (els.connectFolderFullPath) els.connectFolderFullPath.textContent = hasPath ? path : "—";
+        if (els.connectFolderStatus) els.connectFolderStatus.textContent = hasPath ? "Папка доступна" : "";
+        if (els.btnConnectAnalyze) els.btnConnectAnalyze.disabled = !hasPath || !!state.createWizard.busy;
+      }
+
+      function setConnectStage(stage) {
+        state.createWizard.connectStage = stage || "pick";
+        syncCreateModeUi();
+      }
+
+      function syncConnectExistingUi() {
+        var isExisting = state.createWizard.mode === "existing";
+        var stage = state.createWizard.connectStage || "pick";
+        if (els.panelForm) els.panelForm.classList.toggle("is-connect-existing", isExisting);
+        if (els.connectExistingFlow) els.connectExistingFlow.hidden = !isExisting;
+        if (!isExisting) return;
+        if (els.connectPickScreen) els.connectPickScreen.hidden = stage !== "pick";
+        if (els.connectLoadingScreen) els.connectLoadingScreen.hidden = stage !== "loading";
+        if (els.connectReviewScreen) els.connectReviewScreen.hidden = stage !== "review";
+        if (els.formPageTitle) {
+          els.formPageTitle.textContent = stage === "review"
+            ? "Проверьте сведения о проекте"
+            : "Подключить существующий проект";
+        }
+        if (els.formPageLead) {
+          els.formPageLead.hidden = true;
+          els.formPageLead.textContent = "";
+        }
+        if (els.panelForm) {
+          els.panelForm.setAttribute("aria-label", "Подключение существующего проекта");
+        }
+        syncConnectFolderUi();
+      }
+
+      function emptyPassport() {
+        return {
+          schema: "ai-pos.project_passport/v1",
+          version: 1,
+          project_id: "",
+          name: "",
+          summary: "",
+          goal: "",
+          audience: "",
+          expected_result: "",
+          capabilities: [],
+          status: "",
+          modules: [],
+          missing_fields: []
+        };
+      }
+
+      function normalizePassportClient(raw) {
+        var base = emptyPassport();
+        if (!raw || typeof raw !== "object") return base;
+        base.project_id = String(raw.project_id || raw.projectId || "").trim();
+        base.name = String(raw.name || "").trim();
+        base.summary = String(raw.summary || "").trim();
+        base.goal = String(raw.goal || "").trim();
+        base.audience = String(raw.audience || "").trim();
+        base.expected_result = String(raw.expected_result || "").trim();
+        base.status = String(raw.status || "").trim();
+        base.capabilities = Array.isArray(raw.capabilities)
+          ? raw.capabilities.map(function (x) { return String(x || "").trim(); }).filter(Boolean)
+          : [];
+        base.missing_fields = Array.isArray(raw.missing_fields)
+          ? raw.missing_fields.map(function (x) { return String(x || "").trim(); }).filter(Boolean)
+          : [];
+        base.modules = Array.isArray(raw.modules)
+          ? raw.modules.map(function (m) {
+              if (!m || typeof m !== "object") return null;
+              var name = String(m.name || "").trim();
+              if (!name) return null;
+              return {
+                id: String(m.id || "").trim() || null,
+                name: name,
+                description: String(m.description || "").trim(),
+                status: String(m.status || "").trim()
+              };
+            }).filter(Boolean)
+          : [];
+        return base;
+      }
+
+      function computeMissingPassportFields(passport) {
+        var keys = ["name", "summary", "goal", "audience", "expected_result", "status"];
+        var missing = [];
+        for (var i = 0; i < keys.length; i++) {
+          if (!String(passport[keys[i]] || "").trim()) missing.push(keys[i]);
+        }
+        return missing;
+      }
+
+      function passportCacheKey(project) {
+        return String((project && project.workFolder) || "").trim().toLowerCase();
+      }
+
+      function getCachedPassport(project) {
+        var key = passportCacheKey(project);
+        if (!key) return null;
+        return state.passportByFolder[key] || null;
+      }
+
+      function setCachedPassport(project, passport) {
+        var key = passportCacheKey(project);
+        if (!key) return;
+        state.passportByFolder[key] = passport ? normalizePassportClient(passport) : null;
+      }
+
+      async function readPassportFromBridge(projectPath) {
+        var folder = String(projectPath || "").trim();
+        if (!folder) return { ok: false, passport: null, exists: false, message: "Нет рабочей папки." };
+        var res = await postBridgeJson("/api/project-passport/read", { project_path: folder });
+        if (!res.data || !res.data.ok) {
+          return {
+            ok: false,
+            passport: null,
+            exists: false,
+            message: (res.data && res.data.message) || "Не удалось прочитать сведения о проекте."
+          };
+        }
+        return {
+          ok: true,
+          passport: res.data.passport ? normalizePassportClient(res.data.passport) : null,
+          exists: !!res.data.exists,
+          message: res.data.message || null
+        };
+      }
+
+      async function writePassportToBridge(projectPath, passport) {
+        var folder = String(projectPath || "").trim();
+        if (!folder) return { ok: false, message: "Сначала укажите рабочую папку проекта." };
+        var payload = normalizePassportClient(passport);
+        payload.missing_fields = computeMissingPassportFields(payload);
+        var res = await postBridgeJson("/api/project-passport/write", {
+          project_path: folder,
+          passport: payload
+        });
+        if (!res.data || !res.data.ok) {
+          return {
+            ok: false,
+            message: (res.data && res.data.message) || "Не удалось сохранить сведения о проекте."
+          };
+        }
+        return {
+          ok: true,
+          passport: res.data.passport ? normalizePassportClient(res.data.passport) : payload,
+          message: res.data.message || "Сведения о проекте сохранены."
+        };
+      }
+
+      function applyPassportToProjectFields(project, passport) {
+        if (!project || !passport) return;
+        if (passport.name) project.name = passport.name;
+        if (passport.status) project.status = passport.status;
+        if (passport.goal) project.idea = passport.goal;
+        if (passport.summary && !project.idea) project.idea = passport.summary;
+        if (passport.expected_result) project.result = passport.expected_result;
+        if (passport.audience) project.audience = passport.audience;
+        if (Array.isArray(passport.modules) && passport.modules.length) {
+          for (var i = 0; i < passport.modules.length; i++) {
+            var pm = passport.modules[i];
+            var found = null;
+            for (var j = 0; j < (project.modules || []).length; j++) {
+              var sm = project.modules[j];
+              if ((pm.id && sm.id === pm.id) || sm.name === pm.name) {
+                found = sm;
+                break;
+              }
+            }
+            if (found) {
+              if (pm.description) found.purpose = pm.description;
+              if (pm.status) found.status = pm.status;
+            }
+          }
+        }
+      }
+
+      async function analyzeExistingProjectFolder() {
+        var path = state.createWizard.projectPath;
+        if (!path || state.createWizard.busy) return;
+        state.createWizard.connectReadError = "";
+        state.createWizard.connectPassport = null;
+        state.createWizard.connectPassportExists = false;
+        clearConnectReviewFields();
+        setConnectStage("loading");
+        setCreateBusy(true);
+
+        var inspectRes = await postBridgeJson("/api/inspect-project-folder", { project_path: path });
+        state.createWizard.inspect = inspectRes.data || null;
+
+        var read = await readPassportFromBridge(path);
+        setCreateBusy(false);
+
+        if (!read.ok) {
+          state.createWizard.connectReadError =
+            read.message || "Не удалось прочитать сведения о проекте. Можно заполнить поля вручную.";
+          state.createWizard.connectPassport = null;
+          state.createWizard.connectPassportExists = false;
+          fillConnectReviewFields(null);
+          if (els.connectReviewError) {
+            els.connectReviewError.hidden = false;
+            els.connectReviewError.textContent = state.createWizard.connectReadError;
+          }
+          setConnectStage("review");
+          return;
+        }
+
+        state.createWizard.connectReadError = "";
+        state.createWizard.connectPassportExists = !!read.exists && !!read.passport;
+        state.createWizard.connectPassport = read.passport ? normalizePassportClient(read.passport) : null;
+        fillConnectReviewFields(state.createWizard.connectPassport);
+        if (els.connectReviewError) {
+          els.connectReviewError.hidden = true;
+          els.connectReviewError.textContent = "";
+        }
+
+        var pid = passportProjectId(state.createWizard.connectPassport);
+        var byId = findProjectByProjectId(pid);
+        if (byId) {
+          showConnectAlreadyNotice(byId);
+          setConnectStage("review");
+          return;
+        }
+
+        var byPath = findProjectsByWorkFolder(path);
+        if (byPath.length > 1) {
+          showConnectConflict(
+            "По этому пути в AI POS найдено несколько записей проекта. Автоматическое подключение остановлено. Выберите одну запись вручную."
+          );
+          setConnectStage("review");
+          return;
+        }
+
+        if (pid && byPath.length === 1 && byPath[0].id !== pid) {
+          showConnectConflict(
+            "Идентичность проекта не совпадает: в паспорте и в AI POS разные идентификаторы. Ничего не изменено."
+          );
+          setConnectStage("review");
+          return;
+        }
+
+        hideConnectAlreadyNotice();
+        setConnectStage("review");
+      }
+
+      async function confirmConnectExistingProject() {
+        if (state.createWizard.busy) return;
+        var path = state.createWizard.projectPath;
+        if (!path) {
+          setConnectStage("pick");
+          return;
+        }
+
+        var prev = state.createWizard.connectPassport || emptyPassport();
+        var passportExists = !!state.createWizard.connectPassportExists;
+        var pid = passportProjectId(prev);
+        var byId = findProjectByProjectId(pid);
+        var byPath = findProjectsByWorkFolder(path);
+
+        if (byPath.length > 1) {
+          showConnectConflict(
+            "По этому пути в AI POS найдено несколько записей проекта. Автоматическое подключение остановлено. Ничего не записано."
+          );
+          return;
+        }
+
+        if (pid && byPath.length === 1 && byPath[0].id !== pid && !byId) {
+          showConnectConflict(
+            "Идентичность проекта не совпадает: в паспорте и в AI POS разные идентификаторы. Ничего не изменено."
+          );
+          return;
+        }
+
+        if (byId) {
+          showConnectAlreadyNotice(byId);
+          return;
+        }
+
+        if (passportExists && !pid && byPath.length === 1) {
+          var existingCard = byPath[0];
+          var snapshotBefore = JSON.parse(JSON.stringify(state.projects));
+          var migratePassport = normalizePassportClient(prev);
+          migratePassport.project_id = existingCard.id;
+          setCreateBusy(true);
+          var migrated = await writePassportToBridge(path, migratePassport);
+          setCreateBusy(false);
+          if (!migrated.ok) {
+            state.projects = snapshotBefore;
+            showConnectConflict(
+              (migrated.message || "Не удалось сохранить идентификатор проекта.") +
+                " Список проектов не изменён."
+            );
+            return;
+          }
+          if (migrated.passport) {
+            state.createWizard.connectPassport = normalizePassportClient(migrated.passport);
+            if (!passportProjectId(state.createWizard.connectPassport)) {
+              state.createWizard.connectPassport.project_id = existingCard.id;
+            }
+          } else {
+            state.createWizard.connectPassport = migratePassport;
+          }
+          showConnectAlreadyNotice(existingCard);
+          return;
+        }
+
+        if (!pid && byPath.length === 1) {
+          showConnectAlreadyNotice(byPath[0]);
+          return;
+        }
+
+        hideConnectAlreadyNotice();
+
+        var draft = readConnectReviewDraft();
+        var projectId = pid || uid("proj");
+        var passport = normalizePassportClient({
+          project_id: projectId,
+          name: draft.name,
+          summary: draft.summary,
+          goal: draft.goal,
+          audience: draft.audience,
+          expected_result: draft.expected_result,
+          status: draft.status,
+          capabilities: prev.capabilities || [],
+          modules: prev.modules || [],
+          missing_fields: []
+        });
+        passport.missing_fields = computeMissingPassportFields(passport);
+
+        var displayName = draft.name || folderBaseName(path) || "Проект без названия";
+        var idea = draft.goal || draft.summary || "";
+        var projectsBeforeCreate = state.projects.slice();
+
+        setCreateBusy(true);
+        var written = await writePassportToBridge(path, passport);
+        setCreateBusy(false);
+        if (!written.ok) {
+          state.projects = projectsBeforeCreate;
+          if (els.connectReviewError) {
+            els.connectReviewError.hidden = false;
+            els.connectReviewError.textContent =
+              written.message || "Не удалось сохранить сведения о проекте. Проверьте права доступа и повторите.";
+          }
+          return;
+        }
+        if (written.passport) {
+          passport = normalizePassportClient(written.passport);
+          if (!passportProjectId(passport)) passport.project_id = projectId;
+        }
+
+        var project = ensureDerived({
+          id: projectId,
+          name: displayName,
+          idea: idea,
+          result: draft.expected_result || "",
+          audience: draft.audience || "",
+          assets: "",
+          constraints: "",
+          workFolder: path,
+          githubUrl: "",
+          launchUrl: "",
+          captureWindowHwnd: "",
+          captureWindowTitle: "",
+          captureWindowProcess: "",
+          primaryTool: "",
+          aiModel: "",
+          template: "",
+          modules: [],
+          activeModuleId: "",
+          materials: [],
+          status: draft.status || "В работе",
+          stage: "Анализ",
+          isDemo: false,
+          createdAt: new Date().toISOString()
+        });
+        setCachedPassport(project, passport);
+        applyPassportToProjectFields(project, passport);
+        state.projects.push(project);
+        saveProjects();
+        openProjectOverview(project.id);
+      }
+
       function resetCreateWizard(mode) {
         state.createWizard = {
           mode: mode === "existing" ? "existing" : "new",
@@ -5315,12 +6198,20 @@
           preview: null,
           inspect: null,
           busy: false,
-          previewSeq: 0
+          previewSeq: 0,
+          connectStage: "pick",
+          connectReadError: "",
+          connectPassport: null,
+          connectPassportExists: false,
+          connectExistingProjectId: ""
         };
         document.getElementById("fieldParentFolder").value = "";
         document.getElementById("fieldWorkFolder").value = "";
         if (els.fieldCreateConfirm) els.fieldCreateConfirm.checked = false;
         if (els.fieldCreateMaterials) els.fieldCreateMaterials.value = "";
+        clearConnectReviewFields();
+        hideConnectAlreadyNotice();
+        syncConnectFolderUi();
         syncCreateModeUi();
         updateCreateSummary();
       }
@@ -5417,6 +6308,7 @@
 
       function syncCreateModeUi() {
         var mode = state.createWizard.mode;
+        var isExisting = mode === "existing";
         var buttons = document.querySelectorAll("[data-create-mode]");
         for (var i = 0; i < buttons.length; i++) {
           var on = buttons[i].getAttribute("data-create-mode") === mode;
@@ -5424,7 +6316,17 @@
           buttons[i].setAttribute("aria-pressed", on ? "true" : "false");
         }
         if (els.createFolderNew) els.createFolderNew.hidden = mode !== "new";
-        if (els.createFolderExisting) els.createFolderExisting.hidden = mode !== "existing";
+        if (els.createFolderExisting) els.createFolderExisting.hidden = true;
+        if (!isExisting && els.formPageTitle) {
+          els.formPageTitle.textContent = "Создать проект";
+        }
+        if (!isExisting && els.formPageLead) {
+          els.formPageLead.hidden = false;
+          els.formPageLead.textContent = "Мастер подключения проекта к AI POS. На диск пишем только после финального подтверждения.";
+        }
+        if (!isExisting && els.panelForm) {
+          els.panelForm.setAttribute("aria-label", "Создание проекта");
+        }
         if (els.btnSubmitProject) {
           els.btnSubmitProject.textContent = mode === "existing" ? "Подключить проект" : "Создать проект";
         }
@@ -5461,6 +6363,7 @@
         }
         renderExistingInspect(state.createWizard.inspect);
         updateCreateSummary();
+        syncConnectExistingUi();
       }
 
       function renderExistingInspect(inspect) {
@@ -5545,6 +6448,13 @@
         if (els.btnPickProjectFolder) els.btnPickProjectFolder.disabled = !!busy;
         if (els.btnRefreshPreview) els.btnRefreshPreview.disabled = !!busy;
         if (els.btnInspectProjectFolder) els.btnInspectProjectFolder.disabled = !!busy;
+        if (els.btnConnectPickFolder) els.btnConnectPickFolder.disabled = !!busy;
+        if (els.btnConnectCancel) els.btnConnectCancel.disabled = !!busy;
+        if (els.btnConnectReviewBack) els.btnConnectReviewBack.disabled = !!busy;
+        if (els.btnConnectConfirm) els.btnConnectConfirm.disabled = !!busy;
+        if (els.btnConnectAnalyze) {
+          els.btnConnectAnalyze.disabled = !!busy || !state.createWizard.projectPath;
+        }
       }
 
       async function pickFolderViaBridge(title) {
@@ -8409,6 +9319,10 @@
       async function onSubmitForm(event) {
         event.preventDefault();
         if (state.createWizard.busy) return;
+        if (state.createWizard.mode === "existing") {
+          await confirmConnectExistingProject();
+          return;
+        }
         if (state.createWizard.step !== 5) {
           goWizardStep(5);
           return;
@@ -8943,6 +9857,55 @@
         if (els.btnStartExistingProject) {
           els.btnStartExistingProject.addEventListener("click", function () { openForm("existing"); });
         }
+        if (els.btnPmConnect) {
+          els.btnPmConnect.addEventListener("click", function () { openForm("existing"); });
+        }
+        if (els.btnConnectPickFolder) {
+          els.btnConnectPickFolder.addEventListener("click", async function () {
+            var path = await pickFolderViaBridge("Выберите папку существующего проекта");
+            if (!path) return;
+            state.createWizard.projectPath = path;
+            document.getElementById("fieldWorkFolder").value = path;
+            syncConnectFolderUi();
+          });
+        }
+        if (els.btnConnectCancel) {
+          els.btnConnectCancel.addEventListener("click", function () {
+            openSystemHome();
+          });
+        }
+        if (els.btnConnectAnalyze) {
+          els.btnConnectAnalyze.addEventListener("click", function () {
+            analyzeExistingProjectFolder();
+          });
+        }
+        if (els.btnConnectReviewBack) {
+          els.btnConnectReviewBack.addEventListener("click", function () {
+            state.createWizard.connectReadError = "";
+            state.createWizard.connectPassport = null;
+            state.createWizard.connectPassportExists = false;
+            clearConnectReviewFields();
+            setConnectStage("pick");
+          });
+        }
+        if (els.btnConnectConfirm) {
+          els.btnConnectConfirm.addEventListener("click", function () {
+            confirmConnectExistingProject();
+          });
+        }
+        if (els.btnConnectOpenExisting) {
+          els.btnConnectOpenExisting.addEventListener("click", function () {
+            var id = state.createWizard.connectExistingProjectId;
+            if (!id) return;
+            openProjectOverview(id);
+          });
+        }
+        if (els.btnConnectAlreadyCancel) {
+          els.btnConnectAlreadyCancel.addEventListener("click", function () {
+            hideConnectAlreadyNotice();
+            setConnectStage("pick");
+          });
+        }
         if (els.pmSearch) {
           els.pmSearch.addEventListener("input", function () {
             if (!String(els.pmSearch.value || "").trim()) {
@@ -9095,7 +10058,7 @@
           modeButtons[mi].addEventListener("click", function (event) {
             var mode = event.currentTarget.getAttribute("data-create-mode");
             resetCreateWizard(mode);
-            if (state.createWizard.step === 1) syncCreateModeUi();
+            syncCreateModeUi();
           });
         }
         if (els.btnWizardNext) {
