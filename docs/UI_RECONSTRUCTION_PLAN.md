@@ -7,7 +7,7 @@
 | Core UI Reconstruction | **Completed** |
 | Date (canonical update) | 2026-07-31 |
 | Branch (clean UI) | `ui/split-index` @ `D:\AI_POS_UI_SPLIT` |
-| Current HEAD | `8ae7372cad57ca5308b9541feefef8b0aac910ec` (`8ae7372`) |
+| Current HEAD | `b828624b727fa5de37eb8f11dde50ba21259a0af` (`b828624`) |
 | Base (pre UI chain) | `96e0498` — Bridge passport API already in history |
 | Source WIP (reference) | `D:\AI_Project_Operating_System` dirty `index.html` (вырезки, не цель коммитов) |
 | Canon | `Governance/CONSTITUTION.md` (приоритет при конфликте) |
@@ -15,7 +15,7 @@
 
 **Режим документа:** фиксация аудита, статусов и порядка работ. Код этим файлом не изменяется.
 
-**NEXT_TASK:** не назначена. UI-05 закрыт (`8ae7372`, приёмка PASS 12/12). Backlog без автопорядка: UI-06b, группа K; UX-/layout-наблюдения — отдельно.
+**NEXT_TASK:** не назначена. Группа K закрыта (`b828624`, приёмка PASS 17/17). Backlog без автопорядка: UI-06b; UX-/layout-наблюдения и dead-desktop cleanup — отдельно.
 
 ---
 
@@ -37,13 +37,13 @@
 | **UI-07** | History navigation | **Completed** | `85c0d9f` | |
 | **UI-08** | ensureMoyDen / demo hygiene | **Completed** | `33d79d9` | |
 | **I** | Project Overview / паспорт-инфографика | **Completed** *(via UI-10)* | `b0c9659` | закрыта задачей UI-10; не отдельный backlog-item |
-| **K** | Полное снятие sidebar / layout cleanup | **Active** | — | DoD принят (вариант B); см. §3 Группа K |
+| **K** | Полное снятие sidebar / layout cleanup | **Completed** | `b828624` | вариант B; приёмка **PASS**, 17/17; picker + одноколоночный shell |
 | **UI-09** | Итоговая приёмка UI Reconstruction | **Completed** | `c503b47` | **PASS** на `c503b47`; D-DEMO-ENTRY устранён в `c503b47` |
 | **UI-10** | Project Overview / целостный обзор | **Completed** | `b0c9659` | приёмка **PASS**, 9/9; критерии §4a закрыты |
 
 **Core UI Reconstruction: Completed** (после UI-09 PASS; закрывающий docs-коммит `c2b00ae`).
 
-**Не выдавать за выполненные:** UI-06b. Группа K — Active по DoD (вариант B); не считать Completed до приёмки.
+**Не выдавать за выполненные:** UI-06b.
 
 ### Критерий завершения основной (Core) реконструкции
 
@@ -51,14 +51,15 @@
 
 Первичный прогон UI-09 выявил дефект **D-DEMO-ENTRY** (кнопка «Посмотреть пример» была недоступна на главной «Проекты»). Устранён отдельной fix-задачей **UI-09-FIX-01** в коммите `c503b47`; повторная приёмка UI-09 — **PASS**.
 
-UI-06b и группа K остаются в **отдельном backlog** и **не входят** в Completed Core. Группа I закрыта через **UI-10** (`b0c9659`). UI-05 закрыт @ `8ae7372` (post-Core; не часть Core).
+UI-06b остаётся в **отдельном backlog** и **не входит** в Completed Core. Группа I закрыта через **UI-10** (`b0c9659`). UI-05 закрыт @ `8ae7372`. Группа K закрыта @ `b828624` (post-Core; не часть Core).
 
 ### Порядок после закрытия Core
 
 1. Core UI Reconstruction закрыта (UI-09 PASS @ `c503b47`; docs `c2b00ae`).
 2. Пользователь выбрал следующую задачу: **UI-10** (группа I) — **Completed** @ `b0c9659` (приёмка PASS, 9/9).
 3. **UI-05** (shell / boot / layout) — **Completed** @ `8ae7372` (приёмка PASS, 12/12).
-4. UI-06b и K остаются в backlog; **не** назначать их автоматически.
+4. **Группа K** (sidebar removal / picker, вариант B) — **Completed** @ `b828624` (приёмка PASS, 17/17).
+5. UI-06b остаётся в backlog; **не** назначать автоматически.
 
 ---
 
@@ -102,10 +103,11 @@ Project Chrome                    ← UI-02 Completed
 
 Post-Core Completed:
   Boot / shell / mobile drawer    ← UI-05 Completed (`8ae7372`)
+  Sidebar removal + project picker ← группа K Completed (`b828624`, вариант B)
 
 Backlog (не активный Next):
   Create Storytelling             ← UI-06b Deferred, optional
-  Полное снятие sidebar           ← группа K Deferred (вне UI-05)
+  Dead-desktop cleanup            ← #desktopStart / #desktopInfo / #desktopActions (вне K)
 ```
 
 ### 1.4. Обязательные правила переноса
@@ -136,7 +138,7 @@ Backlog (не активный Next):
 | H | History navigation | Covered by **UI-07 Completed** |
 | I | Overview infographic | **Completed via UI-10** (`b0c9659`; см. §3 / §4a) |
 | J | ensureMoyDen seed | Covered by **UI-08 Completed** (не переносить as-is; demo изолирован) |
-| K | Sidebar removal / full layout | **Deferred**; вне UI-05 (полное снятие не делалось) |
+| K | Sidebar removal / full layout | **Completed via группа K** (`b828624`, вариант B) |
 | L | Косметика / leftover | не UI-задача Core |
 
 ---
@@ -226,27 +228,44 @@ Session-demo изолирован от реальной папки и Bridge; а
 | **Статус** | **Completed** через задачу **UI-10** |
 | **Статус строки** | не отдельный backlog-item; закрыта вместе с UI-10 |
 
-### Группа K — Полное снятие старого sidebar и завершение layout cleanup — Active (DoD принят)
+### Группа K — Полное снятие старого sidebar и завершение layout cleanup — Completed (`b828624`)
 
-Полное снятие sidebar **не** входило в UI-05 (`8ae7372` только упростил shell).
-Решение пользователя: **вариант B** — sidebar удаляется только после замены полезных функций; быстрый переход между проектами сохраняется на desktop и телефоне; «← Проекты» остаётся, но не единственный способ смены проекта.
+| | |
+|---|---|
+| **Статус** | **Completed** |
+| **Реализация** | `b828624` — `feat(ui): снять sidebar и добавить переключатель проектов` |
+| **Вариант** | **B** — sidebar удалён только после замены полезных функций |
+| **Итоговая приёмка** | **PASS**, **17/17** сценариев на `b828624` |
 
-#### Definition of Done (группа K)
+Полное снятие sidebar **не** входило в UI-05 (`8ae7372` только упростил shell). Реализован выбранный пользователем **вариант B**.
 
-1. В Project Chrome / mobile bar есть компактный project picker для быстрого переключения проектов.
-2. Picker показывает текущий проект и позволяет открыть другой существующий проект без возврата на home.
-3. На телефоне picker доступен без sidebar/drawer.
-4. Старый sidebar, кнопка «Меню», backdrop и связанная с ними layout-логика полностью удалены.
-5. Shell становится одноколоночным; home, workspace и form устойчивы на desktop и телефоне.
-6. Не возникает регрессий в Проектах, Create, Connect, History, Demo, Обзоре и Текущей задаче.
-7. UI-06b, Bridge, контракты, UI-04 и отдельный dead-desktop cleanup (`#desktopStart` / `#desktopInfo` / `#desktopActions`) не изменяются.
+#### Definition of Done (группа K) — все закрыты
 
-#### Вне DoD K
+1. ~~В Project Chrome / mobile bar есть компактный project picker для быстрого переключения проектов.~~ **Закрыт**
+2. ~~Picker показывает текущий проект и позволяет открыть другой существующий проект без возврата на home.~~ **Закрыт**
+3. ~~На телефоне picker доступен без sidebar/drawer.~~ **Закрыт**
+4. ~~Старый sidebar, кнопка «Меню», backdrop и связанная с ними layout-логика полностью удалены.~~ **Закрыт**
+5. ~~Shell становится одноколоночным; home, workspace и form устойчивы на desktop и телефоне.~~ **Закрыт**
+6. ~~Не возникает регрессий в Проектах, Create, Connect, History, Demo, Обзоре и Текущей задаче.~~ **Закрыт**
+7. ~~UI-06b, Bridge, контракты, UI-04 и отдельный dead-desktop cleanup не изменяются.~~ **Закрыт** (не трогались)
+
+#### Результат приёмки группы K
+
+- Итоговая приёмка на `b828624`: **PASS**, **17/17**.
+- Project picker работает на desktop и телефоне; быстрое переключение A↔B без возврата на home подтверждено.
+- Старый sidebar, кнопка «Меню», backdrop и drawer-логика удалены; shell одноколоночный.
+- Brand на home в верхней панели; «← Проекты» сохранён как дополнительный путь.
+- UI-06b, Bridge, UI-04 не изменялись.
+- `#desktopStart` / `#desktopInfo` / `#desktopActions` сохранены — отдельный backlog cleanup (не часть K).
+- Консоль без блокирующих ошибок; скриншоты предъявлены.
+
+#### Вне scope K (без изменений)
 
 - Create Storytelling (UI-06b).
-- Короткий путь в Обзоре.
+- Bridge / контракты Stage Engine / Analyzer / Freeze.
 - Переработка stage track (UI-04).
-- Удаление мёртвых desktop-блоков — отдельный cleanup backlog.
+- Короткий путь в Обзоре (UX-наблюдение).
+- Удаление мёртвых desktop-блоков `#desktopStart` / `#desktopInfo` / `#desktopActions` — отдельный cleanup backlog.
 
 ---
 
@@ -351,11 +370,13 @@ UI-10 Project Overview (группа I)    →  Completed (`b0c9659`, PASS 9/9)
         ↓
 UI-05 Shell / boot / mobile drawer   →  Completed (`8ae7372`, PASS 12/12)
         ↓
+Группа K sidebar + project picker    →  Completed (`b828624`, вариант B, PASS 17/17)
+        ↓
 Backlog (не автопорядок):
-  UI-06b (optional) | группа K (Deferred)
-  UX: короткий путь папки в Обзоре (вне UI-10 / UI-05)
-  UX: наезд подписей stage track на узком экране (вне UI-05; к UI-04)
-  Cleanup: мёртвые #desktopStart / #desktopInfo / #desktopActions (вне UI-05)
+  UI-06b (optional)
+  UX: короткий путь папки в Обзоре (вне UI-10 / UI-05 / K)
+  UX: наезд подписей stage track на узком экране (вне UI-05 / K; к UI-04)
+  Cleanup: мёртвые #desktopStart / #desktopInfo / #desktopActions (вне K)
 ```
 
 ---
