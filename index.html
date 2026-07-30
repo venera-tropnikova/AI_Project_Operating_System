@@ -3001,6 +3001,115 @@
       cursor: pointer;
     }
     .stage-hidden-support { display: none !important; }
+
+    .desktop-stage-track {
+      margin: 0 0 1rem;
+      padding: 0.85rem 0.55rem 0.35rem;
+    }
+
+    .desktop-stage-track[hidden] {
+      display: none !important;
+    }
+
+    .desktop-stage-line {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: relative;
+    }
+
+    .desktop-stage-line::before {
+      content: "";
+      position: absolute;
+      left: 0.55rem;
+      right: 0.55rem;
+      top: 0.52rem;
+      height: 2px;
+      background: #d7dde8;
+      z-index: 0;
+    }
+
+    .desktop-stage-line-progress {
+      position: absolute;
+      left: 0.55rem;
+      top: 0.52rem;
+      height: 2px;
+      background: #3d9a6a;
+      z-index: 1;
+      max-width: calc(100% - 1.1rem);
+    }
+
+    .desktop-stage-node {
+      position: relative;
+      z-index: 2;
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.4rem;
+    }
+
+    .desktop-stage-dot {
+      width: 0.72rem;
+      height: 0.72rem;
+      border-radius: 50%;
+      border: 2px solid #c5cedd;
+      background: #fff;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+
+    .desktop-stage-node.is-done .desktop-stage-dot {
+      border-color: #3d9a6a;
+      background: #3d9a6a;
+    }
+
+    .desktop-stage-node.is-current .desktop-stage-dot {
+      width: 0.95rem;
+      height: 0.95rem;
+      border-color: #233a8b;
+      background: #233a8b;
+      box-shadow: 0 0 0 4px color-mix(in srgb, #233a8b 14%, transparent);
+      margin-top: -0.1rem;
+    }
+
+    .desktop-stage-node.is-future .desktop-stage-dot {
+      border-color: #c9d0dc;
+      background: #eef1f6;
+    }
+
+    .desktop-stage-label {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--ink-muted);
+      max-width: 6.2rem;
+    }
+
+    .desktop-stage-node.is-done .desktop-stage-label {
+      color: #2f6b4c;
+    }
+
+    .desktop-stage-node.is-current .desktop-stage-label {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .desktop-stage-current-mark {
+      margin: 0;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #233a8b;
+      line-height: 1.2;
+    }
     .settings-form {
       max-width: 420px;
       margin-top: 0.75rem;
@@ -3899,6 +4008,7 @@
         </div>
 
         <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущая задача проекта">
+          <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Этапы проекта" hidden></div>
           <p class="section-note" id="taskEmptyNote" hidden>Текущий этап ещё не определён.</p>
 
           <header class="stage-context">
@@ -4635,6 +4745,7 @@
         historyProjectKey: "",
         passportByFolder: {},
         passportRequestSeq: 0,
+        stageRequestSeq: 0,
         cliAnalysisByProject: {},
         cliFreshnessTimer: null,
         createWizard: {
@@ -4894,7 +5005,8 @@
         btnConnectReviewBack: document.getElementById("btnConnectReviewBack"),
         btnConnectConfirm: document.getElementById("btnConnectConfirm"),
         btnConnectOpenExisting: document.getElementById("btnConnectOpenExisting"),
-        btnConnectAlreadyCancel: document.getElementById("btnConnectAlreadyCancel")
+        btnConnectAlreadyCancel: document.getElementById("btnConnectAlreadyCancel"),
+        desktopStageTrack: document.getElementById("desktopStageTrack")
       };
 
       function uid(prefix) {
@@ -7148,6 +7260,141 @@
         var value = project && String(project.stage || "").trim();
         return value || "—";
       }
+
+      function replaceLegacyStatusPhrase(text) {
+        var value = String(text || "").trim();
+        if (!value) return value;
+        if (value === "В работе" || value === "В разработке") return "В стадии разработки";
+        return value;
+      }
+
+      function normalizeStageCode(code) {
+        return String(code || "").trim().toUpperCase();
+      }
+
+      // Label map only — stage list/order always comes from Bridge stage_model.
+      var USER_STAGE_DISPLAY = {
+        IDEA: { card: "Идея", track: "Идея" },
+        INTAKE: { card: "Подключение", track: "Подключение" },
+        CONNECTED: { card: "Подключение", track: "Подключение" },
+        DISCOVERY: { card: "Изучение", track: "Изучение" },
+        RESEARCH: { card: "Изучение", track: "Изучение" },
+        PLANNING: { card: "Планирование", track: "Планирование" },
+        EXECUTION: { card: "В стадии разработки", track: "Разработка" },
+        IMPLEMENTATION: { card: "В стадии разработки", track: "Разработка" }
+      };
+
+      function userStageCardLabel(code, fallback) {
+        var key = normalizeStageCode(code);
+        if (USER_STAGE_DISPLAY[key]) return USER_STAGE_DISPLAY[key].card;
+        var text = replaceLegacyStatusPhrase(fallback);
+        return text || key || "—";
+      }
+
+      function userStageTrackLabel(code, fallback) {
+        var key = normalizeStageCode(code);
+        if (USER_STAGE_DISPLAY[key]) return USER_STAGE_DISPLAY[key].track;
+        var text = replaceLegacyStatusPhrase(fallback);
+        return text || key || "—";
+      }
+
+      function renderStageTrack(stageData) {
+        if (!els.desktopStageTrack) return;
+        var model = stageData && Array.isArray(stageData.stage_model) ? stageData.stage_model : [];
+        var currentId = stageData && stageData.stage ? String(stageData.stage).trim() : "";
+        if (!model.length) {
+          els.desktopStageTrack.hidden = true;
+          els.desktopStageTrack.innerHTML = "";
+          return;
+        }
+
+        var currentIndex = -1;
+        for (var i = 0; i < model.length; i++) {
+          if (normalizeStageCode(model[i].id) === normalizeStageCode(currentId)) {
+            currentIndex = i;
+            break;
+          }
+        }
+
+        var progressPct = 0;
+        if (model.length > 1 && currentIndex >= 0) {
+          progressPct = (currentIndex / (model.length - 1)) * 100;
+        } else if (model.length === 1 && currentIndex === 0) {
+          progressPct = 100;
+        }
+
+        var html =
+          '<div class="desktop-stage-line" role="list">' +
+          '<span class="desktop-stage-line-progress" style="width:' +
+          progressPct.toFixed(2) +
+          '%"></span>';
+
+        for (var s = 0; s < model.length; s++) {
+          var stateClass = "is-future";
+          if (currentIndex < 0) stateClass = "is-future";
+          else if (s < currentIndex) stateClass = "is-done";
+          else if (s === currentIndex) stateClass = "is-current";
+          var trackLabel = userStageTrackLabel(model[s].id, model[s].label);
+          html +=
+            '<div class="desktop-stage-node ' +
+            stateClass +
+            '" role="listitem">' +
+            '<span class="desktop-stage-dot" aria-hidden="true"></span>' +
+            '<p class="desktop-stage-label">' +
+            escapeHtml(trackLabel) +
+            "</p>";
+          if (s === currentIndex) {
+            html += '<p class="desktop-stage-current-mark">Текущий этап</p>';
+          }
+          html += "</div>";
+        }
+        html += "</div>";
+        els.desktopStageTrack.innerHTML = html;
+        els.desktopStageTrack.hidden = false;
+      }
+
+      async function readStageFromBridge(projectPath) {
+        var folder = String(projectPath || "").trim();
+        if (!folder) {
+          return { ok: false, stage: null, stage_label: null, stage_model: [], exists: false };
+        }
+        var res = await postBridgeJson("/api/project-stage/read", { project_path: folder });
+        if (!res.data || !res.data.ok) {
+          return {
+            ok: false,
+            stage: null,
+            stage_label: null,
+            stage_model: [],
+            exists: false,
+            message: (res.data && res.data.message) || ""
+          };
+        }
+        return {
+          ok: true,
+          stage: res.data.stage || null,
+          stage_label: res.data.stage_label || null,
+          stage_model: Array.isArray(res.data.stage_model) ? res.data.stage_model : [],
+          exists: !!res.data.exists,
+          confidence_state: res.data.confidence_state || null
+        };
+      }
+
+      async function loadAndRenderStageTrack(project) {
+        var seq = (state.stageRequestSeq || 0) + 1;
+        state.stageRequestSeq = seq;
+        if (!project || !String(project.workFolder || "").trim()) {
+          renderStageTrack(null);
+          return;
+        }
+        var stageData = await readStageFromBridge(project.workFolder);
+        if (seq !== state.stageRequestSeq) return;
+        if (state.currentId && project.id && state.currentId !== project.id) return;
+        if (!stageData.ok) {
+          renderStageTrack(null);
+          return;
+        }
+        renderStageTrack(stageData);
+      }
       function systemProjectStageFromCache(cache) {
         if (!cache || cache.kind !== "ok" || !cache.data) return null;
         var code = cache.data.stage;
@@ -9281,6 +9528,7 @@
         syncExampleUi();
         syncProjectChrome();
         setOsNavActive(navIdForActiveTab(state.activeTab || "task"));
+        loadAndRenderStageTrack(project);
       }
 
       function getFormData() {
