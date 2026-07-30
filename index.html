@@ -4820,7 +4820,7 @@
         audience: "Для личного использования.",
         assets: "Каркас главной страницы; заготовки блоков дня; модуль «Историческая справка» в черновике; три проверенные даты.",
         constraints: "Локальный прототип; модульная структура; не ломать уже работающие части проекта ради одного модуля.",
-        workFolder: "D:\\Cursor Проект Мой день",
+        workFolder: "",
         primaryTool: "cursor",
         status: "В работе",
         stage: "Разработка",
@@ -7995,7 +7995,8 @@
       async function loadAndRenderStageTrack(project) {
         var seq = (state.stageRequestSeq || 0) + 1;
         state.stageRequestSeq = seq;
-        if (!project || !String(project.workFolder || "").trim()) {
+        // Session-demo never touches a real folder or Bridge stage API.
+        if (!project || project.isDemo || !String(project.workFolder || "").trim()) {
           renderStageTrack(null);
           return;
         }
@@ -8751,12 +8752,15 @@
         els.cliInsight.hidden = true;
         var cache = project ? getCliAnalysisCache(project.id) : null;
         var httpOk = location.protocol === "http:" || location.protocol === "https:";
-        var hasFolder = !!(project && String(project.workFolder || "").trim());
+        var isDemo = !!(project && project.isDemo);
+        var hasFolder = !isDemo && !!(project && String(project.workFolder || "").trim());
         var refreshing = !!(cache && cache.kind === "loading");
 
         if (els.btnCliInsightRefresh) {
-          els.btnCliInsightRefresh.disabled = refreshing || !hasFolder || !httpOk;
-          if (!httpOk) {
+          els.btnCliInsightRefresh.disabled = refreshing || isDemo || !hasFolder || !httpOk;
+          if (isDemo) {
+            els.btnCliInsightRefresh.title = "В примере проекта анализ по рабочей папке недоступен.";
+          } else if (!httpOk) {
             els.btnCliInsightRefresh.title =
               "Запустите AI POS через Local Bridge: python tools/local_bridge.py";
           } else if (!hasFolder) {
@@ -8908,6 +8912,11 @@
         finishCliRender();
       }      function refreshProjectInsight(project) {
         if (!project) return;
+        // Session-demo must not call Bridge with a project_path.
+        if (project.isDemo) {
+          renderCliInsight(project);
+          return;
+        }
         var folder = String(project.workFolder || "").trim();
         if (!folder) {
           setCliAnalysisCache(project.id, {
