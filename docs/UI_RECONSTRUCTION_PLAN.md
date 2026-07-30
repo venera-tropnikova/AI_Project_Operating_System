@@ -37,13 +37,13 @@
 | **UI-07** | History navigation | **Completed** | `85c0d9f` | |
 | **UI-08** | ensureMoyDen / demo hygiene | **Completed** | `33d79d9` | |
 | **I** | Project Overview / паспорт-инфографика | **Completed** *(via UI-10)* | `b0c9659` | закрыта задачей UI-10; не отдельный backlog-item |
-| **K** | Полное снятие sidebar / layout cleanup | **Deferred** | — | вне UI-05; backlog после упрощения shell |
+| **K** | Полное снятие sidebar / layout cleanup | **Active** | — | DoD принят (вариант B); см. §3 Группа K |
 | **UI-09** | Итоговая приёмка UI Reconstruction | **Completed** | `c503b47` | **PASS** на `c503b47`; D-DEMO-ENTRY устранён в `c503b47` |
 | **UI-10** | Project Overview / целостный обзор | **Completed** | `b0c9659` | приёмка **PASS**, 9/9; критерии §4a закрыты |
 
 **Core UI Reconstruction: Completed** (после UI-09 PASS; закрывающий docs-коммит `c2b00ae`).
 
-**Не выдавать за выполненные:** UI-06b, группу K.
+**Не выдавать за выполненные:** UI-06b. Группа K — Active по DoD (вариант B); не считать Completed до приёмки.
 
 ### Критерий завершения основной (Core) реконструкции
 
@@ -226,9 +226,27 @@ Session-demo изолирован от реальной папки и Bridge; а
 | **Статус** | **Completed** через задачу **UI-10** |
 | **Статус строки** | не отдельный backlog-item; закрыта вместе с UI-10 |
 
-### Группа K — Полное снятие старого sidebar и завершение layout cleanup — Deferred
+### Группа K — Полное снятие старого sidebar и завершение layout cleanup — Active (DoD принят)
 
-Полное снятие sidebar **не** входило в UI-05 (`8ae7372` только упростил shell). Backlog; не Next.
+Полное снятие sidebar **не** входило в UI-05 (`8ae7372` только упростил shell).
+Решение пользователя: **вариант B** — sidebar удаляется только после замены полезных функций; быстрый переход между проектами сохраняется на desktop и телефоне; «← Проекты» остаётся, но не единственный способ смены проекта.
+
+#### Definition of Done (группа K)
+
+1. В Project Chrome / mobile bar есть компактный project picker для быстрого переключения проектов.
+2. Picker показывает текущий проект и позволяет открыть другой существующий проект без возврата на home.
+3. На телефоне picker доступен без sidebar/drawer.
+4. Старый sidebar, кнопка «Меню», backdrop и связанная с ними layout-логика полностью удалены.
+5. Shell становится одноколоночным; home, workspace и form устойчивы на desktop и телефоне.
+6. Не возникает регрессий в Проектах, Create, Connect, History, Demo, Обзоре и Текущей задаче.
+7. UI-06b, Bridge, контракты, UI-04 и отдельный dead-desktop cleanup (`#desktopStart` / `#desktopInfo` / `#desktopActions`) не изменяются.
+
+#### Вне DoD K
+
+- Create Storytelling (UI-06b).
+- Короткий путь в Обзоре.
+- Переработка stage track (UI-04).
+- Удаление мёртвых desktop-блоков — отдельный cleanup backlog.
 
 ---
 
