@@ -4,6 +4,10 @@
 Option Explicit
 
 Dim fso, sh, root, bridge, url, pyCmd, launchCmd, portState
+Dim WAIT_MS, POLL_MS
+
+WAIT_MS = 20000
+POLL_MS = 500
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 Set sh = CreateObject("WScript.Shell")
@@ -19,14 +23,22 @@ If Not fso.FileExists(bridge) Then
   WScript.Quit 1
 End If
 
+' Already healthy AI POS on 8080: open browser only, do not start a second server.
+If HealthReady() Then
+  OpenBrowser url
+  WScript.Quit 0
+End If
+
 portState = CheckPort8080()
 If portState = "aipos" Then
+  ' HealthReady failed but body looked like AI POS — still open only.
   OpenBrowser url
   WScript.Quit 0
 End If
 
 If portState = "busy" Then
-  MsgBox "Порт 8080 уже используется. Закройте другую программу или запустите AI POS на другом порту.", _
+  MsgBox "Порт 8080 уже используется другой программой." & vbCrLf & _
+         "Закройте её или освободите порт, затем запустите AI POS снова.", _
          vbExclamation, "AI POS"
   WScript.Quit 1
 End If
@@ -34,7 +46,9 @@ End If
 ' portState = "free"
 pyCmd = FindPythonCommand()
 If pyCmd = "" Then
-  MsgBox "Для запуска AI POS установите Python 3", vbCritical, "AI POS"
+  MsgBox "Для запуска AI POS установите Python 3." & vbCrLf & _
+         "Нужны команды: py -3 или python.", _
+         vbCritical, "AI POS"
   WScript.Quit 1
 End If
 
@@ -42,7 +56,17 @@ launchCmd = pyCmd & " """ & bridge & """ --host 127.0.0.1 --port 8080"
 ' 0 = hide window; False = do not wait (bridge keeps running)
 sh.Run launchCmd, 0, False
 
-WScript.Sleep 1000
+If Not WaitForHealth(WAIT_MS, POLL_MS) Then
+  MsgBox "Не удалось запустить AI POS." & vbCrLf & vbCrLf & _
+         "Local Bridge не ответил на http://127.0.0.1:8080/api/health за " & _
+         CStr(WAIT_MS \ 1000) & " с." & vbCrLf & vbCrLf & _
+         "Интерпретатор: " & pyCmd & vbCrLf & _
+         "Проверьте Python 3 и что порт 8080 свободен." & vbCrLf & _
+         "Браузер не открыт, чтобы не показать пустую страницу.", _
+         vbCritical, "AI POS"
+  WScript.Quit 1
+End If
+
 OpenBrowser url
 WScript.Quit 0
 
@@ -51,6 +75,51 @@ Sub OpenBrowser(targetUrl)
   browserCmd = "cmd /c start """" """ & targetUrl & """"
   sh.Run browserCmd, 0, False
 End Sub
+
+Function HealthReady()
+  ' True only when /api/health returns OK and looks like AI POS Local Bridge.
+  Dim http, errNum, statusCode, body
+
+  HealthReady = False
+  On Error Resume Next
+  Err.Clear
+  Set http = CreateObject("WinHttp.WinHttpRequest.5.1")
+  If Err.Number <> 0 Or http Is Nothing Then
+    Err.Clear
+    Set http = CreateObject("MSXML2.XMLHTTP")
+  End If
+  If Err.Number <> 0 Or http Is Nothing Then
+    Exit Function
+  End If
+
+  Err.Clear
+  http.SetTimeouts 500, 500, 1000, 1500
+  Err.Clear
+  http.Open "GET", "http://127.0.0.1:8080/api/health", False
+  http.Send
+  errNum = Err.Number
+  If errNum <> 0 Then Exit Function
+
+  statusCode = http.Status
+  body = "" & http.responseText
+  If statusCode >= 200 And statusCode < 300 Then
+    If LooksLikeAiPos(body) Then HealthReady = True
+  End If
+End Function
+
+Function WaitForHealth(timeoutMs, pollMs)
+  Dim elapsed
+  elapsed = 0
+  WaitForHealth = False
+  Do While elapsed <= timeoutMs
+    If HealthReady() Then
+      WaitForHealth = True
+      Exit Function
+    End If
+    WScript.Sleep pollMs
+    elapsed = elapsed + pollMs
+  Loop
+End Function
 
 Function CheckPort8080()
   ' Returns: "free" | "aipos" | "busy"
@@ -127,9 +196,9 @@ End Function
 
 Function FindPythonCommand()
   Dim candidates, i, probe, exitCode
-  ' Spec order: pythonw.exe, then py -3, then python
+  ' Prefer console interpreters that serve Local Bridge reliably.
+  ' Do not use pythonw.exe.
   candidates = Array( _
-    "pythonw.exe", _
     "py -3", _
     "python" _
   )
