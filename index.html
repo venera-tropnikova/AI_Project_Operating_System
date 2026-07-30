@@ -439,6 +439,142 @@
       padding-top: 1.25rem;
     }
 
+    .project-chrome {
+      margin: 0 0 1rem;
+      padding: 0 0 0.15rem;
+    }
+
+    .project-chrome[hidden] {
+      display: none !important;
+    }
+
+    .project-chrome-top {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .project-chrome-name {
+      margin: 0;
+      min-width: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-section-nav {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 0.15rem;
+      margin-top: 0.55rem;
+      padding-bottom: 0.1rem;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .project-section-nav-item {
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0.45rem 0.7rem 0.55rem;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 8px 8px 0 0;
+      background: transparent;
+      color: var(--ink-soft);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 550;
+      line-height: 1.2;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .project-section-nav-item:hover {
+      color: var(--ink);
+      background: color-mix(in srgb, #233a8b 5%, transparent);
+    }
+
+    .project-section-nav-item.is-active {
+      color: var(--ink);
+      font-weight: 650;
+      background: color-mix(in srgb, #233a8b 7%, transparent);
+      border-bottom-color: color-mix(in srgb, #233a8b 55%, transparent);
+    }
+
+    .project-section-nav-item:focus {
+      outline: none;
+    }
+
+    .project-section-nav-item:focus-visible {
+      color: var(--ink);
+      background: color-mix(in srgb, #233a8b 8%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, #233a8b 12%, transparent);
+    }
+
+    .ai-pos-level-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin: 0;
+      padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--ink-muted);
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 650;
+      min-height: 2.4rem;
+      line-height: 1.2;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .ai-pos-level-nav-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: block;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .ai-pos-level-nav-label {
+      white-space: nowrap;
+    }
+
+    .ai-pos-level-nav:hover {
+      color: var(--ink);
+      background: color-mix(in srgb, #233a8b 5%, transparent);
+      border-color: color-mix(in srgb, #233a8b 10%, transparent);
+    }
+
+    .ai-pos-level-nav:focus {
+      outline: none;
+    }
+
+    .ai-pos-level-nav:focus-visible {
+      color: var(--ink);
+      background: color-mix(in srgb, #233a8b 8%, transparent);
+      border-color: color-mix(in srgb, #233a8b 16%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, #233a8b 12%, transparent);
+    }
+
     .desktop {
       max-width: 640px;
       display: flex;
@@ -3113,6 +3249,25 @@
       </aside>
 
       <div class="os-main">
+        <header class="project-chrome" id="projectChrome" hidden>
+          <div class="project-chrome-top">
+            <button type="button" class="ai-pos-level-nav" data-os-nav="home" id="osBackToProjects" aria-label="К списку проектов" title="К списку проектов">
+              <img class="ai-pos-level-nav-icon" src="assets/branding/ai-pos-icon-v1.png" width="28" height="28" alt="" />
+              <span class="ai-pos-level-nav-label">← Проекты</span>
+            </button>
+            <p class="project-chrome-name" id="osNavProjectName">—</p>
+          </div>
+          <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
+            <button type="button" class="project-section-nav-item" data-os-nav="overview">Обзор</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="current-task">Текущая задача</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="rules">Правила</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="materials">Материалы</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="specialists">Специалисты</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="docs">Документы</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="settings">Настройки</button>
+          </nav>
+        </header>
+
     <section class="panel is-active" id="panelList" aria-label="Рабочий стол">
       <div class="desktop" id="desktopRoot">
         <div class="system-home" id="systemHome">
@@ -4175,6 +4330,10 @@
         formError: document.getElementById("formError"),
         templatesGrid: document.getElementById("templatesGrid"),
         osProjectList: document.getElementById("osProjectList"),
+        projectChrome: document.getElementById("projectChrome"),
+        osNavProject: document.getElementById("osNavProject"),
+        osNavProjectName: document.getElementById("osNavProjectName"),
+        osBackToProjects: document.getElementById("osBackToProjects"),
         systemHome: document.getElementById("systemHome"),
         pmSearch: document.getElementById("pmSearch"),
         btnPmSearch: document.getElementById("btnPmSearch"),
@@ -4804,6 +4963,7 @@
         els.panelForm.classList.toggle("is-active", name === "form");
         els.panelWorkspace.classList.toggle("is-active", name === "workspace");
         els.appShell.classList.toggle("is-home", name === "list");
+        syncProjectChrome();
         if (name === "list") {
           if (state.exampleMode) {
             state.exampleMode = false;
@@ -4815,6 +4975,31 @@
         if (!options || !options.keepScroll) window.scrollTo(0, 0);
       }
 
+      function syncProjectChrome() {
+        var inProject = !!(els.panelWorkspace && els.panelWorkspace.classList.contains("is-active"));
+        if (els.projectChrome) els.projectChrome.hidden = !inProject;
+        if (!inProject) return;
+        var project = findProjectRecord(state.currentId);
+        if (!project) project = findProject(state.currentId);
+        if (els.osNavProjectName) {
+          els.osNavProjectName.textContent = project ? (project.name || "Проект") : "—";
+        }
+      }
+
+      function navIdForActiveTab(tabId) {
+        var map = {
+          overview: "overview",
+          task: "current-task",
+          work: "current-task",
+          rules: "rules",
+          materials: "materials",
+          team: "specialists",
+          docs: "docs",
+          settings: "settings"
+        };
+        return map[tabId] || "current-task";
+      }
+
       function setOsNavActive(navId) {
         var items = document.querySelectorAll(".os-nav-item[data-os-nav]");
         for (var i = 0; i < items.length; i++) {
@@ -4823,16 +5008,25 @@
           if (on) items[i].setAttribute("aria-current", "page");
           else items[i].removeAttribute("aria-current");
         }
+        if (els.osNavProject && els.projectChrome && !els.projectChrome.hidden) {
+          var chromeItems = els.osNavProject.querySelectorAll("[data-os-nav]");
+          for (var c = 0; c < chromeItems.length; c++) {
+            var chromeOn = chromeItems[c].getAttribute("data-os-nav") === navId;
+            chromeItems[c].classList.toggle("is-active", chromeOn);
+            if (chromeOn) chromeItems[c].setAttribute("aria-current", "page");
+            else chromeItems[c].removeAttribute("aria-current");
+          }
+        }
       }
 
       function openOsSection(navId) {
         var section = navId || "desktop";
-        if (section === "desktop") {
-          setOsNavActive("desktop");
+        if (section === "home" || section === "desktop") {
           showPanel("list");
           return;
         }
         var tabByNav = {
+          overview: "overview",
           rules: "rules",
           "current-task": "task",
           assignment: "work",
@@ -4843,7 +5037,7 @@
         };
         var tabId = tabByNav[section];
         if (!tabId) return;
-        var project = getFocusProject();
+        var project = findProjectRecord(state.currentId) || getFocusProject();
         if (!project) return;
         state.activeTab = tabId;
         openWorkspace(project.id);
@@ -8175,7 +8369,8 @@
         setActiveTab(state.activeTab || "task", { force: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
         syncExampleUi();
-        if ((state.activeTab || "task") === "task") setOsNavActive("current-task");
+        syncProjectChrome();
+        setOsNavActive(navIdForActiveTab(state.activeTab || "task"));
       }
 
       function getFormData() {
@@ -8838,6 +9033,19 @@
         document.getElementById("btnCancelForm").addEventListener("click", function () { showPanel("list"); });
         document.getElementById("btnCancelFormAlt").addEventListener("click", function () { showPanel("list"); });
         document.getElementById("btnBackToList").addEventListener("click", function () { showPanel("list"); });
+
+        if (els.osBackToProjects) {
+          els.osBackToProjects.addEventListener("click", function () {
+            openOsSection("home");
+          });
+        }
+        if (els.osNavProject) {
+          els.osNavProject.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-os-nav]");
+            if (!btn || !els.osNavProject.contains(btn)) return;
+            openOsSection(btn.getAttribute("data-os-nav"));
+          });
+        }
 
         document.getElementById("btnContinue").addEventListener("click", function () {
           openOsSection("current-task");
