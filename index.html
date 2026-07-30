@@ -1942,6 +1942,27 @@
       border-left: 3px solid var(--lv-task);
     }
 
+    .project-overview {
+      max-width: 52rem;
+    }
+
+    .project-overview .desktop-stage-track {
+      margin-bottom: 1.25rem;
+    }
+
+    .project-overview-lead {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+
+    .overview-item.is-path .overview-path {
+      word-break: break-word;
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+      font-size: 0.88rem;
+    }
+
 
     .ov-stage-meta {
       margin: 0.4rem 0 0;
@@ -4119,8 +4140,7 @@
           <button type="button" class="btn btn-ghost" id="btnExitExample">Выйти из примера</button>
         </div>
 
-        <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущая задача проекта">
-          <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Этапы проекта" hidden></div>
+        <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущая задача проекта" hidden>
           <p class="section-note" id="taskEmptyNote" hidden>Текущая задача ещё не выбрана.</p>
 
           <header class="stage-context">
@@ -4303,39 +4323,72 @@
           </div>
         </main>
 
-        <div class="tab-panel stage-hidden-support" id="tab-overview" data-tab-panel="overview" hidden aria-hidden="true">
-          <p id="ovGoal"></p>
-          <p id="ovModule"></p>
-          <p id="ovStatus"></p>
-          <p id="ovStage"></p>
-          <p id="ovStageMeta"><span id="ovStageSource"></span><span id="ovStageFreshness"></span></p>
-          <p id="ovStageWarn" hidden></p>
-          <p id="ovReady"></p>
-          <p id="ovAttention"></p>
-          <p id="ovTask"></p>
-          <p id="ovNext"></p>
-          <p id="ovResult"></p>
-          <p id="ovTechInfo"></p>
-          <div id="ovSystemNextBlock" hidden>
-            <p id="ovSystemNext"></p>
-            <p id="ovSystemNextMeta"><span id="ovSystemNextSource"></span><span id="ovSystemNextFreshness"></span></p>
-            <p id="ovSystemNextWarn" hidden></p>
+        <div class="tab-panel" id="tab-overview" data-tab-panel="overview" hidden>
+          <div class="project-overview" id="projectOverview">
+            <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Этапы проекта" hidden></div>
+            <h3 class="section-heading lv-project">Обзор проекта</h3>
+            <p class="project-overview-lead">Кратко о проекте: зачем он нужен и куда движется.</p>
+            <div class="overview-grid" id="projectOverviewGrid">
+              <div class="overview-item is-goal">
+                <span class="field-label">Название</span>
+                <p id="poName">—</p>
+              </div>
+              <div class="overview-item">
+                <span class="field-label">Статус</span>
+                <p id="poStatus">—</p>
+              </div>
+              <div class="overview-item wide is-goal">
+                <span class="field-label">Идея / цель</span>
+                <p id="poGoal">—</p>
+              </div>
+              <div class="overview-item">
+                <span class="field-label">Аудитория</span>
+                <p id="poAudience">—</p>
+              </div>
+              <div class="overview-item">
+                <span class="field-label">Ожидаемый результат</span>
+                <p id="poExpected">—</p>
+              </div>
+              <div class="overview-item wide is-path">
+                <span class="field-label">Путь к папке</span>
+                <p class="overview-path" id="poPath">не указана</p>
+              </div>
+            </div>
           </div>
-          <div id="ovExecToolBlock" hidden><p id="ovExecTool"></p></div>
-          <div id="ovSystemAttentionBlock" hidden>
-            <p id="ovSystemAttentionBanner"></p>
-            <ul id="ovSystemAttentionList"></ul>
-            <p id="ovSystemAttentionEmpty"></p>
-            <p id="ovSystemAttentionMeta"><span id="ovSystemAttentionSource"></span><span id="ovSystemAttentionFreshness"></span></p>
-            <p id="ovSystemAttentionWarn" hidden></p>
+          <div class="stage-hidden-support" aria-hidden="true">
+            <p id="ovGoal"></p>
+            <p id="ovModule"></p>
+            <p id="ovStatus"></p>
+            <p id="ovStage"></p>
+            <p id="ovStageMeta"><span id="ovStageSource"></span><span id="ovStageFreshness"></span></p>
+            <p id="ovStageWarn" hidden></p>
+            <p id="ovReady"></p>
+            <p id="ovAttention"></p>
+            <p id="ovTask"></p>
+            <p id="ovNext"></p>
+            <p id="ovResult"></p>
+            <p id="ovTechInfo"></p>
+            <div id="ovSystemNextBlock" hidden>
+              <p id="ovSystemNext"></p>
+              <p id="ovSystemNextMeta"><span id="ovSystemNextSource"></span><span id="ovSystemNextFreshness"></span></p>
+              <p id="ovSystemNextWarn" hidden></p>
+            </div>
+            <div id="ovExecToolBlock" hidden><p id="ovExecTool"></p></div>
+            <div id="ovSystemAttentionBlock" hidden>
+              <p id="ovSystemAttentionBanner"></p>
+              <ul id="ovSystemAttentionList"></ul>
+              <p id="ovSystemAttentionEmpty"></p>
+              <p id="ovSystemAttentionMeta"><span id="ovSystemAttentionSource"></span><span id="ovSystemAttentionFreshness"></span></p>
+              <p id="ovSystemAttentionWarn" hidden></p>
+            </div>
+            <section id="cliInsight" hidden>
+              <p id="cliInsightNote"></p>
+              <span id="cliInsightBadge"></span>
+              <span id="cliInsightFreshness"></span>
+              <div id="cliInsightBody"></div>
+              <button type="button" id="btnCliInsightRefresh" hidden>refresh</button>
+            </section>
           </div>
-          <section id="cliInsight" hidden>
-            <p id="cliInsightNote"></p>
-            <span id="cliInsightBadge"></span>
-            <span id="cliInsightFreshness"></span>
-            <div id="cliInsightBody"></div>
-            <button type="button" id="btnCliInsightRefresh" hidden>refresh</button>
-          </section>
         </div>
         <div class="tab-panel" id="tab-rules" data-tab-panel="rules" data-detail-level="extended">
           <h3 class="section-heading lv-rules">Правила и контроль</h3>
@@ -4927,6 +4980,13 @@
         workspaceMeta: document.getElementById("workspaceMeta"),
         currentStageTitle: document.getElementById("currentStageTitle"),
         currentStageScreen: document.getElementById("currentStageScreen"),
+        projectOverview: document.getElementById("projectOverview"),
+        poName: document.getElementById("poName"),
+        poStatus: document.getElementById("poStatus"),
+        poGoal: document.getElementById("poGoal"),
+        poAudience: document.getElementById("poAudience"),
+        poExpected: document.getElementById("poExpected"),
+        poPath: document.getElementById("poPath"),
         ovGoal: document.getElementById("ovGoal"),
         ovModule: document.getElementById("ovModule"),
         ovStatus: document.getElementById("ovStatus"),
@@ -7386,7 +7446,7 @@
 
       function openProjectFromList(projectId) {
         if (!findRealProject(projectId)) return;
-        state.activeTab = "task";
+        state.activeTab = "overview";
         openWorkspace(projectId);
       }
 
@@ -7410,7 +7470,7 @@
       }
 
       function openExample() {
-        state.activeTab = "task";
+        state.activeTab = "overview";
         openWorkspace(DEMO_PROJECT.id);
       }
 
@@ -7778,14 +7838,15 @@
       function setActiveTab(tabId, options) {
         var opts = options || {};
         var prev = state.activeTab;
-        var next = tabId || "task";
+        var next = tabId || "overview";
         var force = !!opts.force;
         if (!force && state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
           next = "overview";
         }
         state.activeTab = next;
 
-        var stageTabs = { task: true, work: true, overview: true };
+        // Task screen hosts current-task UI; Overview is a separate panel (UI-10).
+        var stageTabs = { task: true, work: true };
         var showStage = !!stageTabs[state.activeTab];
         if (els.currentStageScreen) els.currentStageScreen.hidden = !showStage;
 
@@ -8385,7 +8446,87 @@
         hideAllBodies();
       }
 
+      function textOrDash(value) {
+        var text = String(value || "").trim();
+        return text || "—";
+      }
+
+      function humanWorkFolderPath(project) {
+        var path = String((project && project.workFolder) || "").trim();
+        if (!path) return "не указана";
+        return path;
+      }
+
+      function overviewFieldsFromProject(project, passport) {
+        var p = passport || null;
+        var name = (p && p.name) || (project && project.name) || "";
+        var status = (p && p.status) || (project && project.status) || "";
+        var goal =
+          (p && (p.goal || p.summary)) ||
+          (project && project.idea) ||
+          "";
+        var audience = (p && p.audience) || (project && project.audience) || "";
+        var expected =
+          (p && p.expected_result) ||
+          (project && project.result) ||
+          "";
+        return {
+          name: textOrDash(name),
+          status: textOrDash(status),
+          goal: textOrDash(goal),
+          audience: textOrDash(audience),
+          expected: textOrDash(expected),
+          path: humanWorkFolderPath(project)
+        };
+      }
+
+      function renderProjectAbout(project, passport) {
+        if (!els.poName) return;
+        var fields = overviewFieldsFromProject(project, passport);
+        els.poName.textContent = fields.name;
+        if (els.poStatus) els.poStatus.textContent = fields.status;
+        if (els.poGoal) els.poGoal.textContent = fields.goal;
+        if (els.poAudience) els.poAudience.textContent = fields.audience;
+        if (els.poExpected) els.poExpected.textContent = fields.expected;
+        if (els.poPath) els.poPath.textContent = fields.path;
+      }
+
+      async function refreshProjectAbout(project) {
+        if (!project) {
+          renderProjectAbout(null, null);
+          return;
+        }
+        // Demo and projects without a folder never call Bridge for passport.
+        if (project.isDemo || !String(project.workFolder || "").trim()) {
+          renderProjectAbout(project, null);
+          return;
+        }
+        var cached = getCachedPassport(project);
+        renderProjectAbout(project, cached);
+        var read = await readPassportFromBridge(project.workFolder);
+        var workspaceActive =
+          els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
+        if (
+          !workspaceActive ||
+          !project.id ||
+          state.currentId !== project.id
+        ) {
+          return;
+        }
+        if (read.ok && read.passport) {
+          setCachedPassport(project, read.passport);
+          applyPassportToProjectFields(project, read.passport);
+          renderProjectAbout(project, read.passport);
+          if (els.osNavProjectName) {
+            els.osNavProjectName.textContent = project.name || "Проект";
+          }
+        } else {
+          renderProjectAbout(project, cached);
+        }
+      }
+
       function renderOverview(project, view) {
+        // Legacy #ov* stay in stage-hidden-support for older helpers; not the UI-10 about face.
         if (!els.ovGoal || !els.ovModule) return;
         var review = view.task ? ensureTaskReview(project, view.task) : null;
         var goalText = (view.module && view.module.purpose) || project.idea || "—";
@@ -10139,6 +10280,8 @@
 
         renderHeader(project, view);
         renderOverview(project, view);
+        renderProjectAbout(project, getCachedPassport(project));
+        refreshProjectAbout(project);
         renderRules(project);
         renderTaskTab(project, view);
         renderTools(project);
@@ -10146,11 +10289,11 @@
         renderMaterials(project);
         renderTeam(project);
         renderSettings(project);
-        setActiveTab(state.activeTab || "task", { force: true, skipHistory: true });
+        setActiveTab(state.activeTab || "overview", { force: true, skipHistory: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
         syncExampleUi();
         syncProjectChrome();
-        setOsNavActive(navIdForActiveTab(state.activeTab || "task"));
+        setOsNavActive(navIdForActiveTab(state.activeTab || "overview"));
         loadAndRenderStageTrack(project);
         commitNavHistory(opts);
       }
