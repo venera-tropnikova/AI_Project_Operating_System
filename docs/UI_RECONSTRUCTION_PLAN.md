@@ -7,7 +7,7 @@
 | Core UI Reconstruction | **Completed** |
 | Date (canonical update) | 2026-07-31 |
 | Branch (clean UI) | `ui/split-index` @ `D:\AI_POS_UI_SPLIT` |
-| Current HEAD | `b0c965933e41ad427788e90e21111260ed6c28df` (`b0c9659`) |
+| Current HEAD | `8ae7372cad57ca5308b9541feefef8b0aac910ec` (`8ae7372`) |
 | Base (pre UI chain) | `96e0498` — Bridge passport API already in history |
 | Source WIP (reference) | `D:\AI_Project_Operating_System` dirty `index.html` (вырезки, не цель коммитов) |
 | Canon | `Governance/CONSTITUTION.md` (приоритет при конфликте) |
@@ -15,7 +15,7 @@
 
 **Режим документа:** фиксация аудита, статусов и порядка работ. Код этим файлом не изменяется.
 
-**NEXT_TASK:** не назначена. UI-10 закрыт (`b0c9659`, приёмка PASS). Backlog без автопорядка: UI-05, UI-06b, группа K; UX-наблюдения — отдельно.
+**NEXT_TASK:** не назначена. UI-05 закрыт (`8ae7372`, приёмка PASS 12/12). Backlog без автопорядка: UI-06b, группа K; UX-/layout-наблюдения — отдельно.
 
 ---
 
@@ -31,19 +31,19 @@
 | **UI-03** | Connect + identity + passport | **Completed** | `f1507c8` | |
 | **UI-04** | Stage track (`stage_model`) | **Completed** | `5505371` | трек готов; UI-10 встраивает существующий stage track без переделки |
 | **polish** | Текст пустой текущей задачи | **Completed** | `8add727` | не отдельный UI-ID плана |
-| **UI-05** | Shell / boot / layout | **Deferred, optional** | — | не выполнена; backlog |
+| **UI-05** | Shell / boot / layout | **Completed** | `8ae7372` | приёмка **PASS**, 12/12; boot + режимы shell + mobile drawer |
 | **UI-06a** | Standalone Create (write-first) | **Completed** | `82b3a64` | |
 | **UI-06b** | Create Storytelling | **Deferred, optional** | — | не выполнена; backlog |
 | **UI-07** | History navigation | **Completed** | `85c0d9f` | |
 | **UI-08** | ensureMoyDen / demo hygiene | **Completed** | `33d79d9` | |
 | **I** | Project Overview / паспорт-инфографика | **Completed** *(via UI-10)* | `b0c9659` | закрыта задачей UI-10; не отдельный backlog-item |
-| **K** | Полное снятие sidebar / layout cleanup | **Deferred** | — | связана с UI-05; backlog |
+| **K** | Полное снятие sidebar / layout cleanup | **Deferred** | — | вне UI-05; backlog после упрощения shell |
 | **UI-09** | Итоговая приёмка UI Reconstruction | **Completed** | `c503b47` | **PASS** на `c503b47`; D-DEMO-ENTRY устранён в `c503b47` |
 | **UI-10** | Project Overview / целостный обзор | **Completed** | `b0c9659` | приёмка **PASS**, 9/9; критерии §4a закрыты |
 
 **Core UI Reconstruction: Completed** (после UI-09 PASS; закрывающий docs-коммит `c2b00ae`).
 
-**Не выдавать за выполненные:** UI-05, UI-06b, группу K.
+**Не выдавать за выполненные:** UI-06b, группу K.
 
 ### Критерий завершения основной (Core) реконструкции
 
@@ -51,13 +51,14 @@
 
 Первичный прогон UI-09 выявил дефект **D-DEMO-ENTRY** (кнопка «Посмотреть пример» была недоступна на главной «Проекты»). Устранён отдельной fix-задачей **UI-09-FIX-01** в коммите `c503b47`; повторная приёмка UI-09 — **PASS**.
 
-UI-05, UI-06b и группа K остаются в **отдельном backlog** и **не входят** в Completed Core. Группа I закрыта через **UI-10** (`b0c9659`).
+UI-06b и группа K остаются в **отдельном backlog** и **не входят** в Completed Core. Группа I закрыта через **UI-10** (`b0c9659`). UI-05 закрыт @ `8ae7372` (post-Core; не часть Core).
 
 ### Порядок после закрытия Core
 
 1. Core UI Reconstruction закрыта (UI-09 PASS @ `c503b47`; docs `c2b00ae`).
 2. Пользователь выбрал следующую задачу: **UI-10** (группа I) — **Completed** @ `b0c9659` (приёмка PASS, 9/9).
-3. UI-05, UI-06b и K остаются в backlog; **не** назначать их автоматически после UI-10.
+3. **UI-05** (shell / boot / layout) — **Completed** @ `8ae7372` (приёмка PASS, 12/12).
+4. UI-06b и K остаются в backlog; **не** назначать их автоматически.
 
 ---
 
@@ -99,10 +100,12 @@ Project Chrome                    ← UI-02 Completed
   Demo hygiene                    ← UI-08
   Приёмка Core                    ← UI-09 PASS
 
+Post-Core Completed:
+  Boot / shell / mobile drawer    ← UI-05 Completed (`8ae7372`)
+
 Backlog (не активный Next):
-  Boot / sidebar cleanup          ← UI-05 Deferred, optional
   Create Storytelling             ← UI-06b Deferred, optional
-  Полное снятие sidebar           ← группа K Deferred (с UI-05)
+  Полное снятие sidebar           ← группа K Deferred (вне UI-05)
 ```
 
 ### 1.4. Обязательные правила переноса
@@ -128,12 +131,12 @@ Backlog (не активный Next):
 | C | Passport client | Covered by **UI-03 Completed** (+ Create UI-06a) |
 | D | Stage track UI | Covered by **UI-04 Completed** (UI-10 потребляет без переделки) |
 | E | Project Chrome | Covered by **UI-02 Completed** |
-| F | Boot / enter shell | **UI-05 Deferred, optional** |
+| F | Boot / enter shell | Covered by **UI-05 Completed** (`8ae7372`) |
 | G | Create-story | **UI-06a Completed**; storytelling → **UI-06b Deferred** |
 | H | History navigation | Covered by **UI-07 Completed** |
 | I | Overview infographic | **Completed via UI-10** (`b0c9659`; см. §3 / §4a) |
 | J | ensureMoyDen seed | Covered by **UI-08 Completed** (не переносить as-is; demo изолирован) |
-| K | Sidebar removal / full layout | **Deferred**; связана с UI-05 |
+| K | Sidebar removal / full layout | **Deferred**; вне UI-05 (полное снятие не делалось) |
 | L | Косметика / leftover | не UI-задача Core |
 
 ---
@@ -156,9 +159,38 @@ Backlog (не активный Next):
 
 Трек стадий только из Bridge `stage_model`; пустая модель скрывает трек. **Не переделывать в UI-10** — только встроить в экран обзора без дублирования.
 
-### UI-05 — Shell / boot / layout — Deferred, optional
+### UI-05 — Shell / boot / layout — Completed (`8ae7372`)
 
-Boot и/или упрощение sidebar без поломки UI-01/02. **Не выполнена.** Не смешивать с create-story. Backlog (не Next).
+| | |
+|---|---|
+| **Статус** | **Completed** |
+| **Реализация** | `8ae7372` — `feat(ui): UI-05 — упростить shell и мобильную навигацию` |
+| **Итоговая приёмка** | **PASS**, **12/12** сценариев на `8ae7372` |
+
+#### Что вошло
+
+1. Предсказуемый boot: вход в shell всегда на экран «Проекты» (`showPanel("list")`, sidebar закрыт).
+2. Режимы shell: `is-home` / `is-workspace` / `is-form` на `#appShell`.
+3. Упрощение sidebar **без удаления**: в workspace/form скрыты дублирующие «Разделы» (навигация в Project Chrome); на home остаётся «Рабочий стол»; список проектов и brand сохранены.
+4. Мобильный drawer (≤960px): кнопка «Меню», off-canvas sidebar, backdrop; контент не уезжает под полную высоту sidebar.
+
+#### Вне scope UI-05 (не изменялись)
+
+- Группа **K** — полное снятие sidebar / финальный layout cleanup.
+- **UI-06b** Create Storytelling.
+- Короткий путь папки в Обзоре (UX-наблюдение вне UI-10/UI-05).
+- Bridge, контракты Stage Engine / Analyzer / Freeze.
+- **UI-04** stage track (логика/`stage_model` не переписывались).
+
+#### Результат приёмки
+
+- **PASS**, **12/12**: boot home, Create/Connect shell, Demo, Обзор, Текущая задача, History, mobile drawer open/closed, home mobile, консоль без блокирующих ошибок.
+- UI-01/02 и открытие проекта сохранены.
+
+#### Backlog-наблюдения (вне UI-05)
+
+1. На узком экране подписи stage track могут наезжать друг на друга — наблюдение к **UI-04** / отдельный UX-хвост, не дефект закрытия UI-05.
+2. Мёртвые всегда-скрытые блоки `#desktopStart` / `#desktopInfo` / `#desktopActions` оставлены в DOM (кнопки ещё в bind) — отдельный cleanup backlog, не группа K и не UI-05.
 
 ### UI-06a — Standalone Create (write-first) — Completed (`82b3a64`)
 
@@ -196,7 +228,7 @@ Session-demo изолирован от реальной папки и Bridge; а
 
 ### Группа K — Полное снятие старого sidebar и завершение layout cleanup — Deferred
 
-Связана с UI-05. Backlog; не Next.
+Полное снятие sidebar **не** входило в UI-05 (`8ae7372` только упростил shell). Backlog; не Next.
 
 ---
 
@@ -299,9 +331,13 @@ Core UI Reconstruction               →  Completed (docs c2b00ae)
         ↓
 UI-10 Project Overview (группа I)    →  Completed (`b0c9659`, PASS 9/9)
         ↓
+UI-05 Shell / boot / mobile drawer   →  Completed (`8ae7372`, PASS 12/12)
+        ↓
 Backlog (не автопорядок):
-  UI-05 (optional) | UI-06b (optional) | группа K (Deferred)
-  UX: короткий путь папки в Обзоре (вне UI-10)
+  UI-06b (optional) | группа K (Deferred)
+  UX: короткий путь папки в Обзоре (вне UI-10 / UI-05)
+  UX: наезд подписей stage track на узком экране (вне UI-05; к UI-04)
+  Cleanup: мёртвые #desktopStart / #desktopInfo / #desktopActions (вне UI-05)
 ```
 
 ---
