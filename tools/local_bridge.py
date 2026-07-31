@@ -301,6 +301,91 @@ def resolve_existing_dir(raw: str) -> Path | None:
     return path
 
 
+def find_cursor_executable() -> Path | None:
+    """Locate Cursor desktop app or CLI without inventing a custom protocol."""
+    for name in ("cursor", "cursor.cmd", "Cursor"):
+        found = shutil.which(name)
+        if found:
+            path = Path(found)
+            if path.is_file():
+                return path
+
+    if os.name == "nt":
+        local = os.environ.get("LOCALAPPDATA") or ""
+        candidates = [
+            Path(local) / "Programs" / "cursor" / "Cursor.exe",
+            Path(local) / "Programs" / "Cursor" / "Cursor.exe",
+            Path(os.environ.get("ProgramFiles") or "") / "Cursor" / "Cursor.exe",
+        ]
+        for path in candidates:
+            if path.is_file():
+                return path
+    else:
+        for path in (
+            Path("/usr/local/bin/cursor"),
+            Path.home() / "Applications" / "Cursor.app" / "Contents" / "Resources" / "app" / "bin" / "code",
+            Path("/Applications/Cursor.app/Contents/Resources/app/bin/cursor"),
+            Path("/Applications/Cursor.app/Contents/MacOS/Cursor"),
+        ):
+            if path.is_file():
+                return path
+    return None
+
+
+def open_in_cursor(project_path: str) -> dict[str, Any]:
+    """Open Cursor with the project folder. Does not auto-send a chat prompt."""
+    raw = str(project_path or "").strip()
+    if not raw:
+        return simple_result(
+            ok=False,
+            message="Не указана рабочая папка проекта. Задайте её в настройках проекта.",
+        )
+
+    root = resolve_existing_dir(raw)
+    if root is None:
+        return simple_result(
+            ok=False,
+            message="Папка проекта не найдена. Проверьте путь в настройках проекта.",
+        )
+
+    cursor = find_cursor_executable()
+    if cursor is None:
+        return simple_result(
+            ok=False,
+            message="Cursor не найден на этом компьютере. Установите Cursor или добавьте его в PATH.",
+        )
+
+    try:
+        popen_kwargs: dict[str, Any] = {
+            "cwd": str(root),
+            "stdin": subprocess.DEVNULL,
+            "stdout": subprocess.DEVNULL,
+            "stderr": subprocess.DEVNULL,
+            "close_fds": True,
+        }
+        if os.name == "nt":
+            # Detach from Local Bridge process tree on Windows.
+            popen_kwargs["creationflags"] = (
+                getattr(subprocess, "DETACHED_PROCESS", 0)
+                | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
+            )
+        else:
+            popen_kwargs["start_new_session"] = True
+
+        subprocess.Popen([str(cursor), str(root)], **popen_kwargs)
+    except OSError:
+        return simple_result(
+            ok=False,
+            message="Не удалось открыть Cursor. Проверьте установку программы и повторите.",
+        )
+
+    return simple_result(
+        ok=True,
+        message="Cursor открыт. Вставьте задание в чат.",
+        project_path=str(root),
+    )
+
+
 def template_relative_paths(template_dir: Path | None = None) -> list[str]:
     root = template_dir or TEMPLATE_DIR
     if not root.is_dir():
@@ -1323,6 +1408,13 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             return
         self.send_error(404)
 
+    def end_headers(self) -> None:  # noqa: N802
+        # index.html embeds CSS; avoid browsers keeping a stale connect/create shell.
+        req_path = urlparse(getattr(self, "path", "") or "").path
+        if req_path in {"/", "/index.html"} or str(req_path).endswith(".html"):
+            self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         path = parsed.path
@@ -1456,6 +1548,11 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
+        if path == "/api/open-in-cursor":
+            result = open_in_cursor(str(body.get("project_path") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
         if path == "/api/create-desktop-shortcut":
             result = create_desktop_shortcut()
             self._send_json(200 if result.get("ok") else 400, result)
@@ -1559,6 +1656,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"API: http://{args.host}:{args.port}/api/pick-folder")
     print(f"API: http://{args.host}:{args.port}/api/preview-new-project")
     print(f"API: http://{args.host}:{args.port}/api/inspect-project-folder")
+    print(f"API: http://{args.host}:{args.port}/api/open-in-cursor")
     print(f"API: http://{args.host}:{args.port}/api/create-project")
     print(f"API: http://{args.host}:{args.port}/api/create-desktop-shortcut")
     print(f"API: http://{args.host}:{args.port}/api/project-history/read")
