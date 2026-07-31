@@ -22,15 +22,6 @@ from pathlib import Path
 SCHEMA = "ai-pos.project_stage/v1"
 ENGINE_ID = "project_stage_engine_mvp_min"
 
-# Ordered lifecycle model used by UI (infographic track) and engine decisions.
-STAGE_MODEL = (
-    {"id": "IDEA", "label": "Идея"},
-    {"id": "INTAKE", "label": "Подключение"},
-    {"id": "DISCOVERY", "label": "Изучение"},
-    {"id": "PLANNING", "label": "Планирование"},
-    {"id": "EXECUTION", "label": "Выполнение"},
-)
-
 MIN_BODY_CHARS = 80
 MIN_BODY_LINES = 2
 STUB_MARKER_RE = re.compile(
@@ -382,7 +373,6 @@ def build_result(root: Path, presence: dict) -> dict:
         "schema": SCHEMA,
         "stage": stage,
         "stage_label": label,
-        "stage_model": [dict(item) for item in STAGE_MODEL],
         "confidence_state": confidence,
         "evidence": evidence,
         "conflicting_evidence": conflicting,

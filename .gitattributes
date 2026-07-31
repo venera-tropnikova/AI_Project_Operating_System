@@ -1,5 +1,0 @@
-# cmd.exe ломает разбор .cmd-файла, если переводы строк не CRLF,
-# а bash ломается на CRLF в .sh — поэтому окончания строк зафиксированы.
-*.cmd text eol=crlf
-*.vbs text eol=crlf
-*.sh  text eol=lf

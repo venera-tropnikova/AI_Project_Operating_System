@@ -1,36 +1,22 @@
-﻿# Optional: create Desktop shortcut AI POS -> start_ai_pos_silent.vbs
-# Технические файлы держим в ASCII-именах: русское название живёт в самом ярлыке.
+﻿# Optional: create Desktop shortcut AI POS -> "Запустить AI POS.vbs"
 # Optional branding ICO; warns if missing and uses default icon.
-param(
-    # Local Bridge запускает скрипт без консоли: пауза и ожидание ввода недопустимы.
-    [switch]$NoPause
-)
-
 $ErrorActionPreference = "Stop"
 
 function Write-User([string]$Text) {
     Write-Host $Text
 }
 
-function Wait-User() {
-    if ($NoPause) { return }
-    try { Read-Host "Нажмите Enter, чтобы закрыть" | Out-Null } catch { }
-}
-
-function Write-Result([hashtable]$Data) {
-    Write-Host ("AI_POS_SHORTCUT_RESULT=" + ($Data | ConvertTo-Json -Compress))
-}
-
 try {
     $root = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
-    $vbs = Join-Path $root "start_ai_pos_silent.vbs"
+    $vbs = Join-Path $root "Запустить AI POS.vbs"
+    if (-not (Test-Path -LiteralPath $vbs)) {
+        $vbs = Join-Path $root "start_ai_pos_silent.vbs"
+    }
     $ico = Join-Path $root "assets\branding\ai-pos-icon-v1.ico"
 
     if (-not (Test-Path -LiteralPath $vbs)) {
         Write-User "Не найден файл запуска AI POS в корне папки."
-        Write-User "Откройте папку AI POS и запустите start_ai_pos.cmd."
-        Write-Result @{ ok = $false; reason = "LAUNCHER_MISSING" }
-        Wait-User
+        Write-User "Откройте папку AI POS и запустите «Запустить AI POS.vbs»."
         exit 1
     }
 
@@ -55,9 +41,6 @@ try {
 
     $shortcut.Save()
 
-    # Результат подтверждаем фактом: перечитываем сохранённый ярлык, а не свои же намерения.
-    $saved = $wsh.CreateShortcut($lnkPath)
-
     Write-User "Ярлык AI POS создан на рабочем столе."
     if ($iconMissing) {
         Write-User ""
@@ -67,22 +50,13 @@ try {
     Write-User ""
     Write-User "После переноса папки AI POS запустите создание ярлыка снова."
     Write-User ""
-    Write-Result @{
-        ok           = $true
-        icon_missing = [bool]$iconMissing
-        lnk          = $saved.FullName
-        target       = $saved.TargetPath
-        arguments    = $saved.Arguments
-        icon         = $saved.IconLocation
-    }
-    Wait-User
+    try { Read-Host "Нажмите Enter, чтобы закрыть" | Out-Null } catch { }
     exit 0
 }
 catch {
     Write-User "Не удалось создать ярлык."
     Write-User ($_.Exception.Message)
     Write-User ""
-    Write-Result @{ ok = $false; reason = "SHORTCUT_FAILED" }
-    Wait-User
+    try { Read-Host "Нажмите Enter, чтобы закрыть" | Out-Null } catch { }
     exit 1
 }
