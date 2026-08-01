@@ -4886,7 +4886,211 @@
       .flow-actions .btn { width: 100%; }
     }
 
-  </style>
+.kb-panel {
+      padding: 0 0 1.5rem;
+    }
+
+    .kb-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 0 0 1rem;
+    }
+
+    .kb-lead {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      max-width: 40rem;
+    }
+
+    .kb-status {
+      margin: 0 0 0.85rem;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+
+    .kb-status.is-error {
+      color: #8b2e2e;
+    }
+
+    .kb-empty {
+      margin: 0;
+      padding: 1.25rem 0.15rem;
+      color: var(--ink-muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .kb-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .kb-list-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.35rem 1rem;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 0.75rem 0.9rem;
+      cursor: pointer;
+      color: inherit;
+      font: inherit;
+    }
+
+    .kb-list-item:hover {
+      border-color: var(--ink-muted);
+    }
+
+    .kb-list-title {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+
+    .kb-list-meta {
+      grid-column: 1 / -1;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+    }
+
+    .kb-list-status {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    .kb-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.05rem;
+      background: var(--surface);
+      max-width: 36rem;
+    }
+
+    .kb-card-row {
+      margin: 0 0 0.55rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .kb-card-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .kb-preview {
+      margin: 0.75rem 0 0.35rem;
+      max-width: 220px;
+      max-height: 160px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .kb-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+
+    .kb-confirm {
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .kb-confirm p {
+      margin: 0 0 0.65rem;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .kb-review {
+      margin-top: 1.1rem;
+      max-width: 42rem;
+    }
+
+    .kb-review-note {
+      margin: 0 0 0.85rem;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .kb-review-block {
+      margin: 0 0 1rem;
+    }
+
+    .kb-review-block h3 {
+      margin: 0 0 0.45rem;
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+
+    .kb-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.7rem 0.8rem;
+      margin: 0 0 0.55rem;
+      background: var(--surface);
+    }
+
+    .kb-item-text {
+      margin: 0 0 0.35rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .kb-item-meta {
+      margin: 0 0 0.45rem;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      line-height: 1.35;
+    }
+
+    .kb-item-quote {
+      margin: 0 0 0.55rem;
+      padding: 0.45rem 0.55rem;
+      border-left: 3px solid var(--line);
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      white-space: pre-wrap;
+    }
+
+    .kb-item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .kb-item-edit {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 0.45rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.45rem 0.55rem;
+      font: inherit;
+      min-height: 4rem;
+      resize: vertical;
+    }
+
+</style>
 </head>
 <body>
   <div class="launch-notice" id="launchNotice" hidden>
@@ -5009,6 +5213,7 @@
             </div>
             <div class="pm-toolbar-actions">
               <button type="button" class="btn btn-ghost" id="btnOpenExample">Посмотреть пример</button>
+              <button type="button" class="btn btn-ghost" id="btnOpenKnowledgeHome">База знаний</button>
               <button type="button" class="btn btn-secondary" id="btnPmCreate">Создать</button>
               <button type="button" class="btn btn-primary" id="btnPmConnect">Подключить</button>
             </div>
@@ -5066,6 +5271,55 @@
             </table>
             <p class="system-projects-empty" id="systemProjectsEmpty" hidden>Пока нет проектов.</p>
           </section>
+        </div>
+
+
+        <div class="system-home kb-panel" id="systemKnowledge" hidden>
+          <div class="pm-topbar">
+            <div class="pm-topbar-side pm-topbar-brand">
+              <button type="button" class="os-brand" id="kbBrandHome" aria-label="На главный экран AI POS" title="На главный экран AI POS">
+                <img class="os-brand-mark" src="assets/branding/ai-pos-icon-v1.png" width="36" height="36" alt="" />
+                <div class="os-brand-text">
+                  <span class="os-brand-name">AI POS</span>
+                  <span class="os-brand-sub">AI Project Operating System</span>
+                </div>
+              </button>
+            </div>
+            <div class="pm-topbar-center">
+              <h1 class="page-title pm-title">База знаний</h1>
+            </div>
+            <div class="pm-topbar-side" aria-hidden="true"></div>
+          </div>
+          <p class="kb-lead">Здесь хранятся документы и изображения, которые AI POS сможет использовать в работе. На этом этапе источники только сохраняются.</p>
+          <div class="kb-toolbar">
+            <button type="button" class="btn btn-primary" id="btnKbAddSource">Добавить источник</button>
+            <button type="button" class="btn btn-secondary" id="btnKbBackProjects">К проектам</button>
+          </div>
+          <p class="kb-status" id="kbStatus" hidden aria-live="polite"></p>
+          <div id="kbListView">
+            <p class="kb-empty" id="kbEmpty" hidden>Пока нет источников. Добавьте документ или изображение, чтобы сохранить его в базе знаний AI POS.</p>
+            <ul class="kb-list" id="kbSourceList" aria-label="Источники базы знаний"></ul>
+          </div>
+          <section class="kb-card" id="kbCardView" hidden aria-live="polite">
+            <p class="kb-card-row"><span class="kb-card-label">Название</span><span id="kbCardTitle">—</span></p>
+            <p class="kb-card-row"><span class="kb-card-label">Тип</span><span id="kbCardType">—</span></p>
+            <p class="kb-card-row"><span class="kb-card-label">Дата добавления</span><span id="kbCardDate">—</span></p>
+            <p class="kb-card-row"><span class="kb-card-label">Размер</span><span id="kbCardSize">—</span></p>
+            <p class="kb-card-row"><span class="kb-card-label">Статус</span><span id="kbCardStatus">Добавлен</span></p>
+            <p class="kb-card-row"><span class="kb-card-label">Исходный файл</span><span id="kbCardOrigin">—</span></p>
+            <img class="kb-preview" id="kbCardPreview" alt="Предпросмотр изображения" hidden />
+            <div class="kb-card-actions">
+<button type="button" class="btn btn-secondary" id="btnKbBackList">К списку</button>
+              <button type="button" class="btn btn-secondary" id="btnKbDelete">Удалить</button>
+            </div>
+            <div class="kb-confirm" id="kbDeleteConfirm" hidden>
+              <p>Удалить этот источник из базы знаний? Файл будет удалён из хранилища AI POS.</p>
+              <div class="kb-card-actions">
+                <button type="button" class="btn btn-primary" id="btnKbDeleteConfirm">Да, удалить</button>
+                <button type="button" class="btn btn-secondary" id="btnKbDeleteCancel">Отмена</button>
+              </div>
+            </div>
+</section>
         </div>
 
         <div class="desktop-start" id="desktopStart" hidden>
@@ -5495,6 +5749,7 @@
           </div>
           <div class="workspace-head-actions">
             <button type="button" class="btn btn-ghost" id="btnBackToList">На главную</button>
+            <button type="button" class="ws-rail-action" id="wsOpenKnowledge">База знаний</button>
             <button type="button" class="btn btn-secondary" id="btnNewFromWorkspace">Новый проект</button>
           </div>
         </div>
@@ -6312,6 +6567,29 @@
       };
 
       var els = {
+        wsOpenKnowledge: document.getElementById("wsOpenKnowledge"),
+        btnOpenKnowledgeHome: document.getElementById("btnOpenKnowledgeHome"),
+        systemKnowledge: document.getElementById("systemKnowledge"),
+        btnKbAddSource: document.getElementById("btnKbAddSource"),
+        btnKbBackProjects: document.getElementById("btnKbBackProjects"),
+        kbBrandHome: document.getElementById("kbBrandHome"),
+        kbStatus: document.getElementById("kbStatus"),
+        kbListView: document.getElementById("kbListView"),
+        kbEmpty: document.getElementById("kbEmpty"),
+        kbSourceList: document.getElementById("kbSourceList"),
+        kbCardView: document.getElementById("kbCardView"),
+        kbCardTitle: document.getElementById("kbCardTitle"),
+        kbCardType: document.getElementById("kbCardType"),
+        kbCardDate: document.getElementById("kbCardDate"),
+        kbCardSize: document.getElementById("kbCardSize"),
+        kbCardStatus: document.getElementById("kbCardStatus"),
+        kbCardOrigin: document.getElementById("kbCardOrigin"),
+        kbCardPreview: document.getElementById("kbCardPreview"),
+        btnKbBackList: document.getElementById("btnKbBackList"),
+        btnKbDelete: document.getElementById("btnKbDelete"),
+        kbDeleteConfirm: document.getElementById("kbDeleteConfirm"),
+        btnKbDeleteConfirm: document.getElementById("btnKbDeleteConfirm"),
+        btnKbDeleteCancel: document.getElementById("btnKbDeleteCancel"),
         appShell: document.getElementById("appShell"),
         bootScreen: document.getElementById("bootScreen"),
         osShell: document.getElementById("osShell"),
@@ -12738,6 +13016,82 @@
       }
 
       function bindEvents() {
+        if (els.btnKbAddSource) els.btnKbAddSource.disabled = true;
+        setKnowledgeStatus("Выберите файл…", false);
+        try {
+          var pick = await postBridgeJson("/api/knowledge/sources/pick", {
+            title: "Выберите файл для базы знаний"
+          });
+          var pickData = pick.data || {};
+          if (pickData.cancelled) {
+            setKnowledgeStatus("Добавление отменено.", false);
+            return;
+          }
+
+          if (els.btnKbAddSource) els.btnKbAddSource.disabled = false;
+        }
+
+        if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = true;
+        setKnowledgeStatus("Удаляем источник…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/delete", {
+            id: id,
+            confirm: true
+          });
+          var data = res.data || {};
+          if (!data.ok) {
+            setKnowledgeStatus(data.message || "Не удалось удалить источник.", true);
+            return;
+          }
+
+          if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = false;
+        }
+
+        if (els.wsOpenKnowledge) {
+          els.wsOpenKnowledge.addEventListener("click", function () {
+            openKnowledgeBase();
+          });
+        }
+
+        if (els.btnOpenKnowledgeHome) {
+          els.btnOpenKnowledgeHome.addEventListener("click", function () {
+            openKnowledgeBase();
+          });
+        }
+
+        if (els.btnKbBackProjects) {
+          els.btnKbBackProjects.addEventListener("click", function () {
+            openSystemHome();
+          });
+        }
+
+        if (els.btnKbAddSource) {
+          els.btnKbAddSource.addEventListener("click", onKnowledgeAddClick);
+        }
+
+        if (els.btnKbBackList) {
+          els.btnKbBackList.addEventListener("click", function () {
+            showKnowledgeListView();
+            loadKnowledgeSources();
+          });
+        }
+
+        if (els.btnKbDelete) {
+          els.btnKbDelete.addEventListener("click", function () {
+            if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = false;
+          });
+        }
+
+        if (els.btnKbDeleteCancel) {
+          els.btnKbDeleteCancel.addEventListener("click", function () {
+            if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+          });
+        }
+
+        if (els.btnKbDeleteConfirm) {
+          els.btnKbDeleteConfirm.addEventListener("click", onKnowledgeDeleteConfirm);
+        }
+
         if (els.btnProjectPicker) {
           els.btnProjectPicker.addEventListener("click", function (event) {
             event.stopPropagation();
@@ -13552,6 +13906,229 @@
         if (notice) notice.hidden = false;
         if (shell) shell.hidden = true;
       }
+
+
+      function setKnowledgeStatus(text, isError) {
+        if (!els.kbStatus) return;
+        var msg = String(text || "").trim();
+        if (!msg) {
+          els.kbStatus.hidden = true;
+          els.kbStatus.textContent = "";
+          els.kbStatus.classList.remove("is-error");
+          return;
+        }
+        els.kbStatus.hidden = false;
+        els.kbStatus.textContent = msg;
+        els.kbStatus.classList.toggle("is-error", !!isError);
+      }
+
+
+
+      function formatKnowledgeDate(iso) {
+        var raw = String(iso || "").trim();
+        if (!raw) return "—";
+        var dt = new Date(raw);
+        if (isNaN(dt.getTime())) return raw;
+        var dd = String(dt.getDate()).padStart(2, "0");
+        var mm = String(dt.getMonth() + 1).padStart(2, "0");
+        var yyyy = dt.getFullYear();
+        var hh = String(dt.getHours()).padStart(2, "0");
+        var mi = String(dt.getMinutes()).padStart(2, "0");
+        return dd + "." + mm + "." + yyyy + " " + hh + ":" + mi;
+      }
+
+
+
+      function formatKnowledgeSize(bytes) {
+        var n = Number(bytes);
+        if (!isFinite(n) || n < 0) return "—";
+        if (n < 1024) return String(n) + " Б";
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1).replace(".0", "") + " КБ";
+        return (n / (1024 * 1024)).toFixed(1).replace(".0", "") + " МБ";
+      }
+
+
+
+      function showKnowledgeListView() {
+        state.knowledgeSelectedId = null;
+        if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+        if (els.kbCardView) els.kbCardView.hidden = true;
+        if (els.kbListView) els.kbListView.hidden = false;
+      }
+
+
+
+      function renderKnowledgeList(sources) {
+        if (!els.kbSourceList) return;
+        var list = Array.isArray(sources) ? sources : [];
+        els.kbSourceList.textContent = "";
+        if (els.kbEmpty) els.kbEmpty.hidden = list.length > 0;
+        for (var i = 0; i < list.length; i++) {
+          var s = list[i] || {};
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "kb-list-item";
+          btn.setAttribute("data-kb-id", String(s.id || ""));
+          var title = document.createElement("span");
+          title.className = "kb-list-title";
+          title.textContent = String(s.title || "Без названия");
+          var status = document.createElement("span");
+          status.className = "kb-list-status";
+          status.textContent = String(s.status_label || "Добавлен");
+          var meta = document.createElement("span");
+          meta.className = "kb-list-meta";
+          meta.textContent =
+            String(s.type_label || s.type || "Файл") +
+            " · " +
+            formatKnowledgeDate(s.added_at) +
+            " · " +
+            formatKnowledgeSize(s.size);
+          btn.appendChild(title);
+          btn.appendChild(status);
+          btn.appendChild(meta);
+          btn.addEventListener("click", function (ev) {
+            var id = ev.currentTarget.getAttribute("data-kb-id");
+            if (id) openKnowledgeCard(id);
+          });
+          els.kbSourceList.appendChild(btn);
+        }
+      }
+
+
+
+      async function loadKnowledgeSources() {
+        setKnowledgeStatus("Загружаем источники…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/list", {});
+          var data = res.data || {};
+          if (!data.ok) {
+            setKnowledgeStatus(data.message || "Не удалось загрузить базу знаний.", true);
+            renderKnowledgeList([]);
+            return;
+          }
+          state.knowledgeSources = data.sources || [];
+          state.knowledgeStoragePath = data.storage_path || "";
+          renderKnowledgeList(state.knowledgeSources);
+          setKnowledgeStatus(
+            state.knowledgeSources.length
+              ? "Источников: " + state.knowledgeSources.length
+              : "",
+            false
+          );
+        } catch (e) {
+          setKnowledgeStatus("Не удалось связаться с AI POS для базы знаний.", true);
+          renderKnowledgeList([]);
+        }
+      }
+
+
+
+      async function openKnowledgeCard(sourceId) {
+        setKnowledgeStatus("Открываем источник…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/get", { id: sourceId });
+          var data = res.data || {};
+          if (!data.ok || !data.source) {
+            setKnowledgeStatus(data.message || "Источник не найден.", true);
+            return;
+          }
+          var s = data.source;
+          state.knowledgeSelectedId = s.id;
+          if (els.kbListView) els.kbListView.hidden = true;
+          if (els.kbCardView) els.kbCardView.hidden = false;
+          if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+          }
+          setKnowledgeStatus("", false);
+        } catch (e) {
+          setKnowledgeStatus("Не удалось открыть источник.", true);
+        }
+      }
+
+
+
+      function openKnowledgeBase() {
+        showPanel("list");
+        if (els.systemHome) els.systemHome.hidden = true;
+        if (els.systemKnowledge) els.systemKnowledge.hidden = false;
+        if (els.desktopStart) els.desktopStart.hidden = true;
+        if (els.desktopInfo) els.desktopInfo.hidden = true;
+        if (els.desktopActions) els.desktopActions.hidden = true;
+        showKnowledgeListView();
+        loadKnowledgeSources();
+        try {
+          window.scrollTo(0, 0);
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+
+
+      async function onKnowledgeAddClick() {
+        if (els.btnKbAddSource) els.btnKbAddSource.disabled = true;
+        setKnowledgeStatus("Выберите файл…", false);
+        try {
+          var pick = await postBridgeJson("/api/knowledge/sources/pick", {
+            title: "Выберите файл для базы знаний"
+          });
+          var pickData = pick.data || {};
+          if (pickData.cancelled) {
+            setKnowledgeStatus("Добавление отменено.", false);
+            return;
+          }
+          if (!pickData.ok || !pickData.path) {
+            setKnowledgeStatus(pickData.message || "Не удалось выбрать файл.", true);
+            return;
+          }
+          setKnowledgeStatus("Сохраняем источник…", false);
+          var add = await postBridgeJson("/api/knowledge/sources/add", {
+            file_path: pickData.path
+          });
+          var addData = add.data || {};
+          if (!addData.ok) {
+            setKnowledgeStatus(addData.message || "Не удалось добавить источник.", true);
+            return;
+          }
+          showKnowledgeListView();
+          await loadKnowledgeSources();
+          setKnowledgeStatus("Источник добавлен.", false);
+          if (addData.source && addData.source.id) {
+            openKnowledgeCard(addData.source.id);
+          }
+        } catch (e) {
+          setKnowledgeStatus("Не удалось добавить источник.", true);
+        } finally {
+          if (els.btnKbAddSource) els.btnKbAddSource.disabled = false;
+        }
+      }
+
+
+
+      async function onKnowledgeDeleteConfirm() {
+        var id = state.knowledgeSelectedId;
+        if (!id) return;
+        if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = true;
+        setKnowledgeStatus("Удаляем источник…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/delete", {
+            id: id,
+            confirm: true
+          });
+          var data = res.data || {};
+          if (!data.ok) {
+            setKnowledgeStatus(data.message || "Не удалось удалить источник.", true);
+            return;
+          }
+          showKnowledgeListView();
+          await loadKnowledgeSources();
+          setKnowledgeStatus("Источник удалён.", false);
+        } catch (e) {
+          setKnowledgeStatus("Не удалось удалить источник.", true);
+        } finally {
+          if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = false;
+        }
+      }
+
 
       function init() {
         if (openedAsFile()) {

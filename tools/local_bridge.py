@@ -31,6 +31,15 @@ from pathlib import Path
 from typing import Any
 
 from project_stage_engine import STAGE_MODEL as ENGINE_STAGE_MODEL
+from knowledge_base import (
+    add_source_from_path,
+    content_type_for,
+    delete_source,
+    get_source,
+    list_sources,
+    pick_knowledge_file,
+    resolve_source_file,
+)
 from urllib.parse import parse_qs, urlparse
 
 import capture_service
@@ -1447,6 +1456,26 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
                 return
             self._send_bytes(200, body, content_type="image/png")
             return
+        if path == "/api/knowledge/sources/file":
+            query = parse_qs(parsed.query or "")
+            source_id = (query.get("id") or [""])[0]
+            target, err = resolve_source_file(source_id)
+            if err is not None or target is None:
+                self._send_json(
+                    404 if (err or {}).get("message") else 400,
+                    err or simple_result(ok=False, message="Файл источника не найден."),
+                )
+                return
+            try:
+                body = target.read_bytes()
+            except OSError:
+                self._send_json(
+                    400,
+                    simple_result(ok=False, message="Не удалось открыть файл источника."),
+                )
+                return
+            self._send_bytes(200, body, content_type=content_type_for(target))
+            return
         if path in {"/", "/index.html"}:
             self.path = "/index.html"
         return SimpleHTTPRequestHandler.do_GET(self)
@@ -1533,6 +1562,41 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
             if result.get("cancelled"):
                 status = 200
             self._send_json(status, result)
+            return
+
+
+        if path == "/api/knowledge/sources/list":
+            result = list_sources()
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/knowledge/sources/pick":
+            with _PICK_LOCK:
+                result = pick_knowledge_file(
+                    str(body.get("title") or "Выберите файл для базы знаний")
+                )
+            status = 200 if result.get("ok") or result.get("cancelled") else 400
+            self._send_json(status, result)
+            return
+
+        if path == "/api/knowledge/sources/add":
+            result = add_source_from_path(str(body.get("file_path") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/knowledge/sources/get":
+            result = get_source(str(body.get("id") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/knowledge/sources/delete":
+            confirm = body.get("confirm")
+            if isinstance(confirm, str):
+                confirm = confirm.strip().lower() in {"1", "true", "yes", "да"}
+            else:
+                confirm = bool(confirm)
+            result = delete_source(str(body.get("id") or ""), confirm=confirm)
+            self._send_json(200 if result.get("ok") else 400, result)
             return
 
         if path == "/api/preview-new-project":
