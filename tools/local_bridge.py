@@ -40,6 +40,12 @@ from knowledge_base import (
     pick_knowledge_file,
     resolve_source_file,
 )
+from project_structure_map import build_structure_map
+from project_setup_actions import (
+    apply_project_setup,
+    get_project_setup_status,
+    preview_project_setup,
+)
 from urllib.parse import parse_qs, urlparse
 
 import capture_service
@@ -1609,6 +1615,41 @@ class LocalBridgeHandler(SimpleHTTPRequestHandler):
 
         if path == "/api/inspect-project-folder":
             result = inspect_project_folder(str(body.get("project_path") or ""))
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/project-structure/map":
+            result = build_structure_map(
+                str(body.get("project_path") or ""),
+                include_recommendations=False,
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/project-structure/setup-preview":
+            result = preview_project_setup(
+                str(body.get("project_path") or ""),
+                user_info=body.get("user_info"),
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/project-structure/setup":
+            confirm = body.get("confirm")
+            if isinstance(confirm, str):
+                confirm = confirm.strip().lower() in {"1", "true", "yes", "да"}
+            else:
+                confirm = bool(confirm)
+            result = apply_project_setup(
+                str(body.get("project_path") or ""),
+                confirm=confirm,
+                user_info=body.get("user_info"),
+            )
+            self._send_json(200 if result.get("ok") else 400, result)
+            return
+
+        if path == "/api/project-structure/setup-status":
+            result = get_project_setup_status(str(body.get("project_path") or ""))
             self._send_json(200 if result.get("ok") else 400, result)
             return
 
