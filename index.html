@@ -13016,37 +13016,6 @@
       }
 
       function bindEvents() {
-        if (els.btnKbAddSource) els.btnKbAddSource.disabled = true;
-        setKnowledgeStatus("Выберите файл…", false);
-        try {
-          var pick = await postBridgeJson("/api/knowledge/sources/pick", {
-            title: "Выберите файл для базы знаний"
-          });
-          var pickData = pick.data || {};
-          if (pickData.cancelled) {
-            setKnowledgeStatus("Добавление отменено.", false);
-            return;
-          }
-
-          if (els.btnKbAddSource) els.btnKbAddSource.disabled = false;
-        }
-
-        if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = true;
-        setKnowledgeStatus("Удаляем источник…", false);
-        try {
-          var res = await postBridgeJson("/api/knowledge/sources/delete", {
-            id: id,
-            confirm: true
-          });
-          var data = res.data || {};
-          if (!data.ok) {
-            setKnowledgeStatus(data.message || "Не удалось удалить источник.", true);
-            return;
-          }
-
-          if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = false;
-        }
-
         if (els.wsOpenKnowledge) {
           els.wsOpenKnowledge.addEventListener("click", function () {
             openKnowledgeBase();
@@ -14037,6 +14006,20 @@
           if (els.kbListView) els.kbListView.hidden = true;
           if (els.kbCardView) els.kbCardView.hidden = false;
           if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+          if (els.kbCardTitle) els.kbCardTitle.textContent = s.title || "—";
+          if (els.kbCardType) els.kbCardType.textContent = s.type_label || s.type || "—";
+          if (els.kbCardDate) els.kbCardDate.textContent = formatKnowledgeDate(s.added_at);
+          if (els.kbCardSize) els.kbCardSize.textContent = formatKnowledgeSize(s.size);
+          if (els.kbCardStatus) els.kbCardStatus.textContent = s.status_label || "Добавлен";
+          if (els.kbCardOrigin) els.kbCardOrigin.textContent = s.origin_label || "—";
+          if (els.kbCardPreview) {
+            if (s.is_image && s.preview_url) {
+              els.kbCardPreview.hidden = false;
+              els.kbCardPreview.src = s.preview_url;
+            } else {
+              els.kbCardPreview.hidden = true;
+              els.kbCardPreview.removeAttribute("src");
+            }
           }
           setKnowledgeStatus("", false);
         } catch (e) {
