@@ -626,9 +626,18 @@
       padding-top: 1.75rem;
     }
 
-    .app.is-workspace .os-main,
     .app.is-form .os-main {
       padding-top: 1.25rem;
+    }
+
+    .app.is-workspace .os-main {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      grid-template-rows: minmax(100vh, auto);
+      gap: 0;
+      padding: 0;
+      align-items: stretch;
+      background: var(--bg);
     }
 
     .project-chrome {
@@ -640,12 +649,306 @@
       display: none !important;
     }
 
-    .project-chrome-top {
+    .app.is-workspace .project-chrome {
+      grid-column: 1;
+      grid-row: 1;
+      margin: 0;
+      padding: 1rem 0.85rem 1.25rem;
+      border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 88%, var(--bg));
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+    }
+
+    .app.is-workspace #panelWorkspace.is-active {
+      grid-column: 2;
+      grid-row: 1;
+      min-width: 0;
+      padding: 1rem 1.25rem 2.5rem;
+      overflow-x: hidden;
+    }
+
+    .ws-rail-brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.55rem;
       min-width: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .ws-rail-brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      flex: 0 0 auto;
+    }
+
+    .ws-rail-brand-name {
+      font-size: 0.95rem;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .ws-rail-home {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: 100%;
+      margin: 0;
+      padding: 0.5rem 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 650;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .ws-rail-home:hover {
+      background: color-mix(in srgb, #233a8b 6%, transparent);
+      border-color: color-mix(in srgb, #233a8b 18%, transparent);
+    }
+
+    .ws-rail-recent-block {
+      margin-top: 1.85rem;
+      padding-top: 1.45rem;
+      border-top: 1px solid var(--line);
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ws-rail-heading {
+      margin: 0 0 0.45rem;
+      font-size: 0.72rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .ws-recent {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .ws-recent-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+      width: 100%;
+      margin: 0;
+      padding: 0.55rem 0.6rem;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .ws-recent-item:hover {
+      background: color-mix(in srgb, #233a8b 6%, transparent);
+      border-color: color-mix(in srgb, #233a8b 12%, transparent);
+    }
+
+    .ws-recent-item.is-current {
+      background: var(--surface);
+      border-color: var(--line);
+      box-shadow: 0 1px 2px color-mix(in srgb, #233a8b 8%, transparent);
+    }
+
+    .ws-recent-name {
+      font-size: 0.9rem;
+      font-weight: 650;
+      color: var(--ink);
+      line-height: 1.25;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ws-recent-stage {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 550;
+      color: var(--ink-soft);
+      line-height: 1.2;
+    }
+
+    .ws-recent-stage-dot {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: #3d9a6a;
+      flex: 0 0 auto;
+    }
+
+    .ws-recent-empty {
+      margin: 0;
+      padding: 0.35rem 0.15rem;
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      line-height: 1.35;
+    }
+
+    .ws-rail-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: auto;
+      margin-bottom: 150px;
+      padding-top: 1rem;
+    }
+
+    .ws-rail-action {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 0;
+      padding: 0.5rem 0.65rem;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .ws-rail-action:hover {
+      background: color-mix(in srgb, #233a8b 6%, transparent);
+      border-color: color-mix(in srgb, #233a8b 12%, transparent);
+    }
+
+    .ws-rail-action.is-primary {
+      background: var(--surface);
+      border-color: var(--line);
+    }
+
+    .app.is-workspace .workspace-head {
+      display: none !important;
+    }
+
+    .project-section-nav-item[hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 820px) {
+      .app.is-workspace .os-main {
+        display: block;
+        padding: 0;
+      }
+      .app.is-workspace .project-chrome {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        min-height: 0;
+      }
+      .app.is-workspace #panelWorkspace.is-active {
+        padding: 1rem 1rem 2rem;
+      }
+    }
+
+    .settings-theme-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      margin-top: 0.65rem;
+    }
+
+    .settings-theme-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .settings-theme-option input {
+      margin-top: 0.15rem;
+      flex: 0 0 auto;
+    }
+
+    .settings-theme-option.is-disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .settings-app-row {
+      display: flex;
       flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .settings-version {
+      margin: 0.85rem 0 0;
+      font-size: 0.92rem;
+      color: var(--ink);
+    }
+
+    .settings-developer-option {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    #settingsDeveloperBlock .settings-developer-option + .settings-developer-option {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .settings-developer-option .settings-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .settings-developer-option .settings-check input {
+      margin-top: 0.2rem;
+      flex: 0 0 auto;
+    }
+
+    .settings-developer-option .settings-check-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      min-width: 0;
+    }
+
+    .settings-developer-option .settings-check-title {
+      font-size: 0.95rem;
+      font-weight: 650;
+      color: var(--ink);
+      line-height: 1.3;
     }
 
     .project-chrome-name {
@@ -666,7 +969,7 @@
       flex-wrap: nowrap;
       align-items: stretch;
       gap: 0.15rem;
-      margin-top: 0.55rem;
+      margin: 0 0 0.85rem;
       padding-bottom: 0.1rem;
       border-bottom: 1px solid var(--line);
       overflow-x: auto;
@@ -715,6 +1018,25 @@
       color: var(--ink);
       background: color-mix(in srgb, #233a8b 8%, transparent);
       box-shadow: 0 0 0 3px color-mix(in srgb, #233a8b 12%, transparent);
+    }
+
+    .project-section-nav-item.is-gated {
+      opacity: 0.48;
+      cursor: not-allowed;
+      color: var(--ink-muted);
+    }
+
+    .project-section-nav-item.is-gated:hover {
+      color: var(--ink-muted);
+      background: transparent;
+    }
+
+    .project-section-nav-gate-hint {
+      margin: 0.15rem 0 0.55rem;
+      padding: 0 0.15rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+      color: var(--ink-muted);
     }
 
     .ai-pos-level-nav {
@@ -1360,8 +1682,213 @@
       font-size: 0.92rem;
     }
 
-    #desktopRoot:has(#systemHome:not([hidden])) {
+    #desktopRoot:has(#systemHome:not([hidden])),
+    #desktopRoot:has(#systemKnowledge:not([hidden])) {
       max-width: none;
+    }
+
+    .kb-panel {
+      padding: 0 0 1.5rem;
+    }
+
+    .kb-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 0 0 1rem;
+    }
+
+    .kb-lead {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      max-width: 40rem;
+    }
+
+    .kb-status {
+      margin: 0 0 0.85rem;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+
+    .kb-status.is-error {
+      color: #8b2e2e;
+    }
+
+    .kb-empty {
+      margin: 0;
+      padding: 1.25rem 0.15rem;
+      color: var(--ink-muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .kb-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .kb-list-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.35rem 1rem;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 0.75rem 0.9rem;
+      cursor: pointer;
+      color: inherit;
+      font: inherit;
+    }
+
+    .kb-list-item:hover {
+      border-color: var(--ink-muted);
+    }
+
+    .kb-list-title {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+
+    .kb-list-meta {
+      grid-column: 1 / -1;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+    }
+
+    .kb-list-status {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    .kb-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.05rem;
+      background: var(--surface);
+      max-width: 36rem;
+    }
+
+    .kb-card-row {
+      margin: 0 0 0.55rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .kb-card-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .kb-preview {
+      margin: 0.75rem 0 0.35rem;
+      max-width: 220px;
+      max-height: 160px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .kb-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+
+    .kb-confirm {
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .kb-confirm p {
+      margin: 0 0 0.65rem;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .kb-review {
+      margin-top: 1.1rem;
+      max-width: 42rem;
+    }
+
+    .kb-review-note {
+      margin: 0 0 0.85rem;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .kb-review-block {
+      margin: 0 0 1rem;
+    }
+
+    .kb-review-block h3 {
+      margin: 0 0 0.45rem;
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+
+    .kb-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.7rem 0.8rem;
+      margin: 0 0 0.55rem;
+      background: var(--surface);
+    }
+
+    .kb-item-text {
+      margin: 0 0 0.35rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .kb-item-meta {
+      margin: 0 0 0.45rem;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      line-height: 1.35;
+    }
+
+    .kb-item-quote {
+      margin: 0 0 0.55rem;
+      padding: 0.45rem 0.55rem;
+      border-left: 3px solid var(--line);
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      white-space: pre-wrap;
+    }
+
+    .kb-item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .kb-item-edit {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 0.45rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.45rem 0.55rem;
+      font: inherit;
+      min-height: 4rem;
+      resize: vertical;
     }
 
     .os-project-empty {
@@ -1818,6 +2345,468 @@
       flex-wrap: wrap;
       gap: 0.45rem;
       margin: 0 0 1rem;
+    }
+
+    .structure-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      margin: 0 0 0.85rem;
+    }
+
+    .structure-stat {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+    }
+
+    .structure-stat strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .structure-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+      margin: 0 0 0.85rem;
+    }
+
+    .structure-action-hint {
+      margin: 0;
+      max-width: 36rem;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .structure-status {
+      margin: 0 0 0.85rem;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+    }
+
+    .structure-status.is-error {
+      color: #9a3d3d;
+    }
+
+    .structure-review {
+      margin: 0 0 1rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--bg) 55%, var(--surface));
+    }
+
+    .structure-review-line {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .structure-review-line + .structure-review-line {
+      margin-top: 0.25rem;
+      color: var(--ink-soft);
+    }
+
+    .structure-review-list {
+      margin: 0.45rem 0 0;
+      padding: 0 0 0 1.15rem;
+      list-style: disc;
+    }
+
+    .structure-review-list li {
+      margin: 0.55rem 0 0;
+      padding: 0;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .structure-review-item-title {
+      display: block;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .structure-review-item-reason {
+      display: block;
+      margin-top: 0.15rem;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    .structure-review-group {
+      margin-top: 0.85rem;
+    }
+
+    .structure-review-group-title {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 650;
+      color: var(--ink);
+    }
+
+    .structure-review-group-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem 0.75rem;
+    }
+
+    .structure-review-group-head .structure-review-group-title {
+      margin: 0;
+    }
+
+    .structure-review-group-empty {
+      margin: 0.35rem 0 0;
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+    }
+
+    .structure-review-note {
+      margin: 0.65rem 0 0;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .structure-path {
+      cursor: pointer;
+      border-bottom: 1px dotted var(--ink-muted);
+      color: inherit;
+      font: inherit;
+      background: none;
+      padding: 0;
+    }
+
+    .structure-path[data-expanded="1"] {
+      border-bottom-color: transparent;
+      word-break: break-all;
+    }
+
+    .structure-setup-gate-note {
+      margin: 0 0 0.65rem;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .structure-review-actions {
+      margin-top: 0.9rem;
+    }
+
+    .structure-info-form {
+      margin-top: 0.75rem;
+      padding: 0.75rem 0 0.15rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .structure-info-form-title {
+      margin: 0 0 0.35rem;
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .structure-info-form-hint {
+      margin: 0 0 0.7rem;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .structure-info-form-grid {
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .structure-info-form label {
+      display: grid;
+      gap: 0.25rem;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+    }
+
+    .structure-info-form .prep-mode-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      color: var(--ink);
+      font-size: 0.92rem;
+    }
+
+    .structure-info-form .prep-mode-option input {
+      width: auto;
+      margin-top: 0.2rem;
+      flex: 0 0 auto;
+    }
+
+    #prepBlock .prep-status-text {
+      margin: 0 0 0.35rem;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+
+    #prepBlock .prep-status-text + .prep-status-text {
+      margin-top: 0.2rem;
+    }
+
+    #prepBlock #prepReadyBlock {
+      display: grid;
+      gap: 0.85rem;
+      margin-top: 1.55rem;
+      padding-top: 0.35rem;
+    }
+
+    #prepBlock #prepReadyTitle {
+      margin: 0;
+      font-size: 1.22rem;
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+
+    #prepBlock #prepReadyText {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+
+    #prepNavigatorView #structureSummary {
+      margin-top: 1.45rem;
+      margin-bottom: 1.35rem;
+    }
+
+    #prepBlock .structure-actions {
+      margin-top: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+
+    #prepBlock .structure-review-list {
+      margin-top: 0.85rem;
+    }
+
+    #prepModeMaterials .file-btn.btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff !important;
+      background: var(--accent);
+      position: relative;
+      z-index: 0;
+    }
+
+    #prepModeMaterials .file-btn.btn-primary > span {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    #prepModeMaterials .file-btn.btn-primary input[type="file"] {
+      z-index: 2;
+    }
+
+    .structure-info-form input,
+    .structure-info-form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.45rem 0.55rem;
+      font: inherit;
+      color: var(--ink);
+      background: var(--surface, #fff);
+    }
+
+    .structure-info-form textarea {
+      min-height: 4.2rem;
+      resize: vertical;
+    }
+
+    .structure-info-form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .structure-still-needed {
+      margin-top: 0.85rem;
+    }
+
+    .structure-setup-content-preview {
+      display: block;
+      margin-top: 0.35rem;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.02);
+      font-size: 0.84rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      color: var(--ink-soft);
+      max-height: 12rem;
+      overflow: auto;
+    }
+
+    .structure-setup-preview {
+      margin-top: 0.95rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .structure-setup-preview-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.85rem;
+    }
+
+    .structure-explorer {
+      margin: 0 0 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .structure-explorer-scroll {
+      max-height: min(62vh, 720px);
+      overflow: auto;
+    }
+
+    .structure-explorer-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.88rem;
+    }
+
+    .structure-explorer-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      padding: 0.55rem 0.65rem;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 70%, var(--surface));
+      color: var(--ink-soft);
+      font-weight: 700;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .structure-explorer-table th:nth-child(1) { width: 34%; }
+    .structure-explorer-table th:nth-child(2) { width: 36%; }
+    .structure-explorer-table th:nth-child(3) { width: 16%; }
+    .structure-explorer-table th:nth-child(4) { width: 14%; }
+
+    .structure-explorer-table tbody td {
+      padding: 0.32rem 0.65rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+      color: var(--ink);
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .structure-explorer-table tbody tr:hover {
+      background: color-mix(in srgb, #233a8b 5%, transparent);
+    }
+
+    .structure-explorer-table tbody tr.is-dir-toggle {
+      cursor: pointer;
+    }
+
+    .structure-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      min-width: 0;
+    }
+
+    .structure-name-indent {
+      flex: 0 0 auto;
+      width: calc(var(--structure-depth, 0) * 1.05rem);
+    }
+
+    .structure-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.15rem;
+      height: 1.15rem;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--ink-soft);
+      font-size: 0.65rem;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .structure-toggle:hover {
+      color: var(--ink);
+      border-color: color-mix(in srgb, var(--ink) 25%, var(--line));
+    }
+
+    .structure-toggle-spacer {
+      width: 1.15rem;
+      height: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .structure-node-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .structure-node-name.is-dir::before {
+      content: "📁 ";
+    }
+
+    .structure-node-name.is-file::before {
+      content: "📄 ";
+    }
+
+    .structure-purpose-cell.is-unknown {
+      color: #8a6a2f;
+    }
+
+    .structure-meta-cell {
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .structure-tree-empty {
+      margin: 0;
+      padding: 0.85rem 0.75rem;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 820px) {
+      .structure-explorer-table th:nth-child(3),
+      .structure-explorer-table td:nth-child(3),
+      .structure-explorer-table th:nth-child(4),
+      .structure-explorer-table td:nth-child(4) {
+        display: none;
+      }
+
+      .structure-explorer-table th:nth-child(1),
+      .structure-explorer-table td:nth-child(1) { width: 45%; }
+      .structure-explorer-table th:nth-child(2),
+      .structure-explorer-table td:nth-child(2) { width: 55%; }
     }
 
     .tabs {
@@ -3275,23 +4264,19 @@
       flex-shrink: 0;
     }
 
-    .desktop-stage-node.is-done .desktop-stage-dot {
-      border-color: #3d9a6a;
-      background: #3d9a6a;
+    .desktop-stage-node.is-done .desktop-stage-dot,
+    .desktop-stage-node.is-future .desktop-stage-dot {
+      border-color: #d0d6e0;
+      background: #eef1f6;
     }
 
     .desktop-stage-node.is-current .desktop-stage-dot {
       width: 0.95rem;
       height: 0.95rem;
-      border-color: #233a8b;
-      background: #233a8b;
-      box-shadow: 0 0 0 4px color-mix(in srgb, #233a8b 14%, transparent);
+      border-color: #3d9a6a;
+      background: #3d9a6a;
+      box-shadow: 0 0 0 4px color-mix(in srgb, #3d9a6a 18%, transparent);
       margin-top: -0.1rem;
-    }
-
-    .desktop-stage-node.is-future .desktop-stage-dot {
-      border-color: #c9d0dc;
-      background: #eef1f6;
     }
 
     .desktop-stage-label {
@@ -3303,12 +4288,14 @@
       max-width: 6.2rem;
     }
 
-    .desktop-stage-node.is-done .desktop-stage-label {
-      color: #2f6b4c;
+    .desktop-stage-node.is-done .desktop-stage-label,
+    .desktop-stage-node.is-future .desktop-stage-label {
+      color: var(--ink-muted);
+      font-weight: 550;
     }
 
     .desktop-stage-node.is-current .desktop-stage-label {
-      color: var(--ink);
+      color: #2f6b4c;
       font-weight: 700;
     }
 
@@ -3317,7 +4304,7 @@
       font-size: 0.64rem;
       font-weight: 700;
       letter-spacing: 0.02em;
-      color: #233a8b;
+      color: #2f6b4c;
       line-height: 1.2;
     }
     .settings-form {
@@ -4886,211 +5873,7 @@
       .flow-actions .btn { width: 100%; }
     }
 
-.kb-panel {
-      padding: 0 0 1.5rem;
-    }
-
-    .kb-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin: 0 0 1rem;
-    }
-
-    .kb-lead {
-      margin: 0 0 1rem;
-      font-size: 0.95rem;
-      color: var(--ink-soft);
-      line-height: 1.45;
-      max-width: 40rem;
-    }
-
-    .kb-status {
-      margin: 0 0 0.85rem;
-      font-size: 0.9rem;
-      color: var(--ink-soft);
-    }
-
-    .kb-status.is-error {
-      color: #8b2e2e;
-    }
-
-    .kb-empty {
-      margin: 0;
-      padding: 1.25rem 0.15rem;
-      color: var(--ink-muted);
-      font-size: 0.95rem;
-      line-height: 1.45;
-    }
-
-    .kb-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 0.55rem;
-    }
-
-    .kb-list-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0.35rem 1rem;
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--surface);
-      padding: 0.75rem 0.9rem;
-      cursor: pointer;
-      color: inherit;
-      font: inherit;
-    }
-
-    .kb-list-item:hover {
-      border-color: var(--ink-muted);
-    }
-
-    .kb-list-title {
-      font-weight: 650;
-      font-size: 0.95rem;
-    }
-
-    .kb-list-meta {
-      grid-column: 1 / -1;
-      font-size: 0.86rem;
-      color: var(--ink-soft);
-    }
-
-    .kb-list-status {
-      font-size: 0.82rem;
-      color: var(--ink-muted);
-      white-space: nowrap;
-    }
-
-    .kb-card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1rem 1.05rem;
-      background: var(--surface);
-      max-width: 36rem;
-    }
-
-    .kb-card-row {
-      margin: 0 0 0.55rem;
-      font-size: 0.92rem;
-      line-height: 1.4;
-    }
-
-    .kb-card-label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--ink-muted);
-      margin-bottom: 0.1rem;
-    }
-
-    .kb-preview {
-      margin: 0.75rem 0 0.35rem;
-      max-width: 220px;
-      max-height: 160px;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      object-fit: contain;
-      background: rgba(0, 0, 0, 0.03);
-    }
-
-    .kb-card-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.55rem;
-      margin-top: 1rem;
-    }
-
-    .kb-confirm {
-      margin-top: 0.85rem;
-      padding-top: 0.85rem;
-      border-top: 1px solid var(--line);
-    }
-
-    .kb-confirm p {
-      margin: 0 0 0.65rem;
-      font-size: 0.9rem;
-      color: var(--ink);
-      line-height: 1.4;
-    }
-
-    .kb-review {
-      margin-top: 1.1rem;
-      max-width: 42rem;
-    }
-
-    .kb-review-note {
-      margin: 0 0 0.85rem;
-      font-size: 0.88rem;
-      color: var(--ink-soft);
-      line-height: 1.4;
-    }
-
-    .kb-review-block {
-      margin: 0 0 1rem;
-    }
-
-    .kb-review-block h3 {
-      margin: 0 0 0.45rem;
-      font-size: 0.95rem;
-      font-weight: 650;
-    }
-
-    .kb-item {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 0.7rem 0.8rem;
-      margin: 0 0 0.55rem;
-      background: var(--surface);
-    }
-
-    .kb-item-text {
-      margin: 0 0 0.35rem;
-      font-size: 0.92rem;
-      line-height: 1.4;
-    }
-
-    .kb-item-meta {
-      margin: 0 0 0.45rem;
-      font-size: 0.82rem;
-      color: var(--ink-soft);
-      line-height: 1.35;
-    }
-
-    .kb-item-quote {
-      margin: 0 0 0.55rem;
-      padding: 0.45rem 0.55rem;
-      border-left: 3px solid var(--line);
-      font-size: 0.84rem;
-      color: var(--ink-soft);
-      white-space: pre-wrap;
-    }
-
-    .kb-item-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    .kb-item-edit {
-      width: 100%;
-      box-sizing: border-box;
-      margin: 0 0 0.45rem;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 0.45rem 0.55rem;
-      font: inherit;
-      min-height: 4rem;
-      resize: vertical;
-    }
-
-</style>
+  </style>
 </head>
 <body>
   <div class="launch-notice" id="launchNotice" hidden>
@@ -5157,31 +5940,33 @@
           </button>
           <span class="os-mobile-bar-title" id="osMobileBarTitle">Проекты</span>
         </div>
-        <header class="project-chrome" id="projectChrome" hidden>
-          <div class="project-chrome-top">
-            <button type="button" class="ai-pos-level-nav" data-os-nav="home" id="osBackToProjects" aria-label="К списку проектов" title="К списку проектов">
-              <img class="ai-pos-level-nav-icon" src="assets/branding/ai-pos-icon-v1.png" width="28" height="28" alt="" />
-              <span class="ai-pos-level-nav-label">← Проекты</span>
-            </button>
+        <aside class="project-chrome" id="projectChrome" hidden aria-label="Панель проектов">
+          <div class="ws-rail-brand">
+            <img src="assets/branding/ai-pos-icon-v1.png" width="28" height="28" alt="" />
+            <span class="ws-rail-brand-name">AI POS</span>
+          </div>
+          <button type="button" class="ws-rail-home" id="wsGoHome">← На главную</button>
+          <div class="ws-rail-recent-block">
+            <p class="ws-rail-heading">Недавние проекты</p>
+            <div class="ws-recent" id="wsRecentProjects"></div>
+          </div>
+          <div class="ws-rail-actions">
+            <button type="button" class="ws-rail-action" id="wsAllProjects">Все проекты</button>
+            <button type="button" class="ws-rail-action is-primary" id="wsNewProject">Новый проект</button>
+            <button type="button" class="ws-rail-action" id="wsOpenSettings">Настройки</button>
+          </div>
+          <!-- Служебные элементы для совместимости навигации (не показываются) -->
+          <div class="visually-hidden" aria-hidden="true">
+            <button type="button" id="osBackToProjects" tabindex="-1">← Проекты</button>
             <div class="project-picker" id="projectPicker">
-              <button type="button" class="project-picker-trigger" id="btnProjectPicker" aria-haspopup="listbox" aria-expanded="false" aria-controls="projectPickerMenu">
+              <button type="button" class="project-picker-trigger" id="btnProjectPicker" aria-haspopup="listbox" aria-expanded="false" aria-controls="projectPickerMenu" tabindex="-1">
                 <span class="project-picker-label" id="projectPickerLabel">—</span>
-                <span class="project-picker-caret" aria-hidden="true">▾</span>
               </button>
               <div class="project-picker-menu" id="projectPickerMenu" role="listbox" hidden></div>
             </div>
-            <p class="project-chrome-name visually-hidden" id="osNavProjectName">—</p>
+            <p id="osNavProjectName">—</p>
           </div>
-          <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
-            <button type="button" class="project-section-nav-item" data-os-nav="overview">Обзор</button>
-            <button type="button" class="project-section-nav-item" data-os-nav="current-task">Текущая задача</button>
-            <button type="button" class="project-section-nav-item" data-os-nav="rules">Правила</button>
-            <button type="button" class="project-section-nav-item" data-os-nav="materials">Материалы</button>
-            <button type="button" class="project-section-nav-item" data-os-nav="specialists">Специалисты</button>
-            <button type="button" class="project-section-nav-item" data-os-nav="docs">Документы</button>
-            <button type="button" class="project-section-nav-item" data-os-nav="settings">Настройки</button>
-          </nav>
-        </header>
+        </aside>
 
     <section class="panel is-active" id="panelList" aria-label="Рабочий стол">
       <div class="desktop" id="desktopRoot">
@@ -5212,8 +5997,8 @@
               <button type="button" class="pm-search-find" id="btnPmSearch">Найти</button>
             </div>
             <div class="pm-toolbar-actions">
-              <button type="button" class="btn btn-ghost" id="btnOpenExample">Посмотреть пример</button>
               <button type="button" class="btn btn-ghost" id="btnOpenKnowledgeHome">База знаний</button>
+              <button type="button" class="btn btn-ghost" id="btnOpenExample">Посмотреть пример</button>
               <button type="button" class="btn btn-secondary" id="btnPmCreate">Создать</button>
               <button type="button" class="btn btn-primary" id="btnPmConnect">Подключить</button>
             </div>
@@ -5272,7 +6057,6 @@
             <p class="system-projects-empty" id="systemProjectsEmpty" hidden>Пока нет проектов.</p>
           </section>
         </div>
-
 
         <div class="system-home kb-panel" id="systemKnowledge" hidden>
           <div class="pm-topbar">
@@ -5736,6 +6520,18 @@
 
     <section class="panel" id="panelWorkspace" aria-label="Проект" data-detail-level="technical">
       <div class="workspace-shell">
+        <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
+          <button type="button" class="project-section-nav-item" data-os-nav="structure" data-nav-modes="user developer">Навигатор проекта</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer" data-requires-setup="true">Состояние проекта</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="current-task" data-nav-modes="user developer" data-requires-setup="true" data-nav-label-user="Работа над проектом" data-nav-label-developer="Текущая задача">Работа над проектом</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="rules" data-nav-modes="developer">Правила</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="materials" data-nav-modes="developer">Материалы</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="specialists" data-nav-modes="developer">Специалисты</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="docs" data-nav-modes="developer">Документы</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="settings" data-nav-modes="user developer">Настройки</button>
+        </nav>
+        <p class="project-section-nav-gate-hint" id="osNavSetupGateHint" hidden>Сначала проверьте и настройте проект</p>
+
         <div class="workspace-head">
           <div class="workspace-title-block">
             <nav class="crumbs" id="crumbs" aria-label="Иерархия: Проект → Модуль → Текущий этап">
@@ -5749,7 +6545,6 @@
           </div>
           <div class="workspace-head-actions">
             <button type="button" class="btn btn-ghost" id="btnBackToList">На главную</button>
-            <button type="button" class="ws-rail-action" id="wsOpenKnowledge">База знаний</button>
             <button type="button" class="btn btn-secondary" id="btnNewFromWorkspace">Новый проект</button>
           </div>
         </div>
@@ -5945,20 +6740,20 @@
 
         <div class="tab-panel" id="tab-overview" data-tab-panel="overview" hidden>
           <div class="project-overview" id="projectOverview">
-            <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Этапы проекта" hidden></div>
-            <h3 class="section-heading lv-project">Обзор проекта</h3>
-            <p class="project-overview-lead">Кратко о проекте: зачем он нужен и куда движется.</p>
+            <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Текущая стадия AI POS" hidden></div>
+            <h3 class="section-heading lv-project">Состояние проекта</h3>
+            <p class="project-overview-lead">Экран текущего состояния проекта: стадия AI POS и основные сведения о проекте.</p>
             <div class="overview-grid" id="projectOverviewGrid">
               <div class="overview-item is-goal">
                 <span class="field-label">Название</span>
                 <p id="poName">—</p>
               </div>
               <div class="overview-item">
-                <span class="field-label">Статус</span>
+                <span class="field-label">Состояние готовности</span>
                 <p id="poStatus">—</p>
               </div>
               <div class="overview-item wide is-goal">
-                <span class="field-label">Идея / цель</span>
+                <span class="field-label">Краткое описание</span>
                 <p id="poGoal">—</p>
               </div>
               <div class="overview-item">
@@ -5970,7 +6765,7 @@
                 <p id="poExpected">—</p>
               </div>
               <div class="overview-item wide is-path">
-                <span class="field-label">Путь к папке</span>
+                <span class="field-label">Рабочая папка</span>
                 <p class="overview-path" id="poPath">не указана</p>
               </div>
             </div>
@@ -6041,57 +6836,235 @@
           <p class="section-note">Раздел будет создан на следующем этапе</p>
         </div>
 
+        <div class="tab-panel" id="tab-structure" data-tab-panel="structure" hidden>
+          <div id="prepNavigatorView">
+            <div id="prepBlock" aria-live="polite">
+              <h3 class="section-heading" id="prepHeading">Подготовка проекта</h3>
+              <p class="prep-status-text" id="prepLead">AI POS подготавливает проект к дальнейшей работе.</p>
+              <div class="structure-actions" id="prepActions" hidden>
+                <button type="button" class="btn btn-primary" id="btnPrepContinue">Продолжить</button>
+                <p class="structure-action-hint" id="prepActionHint" hidden></p>
+              </div>
+              <ul class="structure-review-list" id="prepProgressList"></ul>
+              <div id="prepReadyBlock" hidden>
+                <p class="prep-status-text" id="prepReadyTitle">Проект подготовлен.</p>
+                <p class="prep-status-text" id="prepReadyText">AI POS полностью подготовила проект к дальнейшей работе.</p>
+              </div>
+              <p class="structure-review-line" id="prepReadyLine" hidden aria-hidden="true"></p>
+            </div>
+
+            <div class="structure-summary" id="structureSummary">
+              <span class="structure-stat">Папок: <strong id="structureFolderCount">—</strong></span>
+              <span class="structure-stat">Файлов: <strong id="structureFileCount">—</strong></span>
+            </div>
+            <p class="structure-status" id="structureStatus" hidden aria-live="polite"></p>
+
+            <!-- Служебные узлы диагностики скрыты: технику не показываем -->
+            <section class="structure-review" id="structureReview" hidden aria-live="polite">
+              <p class="structure-review-line" id="structureReviewDone"></p>
+              <p class="structure-review-line" id="structureReviewCount"></p>
+              <div id="structureReviewGroups"></div>
+              <div class="structure-review-actions" id="structureReviewActions" hidden>
+                <p class="structure-setup-gate-note" id="structureSetupGateNote" hidden></p>
+                <button type="button" class="btn btn-primary" id="btnStructureSetup" hidden tabindex="-1" aria-hidden="true"></button>
+              </div>
+              <section class="structure-setup-preview" id="structureSetupPreview" hidden aria-live="polite">
+                <p class="structure-review-line" id="structureSetupPreviewTitle"></p>
+                <p class="structure-review-line" id="structureSetupPreviewHint"></p>
+                <ul class="structure-review-list" id="structureSetupPreviewList"></ul>
+                <div id="structureSetupStillNeeded" class="structure-still-needed" hidden>
+                  <ul class="structure-review-list" id="structureSetupStillNeededList"></ul>
+                </div>
+                <div class="structure-setup-preview-actions">
+                  <button type="button" class="btn btn-primary" id="btnStructureSetupConfirm" hidden tabindex="-1" aria-hidden="true"></button>
+                  <button type="button" class="btn btn-secondary" id="btnStructureSetupCancel" hidden tabindex="-1" aria-hidden="true"></button>
+                </div>
+              </section>
+            </section>
+
+            <div class="structure-explorer" id="structureTree" aria-label="Структура проекта"></div>
+          </div>
+
+          <div id="prepTellScreen" hidden aria-label="Расскажите о проекте">
+            <div class="structure-actions" style="margin-bottom:0.75rem">
+              <button type="button" class="btn btn-ghost" id="btnPrepTellBack">← Назад</button>
+            </div>
+            <h3 class="section-heading" id="prepTellHeading">Расскажите о проекте</h3>
+            <section class="structure-info-form" id="structureInfoForm">
+              <p class="structure-info-form-hint" id="prepTellLead">
+                AI POS почти завершила подготовку проекта.
+                Осталось немного рассказать о самом проекте.
+              </p>
+              <p class="structure-info-form-title" id="prepModeTitle">Как вам удобнее рассказать о проекте?</p>
+              <div class="structure-info-form-grid" id="prepModeChoice" style="margin-bottom:0.85rem">
+                <label class="prep-mode-option">
+                  <input type="radio" name="prepTellMode" id="prepModeMaterialsRadio" value="materials" checked />
+                  <span>Добавить материалы проекта (рекомендуется)</span>
+                </label>
+                <label class="prep-mode-option">
+                  <input type="radio" name="prepTellMode" id="prepModeStoryRadio" value="story" />
+                  <span>Рассказать своими словами</span>
+                </label>
+                <label class="prep-mode-option">
+                  <input type="radio" name="prepTellMode" id="prepModeQuestionsRadio" value="questions" />
+                  <span>Ответить на несколько вопросов</span>
+                </label>
+              </div>
+
+              <div id="prepModeMaterials">
+                <p class="structure-info-form-hint">
+                  Если у вас уже есть материалы по проекту, просто добавьте их.
+                  AI POS самостоятельно изучит документы и подготовит описание проекта.
+                </p>
+                <div class="structure-info-form-actions" style="margin-top:0.35rem">
+                  <label class="btn btn-primary file-btn" for="prepMaterialsInput">
+                    <span>Добавить материалы</span>
+                    <input
+                      id="prepMaterialsInput"
+                      type="file"
+                      multiple
+                      accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.txt,.md,.markdown,.png,.jpg,.jpeg,.webp,.gif,.svg,.zip,.rar,.7z,.json,.rtf,.odt,.csv,image/*,text/*,application/pdf"
+                    />
+                  </label>
+                </div>
+                <ul class="structure-review-list" id="prepMaterialsList" style="margin-top:0.75rem"></ul>
+                <p class="structure-info-form-hint" id="prepMaterialsStatus" hidden></p>
+              </div>
+
+              <div id="prepModeStory" hidden>
+                <p class="structure-info-form-title">Расскажите о проекте</p>
+                <p class="structure-info-form-hint">
+                  Расскажите о проекте так, как рассказали бы человеку.
+                  Не думайте о правильных формулировках.
+                  AI POS сама выделит главное и при необходимости задаст несколько уточняющих вопросов.
+                </p>
+                <textarea id="prepStoryText" rows="8" placeholder="Напишите своими словами…"></textarea>
+              </div>
+
+              <div id="prepModeQuestions" hidden>
+                <div class="structure-info-form-grid">
+                  <label id="prepFieldDescriptionWrap">Что вы хотите создать?
+                    <textarea id="structureInfoDescription" rows="3" placeholder="Например, приложение, сайт или сервис"></textarea>
+                  </label>
+                  <label id="prepFieldGoalWrap">Для чего нужен этот проект?
+                    <textarea id="structureInfoGoal" rows="3" placeholder="Зачем вы его делаете"></textarea>
+                  </label>
+                  <label id="prepFieldAudienceWrap">Кто будет пользоваться результатом?
+                    <span class="structure-info-form-hint" style="margin:0">можно пропустить</span>
+                    <textarea id="structureInfoPassport" rows="2" placeholder="Если пока неясно — оставьте пустым"></textarea>
+                  </label>
+                  <label id="prepFieldResultWrap">Что должно получиться в итоге?
+                    <span class="structure-info-form-hint" style="margin:0">это можно изменить позже</span>
+                    <textarea id="structureInfoResult" rows="3" placeholder="Какой результат вы хотите увидеть"></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <div class="structure-info-form-actions">
+                <button type="button" class="btn btn-primary" id="btnPrepContinueForm">Продолжить проект</button>
+                <button type="button" class="btn btn-secondary" id="btnStructureInfoClose" hidden tabindex="-1" aria-hidden="true"></button>
+              </div>
+            </section>
+          </div>
+          <button type="button" id="btnStructureReview" hidden tabindex="-1" aria-hidden="true"></button>
+          <button type="button" id="btnStructureInfoPreview" hidden tabindex="-1" aria-hidden="true"></button>
+          <button type="button" id="btnStructureInfoSave" hidden tabindex="-1" aria-hidden="true"></button>
+          <textarea id="structureInfoRoadmap" hidden aria-hidden="true"></textarea>
+          <textarea id="structureInfoArchitecture" hidden aria-hidden="true"></textarea>
+          <textarea id="structureInfoDesignRules" hidden aria-hidden="true"></textarea>
+          <textarea id="structureInfoDecisions" hidden aria-hidden="true"></textarea>
+          <textarea id="structureInfoDataSchema" hidden aria-hidden="true"></textarea>
+        </div>
+
         <div class="tab-panel" id="tab-settings" data-tab-panel="settings">
           <h3 class="section-heading">Настройки</h3>
-          <p class="section-note">Параметры текущего проекта.</p>
-          <form id="projectSettingsForm" class="settings-form" novalidate>
+          <p class="section-note">Внешний вид и параметры самого AI POS.</p>
+
+          <!-- Служебные поля проекта скрыты: логика и API сохранены -->
+          <form id="projectSettingsForm" class="settings-form" novalidate hidden aria-hidden="true" tabindex="-1">
             <div class="field">
               <label for="settingsPrimaryTool">Основной инструмент</label>
-              <span class="hint">Используется на экране «Текущий этап» для передачи задания</span>
               <select id="settingsPrimaryTool" name="primaryTool">
                 <option value="">Не выбран</option>
               </select>
             </div>
-            <div class="field" style="margin-top:0.85rem">
+            <div class="field">
               <label for="settingsAiModel">Модель ИИ</label>
-              <span class="hint">Предпочтительная модель в основном инструменте</span>
               <select id="settingsAiModel" name="aiModel">
                 <option value="">Не выбрана</option>
               </select>
             </div>
-            <div class="field" style="margin-top:0.85rem">
+            <div class="field">
               <label for="settingsWorkFolder">Рабочая папка</label>
-              <span class="hint">Путь к папке проекта на диске</span>
               <input id="settingsWorkFolder" name="workFolder" type="text" readonly />
             </div>
-            <div class="field" style="margin-top:0.85rem">
+            <div class="field">
               <label for="settingsLaunchUrl">Адрес приложения</label>
-              <span class="hint">Сайт вашего приложения, например https://127.0.0.1:3000/</span>
               <input id="settingsLaunchUrl" name="launchUrl" type="url" inputmode="url" placeholder="https://" autocomplete="off" />
             </div>
-            <div class="field" style="margin-top:0.85rem">
+            <div class="field">
               <label>Окно для снимка</label>
-              <span class="hint">Запоминается после выбора. Если окно закроется, AI POS попросит выбрать его снова.</span>
               <p class="flow-meta" id="settingsCaptureWindowMeta">Не выбрано</p>
-              <div class="flow-actions" style="margin-top:0.45rem">
-                <button type="button" class="btn btn-ghost" id="btnClearCaptureWindow">Сбросить окно</button>
-              </div>
+              <button type="button" class="btn btn-ghost" id="btnClearCaptureWindow">Сбросить окно</button>
             </div>
-            <div class="section-actions" style="margin-top:1rem">
+            <div class="section-actions">
               <button type="submit" class="btn btn-primary" id="btnSaveProjectSettings">Сохранить</button>
               <span class="section-note" id="settingsSaveNote" hidden style="margin:0">Сохранено</span>
             </div>
           </form>
 
-          <div class="settings-app">
+          <div class="settings-app" id="settingsAppearanceBlock">
+            <h3 class="section-heading">Внешний вид</h3>
+            <div class="settings-theme-list" role="radiogroup" aria-label="Тема оформления">
+              <label class="settings-theme-option">
+                <input type="radio" name="settingsTheme" id="settingsThemeLight" value="light" checked />
+                <span>Светлая тема</span>
+              </label>
+              <label class="settings-theme-option">
+                <input type="radio" name="settingsTheme" id="settingsThemeDark" value="dark" />
+                <span>Тёмная тема</span>
+              </label>
+              <label class="settings-theme-option">
+                <input type="radio" name="settingsTheme" id="settingsThemeSystem" value="system" />
+                <span>Использовать системную тему</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-app" id="settingsAiPosBlock">
             <h3 class="section-heading">AI POS</h3>
-            <p class="section-note">Эти действия относятся к самому AI POS, а не к текущему проекту.</p>
-            <div class="section-actions" style="margin-top:0.75rem">
+            <div class="settings-app-row">
               <button type="button" class="btn btn-secondary" data-shortcut-button>Создать ярлык AI POS</button>
             </div>
             <p class="hint" style="margin-top:0.5rem">Ярлык появится на рабочем столе и будет открывать AI POS правильно. Если ярлык перестал работать после переноса папки программы, создайте его заново.</p>
             <p class="section-note" data-shortcut-note hidden style="margin:0" aria-live="polite"></p>
             <p class="form-error" data-shortcut-error aria-live="polite"></p>
+            <div class="settings-app-row">
+              <button type="button" class="btn btn-secondary" id="btnSettingsCheckUpdates">Проверить обновления</button>
+            </div>
+            <p class="section-note" id="settingsUpdatesNote" hidden style="margin:0.45rem 0 0" aria-live="polite"></p>
+            <p class="settings-version" id="settingsAppVersion">Версия AI POS: локальная сборка</p>
+          </div>
+
+          <div class="settings-app" id="settingsDeveloperBlock" hidden>
+            <h3 class="section-heading">Для разработчиков</h3>
+            <div class="settings-developer-option">
+              <label class="settings-check" for="settingsDeveloperMode">
+                <input type="checkbox" id="settingsDeveloperMode" />
+                <span class="settings-check-text">
+                  <span class="settings-check-title">Режим разработчика</span>
+                  <span class="hint">Показывает дополнительные разделы: правила, материалы, специалисты и документы.</span>
+                </span>
+              </label>
+            </div>
+            <div class="settings-developer-option">
+              <span class="settings-check-title">Диагностика</span>
+              <p class="hint" style="margin:0.25rem 0 0">Служебные сведения о работе AI POS. Раздел будет расширен позже.</p>
+            </div>
+            <div class="settings-developer-option">
+              <span class="settings-check-title">Служебные журналы</span>
+              <p class="hint" style="margin:0.25rem 0 0">Журналы для разбора сбоев. Раздел будет расширен позже.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -6207,6 +7180,7 @@
       var STORAGE_KEY = "ai-pos-projects-v1";
       var APPEARANCE_KEY = "ai-pos-appearance-v1";
       var DETAIL_LEVEL_KEY = "ai-pos-detail-level-v1";
+      var WORKSPACE_MODE_KEY = "ai-pos-workspace-mode-v1";
       var LAST_OPENED_KEY = "ai-pos-last-opened-v1";
       var TEMPLATES_KEY = "ai-pos-templates-v1";
       var GATE_KEY = "ai-pos-gate-confirmations-v1";
@@ -6215,6 +7189,9 @@
       var MAX_DATA_URL = 400000;
       var DETAIL_LEVELS = ["basic", "extended", "technical"];
       var DETAIL_TAB_BASIC = { overview: true, task: true, work: true };
+      var WORKSPACE_MODES = ["user", "developer"];
+      var USER_MODE_TABS = { overview: true, task: true, work: true, structure: true, settings: true };
+      var USER_MODE_NAV = { overview: true, "current-task": true, structure: true, settings: true };
 
       var DEMO_RULES = {
         mission: "Создать полезное персональное приложение дня, которым хочется пользоваться ежедневно.",
@@ -6523,6 +7500,8 @@
         // модель Review не расширяем, ключ — тот же, что у записи проверки.
         stageShots: {},
         detailLevel: "technical",
+        // user | developer — видимость разделов верхней навигации проекта
+        workspaceMode: "user",
         // Пример живёт только в текущем сеансе и не становится текущим проектом.
         exampleMode: false,
         // Журнал выполненных заданий: только чтение на этом этапе.
@@ -6535,6 +7514,12 @@
         passportByFolder: {},
         passportRequestSeq: 0,
         stageRequestSeq: 0,
+        structureByProject: {},
+        structureRequestSeq: 0,
+        structureLastData: null,
+        knowledgeSources: [],
+        knowledgeSelectedId: null,
+        knowledgeStoragePath: "",
         cliAnalysisByProject: {},
         cliFreshnessTimer: null,
         createWizard: {
@@ -6567,29 +7552,6 @@
       };
 
       var els = {
-        wsOpenKnowledge: document.getElementById("wsOpenKnowledge"),
-        btnOpenKnowledgeHome: document.getElementById("btnOpenKnowledgeHome"),
-        systemKnowledge: document.getElementById("systemKnowledge"),
-        btnKbAddSource: document.getElementById("btnKbAddSource"),
-        btnKbBackProjects: document.getElementById("btnKbBackProjects"),
-        kbBrandHome: document.getElementById("kbBrandHome"),
-        kbStatus: document.getElementById("kbStatus"),
-        kbListView: document.getElementById("kbListView"),
-        kbEmpty: document.getElementById("kbEmpty"),
-        kbSourceList: document.getElementById("kbSourceList"),
-        kbCardView: document.getElementById("kbCardView"),
-        kbCardTitle: document.getElementById("kbCardTitle"),
-        kbCardType: document.getElementById("kbCardType"),
-        kbCardDate: document.getElementById("kbCardDate"),
-        kbCardSize: document.getElementById("kbCardSize"),
-        kbCardStatus: document.getElementById("kbCardStatus"),
-        kbCardOrigin: document.getElementById("kbCardOrigin"),
-        kbCardPreview: document.getElementById("kbCardPreview"),
-        btnKbBackList: document.getElementById("btnKbBackList"),
-        btnKbDelete: document.getElementById("btnKbDelete"),
-        kbDeleteConfirm: document.getElementById("kbDeleteConfirm"),
-        btnKbDeleteConfirm: document.getElementById("btnKbDeleteConfirm"),
-        btnKbDeleteCancel: document.getElementById("btnKbDeleteCancel"),
         appShell: document.getElementById("appShell"),
         bootScreen: document.getElementById("bootScreen"),
         osShell: document.getElementById("osShell"),
@@ -6612,10 +7574,107 @@
         projectPickerLabel: document.getElementById("projectPickerLabel"),
         projectPickerMenu: document.getElementById("projectPickerMenu"),
         projectChrome: document.getElementById("projectChrome"),
+        prepHeading: document.getElementById("prepHeading"),
+        prepLead: document.getElementById("prepLead"),
+        prepProgressList: document.getElementById("prepProgressList"),
+        prepReadyLine: document.getElementById("prepReadyLine"),
+        prepReadyBlock: document.getElementById("prepReadyBlock"),
+        prepReadyTitle: document.getElementById("prepReadyTitle"),
+        prepReadyText: document.getElementById("prepReadyText"),
+        prepActions: document.getElementById("prepActions"),
+        prepActionHint: document.getElementById("prepActionHint"),
+        prepNavigatorView: document.getElementById("prepNavigatorView"),
+        prepTellScreen: document.getElementById("prepTellScreen"),
+        prepTellHeading: document.getElementById("prepTellHeading"),
+        btnPrepTellBack: document.getElementById("btnPrepTellBack"),
+        prepTellLead: document.getElementById("prepTellLead"),
+        prepModeTitle: document.getElementById("prepModeTitle"),
+        prepModeChoice: document.getElementById("prepModeChoice"),
+        prepModeMaterials: document.getElementById("prepModeMaterials"),
+        prepModeStory: document.getElementById("prepModeStory"),
+        prepModeQuestions: document.getElementById("prepModeQuestions"),
+        prepModeMaterialsRadio: document.getElementById("prepModeMaterialsRadio"),
+        prepModeStoryRadio: document.getElementById("prepModeStoryRadio"),
+        prepModeQuestionsRadio: document.getElementById("prepModeQuestionsRadio"),
+        prepMaterialsInput: document.getElementById("prepMaterialsInput"),
+        prepMaterialsList: document.getElementById("prepMaterialsList"),
+        prepMaterialsStatus: document.getElementById("prepMaterialsStatus"),
+        prepStoryText: document.getElementById("prepStoryText"),
+        prepFieldGoalWrap: document.getElementById("prepFieldGoalWrap"),
+        prepFieldDescriptionWrap: document.getElementById("prepFieldDescriptionWrap"),
+        prepFieldResultWrap: document.getElementById("prepFieldResultWrap"),
+        prepFieldAudienceWrap: document.getElementById("prepFieldAudienceWrap"),
+        btnPrepContinue: document.getElementById("btnPrepContinue"),
+        btnPrepContinueForm: document.getElementById("btnPrepContinueForm"),
+        structureFolderCount: document.getElementById("structureFolderCount"),
+        structureFileCount: document.getElementById("structureFileCount"),
+        btnStructureReview: document.getElementById("btnStructureReview"),
+        structureStatus: document.getElementById("structureStatus"),
+        structureTree: document.getElementById("structureTree"),
+        structureReview: document.getElementById("structureReview"),
+        structureReviewDone: document.getElementById("structureReviewDone"),
+        structureReviewCount: document.getElementById("structureReviewCount"),
+        structureReviewGroups: document.getElementById("structureReviewGroups"),
+        structureInfoForm: document.getElementById("structureInfoForm"),
+        structureInfoGoal: document.getElementById("structureInfoGoal"),
+        structureInfoDescription: document.getElementById("structureInfoDescription"),
+        structureInfoResult: document.getElementById("structureInfoResult"),
+        structureInfoPassport: document.getElementById("structureInfoPassport"),
+        structureInfoRoadmap: document.getElementById("structureInfoRoadmap"),
+        structureInfoArchitecture: document.getElementById("structureInfoArchitecture"),
+        structureInfoDesignRules: document.getElementById("structureInfoDesignRules"),
+        structureInfoDecisions: document.getElementById("structureInfoDecisions"),
+        structureInfoDataSchema: document.getElementById("structureInfoDataSchema"),
+        btnStructureInfoPreview: document.getElementById("btnStructureInfoPreview"),
+        btnStructureInfoSave: document.getElementById("btnStructureInfoSave"),
+        btnStructureInfoClose: document.getElementById("btnStructureInfoClose"),
+        structureReviewActions: document.getElementById("structureReviewActions"),
+        structureSetupGateNote: document.getElementById("structureSetupGateNote"),
+        btnStructureSetup: document.getElementById("btnStructureSetup"),
+        structureSetupPreview: document.getElementById("structureSetupPreview"),
+        structureSetupPreviewTitle: document.getElementById("structureSetupPreviewTitle"),
+        structureSetupPreviewHint: document.getElementById("structureSetupPreviewHint"),
+        structureSetupPreviewList: document.getElementById("structureSetupPreviewList"),
+        structureSetupStillNeeded: document.getElementById("structureSetupStillNeeded"),
+        structureSetupStillNeededList: document.getElementById("structureSetupStillNeededList"),
+        btnStructureSetupConfirm: document.getElementById("btnStructureSetupConfirm"),
+        btnStructureSetupCancel: document.getElementById("btnStructureSetupCancel"),
+        wsGoHome: document.getElementById("wsGoHome"),
+        wsRecentProjects: document.getElementById("wsRecentProjects"),
+        wsAllProjects: document.getElementById("wsAllProjects"),
+        wsNewProject: document.getElementById("wsNewProject"),
+        wsOpenSettings: document.getElementById("wsOpenSettings"),
+        btnOpenKnowledgeHome: document.getElementById("btnOpenKnowledgeHome"),
         osNavProject: document.getElementById("osNavProject"),
         osNavProjectName: document.getElementById("osNavProjectName"),
+        osNavSetupGateHint: document.getElementById("osNavSetupGateHint"),
+        settingsDeveloperMode: document.getElementById("settingsDeveloperMode"),
+        settingsDeveloperBlock: document.getElementById("settingsDeveloperBlock"),
+        btnSettingsCheckUpdates: document.getElementById("btnSettingsCheckUpdates"),
+        settingsUpdatesNote: document.getElementById("settingsUpdatesNote"),
         osBackToProjects: document.getElementById("osBackToProjects"),
         systemHome: document.getElementById("systemHome"),
+        systemKnowledge: document.getElementById("systemKnowledge"),
+        btnKbAddSource: document.getElementById("btnKbAddSource"),
+        btnKbBackProjects: document.getElementById("btnKbBackProjects"),
+        kbBrandHome: document.getElementById("kbBrandHome"),
+        kbStatus: document.getElementById("kbStatus"),
+        kbListView: document.getElementById("kbListView"),
+        kbEmpty: document.getElementById("kbEmpty"),
+        kbSourceList: document.getElementById("kbSourceList"),
+        kbCardView: document.getElementById("kbCardView"),
+        kbCardTitle: document.getElementById("kbCardTitle"),
+        kbCardType: document.getElementById("kbCardType"),
+        kbCardDate: document.getElementById("kbCardDate"),
+        kbCardSize: document.getElementById("kbCardSize"),
+        kbCardStatus: document.getElementById("kbCardStatus"),
+        kbCardOrigin: document.getElementById("kbCardOrigin"),
+        kbCardPreview: document.getElementById("kbCardPreview"),
+        btnKbBackList: document.getElementById("btnKbBackList"),
+        btnKbDelete: document.getElementById("btnKbDelete"),
+        kbDeleteConfirm: document.getElementById("kbDeleteConfirm"),
+        btnKbDeleteConfirm: document.getElementById("btnKbDeleteConfirm"),
+        btnKbDeleteCancel: document.getElementById("btnKbDeleteCancel"),
         pmSearch: document.getElementById("pmSearch"),
         btnPmSearch: document.getElementById("btnPmSearch"),
         pmTable: document.getElementById("pmTable"),
@@ -7203,6 +8262,9 @@
         project.launchUrl = normalizeLaunchUrl(
           project.launchUrl || project.launch_url || project.launchTarget || project.launch_target || ""
         );
+        project.preview_url = normalizeLaunchUrl(
+          project.preview_url || project.previewUrl || ""
+        );
         project.captureWindowHwnd = String(project.captureWindowHwnd || "").trim();
         project.captureWindowTitle = String(project.captureWindowTitle || "").trim();
         project.captureWindowProcess = String(project.captureWindowProcess || "").trim();
@@ -7211,6 +8273,7 @@
         project.aiModel = normalizeAiModel(project.aiModel);
         project.stage = project.stage || "Анализ";
         project.status = project.status || "В работе";
+        project.setupPrepared = project.setupPrepared === true;
         ensureProjectRules(project);
 
         for (var m = 0; m < project.modules.length; m++) {
@@ -7414,8 +8477,11 @@
           if (nav.view === "workspace") {
             var projectId = nav.projectId || null;
             if (projectExistsForNav(projectId)) {
-              state.activeTab = nav.tab || "overview";
-              openWorkspace(projectId, !!opts.keepScroll, openOpts);
+              openWorkspace(
+                projectId,
+                !!opts.keepScroll,
+                Object.assign({}, openOpts, { enterProject: true })
+              );
               return;
             }
             openSystemHome(openOpts);
@@ -7512,6 +8578,213 @@
           els.osNavProjectName.textContent = project ? (project.name || "Проект") : "—";
         }
         renderProjectPicker();
+        renderWorkspaceRail();
+        syncWorkspaceModeUi();
+      }
+
+      function railStageLabel(project) {
+        return userStageCardLabel(resolveUiStageCode(project), "—");
+      }
+
+      function recentProjectsForRail() {
+        var entries = [];
+        var seen = {};
+        function pushProject(project) {
+          if (!project || !project.id || seen[project.id]) return;
+          seen[project.id] = true;
+          entries.push(project);
+        }
+        if (state.exampleMode) pushProject(DEMO_PROJECT);
+        var current = findRealProject(state.currentId);
+        if (current) pushProject(current);
+        if (state.lastOpenedId) pushProject(findRealProject(state.lastOpenedId));
+        var sorted = state.projects.slice().sort(function (a, b) {
+          var am = Date.parse(a && (a.updatedAt || a.createdAt)) || 0;
+          var bm = Date.parse(b && (b.updatedAt || b.createdAt)) || 0;
+          return bm - am;
+        });
+        for (var i = 0; i < sorted.length; i++) pushProject(sorted[i]);
+        return entries.slice(0, 3);
+      }
+
+      function renderWorkspaceRail() {
+        if (!els.wsRecentProjects) return;
+        var recent = recentProjectsForRail();
+        if (!recent.length) {
+          els.wsRecentProjects.innerHTML = '<p class="ws-recent-empty">Пока нет недавних проектов</p>';
+          return;
+        }
+        var html = "";
+        for (var i = 0; i < recent.length; i++) {
+          var p = recent[i];
+          var cur = p.id === state.currentId;
+          html +=
+            '<button type="button" class="ws-recent-item' + (cur ? " is-current" : "") +
+            '" data-ws-project-id="' + escapeHtml(p.id) + '"' +
+            (cur ? ' aria-current="page"' : "") + ">" +
+            '<span class="ws-recent-name">' + escapeHtml(p.name || "Проект") + "</span>" +
+            '<span class="ws-recent-stage">' +
+            '<span class="ws-recent-stage-dot" aria-hidden="true"></span>' +
+            "<span>" + escapeHtml(railStageLabel(p)) + "</span>" +
+            "</span>" +
+            "</button>";
+        }
+        els.wsRecentProjects.innerHTML = html;
+        var buttons = els.wsRecentProjects.querySelectorAll("[data-ws-project-id]");
+        for (var b = 0; b < buttons.length; b++) {
+          buttons[b].addEventListener("click", function (event) {
+            var id = event.currentTarget.getAttribute("data-ws-project-id");
+            if (!id || id === state.currentId) return;
+            if (id === DEMO_PROJECT.id) {
+              openExample();
+              return;
+            }
+            if (!findRealProject(id)) return;
+            openWorkspace(id, false, { enterProject: true });
+          });
+        }
+      }
+
+      function loadWorkspaceMode() {
+        try {
+          var stored = localStorage.getItem(WORKSPACE_MODE_KEY);
+          if (WORKSPACE_MODES.indexOf(stored) !== -1) return stored;
+        } catch (e) {}
+        return "user";
+      }
+
+      function saveWorkspaceMode(mode) {
+        try { localStorage.setItem(WORKSPACE_MODE_KEY, mode); } catch (e) {}
+      }
+
+      function syncWorkspaceModeUi() {
+        var mode = WORKSPACE_MODES.indexOf(state.workspaceMode) !== -1 ? state.workspaceMode : "user";
+        state.workspaceMode = mode;
+        if (els.settingsDeveloperMode) {
+          els.settingsDeveloperMode.checked = mode === "developer";
+        }
+        if (els.settingsDeveloperBlock) {
+          var showDev = mode === "developer";
+          els.settingsDeveloperBlock.hidden = !showDev;
+          if (showDev) els.settingsDeveloperBlock.removeAttribute("hidden");
+          else els.settingsDeveloperBlock.setAttribute("hidden", "");
+        }
+        if (!els.osNavProject) return;
+        var items = els.osNavProject.querySelectorAll("[data-os-nav]");
+        for (var n = 0; n < items.length; n++) {
+          var item = items[n];
+          var modes = String(item.getAttribute("data-nav-modes") || "user developer").split(/\s+/);
+          var allowed = modes.indexOf(mode) !== -1;
+          item.hidden = !allowed;
+          var labelAttr = mode === "user" ? "data-nav-label-user" : "data-nav-label-developer";
+          var label = item.getAttribute(labelAttr);
+          if (label) item.textContent = label;
+        }
+        updateProjectSetupNavGate();
+      }
+
+      function isDemoProject(project) {
+        return !!(project && (project.isDemo || project.id === DEMO_PROJECT.id));
+      }
+
+      function setupActionsFromStructureData(data) {
+        if (!data || !data.ok) return null;
+        if (Array.isArray(data.setup_actions)) return data.setup_actions;
+        if (data.diagnostics && Array.isArray(data.diagnostics.setup_actions)) {
+          return data.diagnostics.setup_actions;
+        }
+        return null;
+      }
+
+      function isProjectSetupReady(project) {
+        if (!project) return false;
+        // Example has no real disk setup workflow.
+        if (isDemoProject(project)) return true;
+        if (!String(project.workFolder || "").trim()) return false;
+        if (project.setupPrepared === true) return true;
+        var cacheKey = project.id || project.workFolder;
+        var cached = state.structureByProject[cacheKey];
+        var actions = setupActionsFromStructureData(cached);
+        if (actions) return actions.length === 0;
+        return false;
+      }
+
+      function markProjectSetupPrepared(project, ready) {
+        if (!project || isDemoProject(project)) return;
+        var next = !!ready;
+        if (project.setupPrepared === next) {
+          updateProjectSetupNavGate();
+          return;
+        }
+        project.setupPrepared = next;
+        var real = findRealProject(project.id);
+        if (real) real.setupPrepared = next;
+        saveProjects();
+        updateProjectSetupNavGate();
+      }
+
+      function updateProjectSetupNavGate() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        var ready = isProjectSetupReady(project);
+        if (!els.osNavProject) return;
+        var items = els.osNavProject.querySelectorAll("[data-requires-setup='true']");
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i];
+          item.classList.toggle("is-gated", !ready);
+          item.setAttribute("aria-disabled", ready ? "false" : "true");
+          if (!ready) {
+            item.setAttribute("title", "Сначала проверьте и настройте проект");
+          } else {
+            item.removeAttribute("title");
+          }
+        }
+        if (els.osNavSetupGateHint) {
+          els.osNavSetupGateHint.hidden = ready || !project || isDemoProject(project);
+          els.osNavSetupGateHint.textContent = "Сначала проверьте и настройте проект";
+        }
+      }
+
+      async function refreshProjectSetupStatus(project) {
+        if (!project || isDemoProject(project) || !String(project.workFolder || "").trim()) {
+          updateProjectSetupNavGate();
+          return isProjectSetupReady(project);
+        }
+        var res = await postBridgeJson("/api/project-structure/setup-status", {
+          project_path: project.workFolder
+        });
+        var data = res.data || {};
+        if (data.ok) {
+          markProjectSetupPrepared(project, !!data.ready);
+          return !!data.ready;
+        }
+        updateProjectSetupNavGate();
+        return isProjectSetupReady(project);
+      }
+
+      function defaultWorkspaceTabForProject(_project) {
+        return "structure";
+      }
+
+      function applyWorkspaceMode(mode, options) {
+        var next = WORKSPACE_MODES.indexOf(mode) !== -1 ? mode : "user";
+        state.workspaceMode = next;
+        if (!options || options.persist !== false) saveWorkspaceMode(next);
+        syncWorkspaceModeUi();
+        var onWorkspace =
+          els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
+        if (!onWorkspace) return;
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!isProjectSetupReady(project)) {
+          setActiveTab("structure", { force: true, skipHistory: true });
+          setOsNavActive("structure");
+          return;
+        }
+        if (next === "user" && !USER_MODE_TABS[state.activeTab]) {
+          setActiveTab("structure", { force: true, skipHistory: true });
+          setOsNavActive("structure");
+        } else {
+          setOsNavActive(navIdForActiveTab(state.activeTab || "structure"));
+        }
       }
 
       function closeProjectPicker() {
@@ -7597,8 +8870,7 @@
           return;
         }
         if (!findRealProject(projectId)) return;
-        state.activeTab = "overview";
-        openWorkspace(projectId);
+        openWorkspace(projectId, false, { enterProject: true });
       }
 
       function navIdForActiveTab(tabId) {
@@ -7610,6 +8882,7 @@
           materials: "materials",
           team: "specialists",
           docs: "docs",
+          structure: "structure",
           settings: "settings"
         };
         return map[tabId] || "current-task";
@@ -7633,6 +8906,9 @@
           openSystemHome();
           return;
         }
+        if (state.workspaceMode === "user" && !USER_MODE_NAV[section]) {
+          section = "structure";
+        }
         var tabByNav = {
           overview: "overview",
           rules: "rules",
@@ -7641,15 +8917,23 @@
           materials: "materials",
           specialists: "team",
           docs: "docs",
+          structure: "structure",
           settings: "settings"
         };
         var tabId = tabByNav[section];
         if (!tabId) return;
         var project = findProjectRecord(state.currentId) || getFocusProject();
         if (!project) return;
-        state.activeTab = tabId;
-        openWorkspace(project.id);
-        setActiveTab(tabId, { force: true, skipHistory: true });
+        if (
+          (section === "overview" || section === "current-task") &&
+          !isProjectSetupReady(project)
+        ) {
+          updateProjectSetupNavGate();
+          openWorkspace(project.id, false, { enterProject: true });
+          setStructureStatus("Сначала проверьте и настройте проект", false);
+          return;
+        }
+        openWorkspace(project.id, false, { tab: tabId });
         setOsNavActive(section);
       }
 
@@ -7962,8 +9246,11 @@
         var opts = options || {};
         if (!projectId) return;
         if (!findRealProject(projectId) && !findProject(projectId)) return;
-        state.activeTab = "overview";
-        openWorkspace(projectId, opts.keepScroll, opts);
+        openWorkspace(
+          projectId,
+          opts.keepScroll,
+          Object.assign({}, opts, { enterProject: true })
+        );
       }
 
       function folderBaseName(path) {
@@ -9575,8 +10862,7 @@
 
       function openProjectFromList(projectId) {
         if (!findRealProject(projectId)) return;
-        state.activeTab = "overview";
-        openWorkspace(projectId);
+        openWorkspace(projectId, false, { enterProject: true });
       }
 
       function syncExampleUi() {
@@ -9588,8 +10874,7 @@
       }
 
       function openExample() {
-        state.activeTab = "overview";
-        openWorkspace(DEMO_PROJECT.id);
+        openWorkspace(DEMO_PROJECT.id, false, { enterProject: true });
       }
 
       function twoDigits(n) {
@@ -9921,12 +11206,246 @@
 
       function renderDesktop() {
         syncExampleUi();
+        if (els.systemKnowledge) els.systemKnowledge.hidden = true;
         if (els.systemHome) els.systemHome.hidden = false;
         if (els.desktopStart) els.desktopStart.hidden = true;
         if (els.desktopInfo) els.desktopInfo.hidden = true;
         if (els.desktopActions) els.desktopActions.hidden = true;
         if (els.pmSearch) els.pmSearch.value = state.projectsUi.query || "";
         renderProjectsTable();
+      }
+
+      function setKnowledgeStatus(text, isError) {
+        if (!els.kbStatus) return;
+        var msg = String(text || "").trim();
+        if (!msg) {
+          els.kbStatus.hidden = true;
+          els.kbStatus.textContent = "";
+          els.kbStatus.classList.remove("is-error");
+          return;
+        }
+        els.kbStatus.hidden = false;
+        els.kbStatus.textContent = msg;
+        els.kbStatus.classList.toggle("is-error", !!isError);
+      }
+
+      function formatKnowledgeDate(iso) {
+        var raw = String(iso || "").trim();
+        if (!raw) return "—";
+        var dt = new Date(raw);
+        if (isNaN(dt.getTime())) return raw;
+        var dd = String(dt.getDate()).padStart(2, "0");
+        var mm = String(dt.getMonth() + 1).padStart(2, "0");
+        var yyyy = dt.getFullYear();
+        var hh = String(dt.getHours()).padStart(2, "0");
+        var mi = String(dt.getMinutes()).padStart(2, "0");
+        return dd + "." + mm + "." + yyyy + " " + hh + ":" + mi;
+      }
+
+      function formatKnowledgeSize(bytes) {
+        var n = Number(bytes);
+        if (!isFinite(n) || n < 0) return "—";
+        if (n < 1024) return String(n) + " Б";
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1).replace(".0", "") + " КБ";
+        return (n / (1024 * 1024)).toFixed(1).replace(".0", "") + " МБ";
+      }
+
+      function showKnowledgeListView() {
+        state.knowledgeSelectedId = null;
+        if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+        if (els.kbCardView) els.kbCardView.hidden = true;
+        if (els.kbListView) els.kbListView.hidden = false;
+        if (els.kbCardPreview) {
+          els.kbCardPreview.hidden = true;
+          els.kbCardPreview.removeAttribute("src");
+        }
+      }
+
+
+
+      function renderKnowledgeList(sources) {
+        if (!els.kbSourceList) return;
+        var list = Array.isArray(sources) ? sources : [];
+        els.kbSourceList.textContent = "";
+        if (els.kbEmpty) els.kbEmpty.hidden = list.length > 0;
+        for (var i = 0; i < list.length; i++) {
+          var s = list[i] || {};
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "kb-list-item";
+          btn.setAttribute("data-kb-id", String(s.id || ""));
+          var title = document.createElement("span");
+          title.className = "kb-list-title";
+          title.textContent = String(s.title || "Без названия");
+          var status = document.createElement("span");
+          status.className = "kb-list-status";
+          status.textContent = String(s.status_label || "Добавлен");
+          var meta = document.createElement("span");
+          meta.className = "kb-list-meta";
+          meta.textContent =
+            String(s.type_label || s.type || "Файл") +
+            " · " +
+            formatKnowledgeDate(s.added_at) +
+            " · " +
+            formatKnowledgeSize(s.size);
+          btn.appendChild(title);
+          btn.appendChild(status);
+          btn.appendChild(meta);
+          btn.addEventListener("click", function (ev) {
+            var id = ev.currentTarget.getAttribute("data-kb-id");
+            if (id) openKnowledgeCard(id);
+          });
+          els.kbSourceList.appendChild(btn);
+        }
+      }
+
+
+
+      async function loadKnowledgeSources() {
+        setKnowledgeStatus("Загружаем источники…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/list", {});
+          var data = res.data || {};
+          if (!data.ok) {
+            setKnowledgeStatus(data.message || "Не удалось загрузить базу знаний.", true);
+            renderKnowledgeList([]);
+            return;
+          }
+          state.knowledgeSources = data.sources || [];
+          state.knowledgeStoragePath = data.storage_path || "";
+          renderKnowledgeList(state.knowledgeSources);
+          setKnowledgeStatus(
+            state.knowledgeSources.length
+              ? "Источников: " + state.knowledgeSources.length
+              : "",
+            false
+          );
+        } catch (e) {
+          setKnowledgeStatus("Не удалось связаться с AI POS для базы знаний.", true);
+          renderKnowledgeList([]);
+        }
+      }
+
+
+
+      async function openKnowledgeCard(sourceId) {
+        setKnowledgeStatus("Открываем источник…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/get", { id: sourceId });
+          var data = res.data || {};
+          if (!data.ok || !data.source) {
+            setKnowledgeStatus(data.message || "Источник не найден.", true);
+            return;
+          }
+          var s = data.source;
+          state.knowledgeSelectedId = s.id;
+          if (els.kbListView) els.kbListView.hidden = true;
+          if (els.kbCardView) els.kbCardView.hidden = false;
+          if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+          if (els.kbCardTitle) els.kbCardTitle.textContent = s.title || "—";
+          if (els.kbCardType) els.kbCardType.textContent = s.type_label || s.type || "—";
+          if (els.kbCardDate) els.kbCardDate.textContent = formatKnowledgeDate(s.added_at);
+          if (els.kbCardSize) els.kbCardSize.textContent = formatKnowledgeSize(s.size);
+          if (els.kbCardStatus) els.kbCardStatus.textContent = s.status_label || "Добавлен";
+          if (els.kbCardOrigin) els.kbCardOrigin.textContent = s.origin_label || "—";
+          if (els.kbCardPreview) {
+            if (s.is_image && s.preview_url) {
+              els.kbCardPreview.hidden = false;
+              els.kbCardPreview.src = s.preview_url;
+            } else {
+              els.kbCardPreview.hidden = true;
+              els.kbCardPreview.removeAttribute("src");
+            }
+          }
+          setKnowledgeStatus("", false);
+        } catch (e) {
+          setKnowledgeStatus("Не удалось открыть источник.", true);
+        }
+      }
+
+
+
+      function openKnowledgeBase() {
+        showPanel("list");
+        if (els.systemHome) els.systemHome.hidden = true;
+        if (els.systemKnowledge) els.systemKnowledge.hidden = false;
+        if (els.desktopStart) els.desktopStart.hidden = true;
+        if (els.desktopInfo) els.desktopInfo.hidden = true;
+        if (els.desktopActions) els.desktopActions.hidden = true;
+        showKnowledgeListView();
+        loadKnowledgeSources();
+        try {
+          window.scrollTo(0, 0);
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+
+
+      async function onKnowledgeAddClick() {
+        if (els.btnKbAddSource) els.btnKbAddSource.disabled = true;
+        setKnowledgeStatus("Выберите файл…", false);
+        try {
+          var pick = await postBridgeJson("/api/knowledge/sources/pick", {
+            title: "Выберите файл для базы знаний"
+          });
+          var pickData = pick.data || {};
+          if (pickData.cancelled) {
+            setKnowledgeStatus("Добавление отменено.", false);
+            return;
+          }
+          if (!pickData.ok || !pickData.path) {
+            setKnowledgeStatus(pickData.message || "Не удалось выбрать файл.", true);
+            return;
+          }
+          setKnowledgeStatus("Сохраняем источник…", false);
+          var add = await postBridgeJson("/api/knowledge/sources/add", {
+            file_path: pickData.path
+          });
+          var addData = add.data || {};
+          if (!addData.ok) {
+            setKnowledgeStatus(addData.message || "Не удалось добавить источник.", true);
+            return;
+          }
+          showKnowledgeListView();
+          await loadKnowledgeSources();
+          setKnowledgeStatus("Источник добавлен.", false);
+          if (addData.source && addData.source.id) {
+            openKnowledgeCard(addData.source.id);
+          }
+        } catch (e) {
+          setKnowledgeStatus("Не удалось добавить источник.", true);
+        } finally {
+          if (els.btnKbAddSource) els.btnKbAddSource.disabled = false;
+        }
+      }
+
+
+
+      async function onKnowledgeDeleteConfirm() {
+        var id = state.knowledgeSelectedId;
+        if (!id) return;
+        if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = true;
+        setKnowledgeStatus("Удаляем источник…", false);
+        try {
+          var res = await postBridgeJson("/api/knowledge/sources/delete", {
+            id: id,
+            confirm: true
+          });
+          var data = res.data || {};
+          if (!data.ok) {
+            setKnowledgeStatus(data.message || "Не удалось удалить источник.", true);
+            return;
+          }
+          showKnowledgeListView();
+          await loadKnowledgeSources();
+          setKnowledgeStatus("Источник удалён.", false);
+        } catch (e) {
+          setKnowledgeStatus("Не удалось удалить источник.", true);
+        } finally {
+          if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = false;
+        }
       }
 
       function copyDesktopProjectPath() {
@@ -9957,10 +11476,21 @@
       function setActiveTab(tabId, options) {
         var opts = options || {};
         var prev = state.activeTab;
-        var next = tabId || "overview";
+        var next = tabId || "structure";
         var force = !!opts.force;
+        var gateProject = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (
+          gateProject &&
+          !isProjectSetupReady(gateProject) &&
+          (next === "overview" || next === "task" || next === "work")
+        ) {
+          next = "structure";
+        }
         if (!force && state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
-          next = "overview";
+          next = isProjectSetupReady(gateProject) ? "overview" : "structure";
+        }
+        if (state.workspaceMode === "user" && !USER_MODE_TABS[next]) {
+          next = "structure";
         }
         state.activeTab = next;
 
@@ -9993,6 +11523,11 @@
         ) {
           setOsNavActive(navIdForActiveTab(state.activeTab));
           pushNavState();
+        }
+        if (state.activeTab === "structure") {
+          ensureStructureLoaded(findProjectRecord(state.currentId) || findProject(state.currentId));
+        } else if (typeof hidePrepTellScreen === "function") {
+          hidePrepTellScreen();
         }
       }
 
@@ -10066,15 +11601,19 @@
       }
 
       // Label map only — stage list/order always comes from Bridge stage_model.
+      // Пользовательские названия: Подключён → Анализ → Проектирование → Разработка → Завершён.
       var USER_STAGE_DISPLAY = {
-        IDEA: { card: "Идея", track: "Идея" },
-        INTAKE: { card: "Подключение", track: "Подключение" },
-        CONNECTED: { card: "Подключение", track: "Подключение" },
-        DISCOVERY: { card: "Изучение", track: "Изучение" },
-        RESEARCH: { card: "Изучение", track: "Изучение" },
-        PLANNING: { card: "Планирование", track: "Планирование" },
-        EXECUTION: { card: "В стадии разработки", track: "Разработка" },
-        IMPLEMENTATION: { card: "В стадии разработки", track: "Разработка" }
+        IDEA: { card: "Подключён", track: "Подключён" },
+        INTAKE: { card: "Подключён", track: "Подключён" },
+        CONNECTED: { card: "Подключён", track: "Подключён" },
+        DISCOVERY: { card: "Анализ", track: "Анализ" },
+        RESEARCH: { card: "Анализ", track: "Анализ" },
+        PLANNING: { card: "Проектирование", track: "Проектирование" },
+        EXECUTION: { card: "Разработка", track: "Разработка" },
+        IMPLEMENTATION: { card: "Разработка", track: "Разработка" },
+        DONE: { card: "Завершён", track: "Завершён" },
+        COMPLETED: { card: "Завершён", track: "Завершён" },
+        COMPLETE: { card: "Завершён", track: "Завершён" }
       };
 
       function userStageCardLabel(code, fallback) {
@@ -10091,28 +11630,54 @@
         return text || key || "—";
       }
 
+      // Фиксированная пользовательская шкала (без дублей IDEA/INTAKE → «Подключён»).
+      var UI_STAGE_TRACK = [
+        { label: "Подключён", codes: ["IDEA", "INTAKE", "CONNECTED"] },
+        { label: "Анализ", codes: ["DISCOVERY", "RESEARCH"] },
+        { label: "Проектирование", codes: ["PLANNING"] },
+        { label: "Разработка", codes: ["EXECUTION", "IMPLEMENTATION"] },
+        { label: "Завершён", codes: ["DONE", "COMPLETED", "COMPLETE"] }
+      ];
+
+      function uiStageTrackIndex(code) {
+        var key = normalizeStageCode(code);
+        if (!key) return -1;
+        for (var i = 0; i < UI_STAGE_TRACK.length; i++) {
+          if (UI_STAGE_TRACK[i].codes.indexOf(key) !== -1) return i;
+        }
+        return -1;
+      }
+
+      /**
+       * Единый источник UI-стадии для левой панели и верхней шкалы.
+       * AI_Portfolio всегда показывается как «Подключён».
+       */
+      function resolveUiStageCode(project, bridgeStage) {
+        if (!project) return "";
+        if (isAiPortfolioProject(project)) return "IDEA";
+        var fromBridge = normalizeStageCode(bridgeStage);
+        if (fromBridge) return fromBridge;
+        var cache = getCliAnalysisCache(project.id);
+        var system = systemProjectStageFromCache(cache);
+        if (system && system.code) return system.code;
+        var status = String(projectNavStatusLabel(project) || project.status || "").toLowerCase();
+        if (status.indexOf("заверш") >= 0) return "DONE";
+        if (status.indexOf("разработ") >= 0 || status === "в работе") return "EXECUTION";
+        if (status.indexOf("проектир") >= 0 || status.indexOf("планир") >= 0) return "PLANNING";
+        if (status.indexOf("анализ") >= 0 || status.indexOf("изуч") >= 0) return "DISCOVERY";
+        if (status.indexOf("подключ") >= 0 || status === "создан") return "IDEA";
+        return "";
+      }
+
       function renderStageTrack(stageData) {
         if (!els.desktopStageTrack) return;
-        var model = stageData && Array.isArray(stageData.stage_model) ? stageData.stage_model : [];
         var currentId = stageData && stageData.stage ? String(stageData.stage).trim() : "";
-        if (!model.length) {
-          els.desktopStageTrack.hidden = true;
-          els.desktopStageTrack.innerHTML = "";
-          return;
-        }
-
-        var currentIndex = -1;
-        for (var i = 0; i < model.length; i++) {
-          if (normalizeStageCode(model[i].id) === normalizeStageCode(currentId)) {
-            currentIndex = i;
-            break;
-          }
-        }
+        var currentIndex = uiStageTrackIndex(currentId);
 
         var progressPct = 0;
-        if (model.length > 1 && currentIndex >= 0) {
-          progressPct = (currentIndex / (model.length - 1)) * 100;
-        } else if (model.length === 1 && currentIndex === 0) {
+        if (UI_STAGE_TRACK.length > 1 && currentIndex >= 0) {
+          progressPct = (currentIndex / (UI_STAGE_TRACK.length - 1)) * 100;
+        } else if (UI_STAGE_TRACK.length === 1 && currentIndex === 0) {
           progressPct = 100;
         }
 
@@ -10122,22 +11687,21 @@
           progressPct.toFixed(2) +
           '%"></span>';
 
-        for (var s = 0; s < model.length; s++) {
+        for (var s = 0; s < UI_STAGE_TRACK.length; s++) {
           var stateClass = "is-future";
           if (currentIndex < 0) stateClass = "is-future";
           else if (s < currentIndex) stateClass = "is-done";
           else if (s === currentIndex) stateClass = "is-current";
-          var trackLabel = userStageTrackLabel(model[s].id, model[s].label);
           html +=
             '<div class="desktop-stage-node ' +
             stateClass +
             '" role="listitem">' +
             '<span class="desktop-stage-dot" aria-hidden="true"></span>' +
             '<p class="desktop-stage-label">' +
-            escapeHtml(trackLabel) +
+            escapeHtml(UI_STAGE_TRACK[s].label) +
             "</p>";
           if (s === currentIndex) {
-            html += '<p class="desktop-stage-current-mark">Текущий этап</p>';
+            html += '<p class="desktop-stage-current-mark">Текущая стадия</p>';
           }
           html += "</div>";
         }
@@ -10177,17 +11741,14 @@
         state.stageRequestSeq = seq;
         // Session-demo never touches a real folder or Bridge stage API.
         if (!project || project.isDemo || !String(project.workFolder || "").trim()) {
-          renderStageTrack(null);
+          renderStageTrack({ stage: resolveUiStageCode(project, null) });
           return;
         }
         var stageData = await readStageFromBridge(project.workFolder);
         if (seq !== state.stageRequestSeq) return;
         if (state.currentId && project.id && state.currentId !== project.id) return;
-        if (!stageData.ok) {
-          renderStageTrack(null);
-          return;
-        }
-        renderStageTrack(stageData);
+        var bridgeStage = stageData && stageData.ok ? stageData.stage : null;
+        renderStageTrack({ stage: resolveUiStageCode(project, bridgeStage) });
       }
       function systemProjectStageFromCache(cache) {
         if (!cache || cache.kind !== "ok" || !cache.data) return null;
@@ -10696,11 +12257,14 @@
       }
 
       var CLI_STAGE_LABELS = {
-        IDEA: "Идея",
-        INTAKE: "Подключение",
-        DISCOVERY: "Изучение",
-        PLANNING: "Планирование",
-        EXECUTION: "Выполнение"
+        IDEA: "Подключён",
+        INTAKE: "Подключён",
+        DISCOVERY: "Анализ",
+        PLANNING: "Проектирование",
+        EXECUTION: "Разработка",
+        DONE: "Завершён",
+        COMPLETED: "Завершён",
+        COMPLETE: "Завершён"
       };
 
       var CLI_CONFIDENCE_LABELS = {
@@ -11311,6 +12875,14 @@
         if (!value) return null;
         if (/^https?:\/\//i.test(value)) return { kind: "url", value: value };
         return { kind: "unsupported", value: value };
+      }
+
+      function isAiPortfolioProject(project) {
+        if (!project) return false;
+        var folder = String(project.workFolder || "").trim().replace(/[\\\/]+$/, "");
+        if (!folder) return false;
+        var base = folder.split(/[\\\/]/).pop() || "";
+        return /^AI_Portfolio$/i.test(base);
       }
 
       function renderOpenAppButton(project) {
@@ -12141,6 +13713,7 @@
         if (els.settingsLaunchUrl) els.settingsLaunchUrl.value = normalizeLaunchUrl(project && project.launchUrl);
         renderCaptureWindowSettings(project);
         if (els.settingsSaveNote) els.settingsSaveNote.hidden = true;
+        syncWorkspaceModeUi();
       }
 
       function onSaveProjectSettings(event) {
@@ -12249,6 +13822,8 @@
         if (/\.txt$/.test(name) || type.indexOf("text/") === 0) return "TXT";
         if (/\.(zip|rar|7z)$/.test(name)) return "архив";
         if (/\.(fig|sketch|xd)$/.test(name)) return "макет";
+        if (/\.(xls|xlsx|csv)$/.test(name)) return "таблица";
+        if (/\.(ppt|pptx)$/.test(name)) return "презентация";
         if (/\.(doc|docx|rtf|odt)$/.test(name)) return "документ";
         return "файл";
       }
@@ -12391,10 +13966,1600 @@
         openWorkspace(project.id, true);
       }
 
+      function setStructureStatus(text, isError) {
+        if (!els.structureStatus) return;
+        var msg = String(text || "").trim();
+        if (!msg) {
+          els.structureStatus.hidden = true;
+          els.structureStatus.textContent = "";
+          els.structureStatus.classList.remove("is-error");
+          return;
+        }
+        els.structureStatus.hidden = false;
+        els.structureStatus.textContent = msg;
+        els.structureStatus.classList.toggle("is-error", !!isError);
+      }
+
+      function formatStructureRecCount(canNowCount, needFillCount, needCheckCount) {
+        var a = Math.max(0, Number(canNowCount) || 0);
+        var b = Math.max(0, Number(needFillCount) || 0);
+        var c = Math.max(0, Number(needCheckCount) || 0);
+        return (
+          "Можно выполнить сейчас: " +
+          a +
+          ". Нужно заполнить: " +
+          b +
+          ". Требуется проверить: " +
+          c +
+          "."
+        );
+      }
+
+      function normalizeStructureDiagnostics(data, items) {
+        var diag = (data && data.diagnostics) || null;
+        if (diag && (diag.can_setup || diag.needs_review || diag.insufficient)) {
+          return {
+            can_setup: Array.isArray(diag.can_setup) ? diag.can_setup : [],
+            needs_review: Array.isArray(diag.needs_review) ? diag.needs_review : [],
+            insufficient: Array.isArray(diag.insufficient) ? diag.insufficient : [],
+            setup_actions: Array.isArray(diag.setup_actions)
+              ? diag.setup_actions
+              : Array.isArray(data && data.setup_actions)
+                ? data.setup_actions
+                : []
+          };
+        }
+        var list = Array.isArray(items) ? items : [];
+        var can_setup = [];
+        var needs_review = [];
+        var insufficient = [];
+        for (var i = 0; i < list.length; i++) {
+          var item = list[i] || {};
+          var bucket = String(item.bucket || "");
+          if (bucket === "can_setup" || item.setup_allowed) can_setup.push(item);
+          else if (bucket === "insufficient" || item.kind === "analysis") insufficient.push(item);
+          else needs_review.push(item);
+        }
+        return {
+          can_setup: can_setup,
+          needs_review: needs_review,
+          insufficient: insufficient,
+          setup_actions: can_setup.filter(function (x) { return x && x.setup_allowed; })
+        };
+      }
+
+      function structureItemId(item) {
+        return String((item && (item.id || item.pid)) || "").trim();
+      }
+
+      function structureItemTextBlob(item) {
+        if (!item) return "";
+        var ev = Array.isArray(item.evidence) ? item.evidence.join(" ") : "";
+        return [
+          item.title,
+          item.reason,
+          item.filename,
+          item.target,
+          item.content_source,
+          ev
+        ]
+          .map(function (x) {
+            return String(x || "");
+          })
+          .join(" ");
+      }
+
+      function structureMentionsPortfolioProjects(diag) {
+        var buckets = ["can_setup", "needs_review", "insufficient"];
+        for (var b = 0; b < buckets.length; b++) {
+          var list = (diag && diag[buckets[b]]) || [];
+          for (var i = 0; i < list.length; i++) {
+            if (/portfolio-projects/i.test(structureItemTextBlob(list[i]))) return true;
+          }
+        }
+        return false;
+      }
+
+      function structureDocNameFromItem(item) {
+        var raw =
+          String((item && (item.filename || item.target)) || "").trim() ||
+          String((item && item.title) || "");
+        var m = raw.match(
+          /\b(PROJECT_CONTEXT|ROADMAP|ARCHITECTURE|DESIGN_RULES|DECISIONS|DATA_SCHEMA)\.md\b/i
+        );
+        return m ? m[1].toUpperCase() + ".md" : "";
+      }
+
+      function structurePathLeaf(path) {
+        var s = String(path || "").replace(/\\/g, "/").replace(/\/+$/, "");
+        if (!s) return "";
+        var parts = s.split("/");
+        return parts[parts.length - 1] || s;
+      }
+
+      function shortenStructureDisplayText(text) {
+        var src = String(text || "");
+        if (!src) return "";
+        return src
+          .replace(/\bВложенные папки вроде portfolio-projects\/ не засчитываются\.?\s*/gi, "")
+          .replace(
+            /([A-Za-zА-Яа-я0-9_.\-]+(?:[\\/][A-Za-zА-Яа-я0-9_.\-]+)+)/g,
+            function (full) {
+              var leaf = structurePathLeaf(full);
+              return leaf || full;
+            }
+          )
+          .replace(/\s{2,}/g, " ")
+          .trim();
+      }
+
+      function appendStructurePathAwareText(el, text) {
+        var src = String(text || "");
+        if (!src) return;
+        var re = /([A-Za-zА-Яа-я0-9_.\-]+(?:[\\/][A-Za-zА-Яа-я0-9_.\-]+)+)/g;
+        var last = 0;
+        var m;
+        while ((m = re.exec(src))) {
+          if (m.index > last) {
+            el.appendChild(document.createTextNode(src.slice(last, m.index)));
+          }
+          var full = m[0];
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "structure-path";
+          btn.setAttribute("data-full", full);
+          btn.setAttribute("data-expanded", "0");
+          btn.title = full;
+          btn.textContent = structurePathLeaf(full) || full;
+          btn.addEventListener("click", function (ev) {
+            ev.preventDefault();
+            var expanded = this.getAttribute("data-expanded") === "1";
+            if (expanded) {
+              this.setAttribute("data-expanded", "0");
+              this.textContent = structurePathLeaf(this.getAttribute("data-full")) || this.getAttribute("data-full");
+            } else {
+              this.setAttribute("data-expanded", "1");
+              this.textContent = this.getAttribute("data-full") || "";
+            }
+          });
+          el.appendChild(btn);
+          last = m.index + full.length;
+        }
+        if (last < src.length) {
+          el.appendChild(document.createTextNode(src.slice(last)));
+        }
+      }
+
+      function presentStructureDiagnostics(diag) {
+        var can_setup = (diag && diag.can_setup) || [];
+        var needs_review = (diag && diag.needs_review) || [];
+        var insufficient = (diag && diag.insufficient) || [];
+        var canNow = [];
+        var needFill = [];
+        var needCheck = [];
+        var docsCanCreate = {};
+        var docsNeedFill = {};
+        var passportMerged = false;
+        var duplicatesOther = false;
+        var unconfirmed = false;
+        var otherCheck = [];
+        var i;
+        var item;
+        var id;
+        var doc;
+        var source;
+        var target;
+
+        for (i = 0; i < can_setup.length; i++) {
+          item = can_setup[i] || {};
+          id = structureItemId(item);
+          doc = structureDocNameFromItem(item);
+          if (doc) docsCanCreate[doc] = true;
+          if (id.indexOf("create_doc_project_context") === 0 || doc === "PROJECT_CONTEXT.md") {
+            source = structurePathLeaf(item.content_source) || "README.md";
+            target = "PROJECT_CONTEXT.md";
+            canNow.push({
+              title: "создать " + target + " из " + source,
+              reason: ""
+            });
+          } else {
+            canNow.push({
+              title: shortenStructureDisplayText(item.title || "Действие настройки"),
+              reason: shortenStructureDisplayText(item.reason || "")
+            });
+          }
+        }
+
+        for (i = 0; i < insufficient.length; i++) {
+          item = insufficient[i] || {};
+          id = structureItemId(item);
+          doc = structureDocNameFromItem(item);
+          if (id === "passport_need_user" || /паспорт/i.test(String(item.title || ""))) {
+            passportMerged = true;
+            continue;
+          }
+          if (id === "unconfirmed_purposes" || item.kind === "analysis") {
+            unconfirmed = true;
+            continue;
+          }
+          if (doc && doc !== "PROJECT_CONTEXT.md") {
+            docsNeedFill[doc] = true;
+            continue;
+          }
+          if (doc === "PROJECT_CONTEXT.md" && docsCanCreate["PROJECT_CONTEXT.md"]) {
+            continue;
+          }
+          needFill.push({
+            title: shortenStructureDisplayText(item.title || "Нужны сведения"),
+            reason: ""
+          });
+        }
+
+        for (i = 0; i < needs_review.length; i++) {
+          item = needs_review[i] || {};
+          id = structureItemId(item);
+          doc = structureDocNameFromItem(item);
+          var blob = structureItemTextBlob(item);
+          if (id.indexOf("doc_missing_") === 0 || /^Не найден обязательный документ/i.test(String(item.title || ""))) {
+            if (doc === "PROJECT_CONTEXT.md" && docsCanCreate["PROJECT_CONTEXT.md"]) {
+              continue;
+            }
+            if (doc && (docsNeedFill[doc] || docsCanCreate[doc])) {
+              continue;
+            }
+            if (doc && doc !== "PROJECT_CONTEXT.md") {
+              docsNeedFill[doc] = true;
+              continue;
+            }
+            continue;
+          }
+          if (
+            /project_passport\.json/i.test(blob) ||
+            (/паспорт/i.test(blob) && (id.indexOf("duplicate") >= 0 || id.indexOf("same_name") >= 0))
+          ) {
+            passportMerged = true;
+            continue;
+          }
+          if (id === "duplicates_confirmed" || id === "same_name_different_sections" || /дубл/i.test(String(item.title || ""))) {
+            duplicatesOther = true;
+            continue;
+          }
+          otherCheck.push({
+            title: shortenStructureDisplayText(item.title || "Требуется проверка"),
+            reason: shortenStructureDisplayText(item.reason || "")
+          });
+        }
+
+        if (passportMerged || Object.keys(docsNeedFill).length || Object.keys(docsCanCreate).length) {
+          if (passportMerged) {
+            needFill.push({
+              title: "цель проекта",
+              reason: ""
+            });
+            needFill.push({
+              title: "описание",
+              reason: ""
+            });
+            needFill.push({
+              title: "ожидаемый результат",
+              reason: ""
+            });
+            needFill.push({
+              title: "Паспорт проекта требует проверки и заполнения",
+              reason: ""
+            });
+          }
+          var fillDocOrder = [
+            "ROADMAP.md",
+            "ARCHITECTURE.md",
+            "DESIGN_RULES.md",
+            "DECISIONS.md",
+            "DATA_SCHEMA.md"
+          ];
+          var fillDocs = fillDocOrder.filter(function (name) {
+            return !!docsNeedFill[name];
+          });
+          Object.keys(docsNeedFill).forEach(function (name) {
+            if (fillDocs.indexOf(name) < 0) fillDocs.push(name);
+          });
+          if (fillDocs.length) {
+            var docLabels = fillDocs.map(function (name) {
+              return name.replace(/\.md$/i, "");
+            });
+            var docsTitle = "данные для " + docLabels[0];
+            if (docLabels.length === 2) {
+              docsTitle += " и " + docLabels[1];
+            } else if (docLabels.length > 2) {
+              docsTitle +=
+                ", " +
+                docLabels.slice(1, -1).join(", ") +
+                " и " +
+                docLabels[docLabels.length - 1];
+            }
+            needFill.push({
+              title: docsTitle,
+              reason: ""
+            });
+          }
+        }
+
+        if (duplicatesOther) {
+          needCheck.push({
+            title: "возможные дубли",
+            reason: ""
+          });
+        }
+        if (unconfirmed) {
+          needCheck.push({
+            title: "другие неподтверждённые элементы",
+            reason: ""
+          });
+        }
+        for (i = 0; i < otherCheck.length; i++) {
+          needCheck.push(otherCheck[i]);
+        }
+
+        return {
+          can_now: canNow,
+          need_fill: needFill,
+          need_check: needCheck,
+          portfolio_note: structureMentionsPortfolioProjects(diag)
+            ? "Вложенные папки вроде portfolio-projects/ не засчитываются как документы всего проекта."
+            : "",
+          show_context_only_note: !!(
+            docsCanCreate["PROJECT_CONTEXT.md"] &&
+            (passportMerged || Object.keys(docsNeedFill).length)
+          ),
+          setup_actions: (diag && diag.setup_actions) || []
+        };
+      }
+
+      function appendStructureDiagGroup(container, title, items, options) {
+        var opts = options || {};
+        var group = document.createElement("div");
+        group.className = "structure-review-group";
+        var head = document.createElement("div");
+        head.className = "structure-review-group-head";
+        var heading = document.createElement("p");
+        heading.className = "structure-review-group-title";
+        heading.textContent = title;
+        head.appendChild(heading);
+        if (opts.actionButton) {
+          head.appendChild(opts.actionButton);
+        }
+        group.appendChild(head);
+        if (!items.length) {
+          var empty = document.createElement("p");
+          empty.className = "structure-review-group-empty";
+          empty.textContent = "Нет пунктов.";
+          group.appendChild(empty);
+          container.appendChild(group);
+          return group;
+        }
+        var ul = document.createElement("ul");
+        ul.className = "structure-review-list";
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i] || {};
+          var li = document.createElement("li");
+          var t = document.createElement("span");
+          t.className = "structure-review-item-title";
+          appendStructurePathAwareText(
+            t,
+            String(item.title || "Пункт").trim() || "Пункт"
+          );
+          li.appendChild(t);
+          var reason = String(item.reason || "").trim();
+          if (reason) {
+            var reasonEl = document.createElement("span");
+            reasonEl.className = "structure-review-item-reason";
+            appendStructurePathAwareText(reasonEl, reason);
+            li.appendChild(reasonEl);
+          }
+          ul.appendChild(li);
+        }
+        group.appendChild(ul);
+        container.appendChild(group);
+        return group;
+      }
+
+      function getStructureInfoDraft(project) {
+        var draft = (project && project.structureInfoDraft) || {};
+        return {
+          goal: String(draft.goal || ""),
+          description: String(draft.description || ""),
+          result: String(draft.result || ""),
+          passport: String(draft.passport || ""),
+          roadmap: String(draft.roadmap || ""),
+          architecture: String(draft.architecture || ""),
+          design_rules: String(draft.design_rules || ""),
+          decisions: String(draft.decisions || ""),
+          data_schema: String(draft.data_schema || "")
+        };
+      }
+
+      function readStructureInfoFormValues() {
+        return {
+          goal: els.structureInfoGoal ? els.structureInfoGoal.value.trim() : "",
+          description: els.structureInfoDescription
+            ? els.structureInfoDescription.value.trim()
+            : "",
+          result: els.structureInfoResult ? els.structureInfoResult.value.trim() : "",
+          passport: els.structureInfoPassport ? els.structureInfoPassport.value.trim() : "",
+          roadmap: els.structureInfoRoadmap ? els.structureInfoRoadmap.value.trim() : "",
+          architecture: els.structureInfoArchitecture
+            ? els.structureInfoArchitecture.value.trim()
+            : "",
+          design_rules: els.structureInfoDesignRules
+            ? els.structureInfoDesignRules.value.trim()
+            : "",
+          decisions: els.structureInfoDecisions ? els.structureInfoDecisions.value.trim() : "",
+          data_schema: els.structureInfoDataSchema
+            ? els.structureInfoDataSchema.value.trim()
+            : ""
+        };
+      }
+
+      function collectStructureUserInfo(project) {
+        var values = readStructureInfoFormValues();
+        var draft = getStructureInfoDraft(project);
+        var merged = {
+          name: String((project && project.name) || "").trim(),
+          goal: values.goal || draft.goal,
+          description: values.description || draft.description,
+          result: values.result || draft.result,
+          passport: values.passport || draft.passport,
+          roadmap: values.roadmap || draft.roadmap,
+          architecture: values.architecture || draft.architecture,
+          design_rules: values.design_rules || draft.design_rules,
+          decisions: values.decisions || draft.decisions,
+          data_schema: values.data_schema || draft.data_schema
+        };
+        var out = {};
+        Object.keys(merged).forEach(function (key) {
+          var val = String(merged[key] || "").trim();
+          if (val) out[key] = val;
+        });
+        return out;
+      }
+
+      function persistStructureInfoDraft(project, values) {
+        if (!project) return;
+        project.structureInfoDraft = Object.assign({}, values || readStructureInfoFormValues(), {
+          updatedAt: new Date().toISOString()
+        });
+        if (!project.isDemo) saveProjects();
+      }
+
+      function fillStructureInfoForm(project) {
+        var draft = getStructureInfoDraft(project);
+        if (els.structureInfoGoal) els.structureInfoGoal.value = draft.goal;
+        if (els.structureInfoDescription) els.structureInfoDescription.value = draft.description;
+        if (els.structureInfoResult) els.structureInfoResult.value = draft.result;
+        if (els.structureInfoPassport) els.structureInfoPassport.value = draft.passport;
+        if (els.structureInfoRoadmap) els.structureInfoRoadmap.value = draft.roadmap;
+        if (els.structureInfoArchitecture) {
+          els.structureInfoArchitecture.value = draft.architecture;
+        }
+        if (els.structureInfoDesignRules) {
+          els.structureInfoDesignRules.value = draft.design_rules;
+        }
+        if (els.structureInfoDecisions) els.structureInfoDecisions.value = draft.decisions;
+        if (els.structureInfoDataSchema) els.structureInfoDataSchema.value = draft.data_schema;
+      }
+
+      function setStructureInfoFormOpen(open) {
+        if (!els.structureInfoForm) return;
+        els.structureInfoForm.hidden = !open;
+        if (open) {
+          var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+          fillStructureInfoForm(project);
+          try {
+            els.structureInfoForm.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          } catch (e) {
+            /* ignore */
+          }
+        }
+      }
+
+      function onStructureInfoAddClick() {
+        setStructureInfoFormOpen(true);
+      }
+
+      function onStructureInfoCloseClick() {
+        setStructureInfoFormOpen(false);
+      }
+
+      function onStructureInfoSaveClick() {
+        var project = findProjectRecord(state.currentId);
+        if (!project) {
+          setStructureStatus("Не удалось сохранить черновик: проект не найден.", true);
+          return;
+        }
+        persistStructureInfoDraft(project, readStructureInfoFormValues());
+        setStructureStatus(
+          "Черновик сведений сохранён в AI POS. На диск проекта ничего не записано.",
+          false
+        );
+      }
+
+      function onStructureInfoPreviewClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        persistStructureInfoDraft(project, readStructureInfoFormValues());
+        requestStructureSetupPreview(project);
+      }
+
+      function structureFileExtension(name) {
+        var raw = String(name || "");
+        var idx = raw.lastIndexOf(".");
+        if (idx <= 0) return "";
+        return raw.slice(idx).toLowerCase();
+      }
+
+      function formatStructureSize(node) {
+        if (!node || node.kind === "dir" || node.kind === "group") return "—";
+        if (node.size_label) return String(node.size_label);
+        var bytes = node.size != null ? Number(node.size) : NaN;
+        if (!isFinite(bytes) || bytes < 0) return "—";
+        if (bytes < 1024) return String(bytes) + " Б";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1).replace(".0", "") + " КБ";
+        return (bytes / (1024 * 1024)).toFixed(1).replace(".0", "") + " МБ";
+      }
+
+      function formatStructureModified(node) {
+        var raw = (node && (node.modified || node.mtime || node.updated_at)) || "";
+        if (!raw) return "—";
+        var dt = new Date(raw);
+        if (isNaN(dt.getTime())) return "—";
+        var dd = String(dt.getDate()).padStart(2, "0");
+        var mm = String(dt.getMonth() + 1).padStart(2, "0");
+        var yyyy = dt.getFullYear();
+        var hh = String(dt.getHours()).padStart(2, "0");
+        var mi = String(dt.getMinutes()).padStart(2, "0");
+        return dd + "." + mm + "." + yyyy + " " + hh + ":" + mi;
+      }
+
+      function displayStructurePurpose(node) {
+        // Без внутренних предупреждений («требует уточнения» и т.п.) — только понятное назначение или «—».
+        var purpose = String((node && node.purpose) || "").trim();
+        return purpose || "—";
+      }
+
+      function appendStructureRows(tbody, node, depth, insertBefore) {
+        if (!node || !tbody) return;
+        var depthVal = depth || 0;
+        var isDir = node.kind === "dir";
+        var children = Array.isArray(node.children) ? node.children : [];
+        var canExpand = isDir && (children.length > 0 || !!node.children_skipped);
+        var purposeText = displayStructurePurpose(node);
+        var purposeUnknown = false;
+
+        var tr = document.createElement("tr");
+        tr.setAttribute("role", "treeitem");
+        tr.setAttribute("aria-level", String(depthVal + 1));
+        if (canExpand) {
+          tr.className = "is-dir-toggle";
+          tr.setAttribute("aria-expanded", "false");
+        }
+
+        var nameTd = document.createElement("td");
+        var nameCell = document.createElement("div");
+        nameCell.className = "structure-name-cell";
+        nameCell.style.setProperty("--structure-depth", String(depthVal));
+
+        var indent = document.createElement("span");
+        indent.className = "structure-name-indent";
+        indent.setAttribute("aria-hidden", "true");
+        nameCell.appendChild(indent);
+
+        var toggle = null;
+        if (canExpand) {
+          toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "structure-toggle";
+          toggle.setAttribute("aria-label", "Развернуть папку " + String(node.name || ""));
+          toggle.textContent = "▸";
+          nameCell.appendChild(toggle);
+        } else {
+          var spacer = document.createElement("span");
+          spacer.className = "structure-toggle-spacer";
+          spacer.setAttribute("aria-hidden", "true");
+          nameCell.appendChild(spacer);
+        }
+
+        var nameEl = document.createElement("span");
+        nameEl.className = "structure-node-name " + (isDir ? "is-dir" : "is-file");
+        nameEl.textContent = node.name || "";
+        nameEl.title = node.name || "";
+        nameCell.appendChild(nameEl);
+        nameTd.appendChild(nameCell);
+
+        var purposeTd = document.createElement("td");
+        purposeTd.className = "structure-purpose-cell" + (purposeUnknown ? " is-unknown" : "");
+        purposeTd.textContent = purposeText;
+        purposeTd.title = purposeText;
+
+        var modifiedTd = document.createElement("td");
+        modifiedTd.className = "structure-meta-cell";
+        modifiedTd.textContent = formatStructureModified(node);
+
+        var sizeTd = document.createElement("td");
+        sizeTd.className = "structure-meta-cell";
+        sizeTd.textContent = formatStructureSize(node);
+
+        tr.appendChild(nameTd);
+        tr.appendChild(purposeTd);
+        tr.appendChild(modifiedTd);
+        tr.appendChild(sizeTd);
+        if (insertBefore) tbody.insertBefore(tr, insertBefore);
+        else tbody.appendChild(tr);
+
+        if (canExpand) {
+          var childrenRendered = false;
+          var parentLevel = depthVal + 1;
+
+          function setDescendantsVisible(open) {
+            var row = tr.nextSibling;
+            while (row) {
+              var rowLevel = Number(row.getAttribute("aria-level") || 0);
+              if (!rowLevel || rowLevel <= parentLevel) break;
+              if (open) {
+                row.hidden = rowLevel !== parentLevel + 1;
+              } else {
+                row.hidden = true;
+              }
+              if (row.getAttribute("aria-expanded") === "true") {
+                row.setAttribute("aria-expanded", "false");
+                var nestedToggle = row.querySelector(".structure-toggle");
+                if (nestedToggle) {
+                  nestedToggle.textContent = "▸";
+                  nestedToggle.setAttribute(
+                    "aria-label",
+                    "Развернуть папку " +
+                      String(
+                        (row.querySelector(".structure-node-name") || {}).textContent || ""
+                      )
+                  );
+                }
+              }
+              row = row.nextSibling;
+            }
+          }
+
+          function setExpanded(open) {
+            tr.setAttribute("aria-expanded", open ? "true" : "false");
+            if (toggle) {
+              toggle.textContent = open ? "▾" : "▸";
+              toggle.setAttribute(
+                "aria-label",
+                (open ? "Свернуть папку " : "Развернуть папку ") + String(node.name || "")
+              );
+            }
+            if (open && !childrenRendered) {
+              childrenRendered = true;
+              var insertAt = tr.nextSibling;
+              if (node.children_skipped && !children.length) {
+                var noteTr = document.createElement("tr");
+                noteTr.setAttribute("aria-level", String(depthVal + 2));
+                var noteTd = document.createElement("td");
+                noteTd.colSpan = 4;
+                noteTd.className = "structure-tree-empty";
+                noteTd.style.paddingLeft =
+                  "calc(1.4rem + " + (depthVal + 1) * 1.05 + "rem)";
+                noteTd.textContent = "Содержимое этой папки не раскрывается полностью.";
+                noteTr.appendChild(noteTd);
+                tbody.insertBefore(noteTr, insertAt);
+              } else {
+                for (var i = 0; i < children.length; i++) {
+                  appendStructureRows(tbody, children[i], depthVal + 1, insertAt);
+                }
+              }
+            }
+            setDescendantsVisible(open);
+          }
+
+          function onToggle(event) {
+            if (event) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            setExpanded(tr.getAttribute("aria-expanded") !== "true");
+          }
+
+          if (toggle) toggle.addEventListener("click", onToggle);
+          tr.addEventListener("click", function (event) {
+            if (event.target && event.target.closest && event.target.closest(".structure-toggle")) {
+              return;
+            }
+            onToggle(event);
+          });
+        }
+      }
+
+      function renderStructureTree(data) {
+        if (!els.structureTree) return;
+        var tree = Array.isArray(data && data.tree) ? data.tree : [];
+        els.structureTree.textContent = "";
+        if (!tree.length) {
+          var empty = document.createElement("p");
+          empty.className = "structure-tree-empty";
+          empty.textContent =
+            (data && data.message) ||
+            "В папке проекта пока нет файлов для отображения.";
+          els.structureTree.appendChild(empty);
+          return;
+        }
+
+        var scroll = document.createElement("div");
+        scroll.className = "structure-explorer-scroll";
+        var table = document.createElement("table");
+        table.className = "structure-explorer-table";
+        table.setAttribute("role", "tree");
+        var thead = document.createElement("thead");
+        thead.innerHTML =
+          "<tr>" +
+          "<th scope=\"col\">Имя</th>" +
+          "<th scope=\"col\">Назначение</th>" +
+          "<th scope=\"col\">Изменён</th>" +
+          "<th scope=\"col\">Размер</th>" +
+          "</tr>";
+        var tbody = document.createElement("tbody");
+        for (var i = 0; i < tree.length; i++) {
+          appendStructureRows(tbody, tree[i], 0);
+        }
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        scroll.appendChild(table);
+        els.structureTree.appendChild(scroll);
+      }
+
+      function renderStructureMap(data) {
+        if (!els.structureTree) return;
+        state.structureLastData = data || null;
+        if (!data || !data.ok) {
+          if (els.structureFolderCount) els.structureFolderCount.textContent = "—";
+          if (els.structureFileCount) els.structureFileCount.textContent = "—";
+          els.structureTree.innerHTML =
+            '<p class="structure-tree-empty">' +
+            escapeHtml((data && data.message) || "Не удалось прочитать структуру проекта.") +
+            "</p>";
+          return;
+        }
+        if (els.structureFolderCount) {
+          els.structureFolderCount.textContent = String(
+            data.folder_count != null ? data.folder_count : "—"
+          );
+        }
+        if (els.structureFileCount) {
+          els.structureFileCount.textContent = String(
+            data.file_count != null ? data.file_count : "—"
+          );
+        }
+        renderStructureTree(data);
+      }
+
+      function renderStructureRecommendations(_items, _options) {
+        // Техническую диагностику, дубли и внутренние предупреждения не показываем.
+        if (els.structureReview) els.structureReview.hidden = true;
+        if (els.structureReviewCount) els.structureReviewCount.textContent = "";
+        if (els.structureReviewGroups) els.structureReviewGroups.innerHTML = "";
+        if (els.structureReviewActions) els.structureReviewActions.hidden = true;
+        if (els.structureSetupGateNote) els.structureSetupGateNote.hidden = true;
+        hideStructureSetupPreview();
+      }
+
+      function hideStructureSetupPreview() {
+        if (els.structureSetupPreview) els.structureSetupPreview.hidden = true;
+        if (els.structureSetupPreviewList) els.structureSetupPreviewList.innerHTML = "";
+        if (els.structureSetupPreviewHint) els.structureSetupPreviewHint.textContent = "";
+        if (els.structureSetupStillNeeded) els.structureSetupStillNeeded.hidden = true;
+        if (els.structureSetupStillNeededList) {
+          els.structureSetupStillNeededList.innerHTML = "";
+        }
+        state.structureSetupPreview = null;
+        state.structureSetupUserInfo = null;
+      }
+
+      function formatStructurePreviewContent(ch) {
+        if (!ch) return "";
+        if (ch.action === "write_passport" && ch.content_preview && typeof ch.content_preview === "object") {
+          var lines = [];
+          var labels = {
+            name: "Название",
+            summary: "Описание",
+            goal: "Цель",
+            audience: "Аудитория / сведения",
+            expected_result: "Ожидаемый результат",
+            status: "Статус"
+          };
+          Object.keys(labels).forEach(function (key) {
+            var val = String(ch.content_preview[key] || "").trim();
+            if (val) lines.push(labels[key] + ":\n" + val);
+          });
+          return lines.join("\n\n");
+        }
+        return String(ch.content_preview || ch.content || "").trim();
+      }
+
+      function renderStructureSetupPreview(preview) {
+        if (!els.structureSetupPreview || !els.structureSetupPreviewList) return;
+        var changes = Array.isArray(preview && preview.changes) ? preview.changes : [];
+        var actionable = changes.filter(function (ch) {
+          if (!ch) return false;
+          if (ch.action === "create_folder") return !ch.exists;
+          if (ch.action === "move" || ch.action === "create_doc" || ch.action === "write_passport") {
+            return ch.ok !== false;
+          }
+          return false;
+        });
+        els.structureSetupPreviewList.textContent = "";
+        if (els.structureSetupPreviewTitle) {
+          els.structureSetupPreviewTitle.textContent = "Предпросмотр настройки";
+        }
+        if (els.structureSetupPreviewHint) {
+          els.structureSetupPreviewHint.textContent =
+            (preview && preview.confirm_hint) ||
+            "Запись начнётся только после подтверждения. Пустые поля не используются.";
+        }
+        if (!actionable.length) {
+          var empty = document.createElement("li");
+          empty.textContent =
+            "Пока нечего записывать: заполните сведения или дождитесь доступных действий настройки.";
+          els.structureSetupPreviewList.appendChild(empty);
+        } else {
+          for (var i = 0; i < actionable.length; i++) {
+            var ch = actionable[i] || {};
+            var li = document.createElement("li");
+            var title = document.createElement("span");
+            title.className = "structure-review-item-title";
+            if (ch.action === "create_folder") {
+              title.textContent = "Создать папку: " + String(ch.to || ch.path || "archive");
+            } else if (ch.action === "move") {
+              title.textContent =
+                "Перенести: " + String(ch.from || "") + " → " + String(ch.to || "");
+            } else if (ch.action === "write_passport") {
+              title.textContent = "Паспорт проекта (.ai-pos/project_passport.json)";
+            } else if (ch.action === "create_doc") {
+              title.textContent = "Документ: " + String(ch.to || ch.path || ch.filename || "");
+            } else {
+              title.textContent = String(ch.detail || ch.action || "Изменение");
+            }
+            li.appendChild(title);
+            var detail = String(ch.detail || "").trim();
+            if (detail) {
+              var reasonEl = document.createElement("span");
+              reasonEl.className = "structure-review-item-reason";
+              reasonEl.textContent = detail;
+              li.appendChild(reasonEl);
+            }
+            var previewText = formatStructurePreviewContent(ch);
+            if (previewText) {
+              var pre = document.createElement("pre");
+              pre.className = "structure-setup-content-preview";
+              pre.textContent = previewText;
+              li.appendChild(pre);
+            }
+            els.structureSetupPreviewList.appendChild(li);
+          }
+        }
+
+        var still = Array.isArray(preview && preview.still_needed) ? preview.still_needed : [];
+        if (els.structureSetupStillNeeded && els.structureSetupStillNeededList) {
+          els.structureSetupStillNeededList.textContent = "";
+          if (still.length) {
+            for (var s = 0; s < still.length; s++) {
+              var sli = document.createElement("li");
+              var st = document.createElement("span");
+              st.className = "structure-review-item-title";
+              st.textContent = String(still[s] || "").trim() || "Требуется уточнение";
+              sli.appendChild(st);
+              els.structureSetupStillNeededList.appendChild(sli);
+            }
+            els.structureSetupStillNeeded.hidden = false;
+          } else {
+            els.structureSetupStillNeeded.hidden = true;
+          }
+        }
+
+        if (els.btnStructureSetupConfirm) {
+          els.btnStructureSetupConfirm.disabled = !actionable.length;
+        }
+        els.structureSetupPreview.hidden = false;
+        try {
+          els.structureSetupPreview.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+      async function requestStructureSetupPreview(project) {
+        if (!project || !String(project.workFolder || "").trim()) {
+          setStructureStatus("Сначала откройте проект с рабочей папкой.", true);
+          return;
+        }
+        hideStructureSetupPreview();
+        setStructureStatus("Готовим предпросмотр настройки…", false);
+        if (els.btnStructureSetup) els.btnStructureSetup.disabled = true;
+        if (els.btnStructureInfoPreview) els.btnStructureInfoPreview.disabled = true;
+        var userInfo = collectStructureUserInfo(project);
+        try {
+          var res = await postBridgeJson("/api/project-structure/setup-preview", {
+            project_path: project.workFolder,
+            user_info: userInfo
+          });
+          var data = res.data || {};
+          if (!data.ok) {
+            setStructureStatus(
+              data.message || "Не удалось подготовить предпросмотр.",
+              true
+            );
+            return;
+          }
+          state.structureSetupPreview = data;
+          state.structureSetupUserInfo = userInfo;
+          renderStructureSetupPreview(data);
+          setStructureStatus(
+            "Проверьте предпросмотр. Запись на диск — только после подтверждения.",
+            false
+          );
+        } finally {
+          if (els.btnStructureSetup) els.btnStructureSetup.disabled = false;
+          if (els.btnStructureInfoPreview) els.btnStructureInfoPreview.disabled = false;
+        }
+      }
+
+      async function onStructureSetupClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project || !String(project.workFolder || "").trim()) {
+          setStructureStatus("Сначала откройте проект с рабочей папкой.", true);
+          return;
+        }
+        if (els.structureInfoForm && !els.structureInfoForm.hidden) {
+          persistStructureInfoDraft(project, readStructureInfoFormValues());
+        }
+        await requestStructureSetupPreview(project);
+      }
+
+      async function onStructureSetupConfirmClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project || !String(project.workFolder || "").trim()) return;
+        if (!state.structureSetupPreview) {
+          setStructureStatus("Сначала откройте предпросмотр изменений.", true);
+          return;
+        }
+        if (els.btnStructureSetupConfirm) els.btnStructureSetupConfirm.disabled = true;
+        if (els.btnStructureSetupCancel) els.btnStructureSetupCancel.disabled = true;
+        setStructureStatus("Выполняем подтверждённые действия…", false);
+        var userInfo =
+          state.structureSetupUserInfo || collectStructureUserInfo(project);
+        try {
+          var res = await postBridgeJson("/api/project-structure/setup", {
+            project_path: project.workFolder,
+            confirm: true,
+            user_info: userInfo
+          });
+          var data = res.data || {};
+          hideStructureSetupPreview();
+          var cacheKey = project.id || project.workFolder;
+          if (data.tree || data.diagnostics) {
+            var merged = Object.assign({}, state.structureByProject[cacheKey] || {}, data, {
+              ok: true
+            });
+            state.structureByProject[cacheKey] = merged;
+            renderStructureMap(merged);
+            renderStructureRecommendations(merged.recommendations || [], {
+              show: true,
+              focus: true,
+              data: merged
+            });
+          } else {
+            delete state.structureByProject[cacheKey];
+            await ensureStructureLoaded(project, { force: true, withReview: true });
+          }
+          refreshProjectSetupStatus(project).then(function (ready) {
+            if (ready) {
+              setStructureStatus(
+                data.message || "Проект подготовлен для дальнейшей работы.",
+                false
+              );
+            } else {
+              setStructureStatus(
+                data.message || "Настройка выполнена, но проект ещё не подготовлен.",
+                !data.ok
+              );
+            }
+          });
+        } finally {
+          if (els.btnStructureSetupConfirm) els.btnStructureSetupConfirm.disabled = false;
+          if (els.btnStructureSetupCancel) els.btnStructureSetupCancel.disabled = false;
+        }
+      }
+
+      function onStructureSetupCancelClick() {
+        hideStructureSetupPreview();
+        setStructureStatus("Настройка отменена. Изменения на диск не вносились.", false);
+      }
+
+      var PREP_STEPS = [
+        { label: "Структура проекта", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
+        { label: "Документы", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
+        { label: "Архитектура", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
+        { label: "Связи между файлами", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
+        { label: "Паспорт проекта", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
+        { label: "Внутренняя модель проекта", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" }
+      ];
+
+      function setPrepChrome(mode) {
+        function setHidden(el, hide) {
+          if (!el) return;
+          if (hide) el.setAttribute("hidden", "");
+          else el.removeAttribute("hidden");
+          el.hidden = !!hide;
+        }
+        if (els.prepHeading) els.prepHeading.textContent = "Подготовка проекта";
+        if (els.prepLead) {
+          if (mode === "ready") {
+            els.prepLead.textContent = "";
+            setHidden(els.prepLead, true);
+          } else if (mode === "needs") {
+            setHidden(els.prepLead, false);
+            els.prepLead.textContent =
+              "AI POS почти завершила подготовку проекта. Осталось немного рассказать о самом проекте.";
+          } else {
+            setHidden(els.prepLead, false);
+            els.prepLead.textContent = "AI POS подготавливает проект к дальнейшей работе.";
+          }
+        }
+        setHidden(els.prepReadyBlock, mode !== "ready");
+        setHidden(els.prepReadyLine, true);
+        if (els.prepReadyTitle) els.prepReadyTitle.textContent = "Проект подготовлен.";
+        if (els.prepReadyText) {
+          els.prepReadyText.textContent = "AI POS полностью подготовила проект к дальнейшей работе.";
+        }
+        // Навигатор: «Продолжить» сразу после текста о почти завершённой подготовке.
+        setHidden(els.prepActions, mode !== "needs");
+        setHidden(els.btnPrepContinue, mode !== "needs");
+        if (els.btnPrepContinue) els.btnPrepContinue.textContent = "Продолжить";
+        if (mode !== "needs") hidePrepTellScreen();
+        setHidden(els.prepProgressList, false);
+        renderStructureRecommendations([], { show: false });
+      }
+
+      function showPrepTellScreen() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        fillPrepNeedForm(project);
+        if (els.prepNavigatorView) {
+          els.prepNavigatorView.setAttribute("hidden", "");
+          els.prepNavigatorView.hidden = true;
+        }
+        if (els.prepTellScreen) {
+          els.prepTellScreen.removeAttribute("hidden");
+          els.prepTellScreen.hidden = false;
+        }
+        if (els.structureInfoForm) {
+          els.structureInfoForm.removeAttribute("hidden");
+          els.structureInfoForm.hidden = false;
+        }
+        syncPrepTellModeUi();
+        try {
+          if (els.prepTellScreen) {
+            els.prepTellScreen.scrollIntoView({ block: "start", behavior: "smooth" });
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+      function hidePrepTellScreen() {
+        if (els.prepTellScreen) {
+          els.prepTellScreen.setAttribute("hidden", "");
+          els.prepTellScreen.hidden = true;
+        }
+        if (els.prepNavigatorView) {
+          els.prepNavigatorView.removeAttribute("hidden");
+          els.prepNavigatorView.hidden = false;
+        }
+      }
+
+      function getPrepTellMode() {
+        if (els.prepModeQuestionsRadio && els.prepModeQuestionsRadio.checked) return "questions";
+        if (els.prepModeStoryRadio && els.prepModeStoryRadio.checked) return "story";
+        return "materials";
+      }
+
+      function setPrepPanelHidden(el, hide) {
+        if (!el) return;
+        if (hide) {
+          el.setAttribute("hidden", "");
+          el.hidden = true;
+        } else {
+          el.removeAttribute("hidden");
+          el.hidden = false;
+        }
+      }
+
+      function syncPrepTellModeUi() {
+        var mode = getPrepTellMode();
+        setPrepPanelHidden(els.prepModeMaterials, mode !== "materials");
+        setPrepPanelHidden(els.prepModeStory, mode !== "story");
+        setPrepPanelHidden(els.prepModeQuestions, mode !== "questions");
+        if (mode === "questions") {
+          var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+          syncPrepQuestionsVisibility(project);
+        }
+        if (mode === "materials") renderPrepMaterialsList(findProjectRecord(state.currentId) || findProject(state.currentId));
+      }
+
+      function renderPrepMaterialsList(project) {
+        if (!els.prepMaterialsList) return;
+        els.prepMaterialsList.textContent = "";
+        var materials = (project && project.materials) || [];
+        for (var i = 0; i < materials.length; i++) {
+          var m = materials[i] || {};
+          var li = document.createElement("li");
+          var title = document.createElement("span");
+          title.className = "structure-review-item-title";
+          title.textContent = String(m.name || "файл");
+          li.appendChild(title);
+          els.prepMaterialsList.appendChild(li);
+        }
+      }
+
+      function setPrepMaterialsStatus(text, isError) {
+        if (!els.prepMaterialsStatus) return;
+        var msg = String(text || "").trim();
+        if (!msg) {
+          els.prepMaterialsStatus.hidden = true;
+          els.prepMaterialsStatus.textContent = "";
+          return;
+        }
+        els.prepMaterialsStatus.hidden = false;
+        els.prepMaterialsStatus.textContent = msg;
+        els.prepMaterialsStatus.style.color = isError ? "var(--danger, #b42318)" : "";
+      }
+
+      function applyPrepFactsFromMaterials(project) {
+        if (!project) return false;
+        var materials = project.materials || [];
+        var chunks = [];
+        for (var i = 0; i < materials.length; i++) {
+          var text = String((materials[i] && materials[i].contentText) || "").trim();
+          if (text) chunks.push(text);
+        }
+        if (!chunks.length) return false;
+        var joined = chunks.join("\n\n").replace(/\s+/g, " ").trim();
+        if (!joined) return false;
+        var changed = false;
+        if (!String(project.description || project.summary || "").trim()) {
+          project.description = joined.slice(0, 600);
+          project.summary = project.description;
+          changed = true;
+        }
+        if (!String(project.idea || project.goal || "").trim()) {
+          project.idea = joined.slice(0, 280);
+          changed = true;
+        }
+        if (!String(project.result || project.expected_result || "").trim()) {
+          project.result = joined.slice(0, 280);
+          changed = true;
+        }
+        return changed;
+      }
+
+      function syncPrepQuestionsVisibility(project) {
+        var facts = getPrepProjectFacts(project);
+        // Не просим повторно то, что уже известно.
+        setPrepPanelHidden(els.prepFieldDescriptionWrap, !!facts.description);
+        setPrepPanelHidden(els.prepFieldGoalWrap, !!facts.goal);
+        setPrepPanelHidden(els.prepFieldResultWrap, !!facts.result);
+        // Можно пропустить всегда; показываем, только если ещё пусто.
+        setPrepPanelHidden(els.prepFieldAudienceWrap, !!facts.audience);
+      }
+
+      function renderPrepProgress(completedCount) {
+        if (!els.prepProgressList) return;
+        var done = Math.max(0, Math.min(PREP_STEPS.length, completedCount | 0));
+        els.prepProgressList.textContent = "";
+        for (var i = 0; i < PREP_STEPS.length; i++) {
+          var step = PREP_STEPS[i];
+          var li = document.createElement("li");
+          var title = document.createElement("span");
+          title.className = "structure-review-item-title";
+          var status = step.wait;
+          if (i < done || done >= PREP_STEPS.length) status = step.done;
+          else if (i === done) status = step.active;
+          title.textContent = status + " — " + step.label;
+          li.appendChild(title);
+          els.prepProgressList.appendChild(li);
+        }
+        // Во время анимации не переключаем в ready/needs — только прогресс.
+        setPrepChrome("progress");
+      }
+
+      function renderPrepReady() {
+        renderPrepProgress(PREP_STEPS.length);
+        setPrepChrome("ready");
+        setStructureStatus("", false);
+      }
+
+      function getPrepProjectFacts(project) {
+        var passport = getCachedPassport(project) || {};
+        var draft = getStructureInfoDraft(project);
+        return {
+          goal: String(
+            (project && (project.idea || project.goal)) || passport.goal || draft.goal || ""
+          ).trim(),
+          description: String(
+            (project && (project.description || project.summary)) ||
+              passport.summary ||
+              draft.description ||
+              ""
+          ).trim(),
+          result: String(
+            (project && (project.result || project.expected_result)) ||
+              passport.expected_result ||
+              draft.result ||
+              ""
+          ).trim(),
+          audience: String(
+            (project && project.audience) || passport.audience || draft.passport || ""
+          ).trim()
+        };
+      }
+
+      function getMissingPrepFields(project) {
+        if (!project || isDemoProject(project)) return [];
+        var facts = getPrepProjectFacts(project);
+        var missing = [];
+        if (!facts.goal) missing.push({ key: "goal" });
+        if (!facts.description) missing.push({ key: "description" });
+        if (!facts.result) missing.push({ key: "result" });
+        // Кто будет пользоваться — можно пропустить.
+        return missing;
+      }
+
+      function fillPrepNeedForm(project) {
+        fillStructureInfoForm(project);
+        var facts = getPrepProjectFacts(project);
+        if (els.structureInfoGoal) els.structureInfoGoal.value = facts.goal || "";
+        if (els.structureInfoDescription) {
+          els.structureInfoDescription.value = facts.description || "";
+        }
+        if (els.structureInfoResult) els.structureInfoResult.value = facts.result || "";
+        if (els.structureInfoPassport) els.structureInfoPassport.value = facts.audience || "";
+        // Не подставляем уже известное в поле «своими словами» — пользователь не должен переписывать.
+        if (els.prepStoryText) els.prepStoryText.value = "";
+        if (els.prepModeMaterialsRadio) els.prepModeMaterialsRadio.checked = true;
+        if (els.prepModeStoryRadio) els.prepModeStoryRadio.checked = false;
+        if (els.prepModeQuestionsRadio) els.prepModeQuestionsRadio.checked = false;
+        renderPrepMaterialsList(project);
+        setPrepMaterialsStatus("", false);
+        syncPrepTellModeUi();
+      }
+
+      function renderPrepNeedsInfo(project, missing) {
+        if (!project) return;
+        // Сначала используем уже известное и материалы — без повторного ввода.
+        if (applyPrepFactsFromMaterials(project) && !project.isDemo) saveProjects();
+        var items = missing || getMissingPrepFields(project);
+        if (!items.length) {
+          renderPrepReady();
+          updateProjectSetupNavGate();
+          return;
+        }
+        if (!els.prepProgressList) return;
+        els.prepProgressList.textContent = "";
+        var completedAuto = 3;
+        for (var i = 0; i < completedAuto && i < PREP_STEPS.length; i++) {
+          var liDone = document.createElement("li");
+          var tDone = document.createElement("span");
+          tDone.className = "structure-review-item-title";
+          tDone.textContent = PREP_STEPS[i].done + " — " + PREP_STEPS[i].label;
+          liDone.appendChild(tDone);
+          els.prepProgressList.appendChild(liDone);
+        }
+        setPrepChrome("needs");
+        setStructureStatus("", false);
+        hidePrepTellScreen();
+      }
+
+      async function onPrepMaterialsSelected(event) {
+        var files = event.target && event.target.files;
+        if (!files || !files.length) return;
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        if (!project.materials) project.materials = [];
+        setPrepMaterialsStatus("AI POS изучает материалы…", false);
+        var tasks = [];
+        for (var i = 0; i < files.length; i++) tasks.push(ingestFile(files[i], project));
+        try {
+          await Promise.all(tasks);
+          applyPrepFactsFromMaterials(project);
+          if (!project.isDemo) saveProjects();
+          renderPrepMaterialsList(project);
+          if (els.prepMaterialsInput) els.prepMaterialsInput.value = "";
+          var still = getMissingPrepFields(project);
+          if (!still.length) {
+            setPrepMaterialsStatus("Материалы изучены. Продолжаем подготовку…", false);
+            setStructureStatus("", false);
+            hidePrepTellScreen();
+            await ensureStructureLoaded(project, { force: true });
+            return;
+          }
+          setPrepMaterialsStatus(
+            "Материалы добавлены. AI POS уже учла то, что смогла понять. Если чего-то не хватает — можно рассказать своими словами или ответить на несколько вопросов.",
+            false
+          );
+          fillPrepNeedForm(project);
+        } catch (e) {
+          setPrepMaterialsStatus("Не удалось добавить материалы. Попробуйте ещё раз.", true);
+        }
+      }
+
+      function openPrepNeedForm() {
+        showPrepTellScreen();
+      }
+
+      function collectPrepTellValues() {
+        if (getPrepTellMode() === "story") {
+          var story = els.prepStoryText ? String(els.prepStoryText.value || "").trim() : "";
+          return {
+            goal: story,
+            description: story,
+            result: story,
+            passport: "",
+            roadmap: "",
+            architecture: "",
+            design_rules: "",
+            decisions: "",
+            data_schema: ""
+          };
+        }
+        return readStructureInfoFormValues();
+      }
+
+      function sleepPrep(ms) {
+        return new Promise(function (resolve) {
+          setTimeout(resolve, ms);
+        });
+      }
+
+      async function animatePrepProgress(seq, startAt, endAt) {
+        var from = Math.max(0, startAt | 0);
+        var to = Math.max(from, Math.min(PREP_STEPS.length, endAt | 0));
+        for (var step = from; step <= to; step++) {
+          if (seq !== state.structureRequestSeq) return false;
+          renderPrepProgress(step);
+          if (step < to) await sleepPrep(220);
+        }
+        return seq === state.structureRequestSeq;
+      }
+
+      async function autoApplySafeProjectSetup(project) {
+        if (!project || isDemoProject(project) || !String(project.workFolder || "").trim()) {
+          return false;
+        }
+        var userInfo = collectStructureUserInfo(project);
+        var previewRes = await postBridgeJson("/api/project-structure/setup-preview", {
+          project_path: project.workFolder,
+          user_info: userInfo
+        });
+        var preview = (previewRes && previewRes.data) || {};
+        if (!preview.ok) return false;
+        var changes = Array.isArray(preview.changes) ? preview.changes : [];
+        var actionable = changes.filter(function (ch) {
+          if (!ch) return false;
+          if (ch.action === "create_folder") return !ch.exists;
+          if (ch.action === "move" || ch.action === "create_doc" || ch.action === "write_passport") {
+            return ch.ok !== false;
+          }
+          return false;
+        });
+        if (!actionable.length && preview.ready) return true;
+        if (!actionable.length) return false;
+        var applyRes = await postBridgeJson("/api/project-structure/setup", {
+          project_path: project.workFolder,
+          confirm: true,
+          user_info: userInfo
+        });
+        var applied = (applyRes && applyRes.data) || {};
+        return !!applied.ok;
+      }
+
+      async function syncPrepStatusForProject(project, seq) {
+        if (seq !== state.structureRequestSeq) return;
+        if (!project) return;
+        if (isDemoProject(project)) {
+          var okDemo = await animatePrepProgress(seq, 3, PREP_STEPS.length);
+          if (!okDemo) return;
+          renderPrepReady();
+          updateProjectSetupNavGate();
+          return;
+        }
+        var missingEarly = getMissingPrepFields(project);
+        if (missingEarly.length) {
+          var okNeed = await animatePrepProgress(seq, 2, 3);
+          if (!okNeed) return;
+          renderPrepNeedsInfo(project, missingEarly);
+          updateProjectSetupNavGate();
+          return;
+        }
+        if (String(project.workFolder || "").trim()) {
+          await autoApplySafeProjectSetup(project);
+          if (seq !== state.structureRequestSeq) return;
+          await refreshProjectSetupStatus(project);
+        }
+        var missingLate = getMissingPrepFields(project);
+        if (missingLate.length) {
+          renderPrepNeedsInfo(project, missingLate);
+          updateProjectSetupNavGate();
+          return;
+        }
+        var okEnd = await animatePrepProgress(seq, 4, PREP_STEPS.length);
+        if (!okEnd) return;
+        if (!isProjectSetupReady(project)) {
+          markProjectSetupPrepared(project, true);
+        }
+        renderPrepReady();
+        updateProjectSetupNavGate();
+      }
+
+      async function onPrepContinueClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        var mode = getPrepTellMode();
+        if (mode === "materials") {
+          applyPrepFactsFromMaterials(project);
+          if (!project.isDemo) saveProjects();
+          var stillMats = getMissingPrepFields(project);
+          if (!stillMats.length) {
+            setStructureStatus("", false);
+            hidePrepTellScreen();
+            await ensureStructureLoaded(project, { force: true });
+            return;
+          }
+          setPrepMaterialsStatus(
+            "Пока не хватает нескольких деталей. Можно добавить ещё материалы или выбрать другой способ рассказать о проекте.",
+            false
+          );
+          return;
+        }
+        var values = collectPrepTellValues();
+        var hasStory =
+          mode === "story" && String((values && values.description) || "").trim();
+        var hasQuestions =
+          mode === "questions" &&
+          (String(values.goal || "").trim() ||
+            String(values.description || "").trim() ||
+            String(values.result || "").trim() ||
+            !getMissingPrepFields(project).length);
+        // В режиме вопросов: если часть уже известна, достаточно ответить только на пустые.
+        if (mode === "questions") {
+          if (values.goal) project.idea = values.goal;
+          if (values.description) {
+            project.description = values.description;
+            project.summary = values.description;
+          }
+          if (values.result) project.result = values.result;
+          if (values.passport) project.audience = values.passport;
+          persistStructureInfoDraft(project, values);
+          if (!project.isDemo) saveProjects();
+          var stillQ = getMissingPrepFields(project);
+          if (stillQ.length) {
+            syncPrepQuestionsVisibility(project);
+            setStructureStatus("Ответьте на оставшиеся вопросы, чтобы продолжить.", false);
+            return;
+          }
+          setStructureStatus("", false);
+          hidePrepTellScreen();
+          await ensureStructureLoaded(project, { force: true });
+          return;
+        }
+        if (!hasStory && !hasQuestions) {
+          setStructureStatus("Расскажите немного о проекте, чтобы продолжить.", false);
+          return;
+        }
+        persistStructureInfoDraft(project, values);
+        if (values.goal) project.idea = values.goal;
+        if (values.description) {
+          project.description = values.description;
+          project.summary = values.description;
+        }
+        if (values.result) project.result = values.result;
+        if (values.passport) project.audience = values.passport;
+        if (!project.isDemo) saveProjects();
+        var still = getMissingPrepFields(project);
+        if (still.length) {
+          fillPrepNeedForm(project);
+          setStructureStatus("Расскажите немного о проекте, чтобы продолжить.", false);
+          return;
+        }
+        setStructureStatus("", false);
+        hidePrepTellScreen();
+        await ensureStructureLoaded(project, { force: true });
+      }
+
+      function clearStructurePanel() {
+        state.structureLastData = null;
+        if (els.structureFolderCount) els.structureFolderCount.textContent = "—";
+        if (els.structureFileCount) els.structureFileCount.textContent = "—";
+        if (els.structureTree) {
+          els.structureTree.innerHTML =
+            '<p class="structure-tree-empty">Откройте проект с рабочей папкой, чтобы увидеть структуру.</p>';
+        }
+        renderStructureRecommendations([], { show: false });
+        hideStructureSetupPreview();
+        setStructureStatus("", false);
+      }
+
+      async function ensureStructureLoaded(project, options) {
+        var opts = options || {};
+        if (!els.structureTree) return;
+        var seq = (state.structureRequestSeq || 0) + 1;
+        state.structureRequestSeq = seq;
+        hideStructureSetupPreview();
+        renderStructureRecommendations([], { show: false });
+        setStructureStatus("", false);
+        renderPrepProgress(0);
+
+        if (!project) {
+          clearStructurePanel();
+          return;
+        }
+
+        if (isDemoProject(project) || !String(project.workFolder || "").trim()) {
+          clearStructurePanel();
+          if (isDemoProject(project)) {
+            setStructureStatus(
+              "Для примера структура папки на диске не читается. Откройте реальный проект.",
+              false
+            );
+          }
+          await syncPrepStatusForProject(project, seq);
+          return;
+        }
+
+        var cacheKey = project.id || project.workFolder;
+        var cached = state.structureByProject[cacheKey];
+        if (cached && cached.ok && !opts.force) {
+          renderStructureMap(cached);
+          renderStructureRecommendations([], { show: false });
+          var okCache = await animatePrepProgress(seq, 0, 3);
+          if (!okCache) return;
+          await syncPrepStatusForProject(project, seq);
+          return;
+        }
+
+        var okStart = await animatePrepProgress(seq, 0, 2);
+        if (!okStart) return;
+        setStructureStatus("Читаем структуру проекта…", false);
+        var res = await postBridgeJson("/api/project-structure/map", {
+          project_path: project.workFolder
+        });
+        if (seq !== state.structureRequestSeq) return;
+        if (state.currentId && project.id && state.currentId !== project.id) return;
+        var data = res.data || { ok: false, message: "Не удалось прочитать структуру проекта." };
+        if (data.ok) state.structureByProject[cacheKey] = data;
+        renderStructureMap(data);
+        renderStructureRecommendations([], { show: false });
+        if (data.ok) setStructureStatus("", false);
+        else setStructureStatus(data.message || "Не удалось прочитать структуру проекта.", true);
+        await syncPrepStatusForProject(project, seq);
+      }
+
+      async function runStructureReview() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        var cacheKey = project.id || project.workFolder;
+        delete state.structureByProject[cacheKey];
+        await ensureStructureLoaded(project, { force: true });
+      }
+
       function openWorkspace(id, keepScroll, options) {
         var opts = options || {};
         var project = findProject(id);
         if (!project) return;
+        var entering = !!opts.enterProject || state.currentId !== id;
         state.currentId = id;
         state.exampleMode = id === DEMO_PROJECT.id;
         state.stageIssuesOpen = false;
@@ -12402,6 +15567,23 @@
 
         var view = deriveView(project);
         state.selectedTool = resolvePrimaryToolId(project);
+
+        // Always open Navigator first when entering a project.
+        if (entering) {
+          state.activeTab = "structure";
+        } else if (opts.tab) {
+          state.activeTab = opts.tab;
+        } else if (!state.activeTab) {
+          state.activeTab = defaultWorkspaceTabForProject(project);
+        }
+        if (
+          !isProjectSetupReady(project) &&
+          (state.activeTab === "overview" ||
+            state.activeTab === "task" ||
+            state.activeTab === "work")
+        ) {
+          state.activeTab = "structure";
+        }
 
         renderHeader(project, view);
         renderOverview(project, view);
@@ -12414,12 +15596,26 @@
         renderMaterials(project);
         renderTeam(project);
         renderSettings(project);
-        setActiveTab(state.activeTab || "overview", { force: true, skipHistory: true });
+        setActiveTab(state.activeTab || "structure", { force: true, skipHistory: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
         syncExampleUi();
         syncProjectChrome();
-        setOsNavActive(navIdForActiveTab(state.activeTab || "overview"));
+        updateProjectSetupNavGate();
+        setOsNavActive(navIdForActiveTab(state.activeTab || "structure"));
         loadAndRenderStageTrack(project);
+        if (state.activeTab === "structure") {
+          ensureStructureLoaded(project);
+        }
+        if (!isDemoProject(project) && String(project.workFolder || "").trim()) {
+          refreshProjectSetupStatus(project).then(function (ready) {
+            if (!ready && (state.activeTab === "overview" || state.activeTab === "task" || state.activeTab === "work")) {
+              state.activeTab = "structure";
+              setActiveTab("structure", { force: true, skipHistory: true });
+              setOsNavActive("structure");
+              ensureStructureLoaded(project);
+            }
+          });
+        }
         commitNavHistory(opts);
       }
 
@@ -13016,51 +16212,6 @@
       }
 
       function bindEvents() {
-        if (els.wsOpenKnowledge) {
-          els.wsOpenKnowledge.addEventListener("click", function () {
-            openKnowledgeBase();
-          });
-        }
-
-        if (els.btnOpenKnowledgeHome) {
-          els.btnOpenKnowledgeHome.addEventListener("click", function () {
-            openKnowledgeBase();
-          });
-        }
-
-        if (els.btnKbBackProjects) {
-          els.btnKbBackProjects.addEventListener("click", function () {
-            openSystemHome();
-          });
-        }
-
-        if (els.btnKbAddSource) {
-          els.btnKbAddSource.addEventListener("click", onKnowledgeAddClick);
-        }
-
-        if (els.btnKbBackList) {
-          els.btnKbBackList.addEventListener("click", function () {
-            showKnowledgeListView();
-            loadKnowledgeSources();
-          });
-        }
-
-        if (els.btnKbDelete) {
-          els.btnKbDelete.addEventListener("click", function () {
-            if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = false;
-          });
-        }
-
-        if (els.btnKbDeleteCancel) {
-          els.btnKbDeleteCancel.addEventListener("click", function () {
-            if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
-          });
-        }
-
-        if (els.btnKbDeleteConfirm) {
-          els.btnKbDeleteConfirm.addEventListener("click", onKnowledgeDeleteConfirm);
-        }
-
         if (els.btnProjectPicker) {
           els.btnProjectPicker.addEventListener("click", function (event) {
             event.stopPropagation();
@@ -13569,8 +16720,121 @@
             openOsSection(btn.getAttribute("data-os-nav"));
           });
         }
+        if (els.wsGoHome) {
+          els.wsGoHome.addEventListener("click", function () { goToBootScreen(); });
+        }
+        if (els.wsAllProjects) {
+          els.wsAllProjects.addEventListener("click", function () { openSystemHome(); });
+        }
+        if (els.wsNewProject) {
+          els.wsNewProject.addEventListener("click", function () { openForm("new"); });
+        }
+        if (els.wsOpenSettings) {
+          els.wsOpenSettings.addEventListener("click", function () { openOsSection("settings"); });
+        }
+        if (els.btnOpenKnowledgeHome) {
+          els.btnOpenKnowledgeHome.addEventListener("click", function () {
+            openKnowledgeBase();
+          });
+        }
+        if (els.btnKbBackProjects) {
+          els.btnKbBackProjects.addEventListener("click", function () {
+            openSystemHome();
+          });
+        }
+        if (els.kbBrandHome) {
+          els.kbBrandHome.addEventListener("click", function () {
+            openSystemHome();
+          });
+        }
+        if (els.btnKbAddSource) {
+          els.btnKbAddSource.addEventListener("click", onKnowledgeAddClick);
+        }
+        if (els.btnKbBackList) {
+          els.btnKbBackList.addEventListener("click", function () {
+            showKnowledgeListView();
+            loadKnowledgeSources();
+          });
+        }
+        if (els.btnKbDelete) {
+          els.btnKbDelete.addEventListener("click", function () {
+            if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = false;
+          });
+        }
+        if (els.btnKbDeleteCancel) {
+          els.btnKbDeleteCancel.addEventListener("click", function () {
+            if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
+          });
+        }
+        if (els.btnKbDeleteConfirm) {
+          els.btnKbDeleteConfirm.addEventListener("click", onKnowledgeDeleteConfirm);
+        }
+        if (els.btnPrepContinue) {
+          els.btnPrepContinue.addEventListener("click", openPrepNeedForm);
+        }
+        if (els.btnPrepTellBack) {
+          els.btnPrepTellBack.addEventListener("click", hidePrepTellScreen);
+        }
+        if (els.btnPrepContinueForm) {
+          els.btnPrepContinueForm.addEventListener("click", onPrepContinueClick);
+        }
+        if (els.prepModeMaterialsRadio) {
+          els.prepModeMaterialsRadio.addEventListener("change", syncPrepTellModeUi);
+        }
+        if (els.prepModeStoryRadio) {
+          els.prepModeStoryRadio.addEventListener("change", syncPrepTellModeUi);
+        }
+        if (els.prepModeQuestionsRadio) {
+          els.prepModeQuestionsRadio.addEventListener("change", syncPrepTellModeUi);
+        }
+        if (els.prepMaterialsInput) {
+          els.prepMaterialsInput.addEventListener("change", onPrepMaterialsSelected);
+        }
+        if (els.btnStructureReview) {
+          els.btnStructureReview.addEventListener("click", function () {
+            runStructureReview();
+          });
+        }
+        if (els.btnStructureSetup) {
+          els.btnStructureSetup.addEventListener("click", onStructureSetupClick);
+        }
+        if (els.btnStructureSetupConfirm) {
+          els.btnStructureSetupConfirm.addEventListener("click", onStructureSetupConfirmClick);
+        }
+        if (els.btnStructureSetupCancel) {
+          els.btnStructureSetupCancel.addEventListener("click", onStructureSetupCancelClick);
+        }
+        if (els.btnStructureInfoPreview) {
+          els.btnStructureInfoPreview.addEventListener("click", onStructureInfoPreviewClick);
+        }
+        if (els.btnStructureInfoSave) {
+          els.btnStructureInfoSave.addEventListener("click", onStructureInfoSaveClick);
+        }
+        if (els.btnStructureInfoClose) {
+          els.btnStructureInfoClose.addEventListener("click", onStructureInfoCloseClick);
+        }
+        if (els.settingsDeveloperMode) {
+          els.settingsDeveloperMode.addEventListener("change", function () {
+            applyWorkspaceMode(els.settingsDeveloperMode.checked ? "developer" : "user");
+          });
+        }
+        if (els.btnSettingsCheckUpdates) {
+          els.btnSettingsCheckUpdates.addEventListener("click", function () {
+            if (!els.settingsUpdatesNote) return;
+            els.settingsUpdatesNote.hidden = false;
+            els.settingsUpdatesNote.removeAttribute("hidden");
+            els.settingsUpdatesNote.textContent =
+              "Сейчас используется локальная сборка AI POS. Проверка обновлений пока недоступна.";
+          });
+        }
 
         document.getElementById("btnContinue").addEventListener("click", function () {
+          var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+          if (!isProjectSetupReady(project)) {
+            openOsSection("structure");
+            setStructureStatus("Сначала проверьте и настройте проект", false);
+            return;
+          }
           openOsSection("current-task");
         });
         if (els.btnCopyProjectPath) {
@@ -13586,8 +16850,7 @@
           closeModal(els.stepModal);
           var focus = getFocusProject();
           if (!focus) return;
-          state.activeTab = "task";
-          openWorkspace(focus.id);
+          openWorkspace(focus.id, false, { tab: "task" });
         });
         document.getElementById("btnCloseStep").addEventListener("click", function () { closeModal(els.stepModal); });
         document.getElementById("btnClearTemplate").addEventListener("click", function () {
@@ -13833,12 +17096,20 @@
       }
 
       function syncAppearanceSwitch(activePref) {
-        if (!els.appearanceSwitch) return;
-        var buttons = els.appearanceSwitch.querySelectorAll("[data-appearance-choice]");
-        for (var i = 0; i < buttons.length; i++) {
-          var value = buttons[i].getAttribute("data-appearance-choice");
-          buttons[i].classList.toggle("is-active", value === activePref);
-          buttons[i].setAttribute("aria-pressed", value === activePref ? "true" : "false");
+        var pref = activePref === "light" || activePref === "dark" || activePref === "system"
+          ? activePref
+          : "system";
+        if (els.appearanceSwitch) {
+          var buttons = els.appearanceSwitch.querySelectorAll("[data-appearance-choice]");
+          for (var i = 0; i < buttons.length; i++) {
+            var value = buttons[i].getAttribute("data-appearance-choice");
+            buttons[i].classList.toggle("is-active", value === pref);
+            buttons[i].setAttribute("aria-pressed", value === pref ? "true" : "false");
+          }
+        }
+        var radios = document.querySelectorAll('input[name="settingsTheme"]');
+        for (var r = 0; r < radios.length; r++) {
+          radios[r].checked = radios[r].value === pref;
         }
       }
 
@@ -13849,6 +17120,13 @@
             var btn = event.target.closest("[data-appearance-choice]");
             if (!btn || !els.appearanceSwitch.contains(btn)) return;
             applyAppearance(btn.getAttribute("data-appearance-choice"));
+          });
+        }
+        var themeRadios = document.querySelectorAll('input[name="settingsTheme"]');
+        for (var t = 0; t < themeRadios.length; t++) {
+          themeRadios[t].addEventListener("change", function () {
+            if (!this.checked) return;
+            applyAppearance(this.value);
           });
         }
         if (window.matchMedia) {
@@ -13876,243 +17154,6 @@
         if (shell) shell.hidden = true;
       }
 
-
-      function setKnowledgeStatus(text, isError) {
-        if (!els.kbStatus) return;
-        var msg = String(text || "").trim();
-        if (!msg) {
-          els.kbStatus.hidden = true;
-          els.kbStatus.textContent = "";
-          els.kbStatus.classList.remove("is-error");
-          return;
-        }
-        els.kbStatus.hidden = false;
-        els.kbStatus.textContent = msg;
-        els.kbStatus.classList.toggle("is-error", !!isError);
-      }
-
-
-
-      function formatKnowledgeDate(iso) {
-        var raw = String(iso || "").trim();
-        if (!raw) return "—";
-        var dt = new Date(raw);
-        if (isNaN(dt.getTime())) return raw;
-        var dd = String(dt.getDate()).padStart(2, "0");
-        var mm = String(dt.getMonth() + 1).padStart(2, "0");
-        var yyyy = dt.getFullYear();
-        var hh = String(dt.getHours()).padStart(2, "0");
-        var mi = String(dt.getMinutes()).padStart(2, "0");
-        return dd + "." + mm + "." + yyyy + " " + hh + ":" + mi;
-      }
-
-
-
-      function formatKnowledgeSize(bytes) {
-        var n = Number(bytes);
-        if (!isFinite(n) || n < 0) return "—";
-        if (n < 1024) return String(n) + " Б";
-        if (n < 1024 * 1024) return (n / 1024).toFixed(1).replace(".0", "") + " КБ";
-        return (n / (1024 * 1024)).toFixed(1).replace(".0", "") + " МБ";
-      }
-
-
-
-      function showKnowledgeListView() {
-        state.knowledgeSelectedId = null;
-        if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
-        if (els.kbCardView) els.kbCardView.hidden = true;
-        if (els.kbListView) els.kbListView.hidden = false;
-      }
-
-
-
-      function renderKnowledgeList(sources) {
-        if (!els.kbSourceList) return;
-        var list = Array.isArray(sources) ? sources : [];
-        els.kbSourceList.textContent = "";
-        if (els.kbEmpty) els.kbEmpty.hidden = list.length > 0;
-        for (var i = 0; i < list.length; i++) {
-          var s = list[i] || {};
-          var btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "kb-list-item";
-          btn.setAttribute("data-kb-id", String(s.id || ""));
-          var title = document.createElement("span");
-          title.className = "kb-list-title";
-          title.textContent = String(s.title || "Без названия");
-          var status = document.createElement("span");
-          status.className = "kb-list-status";
-          status.textContent = String(s.status_label || "Добавлен");
-          var meta = document.createElement("span");
-          meta.className = "kb-list-meta";
-          meta.textContent =
-            String(s.type_label || s.type || "Файл") +
-            " · " +
-            formatKnowledgeDate(s.added_at) +
-            " · " +
-            formatKnowledgeSize(s.size);
-          btn.appendChild(title);
-          btn.appendChild(status);
-          btn.appendChild(meta);
-          btn.addEventListener("click", function (ev) {
-            var id = ev.currentTarget.getAttribute("data-kb-id");
-            if (id) openKnowledgeCard(id);
-          });
-          els.kbSourceList.appendChild(btn);
-        }
-      }
-
-
-
-      async function loadKnowledgeSources() {
-        setKnowledgeStatus("Загружаем источники…", false);
-        try {
-          var res = await postBridgeJson("/api/knowledge/sources/list", {});
-          var data = res.data || {};
-          if (!data.ok) {
-            setKnowledgeStatus(data.message || "Не удалось загрузить базу знаний.", true);
-            renderKnowledgeList([]);
-            return;
-          }
-          state.knowledgeSources = data.sources || [];
-          state.knowledgeStoragePath = data.storage_path || "";
-          renderKnowledgeList(state.knowledgeSources);
-          setKnowledgeStatus(
-            state.knowledgeSources.length
-              ? "Источников: " + state.knowledgeSources.length
-              : "",
-            false
-          );
-        } catch (e) {
-          setKnowledgeStatus("Не удалось связаться с AI POS для базы знаний.", true);
-          renderKnowledgeList([]);
-        }
-      }
-
-
-
-      async function openKnowledgeCard(sourceId) {
-        setKnowledgeStatus("Открываем источник…", false);
-        try {
-          var res = await postBridgeJson("/api/knowledge/sources/get", { id: sourceId });
-          var data = res.data || {};
-          if (!data.ok || !data.source) {
-            setKnowledgeStatus(data.message || "Источник не найден.", true);
-            return;
-          }
-          var s = data.source;
-          state.knowledgeSelectedId = s.id;
-          if (els.kbListView) els.kbListView.hidden = true;
-          if (els.kbCardView) els.kbCardView.hidden = false;
-          if (els.kbDeleteConfirm) els.kbDeleteConfirm.hidden = true;
-          if (els.kbCardTitle) els.kbCardTitle.textContent = s.title || "—";
-          if (els.kbCardType) els.kbCardType.textContent = s.type_label || s.type || "—";
-          if (els.kbCardDate) els.kbCardDate.textContent = formatKnowledgeDate(s.added_at);
-          if (els.kbCardSize) els.kbCardSize.textContent = formatKnowledgeSize(s.size);
-          if (els.kbCardStatus) els.kbCardStatus.textContent = s.status_label || "Добавлен";
-          if (els.kbCardOrigin) els.kbCardOrigin.textContent = s.origin_label || "—";
-          if (els.kbCardPreview) {
-            if (s.is_image && s.preview_url) {
-              els.kbCardPreview.hidden = false;
-              els.kbCardPreview.src = s.preview_url;
-            } else {
-              els.kbCardPreview.hidden = true;
-              els.kbCardPreview.removeAttribute("src");
-            }
-          }
-          setKnowledgeStatus("", false);
-        } catch (e) {
-          setKnowledgeStatus("Не удалось открыть источник.", true);
-        }
-      }
-
-
-
-      function openKnowledgeBase() {
-        showPanel("list");
-        if (els.systemHome) els.systemHome.hidden = true;
-        if (els.systemKnowledge) els.systemKnowledge.hidden = false;
-        if (els.desktopStart) els.desktopStart.hidden = true;
-        if (els.desktopInfo) els.desktopInfo.hidden = true;
-        if (els.desktopActions) els.desktopActions.hidden = true;
-        showKnowledgeListView();
-        loadKnowledgeSources();
-        try {
-          window.scrollTo(0, 0);
-        } catch (e) {
-          /* ignore */
-        }
-      }
-
-
-
-      async function onKnowledgeAddClick() {
-        if (els.btnKbAddSource) els.btnKbAddSource.disabled = true;
-        setKnowledgeStatus("Выберите файл…", false);
-        try {
-          var pick = await postBridgeJson("/api/knowledge/sources/pick", {
-            title: "Выберите файл для базы знаний"
-          });
-          var pickData = pick.data || {};
-          if (pickData.cancelled) {
-            setKnowledgeStatus("Добавление отменено.", false);
-            return;
-          }
-          if (!pickData.ok || !pickData.path) {
-            setKnowledgeStatus(pickData.message || "Не удалось выбрать файл.", true);
-            return;
-          }
-          setKnowledgeStatus("Сохраняем источник…", false);
-          var add = await postBridgeJson("/api/knowledge/sources/add", {
-            file_path: pickData.path
-          });
-          var addData = add.data || {};
-          if (!addData.ok) {
-            setKnowledgeStatus(addData.message || "Не удалось добавить источник.", true);
-            return;
-          }
-          showKnowledgeListView();
-          await loadKnowledgeSources();
-          setKnowledgeStatus("Источник добавлен.", false);
-          if (addData.source && addData.source.id) {
-            openKnowledgeCard(addData.source.id);
-          }
-        } catch (e) {
-          setKnowledgeStatus("Не удалось добавить источник.", true);
-        } finally {
-          if (els.btnKbAddSource) els.btnKbAddSource.disabled = false;
-        }
-      }
-
-
-
-      async function onKnowledgeDeleteConfirm() {
-        var id = state.knowledgeSelectedId;
-        if (!id) return;
-        if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = true;
-        setKnowledgeStatus("Удаляем источник…", false);
-        try {
-          var res = await postBridgeJson("/api/knowledge/sources/delete", {
-            id: id,
-            confirm: true
-          });
-          var data = res.data || {};
-          if (!data.ok) {
-            setKnowledgeStatus(data.message || "Не удалось удалить источник.", true);
-            return;
-          }
-          showKnowledgeListView();
-          await loadKnowledgeSources();
-          setKnowledgeStatus("Источник удалён.", false);
-        } catch (e) {
-          setKnowledgeStatus("Не удалось удалить источник.", true);
-        } finally {
-          if (els.btnKbDeleteConfirm) els.btnKbDeleteConfirm.disabled = false;
-        }
-      }
-
-
       function init() {
         if (openedAsFile()) {
           showLaunchNotice();
@@ -14126,6 +17167,8 @@
         fillPrimaryToolSelects();
         initAppearanceControls();
         applyDetailLevel("technical", { persist: false });
+        state.workspaceMode = loadWorkspaceMode();
+        syncWorkspaceModeUi();
         bindEvents();
         renderTemplates();
         renderDesktop();
