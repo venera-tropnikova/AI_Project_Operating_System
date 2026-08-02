@@ -3222,8 +3222,232 @@
       margin-bottom: 1.25rem;
     }
 
+    .project-info-summary {
+      margin: 0.35rem 0 1rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 10px;
+      background: color-mix(in srgb, #1e3a6e 8%, var(--surface, #fff));
+      border: 1px solid color-mix(in srgb, #1e3a6e 18%, var(--line, #d8d2c8));
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    html[data-color-scheme="dark"] .project-info-summary {
+      background: color-mix(in srgb, #7aa2ff 12%, var(--surface, #1a1a1a));
+      border-color: color-mix(in srgb, #7aa2ff 22%, var(--line, #333));
+    }
+    .project-info-summary-title {
+      margin: 0 0 0.35rem;
+      font-size: 1rem;
+      font-weight: 650;
+      color: var(--ink, #1f1c18);
+    }
+    .project-info-summary-lines {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.1rem;
+      margin: 0;
+      color: var(--ink-soft, #3d3a36);
+    }
+    .project-info-summary-lines strong {
+      font-weight: 650;
+    }
+    .project-info-group {
+      margin: 0 0 1.15rem;
+    }
+    .project-info-group-title {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 650;
+      color: var(--ink-soft, #3d3a36);
+    }
+    .project-info-subgroup {
+      margin: 0 0 0.7rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--line, #d8d2c8);
+      border-radius: 10px;
+      background: var(--surface, #fff);
+    }
+    .project-info-subgroup-title {
+      margin: 0 0 0.45rem;
+      font-size: 0.82rem;
+      font-weight: 650;
+      color: var(--muted, #6b6560);
+      letter-spacing: 0.01em;
+    }
+    .project-info-fields {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0;
+    }
+    .project-info-row {
+      border: 1px solid var(--line, #d8d2c8);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      background: var(--surface, #fff);
+    }
+    .project-info-subgroup .project-info-row {
+      border: 0;
+      border-radius: 0;
+      padding: 0.35rem 0;
+      background: transparent;
+      border-bottom: 1px solid color-mix(in srgb, var(--line, #d8d2c8) 70%, transparent);
+    }
+    .project-info-subgroup .project-info-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .project-info-subgroup .project-info-row:first-child {
+      padding-top: 0;
+    }
+    .project-info-label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+      color: var(--muted, #6b6560);
+    }
+    .project-info-value {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    .project-info-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0.15rem 0 0;
+    }
+    .project-info-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--line, #d8d2c8) 55%, var(--surface, #fff));
+      font-size: 0.8rem;
+      line-height: 1.3;
+      color: var(--ink-soft, #3d3a36);
+    }
+    .project-info-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.9rem;
+      margin: 0;
+    }
+    .project-info-stat {
+      min-width: 4.5rem;
+    }
+    .project-info-stat-value {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+    .project-info-stat-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted, #6b6560);
+    }
+    .project-info-cat-list {
+      margin: 0.45rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.2rem;
+      font-size: 0.84rem;
+      color: var(--ink-soft, #3d3a36);
+    }
+    .project-info-doc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.35rem;
+    }
+    .project-info-doc-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.05rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--line, #d8d2c8) 70%, transparent);
+    }
+    .project-info-doc-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .project-info-doc-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .project-info-doc-path {
+      font-size: 0.75rem;
+      color: var(--muted, #6b6560);
+      word-break: break-all;
+    }
+    .project-info-needs {
+      margin: 0.25rem 0 1rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid color-mix(in srgb, #c4a35a 35%, var(--line, #d8d2c8));
+      border-radius: 10px;
+      background: color-mix(in srgb, #f7efd9 55%, var(--surface, #fff));
+    }
+    html[data-color-scheme="dark"] .project-info-needs {
+      background: color-mix(in srgb, #c4a35a 12%, var(--surface, #1a1a1a));
+      border-color: color-mix(in srgb, #c4a35a 28%, var(--line, #333));
+    }
+    .project-info-needs-title {
+      margin: 0 0 0.2rem;
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+    .project-info-needs-hint {
+      margin: 0 0 0.4rem;
+      font-size: 0.82rem;
+      color: var(--muted, #6b6560);
+    }
+    .project-info-needs-list {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+    .project-info-needs-list li {
+      margin: 0.18rem 0;
+      font-size: 0.9rem;
+    }
+    .project-info-tech {
+      margin: 0 0 0.75rem;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--line, #d8d2c8);
+      border-radius: 8px;
+      background: var(--surface, #fff);
+    }
+    .project-info-tech > summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--muted, #6b6560);
+    }
+    .project-info-tech-body {
+      margin-top: 0.55rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .project-info-tech-row {
+      padding: 0.4rem 0;
+      border-top: 1px solid var(--line, #e8e2d8);
+      font-size: 0.8rem;
+      line-height: 1.35;
+      color: var(--muted, #6b6560);
+    }
+    .project-info-tech-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .project-info-tech-label {
+      font-weight: 600;
+      color: var(--ink-soft, #3d3a36);
+    }
     .project-overview-lead {
-      margin: 0 0 1rem;
+      margin: 0 0 0.65rem;
       font-size: 0.95rem;
       color: var(--ink-muted);
       line-height: 1.45;
@@ -6623,7 +6847,7 @@
         </div>
         <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
           <button type="button" class="project-section-nav-item" data-os-nav="structure" data-nav-modes="user developer">Навигатор проекта</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer" data-requires-setup="true">Состояние проекта</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer" data-requires-setup="true">Сведения о проекте</button>
           <button type="button" class="project-section-nav-item" data-os-nav="current-task" data-nav-modes="user developer" data-requires-setup="true" data-nav-label-user="Работа над проектом" data-nav-label-developer="Текущая задача">Работа над проектом</button>
           <button type="button" class="project-section-nav-item" data-os-nav="rules" data-nav-modes="developer">Правила</button>
           <button type="button" class="project-section-nav-item" data-os-nav="materials" data-nav-modes="developer">Материалы</button>
@@ -6842,34 +7066,20 @@
         <div class="tab-panel" id="tab-overview" data-tab-panel="overview" hidden>
           <div class="project-overview" id="projectOverview">
             <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Текущая стадия AI POS" hidden></div>
-            <h3 class="section-heading lv-project">Состояние проекта</h3>
-            <p class="project-overview-lead">Экран текущего состояния проекта: стадия AI POS и основные сведения о проекте.</p>
-            <div class="overview-grid" id="projectOverviewGrid">
-              <div class="overview-item is-goal">
-                <span class="field-label">Название</span>
-                <p id="poName">—</p>
-              </div>
-              <div class="overview-item">
-                <span class="field-label">Состояние готовности</span>
-                <p id="poStatus">—</p>
-              </div>
-              <div class="overview-item wide is-goal">
-                <span class="field-label">Краткое описание</span>
-                <p id="poGoal">—</p>
-              </div>
-              <div class="overview-item">
-                <span class="field-label">Аудитория</span>
-                <p id="poAudience">—</p>
-              </div>
-              <div class="overview-item">
-                <span class="field-label">Ожидаемый результат</span>
-                <p id="poExpected">—</p>
-              </div>
-              <div class="overview-item wide is-path">
-                <span class="field-label">Рабочая папка</span>
-                <p class="overview-path" id="poPath">не указана</p>
-              </div>
+            <h3 class="section-heading lv-project">Сведения о проекте</h3>
+            <p class="project-overview-lead">Что AI POS уже знает о проекте. Только просмотр.</p>
+            <p class="section-note" id="projectInfoStatus" hidden></p>
+            <div class="project-info-summary" id="projectInfoSummary" hidden></div>
+            <div id="projectInfoBody" aria-live="polite"></div>
+            <div class="project-info-needs" id="projectInfoNeeds" hidden>
+              <h4 class="project-info-needs-title">Можно дополнить</h4>
+              <p class="project-info-needs-hint">Необязательно сейчас — эти сведения помогут AI POS работать точнее.</p>
+              <ul class="project-info-needs-list" id="projectInfoNeedsList"></ul>
             </div>
+            <details class="project-info-tech" id="projectInfoTech" hidden>
+              <summary>Техническая информация</summary>
+              <div class="project-info-tech-body" id="projectInfoTechBody"></div>
+            </details>
           </div>
           <div class="stage-hidden-support" aria-hidden="true">
             <p id="ovGoal"></p>
@@ -7805,12 +8015,14 @@
         currentStageTitle: document.getElementById("currentStageTitle"),
         currentStageScreen: document.getElementById("currentStageScreen"),
         projectOverview: document.getElementById("projectOverview"),
-        poName: document.getElementById("poName"),
-        poStatus: document.getElementById("poStatus"),
-        poGoal: document.getElementById("poGoal"),
-        poAudience: document.getElementById("poAudience"),
-        poExpected: document.getElementById("poExpected"),
-        poPath: document.getElementById("poPath"),
+        projectInfoSummary: document.getElementById("projectInfoSummary"),
+        projectInfoBody: document.getElementById("projectInfoBody"),
+        projectInfoFields: document.getElementById("projectInfoBody"),
+        projectInfoNeeds: document.getElementById("projectInfoNeeds"),
+        projectInfoNeedsList: document.getElementById("projectInfoNeedsList"),
+        projectInfoTech: document.getElementById("projectInfoTech"),
+        projectInfoTechBody: document.getElementById("projectInfoTechBody"),
+        projectInfoStatus: document.getElementById("projectInfoStatus"),
         ovGoal: document.getElementById("ovGoal"),
         ovModule: document.getElementById("ovModule"),
         ovStatus: document.getElementById("ovStatus"),
@@ -10115,13 +10327,22 @@
 
       async function readPassportFromBridge(projectPath) {
         var folder = String(projectPath || "").trim();
-        if (!folder) return { ok: false, passport: null, exists: false, message: "Нет рабочей папки." };
+        if (!folder) {
+          return {
+            ok: false,
+            passport: null,
+            exists: false,
+            found_facts: null,
+            message: "Нет рабочей папки."
+          };
+        }
         var res = await postBridgeJson("/api/project-passport/read", { project_path: folder });
         if (!res.data || !res.data.ok) {
           return {
             ok: false,
             passport: null,
             exists: false,
+            found_facts: (res.data && res.data.found_facts) || null,
             message: (res.data && res.data.message) || "Не удалось прочитать сведения о проекте."
           };
         }
@@ -10129,6 +10350,7 @@
           ok: true,
           passport: res.data.passport ? normalizePassportClient(res.data.passport) : null,
           exists: !!res.data.exists,
+          found_facts: res.data.found_facts || null,
           message: res.data.message || null
         };
       }
@@ -11636,6 +11858,9 @@
         } else if (typeof hidePrepTellScreen === "function") {
           hidePrepTellScreen();
         }
+        if (state.activeTab === "overview") {
+          refreshProjectAbout(findProjectRecord(state.currentId) || findProject(state.currentId));
+        }
         if (typeof syncProjectBannerContinue === "function") {
           syncProjectBannerContinue();
         }
@@ -12281,38 +12506,772 @@
         return path;
       }
 
-      function overviewFieldsFromProject(project, passport) {
-        var p = passport || null;
-        var name = (p && p.name) || (project && project.name) || "";
-        var status = (p && p.status) || (project && project.status) || "";
-        var goal =
-          (p && (p.goal || p.summary)) ||
-          (project && project.idea) ||
-          "";
-        var audience = (p && p.audience) || (project && project.audience) || "";
-        var expected =
-          (p && p.expected_result) ||
-          (project && project.result) ||
-          "";
-        return {
-          name: textOrDash(name),
-          status: textOrDash(status),
-          goal: textOrDash(goal),
-          audience: textOrDash(audience),
-          expected: textOrDash(expected),
-          path: humanWorkFolderPath(project)
-        };
+      var PROJECT_INFO_ORIGIN = {
+        confirmed: "Подтверждено пользователем",
+        user_provided: "Введено пользователем",
+        detected: "Обнаружено автоматически",
+        needs_confirmation: "Требует подтверждения",
+        missing: "Не заполнено"
+      };
+
+      function projectInfoNonEmpty(value) {
+        if (value == null) return false;
+        if (typeof value === "string") return !!value.trim();
+        if (Array.isArray(value)) return value.length > 0;
+        if (typeof value === "object") return Object.keys(value).length > 0;
+        return true;
       }
 
-      function renderProjectAbout(project, passport) {
-        if (!els.poName) return;
-        var fields = overviewFieldsFromProject(project, passport);
-        els.poName.textContent = fields.name;
-        if (els.poStatus) els.poStatus.textContent = fields.status;
-        if (els.poGoal) els.poGoal.textContent = fields.goal;
-        if (els.poAudience) els.poAudience.textContent = fields.audience;
-        if (els.poExpected) els.poExpected.textContent = fields.expected;
-        if (els.poPath) els.poPath.textContent = fields.path;
+      function formatProjectInfoDate(value) {
+        var raw = String(value || "").trim();
+        if (!raw) return "";
+        var ms = Date.parse(raw);
+        if (!isFinite(ms)) return "";
+        try {
+          return new Date(ms).toLocaleString("ru-RU", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+        } catch (e) {
+          return "";
+        }
+      }
+
+      function formatProjectInfoValue(value, fieldId) {
+        if (value == null) return "";
+        if (fieldId === "created_at" || fieldId === "updated_at") {
+          return formatProjectInfoDate(value);
+        }
+        if (typeof value === "string") {
+          if (/^\d{4}-\d{2}-\d{2}T/.test(value.trim())) {
+            return formatProjectInfoDate(value) || value;
+          }
+          return value;
+        }
+        if (Array.isArray(value)) {
+          if (!value.length) return "";
+          if (typeof value[0] === "string") return value.join("\n");
+          return value.map(function (item) {
+            if (!item || typeof item !== "object") return String(item);
+            if (item.name && item.description) {
+              return item.name + " — " + item.description +
+                (item.status ? " (" + item.status + ")" : "");
+            }
+            if (item.path) return item.path;
+            return String(item.name || item.id || "");
+          }).filter(Boolean).join("\n");
+        }
+        if (typeof value === "object") {
+          if (fieldId === "structure") {
+            var parts = [];
+            if (value.folder_count != null) parts.push("папок: " + value.folder_count);
+            if (value.file_count != null) parts.push("файлов: " + value.file_count);
+            if (Array.isArray(value.categories)) parts.push("категорий: " + value.categories.length);
+            return parts.join("\n");
+          }
+          return Object.keys(value).map(function (key) {
+            return key + ": " + value[key];
+          }).join("\n\n");
+        }
+        return String(value);
+      }
+
+      var PROJECT_INFO_SENSE_IDS = {
+        name: true,
+        summary: true,
+        goal: true,
+        audience: true,
+        expected_result: true,
+        human_status: true,
+        card_idea: true,
+        card_result: true
+      };
+
+      function pushProjectInfoField(list, field) {
+        if (!field || !projectInfoNonEmpty(field.value)) return;
+        list.push(field);
+      }
+
+      function collectProjectInfoView(project, passport, foundFacts, stageInfo, structureInfo, setupInfo) {
+        var fields = [];
+        var needs = [];
+        var conflicts = [];
+        var p = passport || null;
+        var facts = foundFacts || {};
+        var readme = facts.readme || null;
+        var context = facts.project_context || null;
+
+        pushProjectInfoField(fields, {
+          id: "name",
+          label: "Название",
+          value: (p && p.name) || (project && project.name) || "",
+          source: (p && p.name)
+            ? ".ai-pos/project_passport.json → name"
+            : "карточка проекта → name",
+          origin: (p && p.name) ? "user_provided" : "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "summary",
+          label: "Краткое описание",
+          value: (p && p.summary) || "",
+          source: ".ai-pos/project_passport.json → summary",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "goal",
+          label: "Цель",
+          value: (p && p.goal) || "",
+          source: ".ai-pos/project_passport.json → goal",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "audience",
+          label: "Аудитория",
+          value: (p && p.audience) || "",
+          source: ".ai-pos/project_passport.json → audience",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "expected_result",
+          label: "Ожидаемый результат",
+          value: (p && p.expected_result) || "",
+          source: ".ai-pos/project_passport.json → expected_result",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "human_status",
+          label: "Рабочий статус",
+          value: (p && p.status) || (project && project.status) || "",
+          source: (p && p.status)
+            ? ".ai-pos/project_passport.json → status"
+            : "карточка проекта → status",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "capabilities",
+          label: "Возможности",
+          value: (p && Array.isArray(p.capabilities) ? p.capabilities : []),
+          source: ".ai-pos/project_passport.json → capabilities",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "product_modules",
+          label: "Модули в паспорте",
+          value: (p && Array.isArray(p.modules) ? p.modules : []),
+          source: ".ai-pos/project_passport.json → modules",
+          origin: "user_provided"
+        });
+
+        var workFolder = String((project && project.workFolder) || "").trim();
+        pushProjectInfoField(fields, {
+          id: "work_folder",
+          label: "Рабочая папка",
+          value: workFolder,
+          source: "карточка проекта → workFolder",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "primary_tool",
+          label: "Основной инструмент",
+          value: String((project && project.primaryTool) || "").trim(),
+          source: "карточка проекта → primaryTool",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "constraints",
+          label: "Ограничения",
+          value: String((project && project.constraints) || "").trim(),
+          source: "карточка проекта → constraints",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "launch_url",
+          label: "Адрес запуска",
+          value: String((project && (project.launchUrl || project.launch_url)) || "").trim(),
+          source: "карточка проекта → launchUrl",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "preview_url",
+          label: "Адрес просмотра",
+          value: String((project && (project.preview_url || project.previewUrl)) || "").trim(),
+          source: "карточка проекта → preview_url",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "github_url_card",
+          label: "GitHub (карточка)",
+          value: String((project && project.githubUrl) || "").trim(),
+          source: "карточка проекта → githubUrl",
+          origin: "user_provided"
+        });
+        pushProjectInfoField(fields, {
+          id: "created_at",
+          label: "Создан",
+          value: String((project && project.createdAt) || "").trim(),
+          source: "карточка проекта → createdAt",
+          origin: "user_provided"
+        });
+        var materials = project && Array.isArray(project.materials) ? project.materials : [];
+        if (materials.length) {
+          pushProjectInfoField(fields, {
+            id: "materials",
+            label: "Материалы карточки",
+            value: materials.length + " шт.",
+            source: "карточка проекта → materials",
+            origin: "user_provided"
+          });
+        }
+
+        pushProjectInfoField(fields, {
+          id: "repository_url",
+          label: "Репозиторий Git",
+          value: facts.git_remote_origin || "",
+          source: "git remote origin",
+          origin: "detected"
+        });
+
+        if (readme) {
+          pushProjectInfoField(fields, {
+            id: "readme_title",
+            label: "Название из README",
+            value: readme.title || "",
+            source: (readme.path || "README.md") + " → заголовок",
+            origin: "detected"
+          });
+          pushProjectInfoField(fields, {
+            id: "readme_purpose",
+            label: "Описание из README",
+            value: readme.purpose || "",
+            source: (readme.path || "README.md") + " → первый абзац",
+            origin: "needs_confirmation"
+          });
+          pushProjectInfoField(fields, {
+            id: "technologies",
+            label: "Технологии",
+            value: readme.technologies || [],
+            source: (readme.path || "README.md") + " → раздел «Технологии»",
+            origin: "needs_confirmation"
+          });
+          pushProjectInfoField(fields, {
+            id: "readme_capabilities",
+            label: "Возможности из README",
+            value: readme.capabilities || [],
+            source: (readme.path || "README.md") + " → раздел «Возможности»",
+            origin: "needs_confirmation"
+          });
+          pushProjectInfoField(fields, {
+            id: "online_url",
+            label: "Онлайн-версия",
+            value: readme.online_url || "",
+            source: (readme.path || "README.md") + " → раздел «Онлайн»",
+            origin: "needs_confirmation"
+          });
+        }
+
+        if (context && context.path) {
+          pushProjectInfoField(fields, {
+            id: "project_context_path",
+            label: "PROJECT_CONTEXT",
+            value: context.path,
+            source: "найденный файл",
+            origin: "detected"
+          });
+          if (context.sections && typeof context.sections === "object") {
+            Object.keys(context.sections).forEach(function (heading) {
+              pushProjectInfoField(fields, {
+                id: "context_" + heading,
+                label: "Контекст: " + heading,
+                value: context.sections[heading],
+                source: context.path + " → «" + heading + "»",
+                origin: "needs_confirmation"
+              });
+            });
+          }
+        }
+
+        var docs = Array.isArray(facts.documents) ? facts.documents : [];
+        if (docs.length) {
+          pushProjectInfoField(fields, {
+            id: "documents",
+            label: "Найденные документы",
+            value: docs,
+            source: "файловая система проекта",
+            origin: "detected"
+          });
+        }
+
+        if (structureInfo && structureInfo.ok) {
+          pushProjectInfoField(fields, {
+            id: "structure",
+            label: "Структура проекта",
+            value: {
+              folder_count: structureInfo.folder_count,
+              file_count: structureInfo.file_count,
+              categories: Array.isArray(structureInfo.categories)
+                ? structureInfo.categories
+                : []
+            },
+            source: "Bridge /api/project-structure/map",
+            origin: "detected"
+          });
+        }
+
+        if (stageInfo && stageInfo.stage) {
+          var stageValue = stageInfo.stage_label
+            ? stageInfo.stage_label + " (" + stageInfo.stage + ")"
+            : stageInfo.stage;
+          if (stageInfo.confidence_state) {
+            stageValue += " · " + stageInfo.confidence_state;
+          }
+          pushProjectInfoField(fields, {
+            id: "lifecycle_stage",
+            label: "Этап AI POS (система)",
+            value: stageValue,
+            source: ".ai-pos/project_stage.json",
+            origin: "detected"
+          });
+        }
+
+        if (setupInfo && setupInfo.prepared === true) {
+          pushProjectInfoField(fields, {
+            id: "setup_prepared",
+            label: "Подготовка проекта",
+            value: "Подготовлен",
+            source: ".ai-pos/project_setup.json → prepared",
+            origin: "detected"
+          });
+        }
+
+        // Card-only idea/result when they are not empty and differ from passport.
+        var cardIdea = String((project && project.idea) || "").trim();
+        var cardResult = String((project && project.result) || "").trim();
+        var passSummary = String((p && p.summary) || "").trim();
+        var passGoal = String((p && p.goal) || "").trim();
+        var passExpected = String((p && p.expected_result) || "").trim();
+        if (cardIdea && cardIdea !== passSummary && cardIdea !== passGoal) {
+          pushProjectInfoField(fields, {
+            id: "card_idea",
+            label: "Идея в карточке",
+            value: cardIdea,
+            source: "карточка проекта → idea",
+            origin: "user_provided"
+          });
+          conflicts.push("Описание: passport summary/goal и карточка idea различаются");
+        }
+        if (cardResult && cardResult !== passExpected) {
+          pushProjectInfoField(fields, {
+            id: "card_result",
+            label: "Результат в карточке",
+            value: cardResult,
+            source: "карточка проекта → result",
+            origin: "user_provided"
+          });
+          conflicts.push("Результат: passport expected_result и карточка result различаются");
+        }
+        if (
+          readme &&
+          Array.isArray(readme.capabilities) &&
+          readme.capabilities.length &&
+          p &&
+          Array.isArray(p.capabilities) &&
+          p.capabilities.length
+        ) {
+          conflicts.push("Возможности: passport capabilities и README «Возможности» различаются");
+        }
+        if (
+          String((project && project.stage) || "").trim() &&
+          stageInfo &&
+          stageInfo.stage
+        ) {
+          conflicts.push(
+            "Этап: метка карточки «" +
+              String(project.stage).trim() +
+              "» и System stage «" +
+              stageInfo.stage +
+              "» — разные слои"
+          );
+        }
+
+        function needIfMissing(id, label, present) {
+          if (!present) needs.push({ id: id, label: label });
+        }
+        needIfMissing("summary", "Краткое описание", !!(p && String(p.summary || "").trim()));
+        needIfMissing("goal", "Цель", !!(p && String(p.goal || "").trim()));
+        needIfMissing("audience", "Аудитория", !!(p && String(p.audience || "").trim()));
+        needIfMissing("expected_result", "Ожидаемый результат", !!(p && String(p.expected_result || "").trim()));
+        needIfMissing("primary_tool", "Основной инструмент", !!String((project && project.primaryTool) || "").trim());
+        needIfMissing("constraints", "Ограничения", !!String((project && project.constraints) || "").trim());
+        needIfMissing(
+          "repository_or_online",
+          "Адрес репозитория или онлайн-версии",
+          !!(facts.git_remote_origin || (readme && readme.online_url) || String((project && project.githubUrl) || "").trim())
+        );
+
+        return { fields: fields, needs: needs, conflicts: conflicts };
+      }
+
+      function projectInfoDocTitle(path) {
+        var rel = String(path || "").replace(/\\/g, "/");
+        var map = {
+          "README.md": "Описание проекта",
+          "readme.md": "Описание проекта",
+          "PROJECT_CONTEXT.md": "Контекст проекта",
+          "docs/PROJECT_CONTEXT.md": "Контекст проекта",
+          "ROADMAP.md": "План работ",
+          "docs/ROADMAP.md": "План работ",
+          "PROJECT_PASSPORT.md": "Паспорт проекта",
+          "docs/ARCHITECTURE.md": "Архитектура",
+          "ARCHITECTURE.md": "Архитектура",
+          "docs/DESIGN_RULES.md": "Правила дизайна",
+          "DESIGN_RULES.md": "Правила дизайна",
+          "docs/DATA_SCHEMA.md": "Схема данных",
+          "DATA_SCHEMA.md": "Схема данных",
+          "docs/DECISIONS.md": "Решения",
+          "DECISIONS.md": "Решения",
+          "PROJECT_RULES.md": "Правила проекта",
+          "DESIGN_PHILOSOPHY.md": "Философия дизайна"
+        };
+        if (map[rel]) return map[rel];
+        var base = rel.split("/").pop() || rel;
+        return base.replace(/\.md$/i, "").replace(/[_-]+/g, " ");
+      }
+
+      function renderProjectInfoTags(items) {
+        var list = Array.isArray(items) ? items : [];
+        if (!list.length) return "";
+        var html = '<div class="project-info-tags">';
+        for (var i = 0; i < list.length; i++) {
+          var text = String(list[i] || "").trim();
+          if (!text) continue;
+          html += '<span class="project-info-tag">' + escapeHtml(text) + "</span>";
+        }
+        html += "</div>";
+        return html;
+      }
+
+      function renderProjectInfoDocuments(docs) {
+        var list = Array.isArray(docs) ? docs : [];
+        if (!list.length) return "";
+        var html = '<ul class="project-info-doc-list">';
+        for (var i = 0; i < list.length; i++) {
+          var path = typeof list[i] === "string" ? list[i] : (list[i] && list[i].path) || "";
+          if (!path) continue;
+          html +=
+            '<li class="project-info-doc-item">' +
+            '<span class="project-info-doc-title">' + escapeHtml(projectInfoDocTitle(path)) + "</span>" +
+            '<span class="project-info-doc-path">' + escapeHtml(String(path).replace(/\\/g, "/")) + "</span>" +
+            "</li>";
+        }
+        html += "</ul>";
+        return html;
+      }
+
+      function renderProjectInfoStructure(value) {
+        if (!value || typeof value !== "object") return "";
+        var folders = value.folder_count;
+        var files = value.file_count;
+        var cats = Array.isArray(value.categories) ? value.categories : [];
+        var html = '<div class="project-info-stats">';
+        if (folders != null) {
+          html +=
+            '<div class="project-info-stat"><span class="project-info-stat-value">' +
+            escapeHtml(String(folders)) +
+            '</span><span class="project-info-stat-label">папок</span></div>';
+        }
+        if (files != null) {
+          html +=
+            '<div class="project-info-stat"><span class="project-info-stat-value">' +
+            escapeHtml(String(files)) +
+            '</span><span class="project-info-stat-label">файлов</span></div>';
+        }
+        if (cats.length) {
+          html +=
+            '<div class="project-info-stat"><span class="project-info-stat-value">' +
+            escapeHtml(String(cats.length)) +
+            '</span><span class="project-info-stat-label">категорий</span></div>';
+        }
+        html += "</div>";
+        if (cats.length) {
+          html += '<ul class="project-info-cat-list">';
+          for (var i = 0; i < cats.length; i++) {
+            var c = cats[i] || {};
+            html +=
+              "<li>" +
+              escapeHtml(String(c.label || c.id || "Категория")) +
+              " — " +
+              escapeHtml(String(c.count != null ? c.count : 0)) +
+              "</li>";
+          }
+          html += "</ul>";
+        }
+        return html;
+      }
+
+      function renderProjectInfoFieldCard(field) {
+        if (!field) return "";
+        if (field.id === "technologies" || field.id === "capabilities" || field.id === "readme_capabilities") {
+          var tags = renderProjectInfoTags(field.value);
+          if (!tags) return "";
+          return (
+            '<article class="project-info-row" data-field-id="' + escapeHtml(field.id) + '">' +
+            '<span class="project-info-label">' + escapeHtml(field.label) + "</span>" +
+            tags +
+            "</article>"
+          );
+        }
+        if (field.id === "documents") {
+          var docsHtml = renderProjectInfoDocuments(field.value);
+          if (!docsHtml) return "";
+          return (
+            '<article class="project-info-row" data-field-id="' + escapeHtml(field.id) + '">' +
+            docsHtml +
+            "</article>"
+          );
+        }
+        if (field.id === "structure") {
+          var structHtml = renderProjectInfoStructure(field.value);
+          if (!structHtml) return "";
+          return (
+            '<article class="project-info-row" data-field-id="' + escapeHtml(field.id) + '">' +
+            structHtml +
+            "</article>"
+          );
+        }
+        var valueText = formatProjectInfoValue(field.value, field.id);
+        if (!String(valueText || "").trim()) return "";
+        return (
+          '<article class="project-info-row" data-field-id="' + escapeHtml(field.id) + '">' +
+          '<span class="project-info-label">' + escapeHtml(field.label) + "</span>" +
+          '<p class="project-info-value">' + escapeHtml(valueText) + "</p>" +
+          "</article>"
+        );
+      }
+
+      function renderProjectInfoEnvSubgroup(title, groupId, fields) {
+        if (!fields || !fields.length) return "";
+        var cards = "";
+        for (var i = 0; i < fields.length; i++) cards += renderProjectInfoFieldCard(fields[i]);
+        if (!cards) return "";
+        return (
+          '<div class="project-info-subgroup" data-env-group="' + escapeHtml(groupId) + '">' +
+          '<h5 class="project-info-subgroup-title">' + escapeHtml(title) + "</h5>" +
+          cards +
+          "</div>"
+        );
+      }
+
+      function pickProjectInfoFields(byId, ids) {
+        var out = [];
+        for (var i = 0; i < ids.length; i++) {
+          if (byId[ids[i]]) out.push(byId[ids[i]]);
+        }
+        return out;
+      }
+
+      function renderProjectInfoView(view, statusText) {
+        if (!els.projectInfoBody && !els.projectInfoFields) return;
+        var host = els.projectInfoBody || els.projectInfoFields;
+        var fields = (view && view.fields) || [];
+        var needs = (view && view.needs) || [];
+        var sense = [];
+        var environment = [];
+        var byId = {};
+        for (var i = 0; i < fields.length; i++) {
+          var field = fields[i];
+          byId[field.id] = field;
+          if (PROJECT_INFO_SENSE_IDS[field.id]) sense.push(field);
+          else environment.push(field);
+        }
+
+        if (els.projectInfoSummary) {
+          if (fields.length || needs.length) {
+            els.projectInfoSummary.hidden = false;
+            els.projectInfoSummary.innerHTML =
+              '<p class="project-info-summary-title">AI POS изучила проект</p>' +
+              '<div class="project-info-summary-lines">' +
+              "<span>Подтверждено: <strong>" + fields.length + "</strong> сведений</span>" +
+              "<span>Требуют уточнения: <strong>" + needs.length + "</strong></span>" +
+              "</div>";
+          } else {
+            els.projectInfoSummary.hidden = true;
+            els.projectInfoSummary.innerHTML = "";
+          }
+        }
+
+        var html = "";
+        if (!fields.length) {
+          html = '<p class="section-note">Пока нет найденных сведений для отображения.</p>';
+        } else {
+          if (sense.length) {
+            html += '<section class="project-info-group" data-group="sense">';
+            html += '<h4 class="project-info-group-title">О проекте</h4>';
+            html += '<div class="project-info-fields">';
+            for (var s = 0; s < sense.length; s++) html += renderProjectInfoFieldCard(sense[s]);
+            html += "</div></section>";
+          }
+
+          if (environment.length) {
+            html += '<section class="project-info-group" data-group="environment">';
+            html += '<h4 class="project-info-group-title">Рабочая среда</h4>';
+
+            var contextFields = [];
+            Object.keys(byId).forEach(function (id) {
+              if (id === "project_context_path" || id.indexOf("context_") === 0) {
+                contextFields.push(byId[id]);
+              }
+            });
+
+            html += renderProjectInfoEnvSubgroup(
+              "README",
+              "readme",
+              pickProjectInfoFields(byId, [
+                "readme_title",
+                "readme_purpose",
+                "technologies",
+                "readme_capabilities",
+                "online_url"
+              ])
+            );
+            html += renderProjectInfoEnvSubgroup("PROJECT_CONTEXT", "context", contextFields);
+            html += renderProjectInfoEnvSubgroup(
+              "Git",
+              "git",
+              pickProjectInfoFields(byId, ["repository_url", "github_url_card"])
+            );
+            html += renderProjectInfoEnvSubgroup(
+              "Рабочая папка",
+              "folder",
+              pickProjectInfoFields(byId, [
+                "work_folder",
+                "created_at",
+                "primary_tool",
+                "launch_url",
+                "preview_url"
+              ])
+            );
+            html += renderProjectInfoEnvSubgroup(
+              "Структура проекта",
+              "structure",
+              pickProjectInfoFields(byId, ["structure"])
+            );
+            html += renderProjectInfoEnvSubgroup(
+              "Документы",
+              "documents",
+              pickProjectInfoFields(byId, ["documents"])
+            );
+
+            var used = {
+              readme_title: true,
+              readme_purpose: true,
+              technologies: true,
+              readme_capabilities: true,
+              online_url: true,
+              project_context_path: true,
+              repository_url: true,
+              github_url_card: true,
+              work_folder: true,
+              created_at: true,
+              primary_tool: true,
+              launch_url: true,
+              preview_url: true,
+              structure: true,
+              documents: true
+            };
+            Object.keys(byId).forEach(function (id) {
+              if (id.indexOf("context_") === 0) used[id] = true;
+            });
+            var other = [];
+            for (var o = 0; o < environment.length; o++) {
+              if (!used[environment[o].id]) other.push(environment[o]);
+            }
+            if (other.length) {
+              html += renderProjectInfoEnvSubgroup("Другое", "other", other);
+            }
+            html += "</section>";
+          }
+        }
+        host.innerHTML = html;
+
+        if (els.projectInfoNeeds && els.projectInfoNeedsList) {
+          if (needs.length) {
+            els.projectInfoNeeds.hidden = false;
+            els.projectInfoNeedsList.innerHTML = needs.map(function (n) {
+              return "<li>" + escapeHtml(n.label) + "</li>";
+            }).join("");
+          } else {
+            els.projectInfoNeeds.hidden = true;
+            els.projectInfoNeedsList.innerHTML = "";
+          }
+        }
+
+        if (els.projectInfoTech && els.projectInfoTechBody) {
+          var techParts = [];
+          for (var t = 0; t < fields.length; t++) {
+            var tf = fields[t];
+            var originLabel = PROJECT_INFO_ORIGIN[tf.origin] || tf.origin || "";
+            var techValue = "";
+            if (tf.id === "structure" && tf.value && typeof tf.value === "object") {
+              techValue =
+                "папок=" + (tf.value.folder_count != null ? tf.value.folder_count : "—") +
+                ", файлов=" + (tf.value.file_count != null ? tf.value.file_count : "—") +
+                ", категорий=" +
+                (Array.isArray(tf.value.categories) ? tf.value.categories.length : 0);
+            } else if (tf.id === "documents" && Array.isArray(tf.value)) {
+              techValue = tf.value.length + " документ(ов)";
+            } else {
+              techValue = formatProjectInfoValue(tf.value, tf.id);
+            }
+            techParts.push(
+              '<div class="project-info-tech-row" data-field-id="' + escapeHtml(tf.id) + '">' +
+              '<div class="project-info-tech-label">' + escapeHtml(tf.label) + "</div>" +
+              "<div>Источник: " + escapeHtml(tf.source || "—") +
+              (originLabel ? " · " + escapeHtml(originLabel) : "") +
+              (techValue ? "<br>Значение: " + escapeHtml(String(techValue).slice(0, 220)) : "") +
+              "</div></div>"
+            );
+          }
+          if (view && view.conflicts && view.conflicts.length) {
+            techParts.push(
+              '<div class="project-info-tech-row">' +
+              '<div class="project-info-tech-label">Расхождения источников</div>' +
+              "<div>" + escapeHtml(view.conflicts.join("; ")) + "</div></div>"
+            );
+          }
+          if (techParts.length) {
+            els.projectInfoTech.hidden = false;
+            els.projectInfoTechBody.innerHTML = techParts.join("");
+          } else {
+            els.projectInfoTech.hidden = true;
+            els.projectInfoTechBody.innerHTML = "";
+          }
+        }
+
+        if (els.projectInfoStatus) {
+          var note = String(statusText || "").trim();
+          els.projectInfoStatus.hidden = !note;
+          els.projectInfoStatus.textContent = note;
+        }
+      }
+
+      function renderProjectAbout(project, passport, foundFacts, stageInfo, structureInfo, setupInfo) {
+        if (!els.projectInfoBody && !els.projectInfoFields) return;
+        if (!project) {
+          renderProjectInfoView({ fields: [], needs: [], conflicts: [] }, "");
+          return;
+        }
+        var view = collectProjectInfoView(
+          project,
+          passport,
+          foundFacts,
+          stageInfo,
+          structureInfo,
+          setupInfo
+        );
+        renderProjectInfoView(view, "");
       }
 
       async function refreshProjectAbout(project) {
@@ -12320,14 +13279,26 @@
           renderProjectAbout(null, null);
           return;
         }
-        // Demo and projects without a folder never call Bridge for passport.
+        // Demo and projects without a folder: card-only facts, no Bridge writes.
         if (project.isDemo || !String(project.workFolder || "").trim()) {
-          renderProjectAbout(project, null);
+          renderProjectAbout(project, getCachedPassport(project), null, null, null, null);
           return;
         }
         var cached = getCachedPassport(project);
-        renderProjectAbout(project, cached);
-        var read = await readPassportFromBridge(project.workFolder);
+        renderProjectAbout(project, cached, null, null, null, null);
+        var folder = project.workFolder;
+        var passportRes = await postBridgeJson("/api/project-passport/read", {
+          project_path: folder
+        });
+        var stageRes = await postBridgeJson("/api/project-stage/read", {
+          project_path: folder
+        });
+        var structureRes = await postBridgeJson("/api/project-structure/map", {
+          project_path: folder
+        });
+        var setupRes = await postBridgeJson("/api/project-structure/setup-status", {
+          project_path: folder
+        });
         var workspaceActive =
           els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
         if (
@@ -12337,18 +13308,55 @@
         ) {
           return;
         }
-        if (read.ok && read.passport) {
-          setCachedPassport(project, read.passport);
-          applyPassportToProjectFields(project, read.passport);
-          renderProjectAbout(project, read.passport);
+        var passport = cached;
+        var foundFacts = null;
+        // postBridgeJson → { ok?: transport, status, data }; payload success is data.ok.
+        var passportTransportOk = !!(passportRes && (passportRes.ok === true || (passportRes.status >= 200 && passportRes.status < 300)));
+        var passportPayloadOk = !!(passportRes && passportRes.data && passportRes.data.ok);
+        var stageTransportOk = !!(stageRes && (stageRes.ok === true || (stageRes.status >= 200 && stageRes.status < 300)));
+        var stagePayloadOk = !!(stageRes && stageRes.data && stageRes.data.ok);
+        var structureTransportOk = !!(structureRes && (structureRes.ok === true || (structureRes.status >= 200 && structureRes.status < 300)));
+        var structurePayloadOk = !!(structureRes && structureRes.data && structureRes.data.ok);
+        var setupTransportOk = !!(setupRes && (setupRes.ok === true || (setupRes.status >= 200 && setupRes.status < 300)));
+        var setupPayloadOk = !!(setupRes && setupRes.data && setupRes.data.ok);
+        if (passportPayloadOk) {
+          if (passportRes.data.passport) {
+            passport = normalizePassportClient(passportRes.data.passport);
+            setCachedPassport(project, passport);
+            // Read-only screen: do not mutate card / localStorage from passport.
+          }
+          foundFacts = passportRes.data.found_facts || null;
+        }
+        var stageInfo = stagePayloadOk ? stageRes.data : null;
+        var structureInfo = structurePayloadOk ? structureRes.data : null;
+        var setupInfo = setupPayloadOk ? setupRes.data : null;
+        var statusParts = [];
+        if (!passportTransportOk || !passportPayloadOk) statusParts.push("Паспорт сейчас недоступен.");
+        if (!stageTransportOk || !stagePayloadOk) statusParts.push("Системный этап сейчас недоступен.");
+        renderProjectAbout(
+          project,
+          passport,
+          foundFacts,
+          stageInfo,
+          structureInfo,
+          setupInfo
+        );
+        if (els.projectInfoStatus && statusParts.length) {
+          var prev = els.projectInfoStatus.textContent || "";
+          els.projectInfoStatus.hidden = false;
+          els.projectInfoStatus.textContent = (statusParts.join(" ") + " " + prev).trim();
+        }
+        if (passport && passport.name) {
           if (els.osNavProjectName) {
-            els.osNavProjectName.textContent = project.name || "Проект";
+            els.osNavProjectName.textContent = passport.name || project.name || "Проект";
           }
           if (els.projectPickerLabel) {
-            els.projectPickerLabel.textContent = project.name || "Проект";
+            els.projectPickerLabel.textContent = passport.name || project.name || "Проект";
           }
-        } else {
-          renderProjectAbout(project, cached);
+          // Banner name only if already matching project display; do not write card.
+          if (els.projectBannerName && passport.name) {
+            els.projectBannerName.textContent = passport.name;
+          }
         }
       }
 

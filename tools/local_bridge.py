@@ -881,11 +881,231 @@ def resolve_project_passport_path(
     return resolved_root, passport_path, None
 
 
+_DOC_CANDIDATES = (
+    "README.md",
+    "PROJECT_CONTEXT.md",
+    "docs/PROJECT_CONTEXT.md",
+    "ROADMAP.md",
+    "docs/ROADMAP.md",
+    "PROJECT_PASSPORT.md",
+    "docs/ARCHITECTURE.md",
+    "ARCHITECTURE.md",
+    "docs/DESIGN_RULES.md",
+    "DESIGN_RULES.md",
+    "docs/DATA_SCHEMA.md",
+    "DATA_SCHEMA.md",
+    "docs/DECISIONS.md",
+    "DECISIONS.md",
+    "PROJECT_RULES.md",
+    "DESIGN_PHILOSOPHY.md",
+)
+
+
+def _facts_md_section_body(text: str, heading_match: str) -> str:
+    """Literal body of first ## section whose heading contains heading_match."""
+    lines = str(text or "").splitlines()
+    start = -1
+    for i, ln in enumerate(lines):
+        stripped = ln.strip()
+        if stripped.startswith("##") and heading_match.lower() in stripped.lower():
+            start = i + 1
+            break
+    if start < 0:
+        return ""
+    body: list[str] = []
+    for ln in lines[start:]:
+        st = ln.strip()
+        if st.startswith("## ") or (st.startswith("##") and not st.startswith("###")):
+            break
+        body.append(ln)
+    return "\n".join(body).strip()
+
+
+def _facts_first_paragraph_after_title(text: str) -> str:
+    lines = str(text or "").splitlines()
+    i = 0
+    while i < len(lines) and not lines[i].strip().startswith("#"):
+        i += 1
+    if i < len(lines) and lines[i].strip().startswith("#"):
+        i += 1
+    chunk: list[str] = []
+    while i < len(lines):
+        ln = lines[i]
+        if ln.strip().startswith("#"):
+            break
+        if not ln.strip():
+            if chunk:
+                break
+            i += 1
+            continue
+        chunk.append(ln.strip())
+        i += 1
+    return " ".join(chunk).strip()
+
+
+def _facts_bullet_lines(section_body: str) -> list[str]:
+    items: list[str] = []
+    for ln in str(section_body or "").splitlines():
+        s = ln.strip()
+        if s.startswith(("- ", "* ")):
+            item = s[2:].strip()
+            if item:
+                items.append(item)
+    return items
+
+
+def _facts_first_url(text: str) -> str | None:
+    match = re.search(r"https?://[^\s<>\"')\]]+", str(text or ""), flags=re.IGNORECASE)
+    if not match:
+        return None
+    return match.group(0).rstrip(".,;")
+
+
+def _read_git_remote_origin(root: Path) -> str | None:
+    git_dir = root / ".git"
+    if not git_dir.exists():
+        return None
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(root), "remote", "get-url", "origin"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=5,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if proc.returncode != 0:
+        return None
+    url = str(proc.stdout or "").strip()
+    return url or None
+
+
+def _parse_readme_found_facts(text: str, rel_path: str) -> dict[str, Any]:
+    """Literal README facts only. Does not invent goal/audience/result."""
+    payload: dict[str, Any] = {"path": rel_path}
+    for ln in str(text or "").splitlines():
+        if ln.startswith("# "):
+            title = ln[2:].strip()
+            if title:
+                payload["title"] = title
+            break
+    purpose = _facts_first_paragraph_after_title(text)
+    if purpose:
+        payload["purpose"] = purpose
+    tech_body = _facts_md_section_body(text, "Технологии")
+    tech = _facts_bullet_lines(tech_body)
+    if tech:
+        payload["technologies"] = tech
+    caps_body = _facts_md_section_body(text, "Возможности")
+    caps = _facts_bullet_lines(caps_body)
+    if caps:
+        payload["capabilities"] = caps
+    online_body = _facts_md_section_body(text, "Онлайн")
+    online = _facts_first_url(online_body) or _facts_first_url(
+        _facts_md_section_body(text, "Онлайн-версия")
+    )
+    if online:
+        payload["online_url"] = online
+    return payload
+
+
+def _parse_context_sections(text: str) -> dict[str, str]:
+    """Return only explicitly present named sections (literal body, truncated)."""
+    wanted = (
+        "Главная идея",
+        "Для кого продукт",
+        "Что приложение не делает",
+        "Текущий статус проекта",
+    )
+    sections: dict[str, str] = {}
+    for heading in wanted:
+        body = _facts_md_section_body(text, heading)
+        if not body:
+            continue
+        # Keep short literal excerpt for UI; no rewriting.
+        excerpt = body.strip()
+        if len(excerpt) > 600:
+            excerpt = excerpt[:600].rstrip() + "…"
+        sections[heading] = excerpt
+    return sections
+
+
+def collect_project_found_facts(root: Path) -> dict[str, Any]:
+    """
+    Read-only disk facts for the Project Info screen.
+    Does not write, does not infer missing profile fields, does not change passport.
+    """
+    facts: dict[str, Any] = {
+        "git_remote_origin": None,
+        "readme": None,
+        "project_context": None,
+        "documents": [],
+    }
+    try:
+        facts["git_remote_origin"] = _read_git_remote_origin(root)
+    except Exception:
+        facts["git_remote_origin"] = None
+
+    readme_path: Path | None = None
+    for name in ("README.md", "readme.md", "README.txt"):
+        candidate = root / name
+        if candidate.is_file():
+            readme_path = candidate
+            break
+    if readme_path is not None:
+        try:
+            raw = readme_path.read_text(encoding="utf-8", errors="ignore")
+            facts["readme"] = _parse_readme_found_facts(raw, readme_path.name)
+        except OSError:
+            facts["readme"] = {"path": readme_path.name}
+
+    context_path: Path | None = None
+    for rel in ("PROJECT_CONTEXT.md", "docs/PROJECT_CONTEXT.md"):
+        candidate = root / rel
+        if candidate.is_file():
+            context_path = candidate
+            break
+    if context_path is not None:
+        rel = str(context_path.relative_to(root)).replace("\\", "/")
+        entry: dict[str, Any] = {"path": rel}
+        try:
+            raw = context_path.read_text(encoding="utf-8", errors="ignore")
+            sections = _parse_context_sections(raw)
+            if sections:
+                entry["sections"] = sections
+        except OSError:
+            pass
+        facts["project_context"] = entry
+
+    documents: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for rel in _DOC_CANDIDATES:
+        path = root / rel
+        if not path.is_file():
+            continue
+        key = rel.replace("\\", "/")
+        if key in seen:
+            continue
+        seen.add(key)
+        documents.append({"path": key})
+    facts["documents"] = documents
+    return facts
+
+
 def read_project_passport(project_path: str) -> dict[str, Any]:
     """Read descriptive project passport from <project>/.ai-pos/project_passport.json."""
-    _root, passport_path, err = resolve_project_passport_path(project_path)
+    root, passport_path, err = resolve_project_passport_path(project_path)
+    found_facts = collect_project_found_facts(root) if root is not None else None
     if err is not None or passport_path is None:
-        return err or simple_result(ok=False, message="Не удалось открыть паспорт проекта.", passport=None)
+        payload = err or simple_result(
+            ok=False, message="Не удалось открыть паспорт проекта.", passport=None
+        )
+        if found_facts is not None:
+            payload["found_facts"] = found_facts
+        return payload
 
     if not passport_path.is_file():
         return simple_result(
@@ -893,6 +1113,7 @@ def read_project_passport(project_path: str) -> dict[str, Any]:
             message=None,
             passport=None,
             exists=False,
+            found_facts=found_facts,
         )
 
     try:
@@ -902,12 +1123,14 @@ def read_project_passport(project_path: str) -> dict[str, Any]:
             ok=False,
             message="Не удалось прочитать паспорт проекта. Повторите попытку.",
             passport=None,
+            found_facts=found_facts,
         )
     except json.JSONDecodeError:
         return simple_result(
             ok=False,
             message="Паспорт проекта повреждён. Откройте настройки и сохраните сведения заново.",
             passport=None,
+            found_facts=found_facts,
         )
 
     passport = normalize_project_passport(loaded)
@@ -916,6 +1139,7 @@ def read_project_passport(project_path: str) -> dict[str, Any]:
             ok=False,
             message="Паспорт проекта повреждён. Откройте настройки и сохраните сведения заново.",
             passport=None,
+            found_facts=found_facts,
         )
 
     return simple_result(
@@ -923,6 +1147,7 @@ def read_project_passport(project_path: str) -> dict[str, Any]:
         message=None,
         passport=passport,
         exists=True,
+        found_facts=found_facts,
     )
 
 
