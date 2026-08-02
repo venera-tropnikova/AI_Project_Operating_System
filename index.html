@@ -964,6 +964,97 @@
       text-overflow: ellipsis;
     }
 
+    .project-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem 1.1rem;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 0.9rem;
+      padding: 0.55rem 1rem 0.65rem;
+      border-radius: 10px;
+      background: #1e3a6e;
+      color: #ffffff;
+      box-shadow: 0 1px 2px color-mix(in srgb, #12284f 18%, transparent);
+    }
+
+    html[data-color-scheme="dark"] .project-banner {
+      background: #243f78;
+      box-shadow: 0 1px 2px color-mix(in srgb, #0b1220 40%, transparent);
+    }
+
+    .project-banner-main {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .project-banner-label {
+      display: block;
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .project-banner-name {
+      margin: 0.12rem 0 0;
+      font-size: 1.12rem;
+      font-weight: 650;
+      line-height: 1.3;
+      color: #ffffff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .project-banner-status {
+      margin: 0.2rem 0 0;
+      font-size: 0.82rem;
+      font-weight: 550;
+      line-height: 1.3;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .project-banner-actions {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .project-banner-continue {
+      margin: 0;
+      min-height: 2.15rem;
+      padding: 0.4rem 1rem;
+      border: 0;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #1e3a6e;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 650;
+      cursor: pointer;
+      box-shadow: 0 1px 2px color-mix(in srgb, #12284f 16%, transparent);
+    }
+
+    .project-banner-continue:hover {
+      background: #f3f6fc;
+    }
+
+    .project-banner-continue:focus {
+      outline: none;
+    }
+
+    .project-banner-continue:focus-visible {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+    }
+
+    html[data-color-scheme="dark"] .project-banner-continue {
+      color: #243f78;
+    }
+
     .project-section-nav {
       display: flex;
       flex-wrap: nowrap;
@@ -6520,6 +6611,16 @@
 
     <section class="panel" id="panelWorkspace" aria-label="Проект" data-detail-level="technical">
       <div class="workspace-shell">
+        <div class="project-banner" id="projectBanner" aria-label="Активный проект">
+          <div class="project-banner-main">
+            <span class="project-banner-label">Проект</span>
+            <p class="project-banner-name" id="projectBannerName">—</p>
+            <p class="project-banner-status" id="projectBannerStatus" hidden></p>
+          </div>
+          <div class="project-banner-actions">
+            <button type="button" class="project-banner-continue" id="btnPrepContinueProject" hidden>Продолжить</button>
+          </div>
+        </div>
         <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
           <button type="button" class="project-section-nav-item" data-os-nav="structure" data-nav-modes="user developer">Навигатор проекта</button>
           <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer" data-requires-setup="true">Состояние проекта</button>
@@ -7575,6 +7676,10 @@
         projectPickerMenu: document.getElementById("projectPickerMenu"),
         projectChrome: document.getElementById("projectChrome"),
         prepHeading: document.getElementById("prepHeading"),
+        projectBanner: document.getElementById("projectBanner"),
+        projectBannerName: document.getElementById("projectBannerName"),
+        projectBannerStatus: document.getElementById("projectBannerStatus"),
+        btnPrepContinueProject: document.getElementById("btnPrepContinueProject"),
         prepLead: document.getElementById("prepLead"),
         prepProgressList: document.getElementById("prepProgressList"),
         prepReadyLine: document.getElementById("prepReadyLine"),
@@ -8833,6 +8938,7 @@
         var currentName = current ? (current.name || "Проект") : "—";
         els.projectPickerLabel.textContent = currentName;
         if (els.osNavProjectName) els.osNavProjectName.textContent = currentName;
+        syncProjectBannerName(current);
 
         var entries = projectPickerEntries();
         if (!entries.length) {
@@ -11127,6 +11233,7 @@
           project.name = nextName;
           project.updatedAt = new Date().toISOString();
           saveProjects();
+          if (state.currentId === project.id) syncProjectBannerName(project);
           refreshProjectsHome();
           return;
         }
@@ -11529,6 +11636,9 @@
         } else if (typeof hidePrepTellScreen === "function") {
           hidePrepTellScreen();
         }
+        if (typeof syncProjectBannerContinue === "function") {
+          syncProjectBannerContinue();
+        }
       }
 
       function loadDetailLevel() {
@@ -11567,11 +11677,45 @@
         }
       }
 
+      function syncProjectBannerContinue() {
+        if (!els.btnPrepContinueProject) return;
+        var onWorkspace =
+          els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
+        var onPrep = onWorkspace && state.activeTab === "structure";
+        var tellOpen = !!(els.prepTellScreen && !els.prepTellScreen.hidden);
+        var show = onPrep && !tellOpen;
+        els.btnPrepContinueProject.hidden = !show;
+        if (show) els.btnPrepContinueProject.removeAttribute("hidden");
+        else els.btnPrepContinueProject.setAttribute("hidden", "");
+        els.btnPrepContinueProject.textContent = "Продолжить";
+      }
+
+      function syncProjectBannerName(project) {
+        if (els.projectBannerName) {
+          var name = project && String(project.name || "").trim();
+          els.projectBannerName.textContent = name || "—";
+        }
+        if (els.projectBannerStatus) {
+          var rawStatus = project && String(project.status || "").trim();
+          if (rawStatus) {
+            els.projectBannerStatus.textContent = projectNavStatusLabel(project);
+            els.projectBannerStatus.hidden = false;
+            els.projectBannerStatus.removeAttribute("hidden");
+          } else {
+            els.projectBannerStatus.textContent = "";
+            els.projectBannerStatus.hidden = true;
+            els.projectBannerStatus.setAttribute("hidden", "");
+          }
+        }
+        syncProjectBannerContinue();
+      }
+
       function renderHeader(project, view) {
         document.getElementById("crumbProject").textContent = project.name;
         document.getElementById("crumbModule").textContent = view.module ? view.module.name : "не выбран";
         document.getElementById("crumbTask").textContent = view.task ? view.task.name : "не выбрана";
         if (els.currentStageTitle) els.currentStageTitle.textContent = view.task ? view.task.name : (view.stage || "Текущий этап");
+        syncProjectBannerName(project);
         var status = project.status || "В работе";
         var review = view.task ? ensureTaskReview(project, view.task) : null;
         if (review && review.status === "accepted") status = "Задача принята";
@@ -15023,6 +15167,11 @@
         if (mode !== "needs") hidePrepTellScreen();
         setHidden(els.prepProgressList, false);
         renderStructureRecommendations([], { show: false });
+        syncProjectBannerContinue();
+      }
+
+      function onPrepContinueProjectClick() {
+        openOsSection("current-task");
       }
 
       function showPrepTellScreen() {
@@ -15036,6 +15185,7 @@
           els.prepTellScreen.removeAttribute("hidden");
           els.prepTellScreen.hidden = false;
         }
+        syncProjectBannerContinue();
         if (els.structureInfoForm) {
           els.structureInfoForm.removeAttribute("hidden");
           els.structureInfoForm.hidden = false;
@@ -15059,6 +15209,7 @@
           els.prepNavigatorView.removeAttribute("hidden");
           els.prepNavigatorView.hidden = false;
         }
+        syncProjectBannerContinue();
       }
 
       function getPrepTellMode() {
@@ -16771,6 +16922,9 @@
         }
         if (els.btnPrepContinue) {
           els.btnPrepContinue.addEventListener("click", openPrepNeedForm);
+        }
+        if (els.btnPrepContinueProject) {
+          els.btnPrepContinueProject.addEventListener("click", onPrepContinueProjectClick);
         }
         if (els.btnPrepTellBack) {
           els.btnPrepTellBack.addEventListener("click", hidePrepTellScreen);
