@@ -654,13 +654,19 @@
       grid-row: 1;
       margin: 0;
       padding: 1rem 0.85rem 1.25rem;
-      border-right: 1px solid var(--line);
-      background: color-mix(in srgb, var(--surface) 88%, var(--bg));
+      border-right: 1px solid color-mix(in srgb, #12284f 55%, #1e3a6e);
+      background: #1e3a6e;
+      color: #ffffff;
       min-height: 100%;
       display: flex;
       flex-direction: column;
       gap: 0;
       min-width: 0;
+    }
+
+    html[data-color-scheme="dark"] .app.is-workspace .project-chrome {
+      background: #243f78;
+      border-right-color: color-mix(in srgb, #0b1220 45%, #243f78);
     }
 
     .app.is-workspace #panelWorkspace.is-active {
@@ -684,13 +690,14 @@
       height: 28px;
       border-radius: 7px;
       flex: 0 0 auto;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
     }
 
     .ws-rail-brand-name {
       font-size: 0.95rem;
       font-weight: 750;
       letter-spacing: -0.02em;
-      color: var(--ink);
+      color: #ffffff;
       line-height: 1.2;
     }
 
@@ -701,10 +708,10 @@
       width: 100%;
       margin: 0;
       padding: 0.5rem 0.65rem;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(255, 255, 255, 0.28);
       border-radius: 10px;
-      background: var(--surface);
-      color: var(--ink);
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
       font: inherit;
       font-size: 0.88rem;
       font-weight: 650;
@@ -714,14 +721,22 @@
     }
 
     .ws-rail-home:hover {
-      background: color-mix(in srgb, #233a8b 6%, transparent);
-      border-color: color-mix(in srgb, #233a8b 18%, transparent);
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.42);
+    }
+
+    .ws-rail-home:focus {
+      outline: none;
+    }
+
+    .ws-rail-home:focus-visible {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28);
     }
 
     .ws-rail-recent-block {
       margin-top: 1.85rem;
       padding-top: 1.45rem;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
       flex: 1 1 auto;
       min-height: 0;
       display: flex;
@@ -734,7 +749,7 @@
       font-weight: 650;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: var(--ink-soft);
+      color: rgba(255, 255, 255, 0.72);
     }
 
     .ws-recent {
@@ -764,20 +779,25 @@
     }
 
     .ws-recent-item:hover {
-      background: color-mix(in srgb, #233a8b 6%, transparent);
-      border-color: color-mix(in srgb, #233a8b 12%, transparent);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.16);
     }
 
     .ws-recent-item.is-current {
-      background: var(--surface);
-      border-color: var(--line);
-      box-shadow: 0 1px 2px color-mix(in srgb, #233a8b 8%, transparent);
+      background: #3a5f9e;
+      border-color: color-mix(in srgb, #ffffff 22%, #3a5f9e);
+      box-shadow: 0 1px 2px color-mix(in srgb, #12284f 28%, transparent);
+    }
+
+    html[data-color-scheme="dark"] .ws-recent-item.is-current {
+      background: #4a6fad;
+      border-color: color-mix(in srgb, #ffffff 20%, #4a6fad);
     }
 
     .ws-recent-name {
       font-size: 0.9rem;
       font-weight: 650;
-      color: var(--ink);
+      color: #ffffff;
       line-height: 1.25;
       max-width: 100%;
       overflow: hidden;
@@ -791,7 +811,7 @@
       gap: 0.35rem;
       font-size: 0.78rem;
       font-weight: 550;
-      color: var(--ink-soft);
+      color: rgba(255, 255, 255, 0.78);
       line-height: 1.2;
     }
 
@@ -799,7 +819,8 @@
       width: 0.45rem;
       height: 0.45rem;
       border-radius: 50%;
-      background: #3d9a6a;
+      background: #7ddea8;
+      box-shadow: 0 0 0 1px rgba(18, 40, 79, 0.25);
       flex: 0 0 auto;
     }
 
@@ -807,7 +828,7 @@
       margin: 0;
       padding: 0.35rem 0.15rem;
       font-size: 0.84rem;
-      color: var(--ink-soft);
+      color: rgba(255, 255, 255, 0.68);
       line-height: 1.35;
     }
 
@@ -826,10 +847,10 @@
       width: 100%;
       margin: 0;
       padding: 0.5rem 0.65rem;
-      border: 1px solid transparent;
+      border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 10px;
-      background: transparent;
-      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
       font: inherit;
       font-size: 0.88rem;
       font-weight: 600;
@@ -839,13 +860,27 @@
     }
 
     .ws-rail-action:hover {
-      background: color-mix(in srgb, #233a8b 6%, transparent);
-      border-color: color-mix(in srgb, #233a8b 12%, transparent);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.36);
+    }
+
+    .ws-rail-action:focus {
+      outline: none;
+    }
+
+    .ws-rail-action:focus-visible {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28);
     }
 
     .ws-rail-action.is-primary {
-      background: var(--surface);
-      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      font-weight: 700;
+    }
+
+    .ws-rail-action.is-primary:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.5);
     }
 
     .app.is-workspace .workspace-head {
@@ -863,8 +898,12 @@
       }
       .app.is-workspace .project-chrome {
         border-right: 0;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid color-mix(in srgb, #12284f 55%, #1e3a6e);
         min-height: 0;
+      }
+
+      html[data-color-scheme="dark"] .app.is-workspace .project-chrome {
+        border-bottom-color: color-mix(in srgb, #0b1220 45%, #243f78);
       }
       .app.is-workspace #panelWorkspace.is-active {
         padding: 1rem 1rem 2rem;
@@ -1452,6 +1491,7 @@
 
     .pm-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       font-size: 0.9rem;
     }
@@ -1609,12 +1649,23 @@
     }
 
     .pm-col-icon {
-      width: 2.6rem;
+      width: 3%;
     }
 
     .pm-col-menu {
-      width: 2.8rem;
+      width: 3%;
       text-align: right;
+    }
+
+    /* Проект / Статус / Размещение — чуть уже, чтобы дать воздух правым столбцам */
+    .pm-table th:nth-child(2),
+    .pm-table td:nth-child(2) {
+      width: 20%;
+    }
+
+    .pm-table th:nth-child(3),
+    .pm-table td:nth-child(3) {
+      width: 12%;
     }
 
     .pm-row-icon {
@@ -1640,6 +1691,9 @@
       font-weight: 700;
       color: var(--ink);
       letter-spacing: -0.02em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .pm-row-status {
@@ -1650,12 +1704,12 @@
     }
 
     .pm-col-path {
-      max-width: 16rem;
+      width: 18%;
     }
 
     .pm-row-path {
       display: block;
-      max-width: 16rem;
+      max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -1671,7 +1725,7 @@
     }
 
     .pm-col-github {
-      width: 6.5rem;
+      width: 12%;
       white-space: nowrap;
     }
 
@@ -1688,6 +1742,18 @@
     .pm-github-link:hover {
       color: #1e3175;
       border-bottom-color: #1e3175;
+    }
+
+    .pm-col-preview {
+      width: 12%;
+      white-space: nowrap;
+    }
+
+    /* 7-й столбец: «Последнее обновление» — чуть шире из‑за длинного заголовка */
+    .pm-table th:nth-child(7),
+    .pm-table td:nth-child(7) {
+      width: 14%;
+      white-space: nowrap;
     }
 
     .pm-row-updated {
@@ -3215,7 +3281,9 @@
     }
 
     .project-overview {
-      max-width: 52rem;
+      width: 100%;
+      max-width: min(1120px, 100%);
+      box-sizing: border-box;
     }
 
     .project-overview .desktop-stage-track {
@@ -3223,33 +3291,287 @@
     }
 
     .project-info-summary {
-      margin: 0.35rem 0 1rem;
-      padding: 0.75rem 0.9rem;
-      border-radius: 10px;
-      background: color-mix(in srgb, #1e3a6e 8%, var(--surface, #fff));
-      border: 1px solid color-mix(in srgb, #1e3a6e 18%, var(--line, #d8d2c8));
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-    html[data-color-scheme="dark"] .project-info-summary {
-      background: color-mix(in srgb, #7aa2ff 12%, var(--surface, #1a1a1a));
-      border-color: color-mix(in srgb, #7aa2ff 22%, var(--line, #333));
-    }
-    .project-info-summary-title {
-      margin: 0 0 0.35rem;
-      font-size: 1rem;
-      font-weight: 650;
-      color: var(--ink, #1f1c18);
-    }
-    .project-info-summary-lines {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.35rem 1.1rem;
+      align-items: stretch;
+      gap: 0.45rem;
+      margin: 0.2rem 0 0.85rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    html[data-color-scheme="dark"] .project-info-summary {
+      background: transparent;
+      border-color: transparent;
+    }
+    .project-info-summary-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.35rem;
       margin: 0;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid color-mix(in srgb, #1e3a6e 22%, var(--line, #d8d2c8));
+      background: color-mix(in srgb, #1e3a6e 10%, var(--surface, #fff));
+      font-size: 0.86rem;
+      line-height: 1.25;
       color: var(--ink-soft, #3d3a36);
     }
-    .project-info-summary-lines strong {
+    .project-info-summary-chip.is-needs {
+      border-color: color-mix(in srgb, #a67c2a 35%, var(--line, #d8d2c8));
+      background: color-mix(in srgb, #c9a227 12%, var(--surface, #fff));
+    }
+    html[data-color-scheme="dark"] .project-info-summary-chip {
+      border-color: color-mix(in srgb, #7aa2ff 28%, var(--line, #333));
+      background: color-mix(in srgb, #7aa2ff 14%, var(--surface, #1a1a1a));
+    }
+    html[data-color-scheme="dark"] .project-info-summary-chip.is-needs {
+      border-color: color-mix(in srgb, #d4a84b 35%, var(--line, #333));
+      background: color-mix(in srgb, #d4a84b 14%, var(--surface, #1a1a1a));
+    }
+    .project-info-summary-chip strong {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink, #1f1c18);
+    }
+    .project-info-value-link {
+      color: #233a8b;
       font-weight: 650;
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, #233a8b 35%, transparent);
+      word-break: break-all;
+    }
+    .project-info-value-link:hover {
+      color: #1e3175;
+      border-bottom-color: #1e3175;
+    }
+    .project-info-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem 0.55rem;
+      margin: 0.85rem 0 0.35rem;
+    }
+    .project-info-actions .btn,
+    .project-info-actions .project-info-action-link {
+      flex: 0 0 auto;
+    }
+    .project-info-action-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.35rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--line, #d8d2c8);
+      background: var(--surface, #fff);
+      color: #233a8b;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 650;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+    .project-info-action-link:hover {
+      color: #1e3175;
+      border-color: color-mix(in srgb, #233a8b 35%, var(--line, #d8d2c8));
+      background: color-mix(in srgb, #233a8b 6%, var(--surface, #fff));
+    }
+    .project-info-action-link[hidden] {
+      display: none !important;
+    }
+    .project-info-image {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 0 1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line, #d8d2c8);
+      background: #0f172a;
+    }
+    .project-info-image[hidden] {
+      display: none !important;
+    }
+    .project-info-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 240px;
+      object-fit: cover;
+    }
+    .project-info-materials {
+      margin: 0.85rem 0 1rem;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--line, #d8d2c8);
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--lv-materials-soft, #f2ebe3) 55%, var(--surface, #fff));
+    }
+    .project-info-materials[hidden] {
+      display: none !important;
+    }
+    .project-info-materials-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.75rem;
+      margin-bottom: 0.45rem;
+    }
+    .project-info-materials-title {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text, #1c1916);
+    }
+    .project-info-materials-count {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted, #6b645c);
+    }
+    .project-info-materials-scroll {
+      max-height: none;
+    }
+    .project-info-materials-scroll.is-collapsed {
+      max-height: 10.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-info-materials-scroll.is-collapsed::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2.2rem;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        color-mix(in srgb, var(--lv-materials-soft, #f2ebe3) 55%, var(--surface, #fff))
+      );
+    }
+    .project-info-materials-list {
+      display: grid;
+      gap: 0.3rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .project-info-material-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.3rem 0.55rem;
+      padding: 0.32rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid color-mix(in srgb, var(--line, #d8d2c8) 80%, transparent);
+      background: var(--surface, #fff);
+    }
+    .project-info-material-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.25rem 0.55rem;
+      min-width: 0;
+      flex: 1 1 12rem;
+    }
+    .project-info-material-name {
+      font-size: 0.86rem;
+      font-weight: 650;
+      word-break: break-word;
+    }
+    .project-info-material-status {
+      font-size: 0.76rem;
+      color: #2f6b3a;
+      font-weight: 600;
+    }
+    .project-info-material-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .project-info-material-actions .btn {
+      min-height: 1.85rem;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.8rem;
+    }
+    .project-info-materials-toggle {
+      margin-top: 0.45rem;
+      min-height: 1.9rem;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.82rem;
+    }
+    .project-info-materials-toggle[hidden] {
+      display: none !important;
+    }
+    html[data-color-scheme="dark"] .project-info-materials {
+      background: color-mix(in srgb, var(--lv-materials-soft, #2a2622) 70%, var(--surface, #1b1916));
+    }
+    html[data-color-scheme="dark"] .project-info-materials-scroll.is-collapsed::after {
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        color-mix(in srgb, var(--lv-materials-soft, #2a2622) 70%, var(--surface, #1b1916))
+      );
+    }
+    html[data-color-scheme="dark"] .project-info-material-status {
+      color: #8dce9a;
+    }
+    .project-info-edit {
+      margin: 0 0 1rem;
+      padding: 0.85rem 0.95rem;
+      border: 1px solid var(--line, #d8d2c8);
+      border-radius: 10px;
+      background: var(--surface, #fff);
+    }
+    .project-info-edit-title {
+      margin: 0 0 0.7rem;
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+    .project-info-edit-grid {
+      display: grid;
+      gap: 0.65rem;
+    }
+    .project-info-edit-field {
+      display: grid;
+      gap: 0.25rem;
+      margin: 0;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted, #6b6560);
+    }
+    .project-info-edit-field input,
+    .project-info-edit-field textarea,
+    .project-info-edit-field select {
+      width: 100%;
+      box-sizing: border-box;
+      font: inherit;
+      font-weight: 400;
+      color: var(--ink, #1f1c18);
+      padding: 0.45rem 0.55rem;
+      border: 1px solid var(--line, #d8d2c8);
+      border-radius: 8px;
+      background: var(--surface, #fff);
+    }
+    .project-info-edit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+    .pm-preview-link {
+      display: inline-flex;
+      align-items: center;
+      color: #233a8b;
+      font-size: 0.84rem;
+      font-weight: 650;
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, #233a8b 35%, transparent);
+    }
+    .pm-preview-link:hover {
+      color: #1e3175;
+      border-bottom-color: #1e3175;
     }
     .project-info-group {
       margin: 0 0 1.15rem;
@@ -3414,17 +3736,31 @@
       font-size: 0.9rem;
     }
     .project-info-tech {
-      margin: 0 0 0.75rem;
-      padding: 0.55rem 0.75rem;
-      border: 1px solid var(--line, #d8d2c8);
+      position: relative;
+      margin: 1.85rem 0 0.75rem;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid color-mix(in srgb, #1e3a6e 14%, #d5dbe8);
       border-radius: 8px;
-      background: var(--surface, #fff);
+      background: color-mix(in srgb, #1e3a6e 4.5%, #eef1f7);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+    .project-info-tech[hidden] {
+      display: none !important;
+    }
+    /* Горизонтальная линия после пользовательской части, перед служебным блоком */
+    .project-info-tech::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -0.95rem;
+      border-top: 1px solid color-mix(in srgb, #1e3a6e 22%, #c5cddc);
     }
     .project-info-tech > summary {
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--muted, #6b6560);
+      font-size: 0.88rem;
+      color: color-mix(in srgb, #1e3a6e 55%, #5a6170);
     }
     .project-info-tech-body {
       margin-top: 0.55rem;
@@ -3433,10 +3769,10 @@
     }
     .project-info-tech-row {
       padding: 0.4rem 0;
-      border-top: 1px solid var(--line, #e8e2d8);
+      border-top: 1px solid color-mix(in srgb, #1e3a6e 10%, #d8dee8);
       font-size: 0.8rem;
       line-height: 1.35;
-      color: var(--muted, #6b6560);
+      color: color-mix(in srgb, #1e3a6e 35%, #6b7280);
     }
     .project-info-tech-row:first-child {
       border-top: 0;
@@ -3444,7 +3780,25 @@
     }
     .project-info-tech-label {
       font-weight: 600;
-      color: var(--ink-soft, #3d3a36);
+      color: color-mix(in srgb, #1e3a6e 45%, #3d4450);
+    }
+    html[data-color-scheme="dark"] .project-info-tech {
+      border-color: color-mix(in srgb, #8ea4d4 22%, var(--line, #3d4554));
+      background: color-mix(in srgb, #243f78 22%, var(--surface, #242933));
+      box-shadow: none;
+    }
+    html[data-color-scheme="dark"] .project-info-tech::before {
+      border-top-color: color-mix(in srgb, #8ea4d4 30%, var(--line, #3d4554));
+    }
+    html[data-color-scheme="dark"] .project-info-tech > summary {
+      color: color-mix(in srgb, #c5d4f0 70%, var(--ink-muted, #a8b0c0));
+    }
+    html[data-color-scheme="dark"] .project-info-tech-row {
+      border-top-color: color-mix(in srgb, #8ea4d4 16%, var(--line, #3d4554));
+      color: color-mix(in srgb, #c5d4f0 45%, var(--ink-muted, #a8b0c0));
+    }
+    html[data-color-scheme="dark"] .project-info-tech-label {
+      color: color-mix(in srgb, #d7e2f7 65%, var(--ink, #e8eaef));
     }
     .project-overview-lead {
       margin: 0 0 0.65rem;
@@ -3955,6 +4309,7 @@
       margin: 0 0 0.85rem;
       font-size: 0.86rem;
       color: var(--ink-muted);
+      white-space: pre-line;
     }
 
     .tool-picks {
@@ -6312,8 +6667,6 @@
               <button type="button" class="pm-search-find" id="btnPmSearch">Найти</button>
             </div>
             <div class="pm-toolbar-actions">
-              <button type="button" class="btn btn-ghost" id="btnOpenKnowledgeHome">База знаний</button>
-              <button type="button" class="btn btn-ghost" id="btnOpenExample">Посмотреть пример</button>
               <button type="button" class="btn btn-secondary" id="btnPmCreate">Создать</button>
               <button type="button" class="btn btn-primary" id="btnPmConnect">Подключить</button>
             </div>
@@ -6353,6 +6706,9 @@
                   </th>
                   <th scope="col" class="pm-th-cell pm-col-github">
                     <span class="pm-th-label">GitHub</span>
+                  </th>
+                  <th scope="col" class="pm-th-cell pm-col-preview">
+                    <span class="pm-th-label">Просмотр</span>
                   </th>
                   <th scope="col" class="pm-th-cell">
                     <div class="pm-th">
@@ -6847,7 +7203,7 @@
         </div>
         <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
           <button type="button" class="project-section-nav-item" data-os-nav="structure" data-nav-modes="user developer">Навигатор проекта</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer" data-requires-setup="true">Сведения о проекте</button>
+          <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer">Сведения о проекте</button>
           <button type="button" class="project-section-nav-item" data-os-nav="current-task" data-nav-modes="user developer" data-requires-setup="true" data-nav-label-user="Работа над проектом" data-nav-label-developer="Текущая задача">Работа над проектом</button>
           <button type="button" class="project-section-nav-item" data-os-nav="rules" data-nav-modes="developer">Правила</button>
           <button type="button" class="project-section-nav-item" data-os-nav="materials" data-nav-modes="developer">Материалы</button>
@@ -7067,8 +7423,9 @@
           <div class="project-overview" id="projectOverview">
             <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Текущая стадия AI POS" hidden></div>
             <h3 class="section-heading lv-project">Сведения о проекте</h3>
-            <p class="project-overview-lead">Что AI POS уже знает о проекте. Только просмотр.</p>
+            <p class="project-overview-lead">Что AI POS уже знает о проекте.</p>
             <p class="section-note" id="projectInfoStatus" hidden></p>
+            <div class="project-info-image" id="projectInfoImage" hidden></div>
             <div class="project-info-summary" id="projectInfoSummary" hidden></div>
             <div id="projectInfoBody" aria-live="polite"></div>
             <div class="project-info-needs" id="projectInfoNeeds" hidden>
@@ -7076,6 +7433,66 @@
               <p class="project-info-needs-hint">Необязательно сейчас — эти сведения помогут AI POS работать точнее.</p>
               <ul class="project-info-needs-list" id="projectInfoNeedsList"></ul>
             </div>
+            <form class="project-info-edit" id="projectInfoEditForm" hidden>
+              <h4 class="project-info-edit-title">Редактирование сведений</h4>
+              <div class="project-info-edit-grid">
+                <label class="project-info-edit-field">
+                  <span>Название</span>
+                  <input type="text" id="piEditName" name="name" autocomplete="off" />
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Краткое описание</span>
+                  <textarea id="piEditSummary" name="summary" rows="2"></textarea>
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Цель</span>
+                  <textarea id="piEditGoal" name="goal" rows="2"></textarea>
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Аудитория</span>
+                  <input type="text" id="piEditAudience" name="audience" autocomplete="off" />
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Ожидаемый результат</span>
+                  <textarea id="piEditExpected" name="expected_result" rows="2"></textarea>
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Ограничения</span>
+                  <textarea id="piEditConstraints" name="constraints" rows="2"></textarea>
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Основной инструмент</span>
+                  <select id="piEditPrimaryTool" name="primaryTool">
+                    <option value="">Не выбран</option>
+                  </select>
+                </label>
+                <label class="project-info-edit-field">
+                  <span>Онлайн-версия / ссылка на проект</span>
+                  <input type="url" id="piEditLaunchUrl" name="launchUrl" inputmode="url" placeholder="https://" autocomplete="off" />
+                </label>
+              </div>
+              <div class="project-info-edit-actions">
+                <button type="submit" class="btn btn-primary" id="btnProjectInfoSave">Сохранить</button>
+                <button type="button" class="btn btn-ghost" id="btnProjectInfoEditCancel">Отмена</button>
+              </div>
+            </form>
+            <div class="project-info-actions" id="projectInfoActions">
+              <button type="button" class="btn btn-primary" id="btnProjectInfoContinue">Продолжить работу</button>
+              <button type="button" class="btn btn-secondary" id="btnProjectInfoEdit">Редактировать сведения</button>
+              <button type="button" class="btn btn-secondary" id="btnProjectInfoOpen" hidden>Открыть проект</button>
+              <a class="project-info-action-link" id="projectInfoGithubLink" href="#" target="_blank" rel="noopener noreferrer" hidden>GitHub</a>
+              <button type="button" class="btn btn-secondary" id="btnProjectInfoMaterials">Добавить материалы</button>
+            </div>
+            <section class="project-info-materials" id="projectInfoMaterials" hidden aria-labelledby="projectInfoMaterialsTitle">
+              <div class="project-info-materials-head">
+                <h4 class="project-info-materials-title" id="projectInfoMaterialsTitle">Материалы проекта</h4>
+                <p class="project-info-materials-count" id="projectInfoMaterialsCount"></p>
+              </div>
+              <div class="project-info-materials-scroll" id="projectInfoMaterialsScroll">
+                <ul class="project-info-materials-list" id="projectInfoMaterialsList"></ul>
+              </div>
+              <button type="button" class="btn btn-ghost project-info-materials-toggle" id="btnProjectInfoMaterialsToggle" hidden>Показать все</button>
+            </section>
             <details class="project-info-tech" id="projectInfoTech" hidden>
               <summary>Техническая информация</summary>
               <div class="project-info-tech-body" id="projectInfoTechBody"></div>
@@ -7813,6 +8230,10 @@
         detailLevel: "technical",
         // user | developer — видимость разделов верхней навигации проекта
         workspaceMode: "user",
+        // Краткий статус на «Сведения» после добавления материалов (не стирается async refresh).
+        projectInfoFlashNote: "",
+        projectInfoMaterialsExpanded: false,
+        projectInfoEditOpen: false,
         // Пример живёт только в текущем сеансе и не становится текущим проектом.
         exampleMode: false,
         // Журнал выполненных заданий: только чтение на этом этапе.
@@ -7858,7 +8279,9 @@
           statusFilter: "all",
           sort: "updated",
           openMenuId: null,
-          openHeaderMenu: null
+          openHeaderMenu: null,
+          linksEnrichToken: 0,
+          linksEnrichBusy: false
         }
       };
 
@@ -7960,6 +8383,23 @@
         wsNewProject: document.getElementById("wsNewProject"),
         wsOpenSettings: document.getElementById("wsOpenSettings"),
         btnOpenKnowledgeHome: document.getElementById("btnOpenKnowledgeHome"),
+        btnProjectInfoContinue: document.getElementById("btnProjectInfoContinue"),
+        btnProjectInfoEdit: document.getElementById("btnProjectInfoEdit"),
+        btnProjectInfoMaterials: document.getElementById("btnProjectInfoMaterials"),
+        btnProjectInfoOpen: document.getElementById("btnProjectInfoOpen"),
+        btnProjectInfoEditCancel: document.getElementById("btnProjectInfoEditCancel"),
+        projectInfoActions: document.getElementById("projectInfoActions"),
+        projectInfoEditForm: document.getElementById("projectInfoEditForm"),
+        projectInfoImage: document.getElementById("projectInfoImage"),
+        projectInfoGithubLink: document.getElementById("projectInfoGithubLink"),
+        piEditName: document.getElementById("piEditName"),
+        piEditSummary: document.getElementById("piEditSummary"),
+        piEditGoal: document.getElementById("piEditGoal"),
+        piEditAudience: document.getElementById("piEditAudience"),
+        piEditExpected: document.getElementById("piEditExpected"),
+        piEditConstraints: document.getElementById("piEditConstraints"),
+        piEditPrimaryTool: document.getElementById("piEditPrimaryTool"),
+        piEditLaunchUrl: document.getElementById("piEditLaunchUrl"),
         osNavProject: document.getElementById("osNavProject"),
         osNavProjectName: document.getElementById("osNavProjectName"),
         osNavSetupGateHint: document.getElementById("osNavSetupGateHint"),
@@ -8023,6 +8463,11 @@
         projectInfoTech: document.getElementById("projectInfoTech"),
         projectInfoTechBody: document.getElementById("projectInfoTechBody"),
         projectInfoStatus: document.getElementById("projectInfoStatus"),
+        projectInfoMaterials: document.getElementById("projectInfoMaterials"),
+        projectInfoMaterialsCount: document.getElementById("projectInfoMaterialsCount"),
+        projectInfoMaterialsScroll: document.getElementById("projectInfoMaterialsScroll"),
+        projectInfoMaterialsList: document.getElementById("projectInfoMaterialsList"),
+        btnProjectInfoMaterialsToggle: document.getElementById("btnProjectInfoMaterialsToggle"),
         ovGoal: document.getElementById("ovGoal"),
         ovModule: document.getElementById("ovModule"),
         ovStatus: document.getElementById("ovStatus"),
@@ -9242,10 +9687,8 @@
         if (!tabId) return;
         var project = findProjectRecord(state.currentId) || getFocusProject();
         if (!project) return;
-        if (
-          (section === "overview" || section === "current-task") &&
-          !isProjectSetupReady(project)
-        ) {
+        // Overview (Сведения о проекте) is always available; incomplete passport/setup must not block it.
+        if (section === "current-task" && !isProjectSetupReady(project)) {
           updateProjectSetupNavGate();
           openWorkspace(project.id, false, { enterProject: true });
           setStructureStatus("Сначала проверьте и настройте проект", false);
@@ -9471,6 +9914,7 @@
       function fillPrimaryToolSelects() {
         fillPrimaryToolSelect(document.getElementById("fieldPrimaryTool"), "");
         fillPrimaryToolSelect(els.settingsPrimaryTool, "");
+        fillPrimaryToolSelect(els.piEditPrimaryTool, "");
         fillAiModelSelect(document.getElementById("fieldAiModel"), "");
         fillAiModelSelect(els.settingsAiModel, "");
       }
@@ -10003,9 +10447,9 @@
           project_id: projectId || "",
           name: data.name || "",
           summary: data.idea || "",
-          goal: data.idea || "",
-          audience: data.audience || "",
-          expected_result: data.result || "",
+          goal: "",
+          audience: "",
+          expected_result: "",
           capabilities: [],
           status: data.status || "В работе",
           modules: modules || [],
@@ -10024,10 +10468,8 @@
         return {
           name: name,
           idea: idea,
-          result: idea
-            ? ("Рабочий результат по описанию проекта «" + name + "».")
-            : ("Рабочий результат проекта «" + (name || "без названия") + "»."),
-          audience: "Уточняется",
+          result: "",
+          audience: "",
           status: "В работе",
           projectKind: state.createWizard.projectKind || ""
         };
@@ -11354,11 +11796,61 @@
         for (var b = 0; b < buttons.length; b++) buttons[b].setAttribute("aria-expanded", "false");
       }
 
+      function resolveProjectPreviewUrl(project) {
+        if (!project) return "";
+        var order = [
+          project.launchUrl,
+          project.launch_url,
+          project.online_url,
+          project.onlineUrl,
+          project.preview_url,
+          project.previewUrl
+        ];
+        for (var i = 0; i < order.length; i++) {
+          var url = normalizeLaunchUrl(order[i]);
+          if (url) return url;
+        }
+        return "";
+      }
+
+      function syncProjectCardUrlsFromFoundFacts(project, foundFacts) {
+        if (!project || !foundFacts || typeof foundFacts !== "object") return false;
+        var changed = false;
+        var gitRemote = String(foundFacts.git_remote_origin || "").trim();
+        if (!String(project.githubUrl || "").trim() && gitRemote) {
+          project.githubUrl = gitRemote;
+          changed = true;
+        }
+        var online = "";
+        if (foundFacts.readme && typeof foundFacts.readme === "object") {
+          online = String(foundFacts.readme.online_url || "").trim();
+        }
+        if (!String(project.launchUrl || "").trim() && online) {
+          project.launchUrl = normalizeLaunchUrl(online);
+          changed = true;
+        }
+        if (!changed) return false;
+        project.updatedAt = new Date().toISOString();
+        var real = findRealProject(project.id);
+        if (real && real !== project) {
+          if (!String(real.githubUrl || "").trim() && project.githubUrl) {
+            real.githubUrl = project.githubUrl;
+          }
+          if (!String(real.launchUrl || "").trim() && project.launchUrl) {
+            real.launchUrl = project.launchUrl;
+          }
+          real.updatedAt = project.updatedAt;
+        }
+        saveProjects();
+        return true;
+      }
+
       function pmRowHtml(project) {
         var name = project.name || "Проект";
         var status = projectNavStatusLabel(project);
         var path = String(project.workFolder || "").trim();
         var github = String(project.githubUrl || "").trim();
+        var preview = resolveProjectPreviewUrl(project);
         var updated = project.updatedAt || project.createdAt || "";
         var menuOpen = state.projectsUi.openMenuId === project.id;
         var pathHtml = path
@@ -11369,6 +11861,11 @@
             '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(github) +
             '">Открыть</a>'
           : '<span class="pm-row-empty">—</span>';
+        var previewHtml = preview
+          ? '<a class="pm-preview-link" href="' + escapeHtml(preview) +
+            '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(preview) +
+            '">Открыть</a>'
+          : '<span class="pm-row-empty">—</span>';
         return (
           '<tr class="pm-row" data-project-id="' + escapeHtml(project.id) + '" tabindex="0">' +
           '<td class="pm-col-icon"><span class="pm-row-icon" aria-hidden="true">' + projectIconSvg() + "</span></td>" +
@@ -11376,6 +11873,7 @@
           '<td><span class="pm-row-status">' + escapeHtml(status) + "</span></td>" +
           '<td class="pm-col-path">' + pathHtml + "</td>" +
           '<td class="pm-col-github">' + githubHtml + "</td>" +
+          '<td class="pm-col-preview">' + previewHtml + "</td>" +
           '<td><span class="pm-row-updated" title="' + escapeHtml(formatExactDateTime(updated)) + '">' +
           escapeHtml(formatRelativeUpdate(updated)) + "</span></td>" +
           '<td class="pm-col-menu"><div class="pm-menu-wrap">' +
@@ -11395,21 +11893,21 @@
         var rows = els.pmTableBody.querySelectorAll(".pm-row");
         for (var i = 0; i < rows.length; i++) {
           rows[i].addEventListener("click", function (event) {
-            if (event.target.closest(".pm-menu-wrap, .pm-github-link")) return;
+            if (event.target.closest(".pm-menu-wrap, .pm-github-link, .pm-preview-link")) return;
             var id = event.currentTarget.getAttribute("data-project-id");
             if (id) openProjectFromList(id);
           });
           rows[i].addEventListener("keydown", function (event) {
             if (event.key !== "Enter" && event.key !== " ") return;
-            if (event.target.closest(".pm-menu-wrap, .pm-github-link")) return;
+            if (event.target.closest(".pm-menu-wrap, .pm-github-link, .pm-preview-link")) return;
             event.preventDefault();
             var id = event.currentTarget.getAttribute("data-project-id");
             if (id) openProjectFromList(id);
           });
         }
-        var githubLinks = els.pmTableBody.querySelectorAll(".pm-github-link");
-        for (var g = 0; g < githubLinks.length; g++) {
-          githubLinks[g].addEventListener("click", function (event) {
+        var externalLinks = els.pmTableBody.querySelectorAll(".pm-github-link, .pm-preview-link");
+        for (var g = 0; g < externalLinks.length; g++) {
+          externalLinks[g].addEventListener("click", function (event) {
             event.stopPropagation();
           });
         }
@@ -11441,6 +11939,40 @@
         if (els.panelWorkspace && els.panelWorkspace.classList.contains("is-active")) {
           renderProjectPicker();
         }
+      }
+
+      function projectNeedsLinkEnrichment(project) {
+        if (!project || isDemoProject(project)) return false;
+        if (!String(project.workFolder || "").trim()) return false;
+        var missingGithub = !String(project.githubUrl || "").trim();
+        var missingLaunch = !String(project.launchUrl || "").trim();
+        return missingGithub || missingLaunch;
+      }
+
+      async function enrichProjectCardsFromPassportReads() {
+        if (!state.projects || !state.projects.length) return;
+        var token = ++state.projectsUi.linksEnrichToken;
+        state.projectsUi.linksEnrichBusy = true;
+        var anyChanged = false;
+        var list = state.projects.slice();
+        for (var i = 0; i < list.length; i++) {
+          if (token !== state.projectsUi.linksEnrichToken) return;
+          var project = list[i];
+          if (!projectNeedsLinkEnrichment(project)) continue;
+          try {
+            var read = await readPassportFromBridge(project.workFolder);
+            if (token !== state.projectsUi.linksEnrichToken) return;
+            if (!read || !read.ok) continue;
+            if (syncProjectCardUrlsFromFoundFacts(project, read.found_facts)) {
+              anyChanged = true;
+            }
+          } catch (e) {
+            /* keep table usable if one project fails */
+          }
+        }
+        if (token !== state.projectsUi.linksEnrichToken) return;
+        state.projectsUi.linksEnrichBusy = false;
+        if (anyChanged) renderProjectsTable();
       }
 
       function handlePmAction(projectId, action) {
@@ -11542,6 +12074,7 @@
         if (els.desktopActions) els.desktopActions.hidden = true;
         if (els.pmSearch) els.pmSearch.value = state.projectsUi.query || "";
         renderProjectsTable();
+        enrichProjectCardsFromPassportReads();
       }
 
       function setKnowledgeStatus(text, isError) {
@@ -11811,12 +12344,12 @@
         if (
           gateProject &&
           !isProjectSetupReady(gateProject) &&
-          (next === "overview" || next === "task" || next === "work")
+          (next === "task" || next === "work")
         ) {
           next = "structure";
         }
         if (!force && state.detailLevel === "basic" && !DETAIL_TAB_BASIC[next]) {
-          next = isProjectSetupReady(gateProject) ? "overview" : "structure";
+          next = "overview";
         }
         if (state.workspaceMode === "user" && !USER_MODE_TABS[next]) {
           next = "structure";
@@ -12579,16 +13112,187 @@
         return String(value);
       }
 
-      var PROJECT_INFO_SENSE_IDS = {
-        name: true,
-        summary: true,
-        goal: true,
-        audience: true,
-        expected_result: true,
-        human_status: true,
-        card_idea: true,
-        card_result: true
-      };
+      var PROJECT_INFO_USER_MAIN = [
+        { id: "name", label: "Название" },
+        { id: "summary", label: "Краткое описание" },
+        { id: "goal", label: "Цель" },
+        { id: "audience", label: "Аудитория" },
+        { id: "expected_result", label: "Ожидаемый результат" },
+        { id: "constraints", label: "Ограничения" },
+        { id: "primary_tool", label: "Основной инструмент" }
+      ];
+
+      var PROJECT_INFO_TECH_CONSTRAINT_MARKERS = [
+        "локальный прототип",
+        "модульная структура",
+        "не ломать"
+      ];
+
+      function userFacingConstraintsText(value) {
+        var raw = String(value || "").trim();
+        if (!raw) return "";
+        var parts = raw.split(/[;\n]+/);
+        var kept = [];
+        for (var i = 0; i < parts.length; i++) {
+          var part = String(parts[i] || "").trim();
+          if (!part) continue;
+          var low = part.toLowerCase();
+          var tech = false;
+          for (var m = 0; m < PROJECT_INFO_TECH_CONSTRAINT_MARKERS.length; m++) {
+            if (low.indexOf(PROJECT_INFO_TECH_CONSTRAINT_MARKERS[m]) !== -1) {
+              tech = true;
+              break;
+            }
+          }
+          if (!tech) kept.push(part);
+        }
+        return kept.join("; ");
+      }
+
+      function projectInfoExternalHref(url) {
+        var u = String(url || "").trim();
+        if (!u) return "";
+        if (/^https?:\/\//i.test(u) || /^mailto:/i.test(u)) return u;
+        if (/^\/\//.test(u)) return "https:" + u;
+        if (/^(localhost|127\.0\.0\.1|[\w.-]+\.[a-z]{2,})(:\d+)?([\/?#]|$)/i.test(u)) {
+          return "https://" + u;
+        }
+        return u;
+      }
+
+      function resolveProjectInfoOnlineField(byId) {
+        var order = ["launch_url", "online_url", "preview_url"];
+        for (var i = 0; i < order.length; i++) {
+          var src = byId[order[i]];
+          if (!src || !projectInfoNonEmpty(src.value)) continue;
+          return {
+            id: "project_online_link",
+            label: "Онлайн-версия / ссылка на проект",
+            value: src.value,
+            source: src.source,
+            origin: src.origin
+          };
+        }
+        return null;
+      }
+
+      function resolveProjectVisualThumb(project) {
+        var materials = project && Array.isArray(project.materials) ? project.materials : [];
+        for (var i = 0; i < materials.length; i++) {
+          var item = materials[i];
+          if (!item) continue;
+          var dataUrl = String(item.dataUrl || "").trim();
+          if (!dataUrl || dataUrl.indexOf("data:image/") !== 0) continue;
+          var type = String(item.type || "");
+          var kind = String(item.kind || "");
+          if (type.indexOf("image/") === 0 || kind === "image" || /^data:image\//i.test(dataUrl)) {
+            return dataUrl;
+          }
+        }
+        return "";
+      }
+
+      function renderProjectInfoVisual(project) {
+        var thumb = resolveProjectVisualThumb(project);
+        if (els.projectInfoImage) {
+          els.projectInfoImage.innerHTML = "";
+          if (thumb) {
+            var img = document.createElement("img");
+            img.alt = "Изображение проекта";
+            img.src = thumb;
+            img.addEventListener("error", function () {
+              if (els.projectInfoImage) {
+                els.projectInfoImage.innerHTML = "";
+                els.projectInfoImage.hidden = true;
+              }
+            });
+            els.projectInfoImage.appendChild(img);
+            els.projectInfoImage.hidden = false;
+            els.projectInfoImage.removeAttribute("hidden");
+          } else {
+            els.projectInfoImage.hidden = true;
+            els.projectInfoImage.setAttribute("hidden", "");
+          }
+        }
+        var github = project ? String(project.githubUrl || "").trim() : "";
+        var online = resolveProjectPreviewUrl(project);
+        if (els.projectInfoGithubLink) {
+          if (github) {
+            els.projectInfoGithubLink.href = projectInfoExternalHref(github);
+            els.projectInfoGithubLink.hidden = false;
+            els.projectInfoGithubLink.removeAttribute("hidden");
+          } else {
+            els.projectInfoGithubLink.removeAttribute("href");
+            els.projectInfoGithubLink.hidden = true;
+            els.projectInfoGithubLink.setAttribute("hidden", "");
+          }
+        }
+        if (els.btnProjectInfoOpen) {
+          if (online) {
+            els.btnProjectInfoOpen.hidden = false;
+            els.btnProjectInfoOpen.removeAttribute("hidden");
+            els.btnProjectInfoOpen.disabled = false;
+            els.btnProjectInfoOpen.setAttribute("aria-disabled", "false");
+            els.btnProjectInfoOpen.title = "Открыть онлайн-версию проекта";
+          } else {
+            els.btnProjectInfoOpen.hidden = true;
+            els.btnProjectInfoOpen.setAttribute("hidden", "");
+            els.btnProjectInfoOpen.disabled = true;
+            els.btnProjectInfoOpen.setAttribute("aria-disabled", "true");
+            els.btnProjectInfoOpen.title = "Ссылка на онлайн-версию пока не указана";
+          }
+        }
+      }
+
+      function onProjectInfoContinueClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        openOsSection("current-task");
+      }
+
+      function buildProjectInfoUserMainFields(byId) {
+        var out = [];
+        for (var i = 0; i < PROJECT_INFO_USER_MAIN.length; i++) {
+          var spec = PROJECT_INFO_USER_MAIN[i];
+          var field = byId[spec.id];
+          if (!field) continue;
+          var value = field.value;
+          if (spec.id === "constraints") {
+            value = userFacingConstraintsText(value);
+          }
+          if (!projectInfoNonEmpty(value)) continue;
+          out.push({
+            id: field.id,
+            label: spec.label,
+            value: value,
+            source: field.source,
+            origin: field.origin
+          });
+        }
+        var online = resolveProjectInfoOnlineField(byId);
+        if (online) out.push(online);
+        return out;
+      }
+
+      function buildProjectInfoUserNeeds(byId) {
+        var needs = [];
+        for (var i = 0; i < PROJECT_INFO_USER_MAIN.length; i++) {
+          var spec = PROJECT_INFO_USER_MAIN[i];
+          var field = byId[spec.id];
+          var value = field ? field.value : "";
+          if (spec.id === "constraints") value = userFacingConstraintsText(value);
+          if (!projectInfoNonEmpty(value)) {
+            needs.push({ id: spec.id, label: spec.label });
+          }
+        }
+        if (!resolveProjectInfoOnlineField(byId)) {
+          needs.push({
+            id: "project_online_link",
+            label: "Онлайн-версия / ссылка на проект"
+          });
+        }
+        return needs;
+      }
 
       function pushProjectInfoField(list, field) {
         if (!field || !projectInfoNonEmpty(field.value)) return;
@@ -12616,8 +13320,10 @@
         pushProjectInfoField(fields, {
           id: "summary",
           label: "Краткое описание",
-          value: (p && p.summary) || "",
-          source: ".ai-pos/project_passport.json → summary",
+          value: (p && p.summary) || String((project && project.idea) || "").trim() || "",
+          source: (p && p.summary)
+            ? ".ai-pos/project_passport.json → summary"
+            : "карточка проекта → idea",
           origin: "user_provided"
         });
         pushProjectInfoField(fields, {
@@ -12630,15 +13336,19 @@
         pushProjectInfoField(fields, {
           id: "audience",
           label: "Аудитория",
-          value: (p && p.audience) || "",
-          source: ".ai-pos/project_passport.json → audience",
+          value: (p && p.audience) || String((project && project.audience) || "").trim() || "",
+          source: (p && p.audience)
+            ? ".ai-pos/project_passport.json → audience"
+            : "карточка проекта → audience",
           origin: "user_provided"
         });
         pushProjectInfoField(fields, {
           id: "expected_result",
           label: "Ожидаемый результат",
-          value: (p && p.expected_result) || "",
-          source: ".ai-pos/project_passport.json → expected_result",
+          value: (p && p.expected_result) || String((project && project.result) || "").trim() || "",
+          source: (p && p.expected_result)
+            ? ".ai-pos/project_passport.json → expected_result"
+            : "карточка проекта → result",
           origin: "user_provided"
         });
         pushProjectInfoField(fields, {
@@ -13043,10 +13753,19 @@
         }
         var valueText = formatProjectInfoValue(field.value, field.id);
         if (!String(valueText || "").trim()) return "";
+        var valueHtml;
+        if (field.id === "project_online_link" || field.id === "online_url" || field.id === "launch_url" || field.id === "preview_url") {
+          var href = projectInfoExternalHref(valueText);
+          valueHtml =
+            '<a class="project-info-value-link" href="' + escapeHtml(href) +
+            '" target="_blank" rel="noopener noreferrer">' + escapeHtml(valueText) + "</a>";
+        } else {
+          valueHtml = escapeHtml(valueText);
+        }
         return (
           '<article class="project-info-row" data-field-id="' + escapeHtml(field.id) + '">' +
           '<span class="project-info-label">' + escapeHtml(field.label) + "</span>" +
-          '<p class="project-info-value">' + escapeHtml(valueText) + "</p>" +
+          '<p class="project-info-value">' + valueHtml + "</p>" +
           "</article>"
         );
       }
@@ -13076,26 +13795,21 @@
         if (!els.projectInfoBody && !els.projectInfoFields) return;
         var host = els.projectInfoBody || els.projectInfoFields;
         var fields = (view && view.fields) || [];
-        var needs = (view && view.needs) || [];
-        var sense = [];
-        var environment = [];
         var byId = {};
         for (var i = 0; i < fields.length; i++) {
-          var field = fields[i];
-          byId[field.id] = field;
-          if (PROJECT_INFO_SENSE_IDS[field.id]) sense.push(field);
-          else environment.push(field);
+          byId[fields[i].id] = fields[i];
         }
+        var mainFields = buildProjectInfoUserMainFields(byId);
+        var needs = buildProjectInfoUserNeeds(byId);
 
         if (els.projectInfoSummary) {
-          if (fields.length || needs.length) {
+          if (mainFields.length || needs.length) {
             els.projectInfoSummary.hidden = false;
             els.projectInfoSummary.innerHTML =
-              '<p class="project-info-summary-title">AI POS изучила проект</p>' +
-              '<div class="project-info-summary-lines">' +
-              "<span>Подтверждено: <strong>" + fields.length + "</strong> сведений</span>" +
-              "<span>Требуют уточнения: <strong>" + needs.length + "</strong></span>" +
-              "</div>";
+              '<p class="project-info-summary-chip">' +
+              "Подтверждено <strong>" + mainFields.length + "</strong></p>" +
+              '<p class="project-info-summary-chip is-needs">' +
+              "Можно дополнить <strong>" + needs.length + "</strong></p>";
           } else {
             els.projectInfoSummary.hidden = true;
             els.projectInfoSummary.innerHTML = "";
@@ -13103,96 +13817,15 @@
         }
 
         var html = "";
-        if (!fields.length) {
-          html = '<p class="section-note">Пока нет найденных сведений для отображения.</p>';
+        if (!mainFields.length) {
+          html = '<p class="section-note">Пока нет сведений о проекте для отображения.</p>';
         } else {
-          if (sense.length) {
-            html += '<section class="project-info-group" data-group="sense">';
-            html += '<h4 class="project-info-group-title">О проекте</h4>';
-            html += '<div class="project-info-fields">';
-            for (var s = 0; s < sense.length; s++) html += renderProjectInfoFieldCard(sense[s]);
-            html += "</div></section>";
+          html += '<section class="project-info-group" data-group="user">';
+          html += '<div class="project-info-fields">';
+          for (var m = 0; m < mainFields.length; m++) {
+            html += renderProjectInfoFieldCard(mainFields[m]);
           }
-
-          if (environment.length) {
-            html += '<section class="project-info-group" data-group="environment">';
-            html += '<h4 class="project-info-group-title">Рабочая среда</h4>';
-
-            var contextFields = [];
-            Object.keys(byId).forEach(function (id) {
-              if (id === "project_context_path" || id.indexOf("context_") === 0) {
-                contextFields.push(byId[id]);
-              }
-            });
-
-            html += renderProjectInfoEnvSubgroup(
-              "README",
-              "readme",
-              pickProjectInfoFields(byId, [
-                "readme_title",
-                "readme_purpose",
-                "technologies",
-                "readme_capabilities",
-                "online_url"
-              ])
-            );
-            html += renderProjectInfoEnvSubgroup("PROJECT_CONTEXT", "context", contextFields);
-            html += renderProjectInfoEnvSubgroup(
-              "Git",
-              "git",
-              pickProjectInfoFields(byId, ["repository_url", "github_url_card"])
-            );
-            html += renderProjectInfoEnvSubgroup(
-              "Рабочая папка",
-              "folder",
-              pickProjectInfoFields(byId, [
-                "work_folder",
-                "created_at",
-                "primary_tool",
-                "launch_url",
-                "preview_url"
-              ])
-            );
-            html += renderProjectInfoEnvSubgroup(
-              "Структура проекта",
-              "structure",
-              pickProjectInfoFields(byId, ["structure"])
-            );
-            html += renderProjectInfoEnvSubgroup(
-              "Документы",
-              "documents",
-              pickProjectInfoFields(byId, ["documents"])
-            );
-
-            var used = {
-              readme_title: true,
-              readme_purpose: true,
-              technologies: true,
-              readme_capabilities: true,
-              online_url: true,
-              project_context_path: true,
-              repository_url: true,
-              github_url_card: true,
-              work_folder: true,
-              created_at: true,
-              primary_tool: true,
-              launch_url: true,
-              preview_url: true,
-              structure: true,
-              documents: true
-            };
-            Object.keys(byId).forEach(function (id) {
-              if (id.indexOf("context_") === 0) used[id] = true;
-            });
-            var other = [];
-            for (var o = 0; o < environment.length; o++) {
-              if (!used[environment[o].id]) other.push(environment[o]);
-            }
-            if (other.length) {
-              html += renderProjectInfoEnvSubgroup("Другое", "other", other);
-            }
-            html += "</section>";
-          }
+          html += "</div></section>";
         }
         host.innerHTML = html;
 
@@ -13243,17 +13876,183 @@
           }
           if (techParts.length) {
             els.projectInfoTech.hidden = false;
+            els.projectInfoTech.open = false;
+            els.projectInfoTech.removeAttribute("open");
             els.projectInfoTechBody.innerHTML = techParts.join("");
           } else {
             els.projectInfoTech.hidden = true;
+            els.projectInfoTech.open = false;
             els.projectInfoTechBody.innerHTML = "";
           }
         }
 
         if (els.projectInfoStatus) {
-          var note = String(statusText || "").trim();
+          var note = String(statusText || "").trim() || String(state.projectInfoFlashNote || "").trim();
           els.projectInfoStatus.hidden = !note;
           els.projectInfoStatus.textContent = note;
+        }
+      }
+
+      function setProjectInfoEditOpen(open) {
+        var show = !!open;
+        state.projectInfoEditOpen = show;
+        if (els.projectInfoEditForm) {
+          els.projectInfoEditForm.hidden = !show;
+          if (show) els.projectInfoEditForm.removeAttribute("hidden");
+          else els.projectInfoEditForm.setAttribute("hidden", "");
+        }
+        if (els.projectInfoActions) {
+          els.projectInfoActions.hidden = show;
+          if (!show) els.projectInfoActions.removeAttribute("hidden");
+        }
+        if (els.projectInfoImage && show) {
+          els.projectInfoImage.hidden = true;
+        }
+        if (els.projectInfoSummary) {
+          if (show) els.projectInfoSummary.hidden = true;
+        }
+        if (els.projectInfoBody) els.projectInfoBody.hidden = show;
+        if (els.projectInfoNeeds) {
+          if (show) els.projectInfoNeeds.hidden = true;
+        }
+        // Материалы не зависят от режима редактирования: если есть — остаются видимы.
+        if (!show) {
+          var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+          renderProjectInfoMaterials(project);
+        }
+      }
+
+      function fillProjectInfoEditForm(project, passport) {
+        if (!els.projectInfoEditForm || !project) return;
+        var p = passport || getCachedPassport(project) || null;
+        if (els.piEditName) els.piEditName.value = (p && p.name) || project.name || "";
+        if (els.piEditSummary) {
+          els.piEditSummary.value = (p && p.summary) || project.idea || "";
+        }
+        if (els.piEditGoal) els.piEditGoal.value = (p && p.goal) || "";
+        if (els.piEditAudience) {
+          els.piEditAudience.value = (p && p.audience) || project.audience || "";
+        }
+        if (els.piEditExpected) {
+          els.piEditExpected.value = (p && p.expected_result) || project.result || "";
+        }
+        if (els.piEditConstraints) els.piEditConstraints.value = project.constraints || "";
+        fillPrimaryToolSelect(els.piEditPrimaryTool, project.primaryTool || "");
+        if (els.piEditLaunchUrl) {
+          els.piEditLaunchUrl.value = normalizeLaunchUrl(project.launchUrl || "");
+        }
+      }
+
+      function openProjectInfoEditor() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        fillProjectInfoEditForm(project, getCachedPassport(project));
+        setProjectInfoEditOpen(true);
+        if (els.projectInfoStatus) {
+          els.projectInfoStatus.hidden = true;
+          els.projectInfoStatus.textContent = "";
+        }
+      }
+
+      function closeProjectInfoEditor() {
+        setProjectInfoEditOpen(false);
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (project) refreshProjectAbout(project);
+      }
+
+      async function saveProjectInfoEdits(event) {
+        if (event) event.preventDefault();
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        var name = els.piEditName ? String(els.piEditName.value || "").trim() : "";
+        var summary = els.piEditSummary ? String(els.piEditSummary.value || "").trim() : "";
+        var goal = els.piEditGoal ? String(els.piEditGoal.value || "").trim() : "";
+        var audience = els.piEditAudience ? String(els.piEditAudience.value || "").trim() : "";
+        var expected = els.piEditExpected ? String(els.piEditExpected.value || "").trim() : "";
+        var constraints = els.piEditConstraints ? String(els.piEditConstraints.value || "").trim() : "";
+        var primaryTool = normalizePrimaryTool(els.piEditPrimaryTool ? els.piEditPrimaryTool.value : "");
+        var launchUrl = normalizeLaunchUrl(els.piEditLaunchUrl ? els.piEditLaunchUrl.value : "");
+        if (!name) {
+          if (els.projectInfoStatus) {
+            els.projectInfoStatus.hidden = false;
+            els.projectInfoStatus.textContent = "Укажите название проекта.";
+          }
+          return;
+        }
+        project.name = name;
+        project.constraints = constraints;
+        project.primaryTool = primaryTool;
+        project.launchUrl = launchUrl;
+        project.idea = summary;
+        project.audience = audience;
+        project.result = expected;
+        project.updatedAt = new Date().toISOString();
+        saveProjects();
+        syncProjectBannerName(project);
+        if (els.osNavProjectName) els.osNavProjectName.textContent = name || "Проект";
+        if (els.projectPickerLabel) els.projectPickerLabel.textContent = name || "Проект";
+
+        var folder = String(project.workFolder || "").trim();
+        if (folder && !isDemoProject(project)) {
+          var passport = getCachedPassport(project) || emptyPassport();
+          passport.name = name;
+          passport.summary = summary;
+          passport.goal = goal;
+          passport.audience = audience;
+          passport.expected_result = expected;
+          if (!passport.status) passport.status = String(project.status || "").trim();
+          var written = await writePassportToBridge(folder, passport);
+          if (!written.ok) {
+            if (els.projectInfoStatus) {
+              els.projectInfoStatus.hidden = false;
+              els.projectInfoStatus.textContent =
+                written.message || "Не удалось сохранить сведения о проекте.";
+            }
+            return;
+          }
+          setCachedPassport(project, written.passport || passport);
+          applyPassportToProjectFields(project, written.passport || passport);
+          saveProjects();
+        }
+
+        state.projectInfoFlashNote = "Сведения обновлены.";
+        closeProjectInfoEditor();
+        await refreshProjectAbout(project);
+        refreshProjectsHome();
+      }
+
+      function onProjectInfoMaterialsClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        if (!els.materialsInput) return;
+        // Остаёмся на «Сведения» — не уводим на developer-вкладку «Материалы».
+        els.materialsInput.click();
+        state.projectInfoFlashNote = "Выберите файлы — они добавятся в материалы проекта.";
+        if (els.projectInfoStatus) {
+          els.projectInfoStatus.hidden = false;
+          els.projectInfoStatus.textContent = state.projectInfoFlashNote;
+        }
+      }
+
+      function onProjectInfoOpenClick() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        var url = resolveProjectPreviewUrl(project);
+        if (!url) {
+          if (els.projectInfoStatus) {
+            els.projectInfoStatus.hidden = false;
+            els.projectInfoStatus.textContent = "Сначала укажите онлайн-версию или ссылку на проект.";
+          }
+          return;
+        }
+        var href = projectInfoExternalHref(url);
+        try {
+          window.open(href, "_blank", "noopener,noreferrer");
+        } catch (e) {
+          if (els.projectInfoStatus) {
+            els.projectInfoStatus.hidden = false;
+            els.projectInfoStatus.textContent = "Не удалось открыть ссылку на проект.";
+          }
         }
       }
 
@@ -13261,6 +14060,8 @@
         if (!els.projectInfoBody && !els.projectInfoFields) return;
         if (!project) {
           renderProjectInfoView({ fields: [], needs: [], conflicts: [] }, "");
+          renderProjectInfoVisual(null);
+          renderProjectInfoMaterials(null);
           return;
         }
         var view = collectProjectInfoView(
@@ -13272,6 +14073,8 @@
           setupInfo
         );
         renderProjectInfoView(view, "");
+        renderProjectInfoVisual(project);
+        renderProjectInfoMaterials(findProjectRecord(project.id) || project);
       }
 
       async function refreshProjectAbout(project) {
@@ -13323,9 +14126,12 @@
           if (passportRes.data.passport) {
             passport = normalizePassportClient(passportRes.data.passport);
             setCachedPassport(project, passport);
-            // Read-only screen: do not mutate card / localStorage from passport.
+            // Read-only screen: do not mutate card / localStorage from passport fields.
           }
           foundFacts = passportRes.data.found_facts || null;
+          if (syncProjectCardUrlsFromFoundFacts(project, foundFacts)) {
+            refreshProjectsHome();
+          }
         }
         var stageInfo = stagePayloadOk ? stageRes.data : null;
         var structureInfo = structurePayloadOk ? structureRes.data : null;
@@ -14980,7 +15786,211 @@
         return "файл";
       }
 
+      function materialHasOpenableContent(item) {
+        if (!item) return false;
+        if (String(item.dataUrl || "").trim()) return true;
+        if (String(item.contentText || "").trim()) return true;
+        return false;
+      }
+
+      function formatMaterialsAddedNote(names) {
+        var list = Array.isArray(names) ? names.filter(Boolean) : [];
+        var n = list.length;
+        if (!n) return "Файлы добавлены в материалы проекта.";
+        var head = n === 1 ? "Добавлен 1 файл" : "Добавлено " + n + " файлов";
+        var lines = list.map(function (name) {
+          return name + " — Добавлен";
+        });
+        return head + ".\n" + lines.join("\n");
+      }
+
+      function openProjectMaterial(id) {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        var materials = project.materials || [];
+        var item = null;
+        for (var i = 0; i < materials.length; i++) {
+          if (materials[i] && materials[i].id === id) {
+            item = materials[i];
+            break;
+          }
+        }
+        if (!item) return;
+        var dataUrl = String(item.dataUrl || "").trim();
+        if (dataUrl) {
+          window.open(dataUrl, "_blank", "noopener,noreferrer");
+          return;
+        }
+        var text = String(item.contentText || "");
+        if (!text) {
+          state.projectInfoFlashNote = "Этот файл сохранён без содержимого для просмотра.";
+          if (els.projectInfoStatus) {
+            els.projectInfoStatus.hidden = false;
+            els.projectInfoStatus.textContent = state.projectInfoFlashNote;
+          }
+          return;
+        }
+        var mime = String(item.type || "").trim() || "text/plain";
+        if (mime.indexOf("text/") !== 0 && mime !== "application/json") mime = "text/plain";
+        var blob = new Blob([text], { type: mime + ";charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var win = window.open(url, "_blank", "noopener,noreferrer");
+        if (!win) {
+          state.projectInfoFlashNote = "Не удалось открыть файл. Разрешите всплывающие окна и повторите.";
+          if (els.projectInfoStatus) {
+            els.projectInfoStatus.hidden = false;
+            els.projectInfoStatus.textContent = state.projectInfoFlashNote;
+          }
+        }
+        setTimeout(function () {
+          try {
+            URL.revokeObjectURL(url);
+          } catch (e) {}
+        }, 60000);
+      }
+
+      function ensureProjectInfoMaterialsEls() {
+        if (!els.projectInfoMaterials) {
+          els.projectInfoMaterials = document.getElementById("projectInfoMaterials");
+        }
+        if (!els.projectInfoMaterialsCount) {
+          els.projectInfoMaterialsCount = document.getElementById("projectInfoMaterialsCount");
+        }
+        if (!els.projectInfoMaterialsScroll) {
+          els.projectInfoMaterialsScroll = document.getElementById("projectInfoMaterialsScroll");
+        }
+        if (!els.projectInfoMaterialsList) {
+          els.projectInfoMaterialsList = document.getElementById("projectInfoMaterialsList");
+        }
+        if (!els.btnProjectInfoMaterialsToggle) {
+          els.btnProjectInfoMaterialsToggle = document.getElementById("btnProjectInfoMaterialsToggle");
+        }
+        return !!(els.projectInfoMaterials && els.projectInfoMaterialsList);
+      }
+
+      function resolveProjectMaterialsList(project) {
+        var live =
+          project && project.id
+            ? findProjectRecord(project.id) || currentProjectMutable()
+            : currentProjectMutable();
+        var src = live || project;
+        if (!src) return [];
+        if (!Array.isArray(src.materials)) src.materials = [];
+        return src.materials;
+      }
+
+      function syncProjectInfoMaterialsCollapse(materialCount) {
+        if (!ensureProjectInfoMaterialsEls()) return;
+        var scroll = els.projectInfoMaterialsScroll;
+        var toggle = els.btnProjectInfoMaterialsToggle;
+        if (!scroll || !toggle) return;
+        var needsCollapse = materialCount > 4;
+        if (!needsCollapse) {
+          state.projectInfoMaterialsExpanded = false;
+          scroll.classList.remove("is-collapsed");
+          toggle.hidden = true;
+          toggle.setAttribute("hidden", "");
+          toggle.textContent = "Показать все";
+          return;
+        }
+        toggle.hidden = false;
+        toggle.removeAttribute("hidden");
+        if (state.projectInfoMaterialsExpanded) {
+          scroll.classList.remove("is-collapsed");
+          toggle.textContent = "Свернуть";
+        } else {
+          scroll.classList.add("is-collapsed");
+          toggle.textContent = "Показать все";
+        }
+      }
+
+      function onProjectInfoMaterialsToggleClick() {
+        state.projectInfoMaterialsExpanded = !state.projectInfoMaterialsExpanded;
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        var count = resolveProjectMaterialsList(project).length;
+        syncProjectInfoMaterialsCollapse(count);
+      }
+
+      function hideProjectInfoMaterialsBlock() {
+        if (!ensureProjectInfoMaterialsEls()) return;
+        els.projectInfoMaterials.hidden = true;
+        els.projectInfoMaterials.setAttribute("hidden", "");
+        els.projectInfoMaterialsList.innerHTML = "";
+        if (els.projectInfoMaterialsCount) els.projectInfoMaterialsCount.textContent = "";
+        if (els.projectInfoMaterialsScroll) {
+          els.projectInfoMaterialsScroll.classList.remove("is-collapsed");
+        }
+        if (els.btnProjectInfoMaterialsToggle) {
+          els.btnProjectInfoMaterialsToggle.hidden = true;
+          els.btnProjectInfoMaterialsToggle.setAttribute("hidden", "");
+        }
+      }
+
+      function showProjectInfoMaterialsBlock() {
+        if (!ensureProjectInfoMaterialsEls()) return;
+        els.projectInfoMaterials.hidden = false;
+        els.projectInfoMaterials.removeAttribute("hidden");
+        if (els.projectInfoMaterials.style) {
+          els.projectInfoMaterials.style.removeProperty("display");
+        }
+      }
+
+      function renderProjectInfoMaterials(project) {
+        if (!ensureProjectInfoMaterialsEls()) return;
+        var materials = resolveProjectMaterialsList(project);
+        if (!materials.length) {
+          hideProjectInfoMaterialsBlock();
+          return;
+        }
+        var countLabel =
+          materials.length === 1 ? "1 файл" : materials.length + " файлов";
+        if (els.projectInfoMaterialsCount) {
+          els.projectInfoMaterialsCount.textContent = countLabel;
+        }
+        var html = "";
+        for (var i = 0; i < materials.length; i++) {
+          var m = materials[i] || {};
+          var canOpen = materialHasOpenableContent(m);
+          html +=
+            '<li class="project-info-material-row" data-material-id="' +
+            escapeHtml(m.id || "") +
+            '">' +
+            '<div class="project-info-material-meta">' +
+            '<span class="project-info-material-name">' +
+            escapeHtml(m.name || "Файл") +
+            "</span>" +
+            '<span class="project-info-material-status">Добавлен</span>' +
+            "</div>" +
+            '<div class="project-info-material-actions">' +
+            (canOpen
+              ? '<button type="button" class="btn btn-secondary" data-open-material="' +
+                escapeHtml(m.id || "") +
+                '">Открыть</button>'
+              : "") +
+            '<button type="button" class="btn btn-secondary" data-remove-material="' +
+            escapeHtml(m.id || "") +
+            '">Удалить</button>' +
+            "</div></li>";
+        }
+        els.projectInfoMaterialsList.innerHTML = html;
+        showProjectInfoMaterialsBlock();
+        syncProjectInfoMaterialsCollapse(materials.length);
+        var opens = els.projectInfoMaterialsList.querySelectorAll("[data-open-material]");
+        for (var o = 0; o < opens.length; o++) {
+          opens[o].addEventListener("click", function (event) {
+            openProjectMaterial(event.currentTarget.getAttribute("data-open-material"));
+          });
+        }
+        var removes = els.projectInfoMaterialsList.querySelectorAll("[data-remove-material]");
+        for (var r = 0; r < removes.length; r++) {
+          removes[r].addEventListener("click", function (event) {
+            removeMaterial(event.currentTarget.getAttribute("data-remove-material"));
+          });
+        }
+      }
+
       function renderMaterials(project) {
+        if (!els.materialsList) return;
         var materials = project.materials || [];
         if (!materials.length) {
           els.materialsList.innerHTML =
@@ -15014,8 +16024,22 @@
       function removeMaterial(id) {
         var mutable = currentProjectMutable();
         if (!mutable) return;
-        mutable.materials = (mutable.materials || []).filter(function (m) { return m.id !== id; });
+        var key = String(id || "");
+        var removedName = "";
+        var next = [];
+        var materials = mutable.materials || [];
+        for (var i = 0; i < materials.length; i++) {
+          if (materials[i] && materials[i].id === key) {
+            removedName = materials[i].name || "";
+            continue;
+          }
+          next.push(materials[i]);
+        }
+        mutable.materials = next;
         if (!mutable.isDemo) saveProjects();
+        state.projectInfoFlashNote = removedName
+          ? ("Удалён: " + removedName)
+          : "Материал удалён.";
         refreshWorkspace();
       }
 
@@ -15076,12 +16100,23 @@
         var mutable = currentProjectMutable();
         if (!mutable) return;
         if (!mutable.materials) mutable.materials = [];
+        var names = [];
         var tasks = [];
-        for (var i = 0; i < files.length; i++) tasks.push(ingestFile(files[i], mutable));
+        for (var i = 0; i < files.length; i++) {
+          names.push(files[i].name || ("Файл " + (i + 1)));
+          tasks.push(ingestFile(files[i], mutable));
+        }
         Promise.all(tasks).then(function () {
           if (!mutable.isDemo) saveProjects();
+          state.projectInfoFlashNote = formatMaterialsAddedNote(names);
+          // Обновляем workspace, оставаясь на текущей вкладке «Сведения».
           refreshWorkspace();
-          els.materialsInput.value = "";
+          if (els.materialsInput) els.materialsInput.value = "";
+          if (els.projectInfoStatus) {
+            els.projectInfoStatus.hidden = false;
+            els.projectInfoStatus.textContent = state.projectInfoFlashNote;
+          }
+          renderProjectInfoMaterials(findProjectRecord(mutable.id) || mutable);
         });
       }
 
@@ -16463,9 +17498,9 @@
         if (getPrepTellMode() === "story") {
           var story = els.prepStoryText ? String(els.prepStoryText.value || "").trim() : "";
           return {
-            goal: story,
+            goal: "",
             description: story,
-            result: story,
+            result: "",
             passport: "",
             roadmap: "",
             architecture: "",
@@ -16737,9 +17772,7 @@
         }
         if (
           !isProjectSetupReady(project) &&
-          (state.activeTab === "overview" ||
-            state.activeTab === "task" ||
-            state.activeTab === "work")
+          (state.activeTab === "task" || state.activeTab === "work")
         ) {
           state.activeTab = "structure";
         }
@@ -16757,6 +17790,8 @@
         renderSettings(project);
         setActiveTab(state.activeTab || "structure", { force: true, skipHistory: true });
         showPanel("workspace", { keepScroll: !!keepScroll });
+        // После переключения вкладки заново рисуем материалы из живой карточки.
+        renderProjectInfoMaterials(findProjectRecord(id) || project);
         syncExampleUi();
         syncProjectChrome();
         updateProjectSetupNavGate();
@@ -16767,7 +17802,7 @@
         }
         if (!isDemoProject(project) && String(project.workFolder || "").trim()) {
           refreshProjectSetupStatus(project).then(function (ready) {
-            if (!ready && (state.activeTab === "overview" || state.activeTab === "task" || state.activeTab === "work")) {
+            if (!ready && (state.activeTab === "task" || state.activeTab === "work")) {
               state.activeTab = "structure";
               setActiveTab("structure", { force: true, skipHistory: true });
               setOsNavActive("structure");
@@ -17856,6 +18891,29 @@
         });
         if (els.btnOpenExample) {
           els.btnOpenExample.addEventListener("click", openExample);
+        }
+        if (els.btnProjectInfoContinue) {
+          els.btnProjectInfoContinue.addEventListener("click", onProjectInfoContinueClick);
+        }
+        if (els.btnProjectInfoEdit) {
+          els.btnProjectInfoEdit.addEventListener("click", openProjectInfoEditor);
+        }
+        if (els.btnProjectInfoMaterials) {
+          els.btnProjectInfoMaterials.addEventListener("click", onProjectInfoMaterialsClick);
+        }
+        if (els.btnProjectInfoMaterialsToggle) {
+          els.btnProjectInfoMaterialsToggle.addEventListener("click", onProjectInfoMaterialsToggleClick);
+        }
+        if (els.btnProjectInfoOpen) {
+          els.btnProjectInfoOpen.addEventListener("click", onProjectInfoOpenClick);
+        }
+        if (els.btnProjectInfoEditCancel) {
+          els.btnProjectInfoEditCancel.addEventListener("click", closeProjectInfoEditor);
+        }
+        if (els.projectInfoEditForm) {
+          els.projectInfoEditForm.addEventListener("submit", function (event) {
+            saveProjectInfoEdits(event);
+          });
         }
         if (els.btnExitExample) {
           els.btnExitExample.addEventListener("click", function () { showPanel("list"); });
