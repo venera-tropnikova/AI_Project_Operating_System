@@ -1003,6 +1003,12 @@
       text-overflow: ellipsis;
     }
 
+    /* Единый верх проекта: название — на всех вкладках. */
+    .project-top {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 0.75rem;
+    }
     .project-banner {
       display: flex;
       align-items: center;
@@ -1010,12 +1016,20 @@
       gap: 0.85rem 1.1rem;
       width: 100%;
       box-sizing: border-box;
-      margin: 0 0 0.9rem;
+      margin: 0;
       padding: 0.55rem 1rem 0.65rem;
       border-radius: 10px;
       background: #1e3a6e;
       color: #ffffff;
       box-shadow: 0 1px 2px color-mix(in srgb, #12284f 18%, transparent);
+    }
+    /* Инфографика этапов — под панелью вкладок, на всех вкладках. */
+    .workspace-stage-track {
+      margin: 0 0 1rem;
+      padding: 0.75rem 0.65rem 0.45rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-raised, var(--surface));
     }
 
     html[data-color-scheme="dark"] .project-banner {
@@ -1094,14 +1108,30 @@
       color: #243f78;
     }
 
+    /* Светлая панель вкладок — отделяет шапку проекта от содержимого. */
+    .project-section-nav-panel {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 1.35rem;
+      padding: 0.5rem 0.7rem;
+      border: 1px solid color-mix(in srgb, #1e3a6e 12%, var(--line, #d8d2c8));
+      border-radius: 12px;
+      background: #f4f6fa;
+      box-shadow: 0 1px 2px color-mix(in srgb, #1e3a6e 6%, transparent);
+    }
+    html[data-color-scheme="dark"] .project-section-nav-panel {
+      background: color-mix(in srgb, #243f78 22%, var(--surface, #1a1a1a));
+      border-color: color-mix(in srgb, #8aa0c8 28%, var(--line, #333));
+      box-shadow: none;
+    }
     .project-section-nav {
       display: flex;
       flex-wrap: nowrap;
       align-items: stretch;
-      gap: 0.15rem;
-      margin: 0 0 0.85rem;
-      padding-bottom: 0.1rem;
-      border-bottom: 1px solid var(--line);
+      gap: 0.2rem;
+      margin: 0;
+      padding: 0;
+      border-bottom: 0;
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
@@ -1113,10 +1143,10 @@
       align-items: center;
       flex: 0 0 auto;
       margin: 0;
-      padding: 0.45rem 0.7rem 0.55rem;
+      padding: 0.5rem 0.85rem;
       border: 0;
       border-bottom: 2px solid transparent;
-      border-radius: 8px 8px 0 0;
+      border-radius: 8px;
       background: transparent;
       color: var(--ink-soft);
       font: inherit;
@@ -1136,8 +1166,11 @@
     .project-section-nav-item.is-active {
       color: var(--ink);
       font-weight: 650;
-      background: color-mix(in srgb, #233a8b 7%, transparent);
+      background: color-mix(in srgb, #233a8b 7%, #ffffff);
       border-bottom-color: color-mix(in srgb, #233a8b 55%, transparent);
+    }
+    html[data-color-scheme="dark"] .project-section-nav-item.is-active {
+      background: color-mix(in srgb, #233a8b 18%, transparent);
     }
 
     .project-section-nav-item:focus {
@@ -2548,7 +2581,7 @@
     }
 
     .structure-review {
-      margin: 0 0 1rem;
+      margin: 1.1rem 0 1rem;
       padding: 0.85rem 1rem;
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -2717,6 +2750,10 @@
       padding-top: 0.35rem;
     }
 
+    #prepBlock #prepReadyBlock[hidden] {
+      display: none !important;
+    }
+
     #prepBlock #prepReadyTitle {
       margin: 0;
       font-size: 1.22rem;
@@ -2745,6 +2782,96 @@
 
     #prepBlock .structure-review-list {
       margin-top: 0.85rem;
+    }
+
+    #prepBlock #prepProgressList[hidden] {
+      display: none !important;
+    }
+
+    .structure-mode-switch {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 0 0 1rem;
+    }
+    .structure-mode-switch[hidden] { display: none !important; }
+    .structure-mode-btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink-soft);
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 0.4rem 0.9rem;
+      cursor: pointer;
+    }
+    .structure-mode-btn.is-active {
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      color: var(--ink);
+    }
+    .structure-mode-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .structure-dev-links {
+      margin: 1.15rem 0 0.35rem;
+      padding: 0.95rem 1.05rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-raised, var(--surface));
+    }
+    .structure-dev-links[hidden] { display: none !important; }
+    .structure-dev-links-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .structure-dev-links-lead {
+      margin: 0 0 0.75rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+    .structure-dev-links-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    @media (max-width: 720px) {
+      .structure-dev-links-list { grid-template-columns: 1fr; }
+    }
+    .structure-dev-links-list button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      padding: 0.65rem 0.8rem;
+      cursor: pointer;
+    }
+    .structure-dev-links-list button:hover {
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+    }
+    .structure-dev-link-name {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+    .structure-dev-link-hint {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
     }
 
     #prepModeMaterials .file-btn.btn-primary {
@@ -3122,6 +3249,45 @@
     .gate-card {
       width: min(100%, 520px);
     }
+    .gate-card.is-assignment-view {
+      width: min(100%, 920px);
+      max-height: min(92vh, 900px);
+      display: flex;
+      flex-direction: column;
+    }
+    .gate-card.is-assignment-view .modal-top h3 {
+      font-size: 1.2rem;
+    }
+    .gate-assignment-preview {
+      flex: 1 1 auto;
+      margin: 0.35rem 0 0;
+      padding: 1rem 1.1rem;
+      min-height: 280px;
+      max-height: min(62vh, 640px);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-raised, #f7f5f1);
+      color: var(--ink);
+      font-size: 0.98rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+    .gate-assignment-preview[hidden] { display: none !important; }
+    .gate-card.is-assignment-view .modal-actions {
+      flex-shrink: 0;
+      margin-top: 1.1rem;
+    }
+    .gate-card.is-assignment-view #gateLead,
+    .gate-card.is-assignment-view #gateMeta,
+    .gate-card.is-assignment-view #gateChecks,
+    .gate-card.is-assignment-view #gateConfirmedAt {
+      display: none !important;
+    }
+    .gate-card.is-assignment-view #gateAssignmentPreview {
+      margin-top: 0.15rem;
+    }
 
     .gate-meta {
       display: grid;
@@ -3286,10 +3452,6 @@
       box-sizing: border-box;
     }
 
-    .project-overview .desktop-stage-track {
-      margin-bottom: 1.25rem;
-    }
-
     .project-info-summary {
       display: flex;
       flex-wrap: wrap;
@@ -3316,6 +3478,22 @@
       font-size: 0.86rem;
       line-height: 1.25;
       color: var(--ink-soft, #3d3a36);
+    }
+    button.project-info-summary-chip {
+      appearance: none;
+      font: inherit;
+      cursor: pointer;
+      text-align: left;
+      max-width: 100%;
+    }
+    button.project-info-summary-chip.is-needs:hover,
+    button.project-info-summary-chip.is-needs:focus-visible {
+      border-color: color-mix(in srgb, #a67c2a 55%, var(--line, #d8d2c8));
+      background: color-mix(in srgb, #c9a227 20%, var(--surface, #fff));
+      outline: none;
+    }
+    button.project-info-summary-chip.is-needs:focus-visible {
+      box-shadow: 0 0 0 2px color-mix(in srgb, #a67c2a 45%, transparent);
     }
     .project-info-summary-chip.is-needs {
       border-color: color-mix(in srgb, #a67c2a 35%, var(--line, #d8d2c8));
@@ -4679,7 +4857,12 @@
 
 
     /* Unified current-stage workspace */
-    .current-stage-screen { display: block; max-width: min(1120px, 100%); }
+    .current-stage-screen {
+      display: block;
+      max-width: min(1120px, 100%);
+      /* Отделить заголовок модуля от панели вкладок. */
+      padding-top: 1.75rem; /* 28px */
+    }
     .current-stage-screen[hidden] { display: none !important; }
     .stage-flow {
       display: block;
@@ -4694,11 +4877,24 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem 2.4rem;
-      max-width: min(760px, 100%);
+      max-width: min(1120px, 100%);
       margin: 0 0 1.15rem;
       padding: 0 0.15rem;
     }
     .stage-context-item { min-width: 150px; }
+    /* Одна строка: «Модуль: Историческая справка». */
+    .stage-context-item--module .flow-label { display: none; }
+    .stage-context-item--module .flow-value {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 750;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
     .stage-zone { margin: 0 0 1.35rem; }
     .stage-zone:last-of-type { margin-bottom: 0; }
     .stage-zone-title {
@@ -4708,10 +4904,133 @@
       letter-spacing: -0.01em;
       color: var(--ink);
     }
-    /* Фокус экрана: текущее задание выделяется среди остальных зон. */
+    /* Две колонки: работа | проверка — только при активной задаче. */
+    .stage-work-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+      gap: 1rem 1.15rem;
+      align-items: start;
+      max-width: min(1120px, 100%);
+      margin: 0 0 0.25rem;
+    }
+    .stage-work-columns[hidden] { display: none !important; }
+    .stage-work-columns .stage-zone { margin: 0; }
+    .stage-work-columns .stage-flow {
+      max-width: none;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .stage-col-review {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 0;
+    }
+    /* Левая колонка: спокойные карточки; жирным — заголовок и одно ключевое. */
+    .stage-col-work > .stage-zone-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.8rem;
+    }
+    .stage-col-work .stage-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
     .stage-zone[data-zone="now"] .stage-flow {
-      border-color: var(--line-strong);
-      background: var(--accent-soft);
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+    .stage-col-work .flow-row,
+    .stage-col-work .stage-tech-criteria {
+      margin: 0;
+      padding: 0.95rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-raised, var(--surface));
+      box-shadow: none;
+    }
+    .stage-col-work .flow-row:last-child { border-bottom: 1px solid var(--line); }
+    .stage-col-work .flow-label {
+      margin-bottom: 0.45rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      color: var(--ink);
+    }
+    .stage-col-work .flow-value,
+    .stage-col-work .flow-text {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--ink-soft, var(--ink));
+    }
+    .stage-col-work .work-key-line,
+    .stage-col-work #currentStageTitle,
+    .stage-col-work #stagePrimaryToolName {
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .stage-col-work .flow-hint,
+    .stage-col-work .flow-meta {
+      font-size: 0.86rem;
+      font-weight: 400;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+    .stage-col-work .flow-hint { margin-top: 0.3rem; }
+    .stage-col-work #stageTransferBlock .flow-actions { margin-top: 0.85rem; }
+    .stage-criteria-readonly {
+      margin: 0.35rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--ink);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .stage-criteria-readonly li { margin: 0.25rem 0; }
+    .stage-tech-criteria[hidden] { display: none !important; }
+    .stage-tech-criteria > summary {
+      cursor: pointer;
+      list-style: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      user-select: none;
+    }
+    .stage-col-work .stage-criteria-readonly,
+    .stage-col-work .stage-criteria-readonly li {
+      font-weight: 400;
+      color: var(--ink-soft, var(--ink));
+    }
+    .stage-tech-criteria > summary::-webkit-details-marker { display: none; }
+    .stage-tech-criteria > summary::before {
+      content: "▸ ";
+      display: inline-block;
+    }
+    .stage-tech-criteria[open] > summary::before { content: "▾ "; }
+    .stage-tech-criteria .stage-criteria-readonly { margin-top: 0.55rem; }
+    .capture-attach-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
+      min-width: 0;
+    }
+    .capture-attach-wrap .flow-inline-btn {
+      margin-left: 0.1rem;
+    }
+    @media (max-width: 960px) {
+      .stage-work-columns {
+        grid-template-columns: 1fr;
+      }
     }
     .history-list { display: grid; gap: 0.7rem; }
     .history-list[hidden] { display: none !important; }
@@ -4925,28 +5244,54 @@
     }
 
     .desktop-stage-dot {
-      width: 0.72rem;
-      height: 0.72rem;
+      width: 0.78rem;
+      height: 0.78rem;
       border-radius: 50%;
-      border: 2px solid #c5cedd;
-      background: #fff;
+      border: 2px solid #5f6b7d;
+      background: #ffffff;
       box-sizing: border-box;
       flex-shrink: 0;
     }
 
-    .desktop-stage-node.is-done .desktop-stage-dot,
+    .desktop-stage-node.is-done .desktop-stage-dot {
+      border-color: #3f7d5c;
+      background: #d8efe3;
+    }
+
     .desktop-stage-node.is-future .desktop-stage-dot {
-      border-color: #d0d6e0;
-      background: #eef1f6;
+      border-color: #5f6b7d;
+      background: #ffffff;
     }
 
     .desktop-stage-node.is-current .desktop-stage-dot {
-      width: 0.95rem;
-      height: 0.95rem;
-      border-color: #3d9a6a;
+      width: 0.98rem;
+      height: 0.98rem;
+      border-width: 3px;
+      border-color: #246846;
       background: #3d9a6a;
-      box-shadow: 0 0 0 4px color-mix(in srgb, #3d9a6a 18%, transparent);
-      margin-top: -0.1rem;
+      box-shadow: 0 0 0 3px color-mix(in srgb, #3d9a6a 22%, transparent);
+      margin-top: -0.12rem;
+    }
+
+    html[data-color-scheme="dark"] .desktop-stage-dot {
+      border-color: #b0bbcd;
+      background: #1b2433;
+    }
+
+    html[data-color-scheme="dark"] .desktop-stage-node.is-done .desktop-stage-dot {
+      border-color: #5fad84;
+      background: color-mix(in srgb, #3d9a6a 34%, #1b2433);
+    }
+
+    html[data-color-scheme="dark"] .desktop-stage-node.is-future .desktop-stage-dot {
+      border-color: #b0bbcd;
+      background: #243044;
+    }
+
+    html[data-color-scheme="dark"] .desktop-stage-node.is-current .desktop-stage-dot {
+      border-color: #7dcea6;
+      background: #3d9a6a;
+      box-shadow: 0 0 0 3px color-mix(in srgb, #3d9a6a 28%, transparent);
     }
 
     .desktop-stage-label {
@@ -6534,6 +6879,42 @@
     .current-stage-screen .check-list { margin: 0.85rem 0 0; }
     .current-stage-screen .check-list input { flex: 0 0 auto; }
     .stage-flow .copy-toast { display: inline-block; margin-top: 0.45rem; }
+    .work-kickoff-flow { padding-top: 0.85rem; padding-bottom: 0.95rem; }
+    .work-kickoff-flow .field { margin: 0 0 0.85rem; }
+    .work-kickoff-flow .field:last-of-type { margin-bottom: 0.55rem; }
+    .work-kickoff-confirm-title {
+      margin: 0 0 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .kickoff-criteria-list {
+      list-style: none;
+      margin: 0.35rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .kickoff-criteria-list input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 2.4rem;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+    }
+    .kickoff-confirm-list {
+      margin: 0.25rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--ink);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .kickoff-confirm-list li { margin: 0.2rem 0; }
     #workspaceMeta { display: none !important; }
     /* Проект, модуль и этап показаны первыми строками линейного экрана */
     #crumbs { display: none !important; }
@@ -7191,26 +7572,31 @@
 
     <section class="panel" id="panelWorkspace" aria-label="Проект" data-detail-level="technical">
       <div class="workspace-shell">
-        <div class="project-banner" id="projectBanner" aria-label="Активный проект">
-          <div class="project-banner-main">
-            <span class="project-banner-label">Проект</span>
-            <p class="project-banner-name" id="projectBannerName">—</p>
-            <p class="project-banner-status" id="projectBannerStatus" hidden></p>
-          </div>
-          <div class="project-banner-actions">
-            <button type="button" class="project-banner-continue" id="btnPrepContinueProject" hidden>Продолжить</button>
+        <div class="project-top" id="projectTop">
+          <div class="project-banner" id="projectBanner" aria-label="Активный проект">
+            <div class="project-banner-main">
+              <span class="project-banner-label">Проект</span>
+              <p class="project-banner-name" id="projectBannerName">—</p>
+              <p class="project-banner-status" id="projectBannerStatus" hidden></p>
+            </div>
+            <div class="project-banner-actions">
+              <button type="button" class="project-banner-continue" id="btnPrepContinueProject" hidden>Продолжить</button>
+            </div>
           </div>
         </div>
-        <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
-          <button type="button" class="project-section-nav-item" data-os-nav="structure" data-nav-modes="user developer">Навигатор проекта</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer">Сведения о проекте</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="current-task" data-nav-modes="user developer" data-requires-setup="true" data-nav-label-user="Работа над проектом" data-nav-label-developer="Текущая задача">Работа над проектом</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="rules" data-nav-modes="developer">Правила</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="materials" data-nav-modes="developer">Материалы</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="specialists" data-nav-modes="developer">Специалисты</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="docs" data-nav-modes="developer">Документы</button>
-          <button type="button" class="project-section-nav-item" data-os-nav="settings" data-nav-modes="user developer">Настройки</button>
-        </nav>
+        <div class="project-section-nav-panel" id="projectSectionNavPanel">
+          <nav class="project-section-nav" id="osNavProject" aria-label="Разделы проекта">
+            <button type="button" class="project-section-nav-item" data-os-nav="structure" data-nav-modes="user developer">Навигатор проекта</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="overview" data-nav-modes="user developer">Сведения о проекте</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="current-task" data-nav-modes="user developer" data-requires-setup="true" data-nav-label-user="Работа над проектом" data-nav-label-developer="Текущая задача">Работа над проектом</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="rules" data-nav-modes="developer">Правила</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="materials" data-nav-modes="developer">Материалы</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="specialists" data-nav-modes="developer">Специалисты</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="docs" data-nav-modes="developer">Документы</button>
+            <button type="button" class="project-section-nav-item" data-os-nav="settings" data-nav-modes="user developer">Настройки</button>
+          </nav>
+        </div>
+        <div class="desktop-stage-track workspace-stage-track" id="desktopStageTrack" aria-label="Текущий этап работы проекта" hidden></div>
         <p class="project-section-nav-gate-hint" id="osNavSetupGateHint" hidden>Сначала проверьте и настройте проект</p>
 
         <div class="workspace-head">
@@ -7239,22 +7625,18 @@
           <p class="section-note" id="taskEmptyNote" hidden>Текущая задача ещё не выбрана.</p>
 
           <header class="stage-context">
-            <div class="stage-context-item">
-              <span class="flow-label">Проект</span>
-              <p class="flow-value" id="stageProjectName">—</p>
-            </div>
-            <div class="stage-context-item">
-              <span class="flow-label">Модуль</span>
-              <p class="flow-value" id="stageModuleName">—</p>
+            <div class="stage-context-item stage-context-item--module">
+              <span class="flow-label" id="stagePartLabel" hidden>Модуль</span>
+              <p class="flow-value" id="stageModuleName">Модуль: —</p>
             </div>
           </header>
 
-          <section class="stage-zone" data-zone="done" aria-labelledby="zoneDoneTitle">
+          <section class="stage-zone" id="stageDoneZone" data-zone="done" aria-labelledby="zoneDoneTitle" hidden>
             <h3 class="stage-zone-title" id="zoneDoneTitle">Что уже сделано</h3>
             <div class="stage-flow">
               <section class="flow-row" id="historyRow">
                 <div class="history-list" id="historyList" hidden></div>
-                <p class="flow-text" id="historyEmpty">Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.</p>
+                <p class="flow-text" id="historyEmpty" hidden>Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.</p>
                 <p class="history-status" id="historyStatus" hidden></p>
                 <div class="history-actions" id="historyActions" hidden>
                   <button type="button" class="btn btn-ghost" id="btnHistoryToggle">Показать всю историю</button>
@@ -7263,155 +7645,248 @@
             </div>
           </section>
 
-          <section class="stage-zone" data-zone="now" aria-labelledby="zoneNowTitle">
-            <h3 class="stage-zone-title" id="zoneNowTitle">Что делается сейчас</h3>
-            <div class="stage-flow">
-              <section class="flow-row">
-                <span class="flow-label">Текущее задание</span>
-                <p class="flow-value" id="currentStageTitle">—</p>
-              </section>
-
-              <section class="flow-row">
-                <span class="flow-label">Необходимо сделать</span>
-                <p class="flow-text" id="taskGoalText">—</p>
-              </section>
-
-              <section class="flow-row" id="stageToolBlock">
-                <span class="flow-label">Где выполнить</span>
-                <div id="stagePrimaryToolReady">
-                  <p class="flow-value" id="stagePrimaryToolName">—</p>
-                  <p class="flow-meta">Рабочая папка: <span id="toolFolder">—</span></p>
-                  <div class="flow-actions">
-                    <button type="button" class="btn btn-primary" id="btnCopyWork">Скопировать задание</button>
-                    <button type="button" class="btn btn-secondary" id="btnOpenInCursor">Открыть в Cursor</button>
-                  </div>
-                  <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано</span>
-                </div>
-                <div id="stagePrimaryToolMissing" hidden>
-                  <p class="flow-hint">Среда разработки для проекта не указана. Задайте её в настройках проекта.</p>
-                  <div class="flow-actions">
-                    <button type="button" class="btn btn-secondary" id="btnOpenProjectSettings">Открыть настройки</button>
-                  </div>
-                </div>
-                <div class="stage-hidden-support" aria-hidden="true">
-                  <p id="toolWhy">—</p>
-                  <p id="toolWhen">—</p>
-                  <p id="toolAvoid">—</p>
-                  <div class="tool-picks" id="toolPicks"></div>
-                  <h3 id="assignmentTitle">Рабочее задание</h3>
-                  <div class="work-editor" id="workBox" hidden></div>
-                </div>
-              </section>
-            </div>
-          </section>
-
-          <section class="stage-zone" data-zone="result" aria-labelledby="zoneResultTitle">
-            <h3 class="stage-zone-title" id="zoneResultTitle">Какой результат ожидается</h3>
-            <div class="stage-flow">
-              <section class="flow-row">
-                <span class="flow-label">Ожидаемый результат</span>
-                <p class="flow-text" id="taskResultText">—</p>
-              </section>
-
-              <section class="flow-row" id="stageCheckBlock">
-                <span class="flow-label">Проверка результата</span>
-                <div class="flow-actions">
-                  <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
-                  <button type="button" class="btn btn-secondary" id="btnCaptureResult">Снять результат</button>
-                  <button type="button" class="btn btn-ghost" id="btnChooseCaptureWindow">Выбрать окно</button>
-                  <label class="btn btn-ghost file-btn">
-                    <span id="resultShotAttachText">Прикрепить снимок</span>
-                    <input type="file" id="resultShotInput" accept="image/png,image/*" />
-                  </label>
-                </div>
-                <p class="flow-hint" id="openAppHint">Адрес приложения не указан. Задайте его в настройках проекта.</p>
-                <p class="flow-hint" id="captureWindowHint" hidden></p>
-                <p class="flow-hint" id="captureStatus" hidden aria-live="polite"></p>
-                <div class="capture-preview" id="capturePreview" hidden>
-                  <img id="capturePreviewImage" alt="Снимок результата" />
-                  <p class="flow-meta" id="capturePreviewMeta"></p>
-                  <button type="button" class="flow-inline-btn" id="btnClearCaptureVisual">Удалить снимок</button>
-                </div>
-                <div class="field capture-skip" id="captureSkipBox">
-                  <label class="check-list" style="display:block;margin:0.75rem 0 0">
-                    <input type="checkbox" id="captureSkipCheck" />
-                    Задание не меняет интерфейс
-                  </label>
-                  <div id="captureSkipReasonWrap" hidden style="margin-top:0.55rem">
-                    <label for="captureSkipReason">Почему визуальный результат не нужен</label>
-                    <textarea id="captureSkipReason" rows="2" placeholder="Кратко опишите причину"></textarea>
-                  </div>
-                </div>
-                <div class="capture-window-picker" id="captureWindowPicker" hidden>
-                  <p class="flow-label">Выберите окно приложения</p>
-                  <div class="capture-window-list" id="captureWindowList"></div>
-                  <div class="flow-actions">
-                    <button type="button" class="btn btn-ghost" id="btnCancelCaptureWindow">Отмена</button>
-                  </div>
-                </div>
-                <ul class="check-list" id="reviewChecks"></ul>
-              </section>
-
-              <section class="flow-row" id="reviewCard">
-                <span class="flow-label">Результат проверки</span>
-                <div class="review-status" id="reviewStatus">Не проверено</div>
-                <div class="flow-actions">
-                  <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
-                  <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
-                </div>
-                <div class="flow-issues" id="stageIssuesBox" hidden>
+          <section class="stage-zone" id="workKickoffZone" data-zone="kickoff" aria-labelledby="workKickoffTitle" hidden>
+            <h3 class="stage-zone-title" id="workKickoffTitle">С чего продолжить работу над проектом?</h3>
+            <div class="stage-flow work-kickoff-flow">
+              <div id="workKickoffFormStep">
+                <form id="workKickoffForm" novalidate>
                   <div class="field">
-                    <label for="reviewNotes">Описание замечаний</label>
-                    <textarea id="reviewNotes" rows="3" placeholder="Что именно нужно исправить"></textarea>
+                    <label for="kickoffGoal">Что нужно сделать</label>
+                    <textarea id="kickoffGoal" rows="4" required placeholder="Опишите следующий конкретный шаг"></textarea>
                   </div>
-                  <div class="flow-actions" style="margin-top:0">
-                    <label class="btn btn-ghost file-btn">
-                      <span id="reviewShotBtnText">Прикрепить скриншот</span>
-                      <input type="file" id="reviewShotInput" accept="image/*" />
-                    </label>
-                    <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Передать на исправление</button>
+                  <div class="field">
+                    <label for="kickoffResult">Какой результат должен получиться</label>
+                    <textarea id="kickoffResult" rows="3" required placeholder="Как вы поймёте, что шаг выполнен"></textarea>
                   </div>
-                  <p class="flow-hint" id="reviewShotNote" hidden>
-                    <span id="reviewShotName"></span>
-                    <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
-                  </p>
-                  <p class="flow-hint">Связь скриншота с замечанием сохраняется только в текущей сессии.</p>
+                  <div class="field">
+                    <label for="kickoffName">Название задачи</label>
+                    <input id="kickoffName" type="text" maxlength="120" autocomplete="off" />
+                  </div>
+                  <div class="field">
+                    <span class="flow-label">Критерии проверки</span>
+                    <ul class="kickoff-criteria-list" id="kickoffCriteriaList"></ul>
+                  </div>
+                  <div class="field">
+                    <span class="flow-label">Исполнитель</span>
+                    <p class="flow-value" id="kickoffToolName">Cursor</p>
+                  </div>
+                  <div class="field">
+                    <span class="flow-label">Рабочая папка</span>
+                    <p class="flow-text" id="kickoffFolder">—</p>
+                  </div>
+                  <p class="form-error" id="kickoffError" hidden aria-live="polite"></p>
+                  <div class="flow-actions">
+                    <button type="button" class="btn btn-ghost" id="btnKickoffCancel">Отмена</button>
+                    <button type="submit" class="btn btn-primary" id="btnKickoffContinue">Продолжить</button>
+                  </div>
+                </form>
+              </div>
+
+              <div id="workKickoffConfirmStep" hidden>
+                <h4 class="work-kickoff-confirm-title">Проверьте задачу</h4>
+                <section class="flow-row">
+                  <span class="flow-label">Название</span>
+                  <p class="flow-value" id="kickoffConfirmName">—</p>
+                </section>
+                <section class="flow-row">
+                  <span class="flow-label">Что нужно сделать</span>
+                  <p class="flow-text" id="kickoffConfirmGoal">—</p>
+                </section>
+                <section class="flow-row">
+                  <span class="flow-label">Ожидаемый результат</span>
+                  <p class="flow-text" id="kickoffConfirmResult">—</p>
+                </section>
+                <section class="flow-row">
+                  <span class="flow-label">Критерии проверки</span>
+                  <ul class="kickoff-confirm-list" id="kickoffConfirmCriteria"></ul>
+                </section>
+                <section class="flow-row">
+                  <span class="flow-label">Исполнитель</span>
+                  <p class="flow-value" id="kickoffConfirmTool">—</p>
+                </section>
+                <section class="flow-row">
+                  <span class="flow-label">Рабочая папка</span>
+                  <p class="flow-text" id="kickoffConfirmFolder">—</p>
+                </section>
+                <p class="form-error" id="kickoffConfirmError" hidden aria-live="polite"></p>
+                <div class="flow-actions">
+                  <button type="button" class="btn btn-ghost" id="btnKickoffBack">Изменить</button>
+                  <button type="button" class="btn btn-primary" id="btnKickoffSave">Сохранить и начать</button>
                 </div>
-                <p class="flow-hint" id="reviewHint">Отметьте пункты, которые вы проверили.</p>
-              </section>
+              </div>
             </div>
           </section>
 
-          <section class="stage-zone" data-zone="next" aria-labelledby="zoneNextTitle">
-            <h3 class="stage-zone-title" id="zoneNextTitle">Что нужно сделать дальше</h3>
-            <div class="stage-flow">
-              <section class="flow-row" id="stageFixBlock" hidden>
-                <span class="flow-label">Задание на исправление</span>
-                <p class="flow-text" id="stageFixText">—</p>
-                <p class="flow-meta" id="stageFixShot" hidden></p>
-                <div class="flow-actions">
-                  <button type="button" class="btn btn-primary" id="btnCopyFix">Скопировать задание на исправление</button>
+          <div class="stage-work-columns" id="stageWorkColumns" hidden>
+            <section class="stage-zone stage-col-work" data-zone="now" aria-labelledby="stageModuleName">
+              <h3 class="stage-zone-title" id="zoneNowTitle" hidden>Сейчас в работе</h3>
+              <div class="stage-flow">
+                <section class="flow-row">
+                  <span class="flow-label">Текущее состояние</span>
+                  <p class="flow-text" id="taskWhyText">—</p>
+                </section>
+
+                <section class="flow-row">
+                  <span class="flow-label">Нужно исправить</span>
+                  <p class="flow-value" id="currentStageTitle">—</p>
+                </section>
+
+                <section class="flow-row">
+                  <span class="flow-label">Задача</span>
+                  <p class="flow-text" id="taskGoalText">—</p>
+                </section>
+
+                <section class="flow-row" id="stageTransferBlock">
+                  <span class="flow-label">Подготовлено задание</span>
+                  <p class="flow-text">Задание готово к выполнению.</p>
+                  <div class="flow-actions">
+                    <button type="button" class="btn btn-primary" id="btnOpenInCursor">Передать задачу в Cursor</button>
+                    <button type="button" class="btn btn-primary" id="btnCopyWork" hidden>Просмотреть задание</button>
+                  </div>
+                  <span class="copy-toast" id="copyToast" aria-live="polite">Задание скопировано. Вставьте его в Cursor</span>
+                </section>
+
+                <!-- Служебные поля: нужны логике, на экране не показываются. -->
+                <div class="stage-hidden-support" aria-hidden="true">
+                  <p class="flow-text" id="taskResultText">—</p>
+                  <section id="stageToolBlock">
+                    <div id="stagePrimaryToolReady">
+                      <p class="flow-value" id="stagePrimaryToolName">—</p>
+                      <p class="flow-meta">Папка: <span id="toolFolder">—</span></p>
+                    </div>
+                    <div id="stagePrimaryToolMissing" hidden>
+                      <p class="flow-hint">Программа для работы ещё не указана. Откройте настройки проекта.</p>
+                      <div class="flow-actions">
+                        <button type="button" class="btn btn-secondary" id="btnOpenProjectSettings">Открыть настройки</button>
+                      </div>
+                    </div>
+                    <p id="toolWhy">—</p>
+                    <p id="toolWhen">—</p>
+                    <p id="toolAvoid">—</p>
+                    <div class="tool-picks" id="toolPicks"></div>
+                    <h3 id="assignmentTitle">Рабочее задание</h3>
+                    <div class="work-editor" id="workBox" hidden></div>
+                  </section>
+                  <details id="stageCriteriaBlock">
+                    <summary>Как проверить, что всё сделано</summary>
+                    <ul class="stage-criteria-readonly" id="stageCriteriaList"></ul>
+                    <p class="flow-hint" id="criteriaHint">Отметьте пункты справа после работы.</p>
+                  </details>
                 </div>
-                <span class="copy-toast" id="copyFixToast" aria-live="polite">Задание скопировано</span>
+              </div>
+            </section>
+
+            <div class="stage-col-review">
+              <section class="stage-zone" data-zone="result" aria-labelledby="zoneResultTitle">
+                <h3 class="stage-zone-title" id="zoneResultTitle">Проверка результата</h3>
+                <div class="stage-flow">
+                  <section class="flow-row" id="stageCheckBlock">
+                    <span class="flow-label">После работы в Cursor</span>
+                    <p class="flow-hint">Проверьте результат. При необходимости откройте приложение или приложите снимок.</p>
+                    <div class="flow-actions">
+                      <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
+                      <div class="capture-attach-wrap">
+                        <label class="btn btn-ghost file-btn">
+                          <span id="resultShotAttachText">Прикрепить снимок</span>
+                          <input type="file" id="resultShotInput" accept="image/png,image/*" />
+                        </label>
+                        <button type="button" class="flow-inline-btn" id="btnChooseCaptureWindow">Выбрать окно</button>
+                        <button type="button" class="btn btn-secondary" id="btnCaptureResult" hidden>Снять результат</button>
+                      </div>
+                    </div>
+                    <p class="flow-hint" id="openAppHint">Адрес приложения не указан. Задайте его в настройках проекта.</p>
+                    <p class="flow-hint" id="captureWindowHint" hidden></p>
+                    <p class="flow-hint" id="captureStatus" hidden aria-live="polite"></p>
+                    <div class="capture-preview" id="capturePreview" hidden>
+                      <img id="capturePreviewImage" alt="Снимок результата" />
+                      <p class="flow-meta" id="capturePreviewMeta"></p>
+                      <button type="button" class="flow-inline-btn" id="btnClearCaptureVisual">Удалить снимок</button>
+                    </div>
+                    <div class="field capture-skip" id="captureSkipBox">
+                      <label class="check-list" style="display:block;margin:0.75rem 0 0">
+                        <input type="checkbox" id="captureSkipCheck" />
+                        Задание не меняет интерфейс
+                      </label>
+                      <div id="captureSkipReasonWrap" hidden style="margin-top:0.55rem">
+                        <label for="captureSkipReason">Почему визуальный результат не нужен</label>
+                        <textarea id="captureSkipReason" rows="2" placeholder="Кратко опишите причину"></textarea>
+                      </div>
+                    </div>
+                    <div class="capture-window-picker" id="captureWindowPicker" hidden>
+                      <p class="flow-label">Выберите окно приложения</p>
+                      <div class="capture-window-list" id="captureWindowList"></div>
+                      <div class="flow-actions">
+                        <button type="button" class="btn btn-ghost" id="btnCancelCaptureWindow">Отмена</button>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="flow-row" id="stageVerifyChecksBlock">
+                    <span class="flow-label">Проверочные пункты</span>
+                    <ul class="check-list" id="reviewChecks"></ul>
+                  </section>
+
+                  <section class="flow-row" id="reviewCard">
+                    <span class="flow-label">Завершение задачи</span>
+                    <div class="review-status" id="reviewStatus">Не проверено</div>
+                    <div class="flow-actions">
+                      <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
+                      <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
+                    </div>
+                    <div class="flow-issues" id="stageIssuesBox" hidden>
+                      <div class="field">
+                        <label for="reviewNotes">Описание замечаний</label>
+                        <textarea id="reviewNotes" rows="3" placeholder="Что именно нужно исправить"></textarea>
+                      </div>
+                      <div class="flow-actions" style="margin-top:0">
+                        <label class="btn btn-ghost file-btn">
+                          <span id="reviewShotBtnText">Прикрепить скриншот</span>
+                          <input type="file" id="reviewShotInput" accept="image/*" />
+                        </label>
+                        <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Передать на исправление</button>
+                      </div>
+                      <p class="flow-hint" id="reviewShotNote" hidden>
+                        <span id="reviewShotName"></span>
+                        <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
+                      </p>
+                      <p class="flow-hint">Связь скриншота с замечанием сохраняется только в текущей сессии.</p>
+                    </div>
+                    <p class="flow-hint" id="reviewHint">Отметьте проверочные пункты. Затем нажмите «Всё выполнено».</p>
+                  </section>
+                </div>
               </section>
 
-              <section class="flow-row" id="stageNextBlock" hidden>
-                <span class="flow-label" id="stageNextLabel">Следующее задание</span>
-                <p class="flow-text" id="stageNextText">—</p>
-                <div class="flow-actions">
-                  <button type="button" class="btn btn-primary" id="btnCopyNext">Скопировать следующее задание</button>
-                </div>
-                <span class="copy-toast" id="copyNextToast" aria-live="polite">Задание скопировано</span>
-              </section>
+              <section class="stage-zone" id="stageNextZone" data-zone="next" aria-labelledby="zoneNextTitle" hidden>
+                <h3 class="stage-zone-title" id="zoneNextTitle">Что нужно сделать дальше</h3>
+                <div class="stage-flow">
+                  <section class="flow-row" id="stageFixBlock" hidden>
+                    <span class="flow-label">Задание на исправление</span>
+                    <p class="flow-text" id="stageFixText">—</p>
+                    <p class="flow-meta" id="stageFixShot" hidden></p>
+                    <div class="flow-actions">
+                      <button type="button" class="btn btn-primary" id="btnCopyFix">Скопировать задание на исправление</button>
+                    </div>
+                    <span class="copy-toast" id="copyFixToast" aria-live="polite">Задание скопировано</span>
+                  </section>
 
-              <section class="flow-row" id="stageNextEmptyRow">
-                <p class="flow-text" id="stageNextEmpty">Следующий шаг появится после того, как результат текущего задания будет принят.</p>
+                  <section class="flow-row" id="stageNextBlock" hidden>
+                    <span class="flow-label" id="stageNextLabel">Следующее задание</span>
+                    <p class="flow-text" id="stageNextText">—</p>
+                    <div class="flow-actions">
+                      <button type="button" class="btn btn-primary" id="btnCopyNext">Скопировать следующее задание</button>
+                    </div>
+                    <span class="copy-toast" id="copyNextToast" aria-live="polite">Задание скопировано</span>
+                  </section>
+
+                  <section class="flow-row" id="stageNextEmptyRow">
+                    <p class="flow-text" id="stageNextEmpty">Следующий шаг появится после того, как результат текущего задания будет принят.</p>
+                  </section>
+                </div>
               </section>
             </div>
-          </section>
+          </div>
 
           <div class="stage-hidden-support" aria-hidden="true">
-            <p id="taskWhyText">—</p>
             <p id="taskCanText">—</p>
             <p id="taskAltText">—</p>
             <ul class="restrict-list" id="dontList"></ul>
@@ -7421,7 +7896,6 @@
 
         <div class="tab-panel" id="tab-overview" data-tab-panel="overview" hidden>
           <div class="project-overview" id="projectOverview">
-            <div class="desktop-stage-track" id="desktopStageTrack" aria-label="Текущая стадия AI POS" hidden></div>
             <h3 class="section-heading lv-project">Сведения о проекте</h3>
             <p class="project-overview-lead">Что AI POS уже знает о проекте.</p>
             <p class="section-note" id="projectInfoStatus" hidden></p>
@@ -7458,7 +7932,7 @@
                 </label>
                 <label class="project-info-edit-field">
                   <span>Ограничения</span>
-                  <textarea id="piEditConstraints" name="constraints" rows="2"></textarea>
+                  <textarea id="piEditConstraints" name="constraints" rows="2" placeholder="Например: срок, бюджет, платформа, обязательные требования (необязательно)"></textarea>
                 </label>
                 <label class="project-info-edit-field">
                   <span>Основной инструмент</span>
@@ -7568,17 +8042,22 @@
           <div id="prepNavigatorView">
             <div id="prepBlock" aria-live="polite">
               <h3 class="section-heading" id="prepHeading">Подготовка проекта</h3>
-              <p class="prep-status-text" id="prepLead">AI POS подготавливает проект к дальнейшей работе.</p>
+              <p class="prep-status-text" id="prepLead">AI POS знакомится с проектом и готовит его к работе.</p>
               <div class="structure-actions" id="prepActions" hidden>
-                <button type="button" class="btn btn-primary" id="btnPrepContinue">Продолжить</button>
+                <button type="button" class="btn btn-primary" id="btnPrepContinue">Рассказать о проекте</button>
                 <p class="structure-action-hint" id="prepActionHint" hidden></p>
               </div>
               <ul class="structure-review-list" id="prepProgressList"></ul>
               <div id="prepReadyBlock" hidden>
-                <p class="prep-status-text" id="prepReadyTitle">Проект подготовлен.</p>
-                <p class="prep-status-text" id="prepReadyText">AI POS полностью подготовила проект к дальнейшей работе.</p>
+                <p class="prep-status-text" id="prepReadyTitle">Проект готов к работе.</p>
+                <p class="prep-status-text" id="prepReadyText">Ниже — структура проекта: где что находится и какую роль выполняет.</p>
               </div>
               <p class="structure-review-line" id="prepReadyLine" hidden aria-hidden="true"></p>
+            </div>
+
+            <div class="structure-mode-switch" id="structureModeSwitch" role="group" aria-label="Режим просмотра навигатора">
+              <button type="button" class="structure-mode-btn is-active" id="btnStructureModeUser" data-workspace-mode="user">Обычный режим</button>
+              <button type="button" class="structure-mode-btn" id="btnStructureModeDeveloper" data-workspace-mode="developer">Режим разработчика</button>
             </div>
 
             <div class="structure-summary" id="structureSummary">
@@ -7587,7 +8066,8 @@
             </div>
             <p class="structure-status" id="structureStatus" hidden aria-live="polite"></p>
 
-            <!-- Служебные узлы диагностики скрыты: технику не показываем -->
+            <div class="structure-explorer" id="structureTree" aria-label="Структура проекта"></div>
+
             <section class="structure-review" id="structureReview" hidden aria-live="polite">
               <p class="structure-review-line" id="structureReviewDone"></p>
               <p class="structure-review-line" id="structureReviewCount"></p>
@@ -7610,7 +8090,36 @@
               </section>
             </section>
 
-            <div class="structure-explorer" id="structureTree" aria-label="Структура проекта"></div>
+            <section class="structure-dev-links" id="structureDeveloperLinks" hidden aria-label="Разделы режима разработчика">
+              <h3 class="structure-dev-links-title">Подробное устройство проекта</h3>
+              <p class="structure-dev-links-lead">Откройте нужный раздел — там уже есть существующие сведения AI POS.</p>
+              <ul class="structure-dev-links-list">
+                <li>
+                  <button type="button" data-os-nav="specialists">
+                    <span class="structure-dev-link-name">Специалисты</span>
+                    <span class="structure-dev-link-hint">Кто помогает в проекте и за что отвечает</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" data-os-nav="rules">
+                    <span class="structure-dev-link-name">Правила</span>
+                    <span class="structure-dev-link-hint">Ограничения и принципы, которых нужно придерживаться</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" data-os-nav="docs">
+                    <span class="structure-dev-link-name">Документы</span>
+                    <span class="structure-dev-link-hint">Внутренние материалы AI POS по проекту</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" data-os-nav="materials">
+                    <span class="structure-dev-link-name">Материалы</span>
+                    <span class="structure-dev-link-hint">Файлы и вложения, связанные с работой</span>
+                  </button>
+                </li>
+              </ul>
+            </section>
           </div>
 
           <div id="prepTellScreen" hidden aria-label="Расскажите о проекте">
@@ -7877,16 +8386,17 @@
   </div>
 
   <div class="modal" id="gateModal" role="dialog" aria-modal="true" hidden>
-    <div class="modal-card gate-card">
-      <div class="modal-top"><h3 id="gateTitle">Передать задачу ИИ</h3></div>
-      <p id="gateLead">Контроль перед передачей задачи. Подтвердите границы, затем скопируйте задание.</p>
-      <div class="gate-meta">
+    <div class="modal-card gate-card" id="gateCard">
+      <div class="modal-top"><h3 id="gateTitle">Просмотреть задание</h3></div>
+      <p id="gateLead">Прочитайте задание и скопируйте его, если нужно.</p>
+      <div class="gate-meta" id="gateMeta">
         <div><strong>Проект</strong><p id="gateProject">—</p></div>
-        <div><strong>Модуль</strong><p id="gateModule">—</p></div>
+        <div><strong>Раздел</strong><p id="gateModule">—</p></div>
         <div><strong>Текущая задача</strong><p id="gateTask">—</p></div>
-        <div class="allow"><strong>Разрешено менять</strong><ul id="gateAllowed"></ul></div>
-        <div class="forbid"><strong>Запрещено менять</strong><ul id="gateForbidden"></ul></div>
+        <div class="allow" id="gateAllowedWrap"><strong>Разрешено менять</strong><ul id="gateAllowed"></ul></div>
+        <div class="forbid" id="gateForbiddenWrap"><strong>Запрещено менять</strong><ul id="gateForbidden"></ul></div>
       </div>
+      <pre class="gate-assignment-preview" id="gateAssignmentPreview" hidden></pre>
       <div class="gate-checks" id="gateChecks">
         <label><input type="checkbox" data-gate-check="task" /> Я проверил текущую задачу.</label>
         <label><input type="checkbox" data-gate-check="scope" /> Я проверил разрешённую область изменений.</label>
@@ -7896,7 +8406,7 @@
       <p class="section-note" id="gateConfirmedAt" hidden></p>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="btnCancelGate">Отмена</button>
-        <button type="button" class="btn btn-primary" id="btnConfirmGate" disabled>Скопировать и продолжить</button>
+        <button type="button" class="btn btn-primary" id="btnConfirmGate" disabled>Скопировать задание</button>
       </div>
     </div>
   </div>
@@ -8122,60 +8632,60 @@
 
       var DEMO_TASK = {
         id: "task-card-reveal",
-        name: "Завершить механику раскрытия карточки на трёх проверенных датах",
-        goal: "Довести раскрытие карточки исторической справки до рабочего состояния на трёх датах.",
-        whyNow: "Механика почти готова; без неё модуль нельзя считать завершённым для главной страницы проекта «Мой день».",
-        expectedResult: "Карточка корректно раскрывается и показывает содержимое на трёх проверенных датах.",
-        canChange: "Код и разметку модуля «Историческая справка», связанные с раскрытием карточки и отображением трёх дат.",
+        name: "Сделать так, чтобы карточка правильно открывалась на трёх проверенных датах.",
+        goal: "Сделать так, чтобы карточка открывалась правильно и показывала нужную информацию.",
+        whyNow: "Раздел почти готов. Осталось завершить работу карточки, чтобы она работала правильно.",
+        expectedResult: "Карточка открывается и показывает нужную информацию.",
+        canChange: "Только раздел «Историческая справка» и работу его карточки.",
         cannotChange: [
-          "Не менять архитектуру всего проекта «Мой день»",
-          "Не переписывать другие модули (погода, планы, календарь, праздники)",
-          "Не удалять существующую функциональность проекта",
-          "Не подключать внешние API и библиотеки",
-          "Не менять общий дизайн проекта без отдельного решения",
-          "Не раздувать базу событий сверх трёх проверенных дат"
+          "Не менять весь проект «Мой день» целиком",
+          "Не трогать другие разделы (погода, планы, календарь, праздники)",
+          "Не убирать то, что уже работает",
+          "Не подключать новые внешние сервисы без согласования",
+          "Не менять общий вид приложения без отдельного решения",
+          "Не добавлять лишние факты сверх уже выбранных примеров"
         ],
         gateAllowed: [
-          "код и разметку модуля исторической справки",
-          "отображение трёх тестовых дат"
+          "раздел «Историческая справка»",
+          "работу карточки и показ примеров"
         ],
         gateForbidden: [
-          "другие модули",
-          "архитектуру проекта",
-          "общий дизайн без отдельного решения",
-          "базу событий сверх текущих трёх дат"
+          "другие разделы",
+          "устройство всего проекта",
+          "общий вид приложения без отдельного решения",
+          "лишние факты сверх выбранных примеров"
         ],
         reviewItems: DEMO_REVIEW_ITEMS.slice(),
         teamEngagement: {
           "Разработчик": {
             kind: "active",
             label: "Активен сейчас",
-            reason: "Нужно завершить механику раскрытия карточки в коде модуля."
+            reason: "Нужно исправить работу карточки в разделе «Историческая справка»."
           },
           "QA": {
             kind: "active",
             label: "Активен сейчас",
-            reason: "Проверяет раскрытие на трёх датах и отсутствие регрессий."
+            reason: "Проверяет, что карточка открывается как нужно."
           },
           "Архитектор": {
             kind: "consult",
             label: "Подключается для проверки",
-            reason: "Консультирует по границам изменений и защите архитектуры главной страницы."
+            reason: "Помогает не выйти за границы текущей задачи."
           },
           "UX/UI-дизайнер": {
             kind: "idle",
             label: "Не требуется на этом этапе",
-            reason: "Новый дизайн не входит в текущую задачу."
+            reason: "Новый дизайн сейчас не нужен."
           },
           "Технический редактор": {
             kind: "idle",
             label: "Не требуется на этом этапе",
-            reason: "Формулировка задания уже подготовлена; сейчас важны реализация и проверка."
+            reason: "Текст задания уже готов; сейчас важны исправление и проверка."
           }
         },
         recommendedTool: "cursor",
-        filesRefs: "Файлы модуля исторической справки в рабочей папке; три проверенные даты; текущий UI карточки.",
-        subtask: "Проверить раскрытие карточки поочерёдно на каждой из трёх дат."
+        filesRefs: "Файлы раздела «Историческая справка» в папке проекта; текущий вид карточки.",
+        subtask: "Проверить, что карточка открывается на нескольких примерах."
       };
 
       var DEMO_MODULE = {
@@ -8183,9 +8693,9 @@
         name: "Историческая справка",
         purpose: "Показывать интересные исторические факты дня внутри приложения «Мой день».",
         status: "В работе",
-        ready: "Каркас модуля, черновик карточки, три проверенные даты.",
-        remaining: "Завершить механику раскрытия карточки и стабильно показать содержимое на трёх датах.",
-        constraints: "Не превращать модуль в отдельный продукт; не расширять базу событий раньше механики.",
+        ready: "Черновик карточки и несколько примеров для проверки.",
+        remaining: "Завершить работу карточки, чтобы она правильно открывалась.",
+        constraints: "Не превращать этот раздел в отдельное приложение; сначала довести карточку до рабочего вида.",
         tasks: [DEMO_TASK],
         activeTaskId: DEMO_TASK.id
       };
@@ -8243,6 +8753,13 @@
         historyError: "",
         historyRequestSeq: 0,
         historyProjectKey: "",
+        // Kickoff первой задачи: только UI-состояние до сохранения в modules/tasks.
+        workKickoff: {
+          projectId: "",
+          step: "form",
+          nameManual: false,
+          toolId: "cursor"
+        },
         passportByFolder: {},
         passportRequestSeq: 0,
         stageRequestSeq: 0,
@@ -8506,12 +9023,35 @@
         btnCliInsightRefresh: document.getElementById("btnCliInsightRefresh"),
         detailLevelSwitch: document.getElementById("detailLevelSwitch"),
         taskEmptyNote: document.getElementById("taskEmptyNote"),
+        workKickoffZone: document.getElementById("workKickoffZone"),
+        workKickoffForm: document.getElementById("workKickoffForm"),
+        workKickoffFormStep: document.getElementById("workKickoffFormStep"),
+        workKickoffConfirmStep: document.getElementById("workKickoffConfirmStep"),
+        kickoffGoal: document.getElementById("kickoffGoal"),
+        kickoffResult: document.getElementById("kickoffResult"),
+        kickoffName: document.getElementById("kickoffName"),
+        kickoffCriteriaList: document.getElementById("kickoffCriteriaList"),
+        kickoffToolName: document.getElementById("kickoffToolName"),
+        kickoffFolder: document.getElementById("kickoffFolder"),
+        kickoffError: document.getElementById("kickoffError"),
+        kickoffConfirmName: document.getElementById("kickoffConfirmName"),
+        kickoffConfirmGoal: document.getElementById("kickoffConfirmGoal"),
+        kickoffConfirmResult: document.getElementById("kickoffConfirmResult"),
+        kickoffConfirmCriteria: document.getElementById("kickoffConfirmCriteria"),
+        kickoffConfirmTool: document.getElementById("kickoffConfirmTool"),
+        kickoffConfirmFolder: document.getElementById("kickoffConfirmFolder"),
+        kickoffConfirmError: document.getElementById("kickoffConfirmError"),
+        btnKickoffCancel: document.getElementById("btnKickoffCancel"),
+        btnKickoffContinue: document.getElementById("btnKickoffContinue"),
+        btnKickoffBack: document.getElementById("btnKickoffBack"),
+        btnKickoffSave: document.getElementById("btnKickoffSave"),
         historyList: document.getElementById("historyList"),
         historyEmpty: document.getElementById("historyEmpty"),
         historyStatus: document.getElementById("historyStatus"),
         historyActions: document.getElementById("historyActions"),
         btnHistoryToggle: document.getElementById("btnHistoryToggle"),
         stageNextEmptyRow: document.getElementById("stageNextEmptyRow"),
+        stageNextZone: document.getElementById("stageNextZone"),
         taskGoalText: document.getElementById("taskGoalText"),
         taskWhyText: document.getElementById("taskWhyText"),
         taskResultText: document.getElementById("taskResultText"),
@@ -8594,13 +9134,18 @@
         moduleModal: document.getElementById("moduleModal"),
         taskModal: document.getElementById("taskModal"),
         gateModal: document.getElementById("gateModal"),
+        gateCard: document.getElementById("gateCard"),
         gateTitle: document.getElementById("gateTitle"),
         gateLead: document.getElementById("gateLead"),
+        gateMeta: document.getElementById("gateMeta"),
         gateProject: document.getElementById("gateProject"),
         gateModule: document.getElementById("gateModule"),
         gateTask: document.getElementById("gateTask"),
+        gateAllowedWrap: document.getElementById("gateAllowedWrap"),
+        gateForbiddenWrap: document.getElementById("gateForbiddenWrap"),
         gateAllowed: document.getElementById("gateAllowed"),
         gateForbidden: document.getElementById("gateForbidden"),
+        gateAssignmentPreview: document.getElementById("gateAssignmentPreview"),
         gateChecks: document.getElementById("gateChecks"),
         gateConfirmedAt: document.getElementById("gateConfirmedAt"),
         btnConfirmGate: document.getElementById("btnConfirmGate"),
@@ -8741,36 +9286,86 @@
       }
 
       function defaultRulesFor(project) {
+        var techForbidden = constraintPartsByKind(project && project.constraints).tech;
         return {
-          mission: project.idea || "Сделать полезный продукт с понятной целью.",
-          principles: [
-            "не ломать готовые модули",
-            "менять только согласованную область",
-            "сохранять понятную архитектуру",
-            "сначала завершать механику, затем расширять данные",
-            "не добавлять лишние функции без отдельного решения"
-          ],
-          changeScale: "Только согласованная область текущей задачи внутри активного модуля.",
-          protectedModules: ["общая архитектура проекта", "готовые модули без отдельного решения"],
-          forbidden: linesFromCannot(project.constraints).length
-            ? linesFromCannot(project.constraints)
-            : [
-              "менять весь проект без необходимости",
-              "расширять задачу сверх согласованных границ"
-            ],
-          approvalOrder: [
-            "зафиксировать текущую задачу и область изменений",
-            "пройти контроль перед передачей задачи ИИ",
-            "выполнить работу в разрешённых границах",
-            "пройти проверку результата и принять её явно"
-          ],
-          acceptance: [
-            "результат соответствует цели текущей задачи",
-            "изменения уложились в разрешённую область",
-            "запрещённые области не затронуты",
-            "критерии проверки результата отмечены и приняты"
-          ]
+          mission: (project && project.idea) || "",
+          principles: [],
+          changeScale: "",
+          protectedModules: [],
+          forbidden: techForbidden.slice(),
+          approvalOrder: [],
+          acceptance: []
         };
+      }
+
+      // Точные строки системных дефолтов AI POS — удаляются только при полном совпадении.
+      var SYSTEM_RULES_DEFAULT_STRINGS = {
+        mission: [
+          "Сделать полезный продукт с понятной целью."
+        ],
+        principles: [
+          "не ломать готовые модули",
+          "менять только согласованную область",
+          "сохранять понятную архитектуру",
+          "сначала завершать механику, затем расширять данные",
+          "не добавлять лишние функции без отдельного решения"
+        ],
+        changeScale: [
+          "Только согласованная область текущей задачи внутри активного модуля.",
+          "Только согласованная область текущей задачи внутри активного модуля. Расширение продукта — только после отдельного решения."
+        ],
+        protectedModules: [
+          "общая архитектура проекта",
+          "готовые модули без отдельного решения"
+        ],
+        forbidden: [
+          "менять весь проект без необходимости",
+          "расширять задачу сверх согласованных границ"
+        ],
+        approvalOrder: [
+          "зафиксировать текущую задачу и область изменений",
+          "пройти контроль перед передачей задачи ИИ",
+          "выполнить работу в разрешённых границах",
+          "пройти проверку результата и принять её явно"
+        ],
+        acceptance: [
+          "результат соответствует цели текущей задачи",
+          "изменения уложились в разрешённую область",
+          "запрещённые области не затронуты",
+          "критерии проверки результата отмечены и приняты"
+        ]
+      };
+
+      function isExactSystemRulesDefault(value, list) {
+        var text = String(value || "").trim();
+        if (!text) return false;
+        for (var i = 0; i < list.length; i++) {
+          if (text === list[i]) return true;
+        }
+        return false;
+      }
+
+      function filterOutSystemRulesDefaults(items, list) {
+        if (!Array.isArray(items) || !items.length) return Array.isArray(items) ? items.slice() : [];
+        return items.filter(function (item) {
+          return !isExactSystemRulesDefault(item, list);
+        });
+      }
+
+      function scrubSystemDefaultRules(rules, project) {
+        if (!rules || typeof rules !== "object") return rules;
+        rules.principles = filterOutSystemRulesDefaults(rules.principles, SYSTEM_RULES_DEFAULT_STRINGS.principles);
+        rules.protectedModules = filterOutSystemRulesDefaults(rules.protectedModules, SYSTEM_RULES_DEFAULT_STRINGS.protectedModules);
+        rules.forbidden = filterOutSystemRulesDefaults(rules.forbidden, SYSTEM_RULES_DEFAULT_STRINGS.forbidden);
+        rules.approvalOrder = filterOutSystemRulesDefaults(rules.approvalOrder, SYSTEM_RULES_DEFAULT_STRINGS.approvalOrder);
+        rules.acceptance = filterOutSystemRulesDefaults(rules.acceptance, SYSTEM_RULES_DEFAULT_STRINGS.acceptance);
+        if (isExactSystemRulesDefault(rules.changeScale, SYSTEM_RULES_DEFAULT_STRINGS.changeScale)) {
+          rules.changeScale = "";
+        }
+        if (isExactSystemRulesDefault(rules.mission, SYSTEM_RULES_DEFAULT_STRINGS.mission)) {
+          rules.mission = (project && project.idea) || "";
+        }
+        return rules;
       }
 
       function ensureProjectRules(project) {
@@ -8778,25 +9373,58 @@
           project.rules = project.isDemo ? Object.assign({}, DEMO_RULES) : defaultRulesFor(project);
         }
         var rules = project.rules;
-        if (!rules.mission) rules.mission = (project.isDemo ? DEMO_RULES.mission : project.idea) || "";
-        if (!Array.isArray(rules.principles) || !rules.principles.length) {
-          rules.principles = (project.isDemo ? DEMO_RULES.principles : defaultRulesFor(project).principles).slice();
+        if (project.isDemo) {
+          if (!rules.mission) rules.mission = DEMO_RULES.mission;
+          if (!Array.isArray(rules.principles) || !rules.principles.length) {
+            rules.principles = DEMO_RULES.principles.slice();
+          }
+          if (!rules.changeScale) rules.changeScale = DEMO_RULES.changeScale;
+          if (!Array.isArray(rules.protectedModules) || !rules.protectedModules.length) {
+            rules.protectedModules = DEMO_RULES.protectedModules.slice();
+          }
+          if (!Array.isArray(rules.forbidden) || !rules.forbidden.length) {
+            rules.forbidden = DEMO_RULES.forbidden.slice();
+          }
+          if (!Array.isArray(rules.approvalOrder) || !rules.approvalOrder.length) {
+            rules.approvalOrder = DEMO_RULES.approvalOrder.slice();
+          }
+          if (!Array.isArray(rules.acceptance) || !rules.acceptance.length) {
+            rules.acceptance = DEMO_RULES.acceptance.slice();
+          }
+        } else {
+          if (!Array.isArray(rules.principles)) rules.principles = [];
+          if (typeof rules.changeScale !== "string") rules.changeScale = "";
+          if (!Array.isArray(rules.protectedModules)) rules.protectedModules = [];
+          if (!Array.isArray(rules.forbidden)) rules.forbidden = [];
+          if (!Array.isArray(rules.approvalOrder)) rules.approvalOrder = [];
+          if (!Array.isArray(rules.acceptance)) rules.acceptance = [];
+          if (!rules.mission) rules.mission = project.idea || "";
+          scrubSystemDefaultRules(rules, project);
         }
-        if (!rules.changeScale) {
-          rules.changeScale = project.isDemo ? DEMO_RULES.changeScale : defaultRulesFor(project).changeScale;
+        // Технические фразы из constraints сохраняем в rules без ручного ввода.
+        var parts = constraintPartsByKind(project.constraints);
+        var tech = parts.tech;
+        var userLows = parts.user.map(function (x) { return String(x || "").trim().toLowerCase(); });
+        var forbidden = Array.isArray(rules.forbidden) ? rules.forbidden.slice() : [];
+        // Пользовательские ограничения не должны жить в rules.forbidden.
+        if (userLows.length) {
+          forbidden = forbidden.filter(function (item) {
+            return userLows.indexOf(String(item || "").trim().toLowerCase()) === -1;
+          });
         }
-        if (!Array.isArray(rules.protectedModules) || !rules.protectedModules.length) {
-          rules.protectedModules = (project.isDemo ? DEMO_RULES.protectedModules : defaultRulesFor(project).protectedModules).slice();
+        for (var t = 0; t < tech.length; t++) {
+          var item = tech[t];
+          var low = item.toLowerCase();
+          var exists = false;
+          for (var f = 0; f < forbidden.length; f++) {
+            if (String(forbidden[f] || "").trim().toLowerCase() === low) {
+              exists = true;
+              break;
+            }
+          }
+          if (!exists) forbidden.push(item);
         }
-        if (!Array.isArray(rules.forbidden) || !rules.forbidden.length) {
-          rules.forbidden = (project.isDemo ? DEMO_RULES.forbidden : defaultRulesFor(project).forbidden).slice();
-        }
-        if (!Array.isArray(rules.approvalOrder) || !rules.approvalOrder.length) {
-          rules.approvalOrder = DEMO_RULES.approvalOrder.slice();
-        }
-        if (!Array.isArray(rules.acceptance) || !rules.acceptance.length) {
-          rules.acceptance = DEMO_RULES.acceptance.slice();
-        }
+        rules.forbidden = forbidden;
         return project;
       }
 
@@ -8971,14 +9599,30 @@
         return modules[0];
       }
 
+      function isTaskCompleted(task) {
+        if (!task) return false;
+        if (String(task.workflowStatus || "").trim() === "Готово") return true;
+        if (task.review && task.review.status === "accepted") return true;
+        return false;
+      }
+
       function getActiveTask(module) {
         if (!module) return null;
         var tasks = module.tasks || [];
         if (!tasks.length) return null;
-        for (var i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === module.activeTaskId) return tasks[i];
+        var activeId = String(module.activeTaskId || "").trim();
+        if (activeId) {
+          for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].id === activeId) {
+              if (isTaskCompleted(tasks[i])) break;
+              return tasks[i];
+            }
+          }
         }
-        return tasks[0];
+        for (var j = 0; j < tasks.length; j++) {
+          if (!isTaskCompleted(tasks[j])) return tasks[j];
+        }
+        return null;
       }
 
       function migrateProject(raw) {
@@ -9073,7 +9717,7 @@
           view.nextLine2 = "Рекомендуем: " + task.name + ".";
           if (project.isDemo || mod.id === "mod-history") {
             view.nextLine1 = "«Историческая справка» почти готова.";
-            view.nextLine2 = "Рекомендуем завершить механику раскрытия карточки на трёх датах.";
+            view.nextLine2 = "Сделать так, чтобы карточка правильно открывалась на трёх проверенных датах.";
           }
           view.whyPath = task.whyNow
             ? ("Сейчас в проекте «" + project.name + "» активен модуль «" + mod.name + "». " +
@@ -9419,6 +10063,48 @@
         try { localStorage.setItem(WORKSPACE_MODE_KEY, mode); } catch (e) {}
       }
 
+      function syncStructureModeSwitchUi(mode) {
+        var btnUser = document.getElementById("btnStructureModeUser");
+        var btnDev = document.getElementById("btnStructureModeDeveloper");
+        if (btnUser) {
+          btnUser.classList.toggle("is-active", mode === "user");
+          btnUser.setAttribute("aria-pressed", mode === "user" ? "true" : "false");
+        }
+        if (btnDev) {
+          btnDev.classList.toggle("is-active", mode === "developer");
+          btnDev.setAttribute("aria-pressed", mode === "developer" ? "true" : "false");
+        }
+        var devLinks = document.getElementById("structureDeveloperLinks");
+        if (devLinks) {
+          var showLinks = mode === "developer";
+          devLinks.hidden = !showLinks;
+          if (showLinks) devLinks.removeAttribute("hidden");
+          else devLinks.setAttribute("hidden", "");
+        }
+      }
+
+      function refreshStructureModePanel() {
+        var data = state.structureLastData;
+        if (state.workspaceMode === "developer" && data && data.ok) {
+          renderStructureRecommendations(data.recommendations || [], {
+            show: true,
+            data: data
+          });
+        } else {
+          renderStructureRecommendations([], { show: false });
+        }
+        if (
+          els.prepLead &&
+          els.prepHeading &&
+          els.prepHeading.textContent === "Структура проекта"
+        ) {
+          els.prepLead.hidden = false;
+          els.prepLead.removeAttribute("hidden");
+          els.prepLead.textContent =
+            "Здесь показано, где находятся папки и файлы проекта и для чего они нужны.";
+        }
+      }
+
       function syncWorkspaceModeUi() {
         var mode = WORKSPACE_MODES.indexOf(state.workspaceMode) !== -1 ? state.workspaceMode : "user";
         state.workspaceMode = mode;
@@ -9431,6 +10117,7 @@
           if (showDev) els.settingsDeveloperBlock.removeAttribute("hidden");
           else els.settingsDeveloperBlock.setAttribute("hidden", "");
         }
+        syncStructureModeSwitchUi(mode);
         if (!els.osNavProject) return;
         var items = els.osNavProject.querySelectorAll("[data-os-nav]");
         for (var n = 0; n < items.length; n++) {
@@ -9532,6 +10219,7 @@
         state.workspaceMode = next;
         if (!options || options.persist !== false) saveWorkspaceMode(next);
         syncWorkspaceModeUi();
+        refreshStructureModePanel();
         var onWorkspace =
           els.panelWorkspace && els.panelWorkspace.classList.contains("is-active");
         if (!onWorkspace) return;
@@ -11532,9 +12220,15 @@
       }
 
       function buildAssignment(project, tool) {
+        ensureProjectRules(project);
         var mod = getActiveModule(project);
         var task = getActiveTask(mod);
         var cannot = task ? linesFromCannot(task.cannotChange) : [];
+        var userConstraints = userFacingConstraintsText(project.constraints);
+        var ruleForbidden =
+          project.rules && Array.isArray(project.rules.forbidden)
+            ? project.rules.forbidden.filter(Boolean)
+            : [];
         var review = task ? ensureTaskReview(project, task) : null;
         var criteria = review && review.items
           ? review.items.map(function (item, i) { return (i + 1) + ". " + item.label; }).join("\n")
@@ -11572,7 +12266,11 @@
           "Итоговый результат проекта: " + project.result,
           "Для кого: " + project.audience,
           "Что уже существует во всём проекте: " + (project.assets && project.assets.trim() ? project.assets : "не указано"),
-          "Общие ограничения проекта: " + (project.constraints && project.constraints.trim() ? project.constraints : "не указаны"),
+          "Общие ограничения проекта: " + (userConstraints || "не указаны"),
+          "Технические правила разработки: " +
+            (ruleForbidden.length
+              ? ruleForbidden.map(function (x, i) { return (i + 1) + ". " + x; }).join(" ")
+              : "не указаны"),
           "Материалы проекта: " + materialsDigest(project),
           "",
           "МОДУЛЬ",
@@ -12453,17 +13151,12 @@
           var name = project && String(project.name || "").trim();
           els.projectBannerName.textContent = name || "—";
         }
+        /* Статусный текст («В стадии разработки») не показываем:
+           этап виден через единый индикатор стадий под панелью вкладок. */
         if (els.projectBannerStatus) {
-          var rawStatus = project && String(project.status || "").trim();
-          if (rawStatus) {
-            els.projectBannerStatus.textContent = projectNavStatusLabel(project);
-            els.projectBannerStatus.hidden = false;
-            els.projectBannerStatus.removeAttribute("hidden");
-          } else {
-            els.projectBannerStatus.textContent = "";
-            els.projectBannerStatus.hidden = true;
-            els.projectBannerStatus.setAttribute("hidden", "");
-          }
+          els.projectBannerStatus.textContent = "";
+          els.projectBannerStatus.hidden = true;
+          els.projectBannerStatus.setAttribute("hidden", "");
         }
         syncProjectBannerContinue();
       }
@@ -13128,25 +13821,46 @@
         "не ломать"
       ];
 
-      function userFacingConstraintsText(value) {
+      function isTechConstraintPart(part) {
+        var low = String(part || "").trim().toLowerCase();
+        if (!low) return false;
+        for (var m = 0; m < PROJECT_INFO_TECH_CONSTRAINT_MARKERS.length; m++) {
+          if (low.indexOf(PROJECT_INFO_TECH_CONSTRAINT_MARKERS[m]) !== -1) return true;
+        }
+        return false;
+      }
+
+      function constraintPartsByKind(value) {
+        var user = [];
+        var tech = [];
         var raw = String(value || "").trim();
-        if (!raw) return "";
+        if (!raw) return { user: user, tech: tech };
         var parts = raw.split(/[;\n]+/);
-        var kept = [];
         for (var i = 0; i < parts.length; i++) {
           var part = String(parts[i] || "").trim();
           if (!part) continue;
-          var low = part.toLowerCase();
-          var tech = false;
-          for (var m = 0; m < PROJECT_INFO_TECH_CONSTRAINT_MARKERS.length; m++) {
-            if (low.indexOf(PROJECT_INFO_TECH_CONSTRAINT_MARKERS[m]) !== -1) {
-              tech = true;
-              break;
-            }
-          }
-          if (!tech) kept.push(part);
+          if (isTechConstraintPart(part)) tech.push(part);
+          else user.push(part);
         }
-        return kept.join("; ");
+        return { user: user, tech: tech };
+      }
+
+      function userFacingConstraintsText(value) {
+        return constraintPartsByKind(value).user.join("; ");
+      }
+
+      function techConstraintsText(value) {
+        return constraintPartsByKind(value).tech.join("; ");
+      }
+
+      function mergeUserConstraintsPreservingTech(userText, existingRaw) {
+        var userParts = constraintPartsByKind(userText).user;
+        var techParts = constraintPartsByKind(existingRaw).tech;
+        return userParts.concat(techParts).join("; ");
+      }
+
+      function syncTechConstraintsIntoRules(project) {
+        return ensureProjectRules(project);
       }
 
       function projectInfoExternalHref(url) {
@@ -13278,9 +13992,10 @@
         var needs = [];
         for (var i = 0; i < PROJECT_INFO_USER_MAIN.length; i++) {
           var spec = PROJECT_INFO_USER_MAIN[i];
+          // Пользовательские ограничения необязательны и не попадают в «Нужно дополнить».
+          if (spec.id === "constraints") continue;
           var field = byId[spec.id];
           var value = field ? field.value : "";
-          if (spec.id === "constraints") value = userFacingConstraintsText(value);
           if (!projectInfoNonEmpty(value)) {
             needs.push({ id: spec.id, label: spec.label });
           }
@@ -13292,6 +14007,33 @@
           });
         }
         return needs;
+      }
+
+      function formatProjectInfoNeedsChipText(needs) {
+        var labels = [];
+        for (var i = 0; i < (needs || []).length; i++) {
+          var label = needs[i] && needs[i].label ? String(needs[i].label).trim() : "";
+          if (label) labels.push(label);
+        }
+        if (!labels.length) return "";
+        return "Нужно дополнить: " + labels.join(", ");
+      }
+
+      function projectInfoEditFieldForNeedId(needId) {
+        var map = {
+          name: "piEditName",
+          summary: "piEditSummary",
+          goal: "piEditGoal",
+          audience: "piEditAudience",
+          expected_result: "piEditExpected",
+          constraints: "piEditConstraints",
+          primary_tool: "piEditPrimaryTool",
+          project_online_link: "piEditLaunchUrl",
+          repository_or_online: "piEditLaunchUrl",
+          launch_url: "piEditLaunchUrl"
+        };
+        var elId = map[String(needId || "").trim()];
+        return elId ? document.getElementById(elId) : null;
       }
 
       function pushProjectInfoField(list, field) {
@@ -13614,7 +14356,6 @@
         needIfMissing("audience", "Аудитория", !!(p && String(p.audience || "").trim()));
         needIfMissing("expected_result", "Ожидаемый результат", !!(p && String(p.expected_result || "").trim()));
         needIfMissing("primary_tool", "Основной инструмент", !!String((project && project.primaryTool) || "").trim());
-        needIfMissing("constraints", "Ограничения", !!String((project && project.constraints) || "").trim());
         needIfMissing(
           "repository_or_online",
           "Адрес репозитория или онлайн-версии",
@@ -13805,11 +14546,20 @@
         if (els.projectInfoSummary) {
           if (mainFields.length || needs.length) {
             els.projectInfoSummary.hidden = false;
-            els.projectInfoSummary.innerHTML =
+            var summaryHtml =
               '<p class="project-info-summary-chip">' +
-              "Подтверждено <strong>" + mainFields.length + "</strong></p>" +
-              '<p class="project-info-summary-chip is-needs">' +
-              "Можно дополнить <strong>" + needs.length + "</strong></p>";
+              "Подтверждено <strong>" + mainFields.length + "</strong></p>";
+            if (needs.length) {
+              var needsText = formatProjectInfoNeedsChipText(needs);
+              var focusNeed = needs[0] && needs[0].id ? String(needs[0].id) : "";
+              summaryHtml +=
+                '<button type="button" class="project-info-summary-chip is-needs" id="btnProjectInfoNeedsChip"' +
+                ' data-focus-need="' + escapeHtml(focusNeed) + '"' +
+                ' aria-label="' + escapeHtml(needsText) + '">' +
+                escapeHtml(needsText) +
+                "</button>";
+            }
+            els.projectInfoSummary.innerHTML = summaryHtml;
           } else {
             els.projectInfoSummary.hidden = true;
             els.projectInfoSummary.innerHTML = "";
@@ -13936,14 +14686,17 @@
         if (els.piEditExpected) {
           els.piEditExpected.value = (p && p.expected_result) || project.result || "";
         }
-        if (els.piEditConstraints) els.piEditConstraints.value = project.constraints || "";
+        if (els.piEditConstraints) {
+          els.piEditConstraints.value = userFacingConstraintsText(project.constraints || "");
+        }
         fillPrimaryToolSelect(els.piEditPrimaryTool, project.primaryTool || "");
         if (els.piEditLaunchUrl) {
           els.piEditLaunchUrl.value = normalizeLaunchUrl(project.launchUrl || "");
         }
       }
 
-      function openProjectInfoEditor() {
+      function openProjectInfoEditor(focusNeedId) {
+        if (focusNeedId && typeof focusNeedId === "object") focusNeedId = "";
         var project = findProjectRecord(state.currentId) || findProject(state.currentId);
         if (!project) return;
         fillProjectInfoEditForm(project, getCachedPassport(project));
@@ -13952,6 +14705,21 @@
           els.projectInfoStatus.hidden = true;
           els.projectInfoStatus.textContent = "";
         }
+        var focusId = String(focusNeedId || "").trim();
+        if (!focusId) return;
+        window.setTimeout(function () {
+          var field = projectInfoEditFieldForNeedId(focusId);
+          if (!field) return;
+          try {
+            field.focus();
+            if (typeof field.select === "function" && field.tagName === "INPUT") {
+              field.select();
+            }
+            field.scrollIntoView({ block: "center", behavior: "smooth" });
+          } catch (e) {
+            /* ignore */
+          }
+        }, 40);
       }
 
       function closeProjectInfoEditor() {
@@ -13980,7 +14748,11 @@
           return;
         }
         project.name = name;
-        project.constraints = constraints;
+        project.constraints = mergeUserConstraintsPreservingTech(
+          constraints,
+          project.constraints || ""
+        );
+        ensureProjectRules(project);
         project.primaryTool = primaryTool;
         project.launchUrl = launchUrl;
         project.idea = summary;
@@ -15065,7 +15837,8 @@
         if (!mutable) return;
         hideCaptureWindowPicker();
         saveCaptureWindow(mutable, hwnd, title, processName);
-        setCaptureStatus("Окно сохранено. Можно снять результат.", false);
+        setCaptureStatus("Окно выбрано. Делаю снимок…", false);
+        await captureResultShot();
       }
 
       async function captureResultShot() {
@@ -15080,28 +15853,26 @@
         }
 
         var hwnd = String(mutable.captureWindowHwnd || "").trim();
-        if (hwnd) {
-          setCaptureStatus("Проверяю сохранённое окно…", false);
-          var probe = await postBridgeJson("/api/capture/probe", { hwnd: hwnd });
-          if (!probe.data || !probe.data.ok || probe.data.available === false) {
-            saveCaptureWindow(mutable, "", "", "");
-            setCaptureStatus("Сохранённое окно больше недоступно. Выберите окно снова.", true);
-            await openCaptureWindowPicker();
-            return;
-          }
-          // Refresh title/process if probe returned them.
-          if (probe.data.title || probe.data.process_name) {
-            saveCaptureWindow(
-              mutable,
-              probe.data.hwnd || hwnd,
-              probe.data.title || mutable.captureWindowTitle,
-              probe.data.process_name || mutable.captureWindowProcess
-            );
-            hwnd = String(mutable.captureWindowHwnd || hwnd);
-          }
-        } else {
-          await openCaptureWindowPicker();
+        if (!hwnd) {
+          setCaptureStatus("Сначала нажмите «Выбрать окно» под «Прикрепить снимок».", true);
           return;
+        }
+
+        setCaptureStatus("Проверяю сохранённое окно…", false);
+        var probe = await postBridgeJson("/api/capture/probe", { hwnd: hwnd });
+        if (!probe.data || !probe.data.ok || probe.data.available === false) {
+          saveCaptureWindow(mutable, "", "", "");
+          setCaptureStatus("Сохранённое окно больше недоступно. Нажмите «Выбрать окно» снова.", true);
+          return;
+        }
+        if (probe.data.title || probe.data.process_name) {
+          saveCaptureWindow(
+            mutable,
+            probe.data.hwnd || hwnd,
+            probe.data.title || mutable.captureWindowTitle,
+            probe.data.process_name || mutable.captureWindowProcess
+          );
+          hwnd = String(mutable.captureWindowHwnd || hwnd);
         }
 
         if (els.btnCaptureResult) els.btnCaptureResult.disabled = true;
@@ -15115,8 +15886,7 @@
         if (!res.data || !res.data.ok) {
           if (res.data && res.data.need_reselect) {
             saveCaptureWindow(mutable, "", "", "");
-            setCaptureStatus(res.data.message || "Выберите окно снова.", true);
-            await openCaptureWindowPicker();
+            setCaptureStatus(res.data.message || "Нажмите «Выбрать окно» снова.", true);
             return;
           }
           setCaptureStatus((res.data && res.data.message) || "Не удалось сделать снимок.", true);
@@ -15263,12 +16033,13 @@
         if (els.stageNextText) els.stageNextText.textContent = nextStepText(project);
       }
 
-      // Пояснение показывается, пока в зоне нет ни следующего задания, ни задания на исправление.
+      // Зона «Что дальше» — только после «Есть замечания» и передачи на исправление.
       function syncStageNextEmpty() {
-        if (!els.stageNextEmptyRow) return;
-        var hasNext = !!(els.stageNextBlock && !els.stageNextBlock.hidden);
         var hasFix = !!(els.stageFixBlock && !els.stageFixBlock.hidden);
-        els.stageNextEmptyRow.hidden = hasNext || hasFix;
+        var zone = els.stageNextZone || document.getElementById("stageNextZone");
+        if (zone) zone.hidden = !hasFix;
+        if (els.stageNextEmptyRow) els.stageNextEmptyRow.hidden = true;
+        if (!hasFix && els.stageNextBlock) els.stageNextBlock.hidden = true;
       }
 
       // Журнал выполненных заданий: на этом этапе только чтение и показ.
@@ -15323,27 +16094,60 @@
         );
       }
 
+      function listCompletedTasksForDoneZone(project) {
+        var out = [];
+        if (!project || !Array.isArray(project.modules)) return out;
+        for (var i = 0; i < project.modules.length; i++) {
+          var mod = project.modules[i];
+          var tasks = mod && Array.isArray(mod.tasks) ? mod.tasks : [];
+          for (var j = 0; j < tasks.length; j++) {
+            var task = tasks[j];
+            if (!isTaskCompleted(task)) continue;
+            out.push({
+              task_name: task.name || "Задание",
+              accepted_at: (task.review && task.review.acceptedAt) || null,
+              result_summary: task.expectedResult || task.goal || "",
+              verification_summary: "",
+              next_step: "",
+              module_name: (mod && mod.name) || "",
+              visual: null
+            });
+          }
+        }
+        return out;
+      }
+
+      function syncStageDoneZone(hasItems) {
+        var zone = document.getElementById("stageDoneZone");
+        if (zone) zone.hidden = !hasItems;
+        // Пустой placeholder больше не показываем — раздел скрыт целиком.
+        if (els.historyEmpty) els.historyEmpty.hidden = true;
+      }
+
       function paintTaskHistory() {
         if (!els.historyList || !els.historyEmpty) return;
-        var project = findProject(state.currentId);
-        var entries = Array.isArray(state.historyEntries) ? state.historyEntries : [];
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        var entries = Array.isArray(state.historyEntries) ? state.historyEntries.slice() : [];
+        if (!entries.length) entries = listCompletedTasksForDoneZone(project);
         var expanded = !!state.historyExpanded;
         var visible = expanded ? entries : entries.slice(0, 3);
         var html = "";
         for (var i = 0; i < visible.length; i++) html += historyEntryHtml(visible[i], project);
         els.historyList.innerHTML = html;
         els.historyList.hidden = !visible.length;
-        els.historyEmpty.hidden = !!visible.length || !!state.historyLoading || !!state.historyError;
+        syncStageDoneZone(!!visible.length);
         if (els.historyActions) {
           els.historyActions.hidden = entries.length <= 3;
         }
         if (els.btnHistoryToggle) {
           els.btnHistoryToggle.textContent = expanded ? "Свернуть" : "Показать всю историю";
         }
-        if (state.historyLoading) {
+        if (visible.length && state.historyLoading) {
           setHistoryStatus("Загружаю историю…", false);
-        } else if (state.historyError) {
-          setHistoryStatus(state.historyError, true);
+        } else if (visible.length && state.historyError && !(state.historyEntries && state.historyEntries.length)) {
+          setHistoryStatus("", false);
+        } else if (state.historyError && visible.length && state.historyEntries && state.historyEntries.length) {
+          setHistoryStatus("", false);
         } else {
           setHistoryStatus("", false);
         }
@@ -15358,12 +16162,7 @@
           state.historyLoading = false;
           state.historyError = "";
           state.historyProjectKey = historyProjectKey(project);
-          els.historyList.innerHTML = "";
-          els.historyList.hidden = true;
-          els.historyEmpty.textContent = "В примере проекта история заданий не сохраняется.";
-          els.historyEmpty.hidden = false;
-          if (els.historyActions) els.historyActions.hidden = true;
-          setHistoryStatus("", false);
+          paintTaskHistory();
           return;
         }
 
@@ -15374,13 +16173,7 @@
           state.historyLoading = false;
           state.historyError = "";
           state.historyProjectKey = historyProjectKey(project);
-          els.historyList.innerHTML = "";
-          els.historyList.hidden = true;
-          els.historyEmpty.textContent =
-            "История заданий хранится в папке проекта. Укажите рабочую папку в настройках проекта.";
-          els.historyEmpty.hidden = false;
-          if (els.historyActions) els.historyActions.hidden = true;
-          setHistoryStatus("", false);
+          paintTaskHistory();
           return;
         }
 
@@ -15393,8 +16186,6 @@
         }
         state.historyProjectKey = key;
         state.historyLoading = true;
-        els.historyEmpty.textContent =
-          "Здесь появятся завершённые задания и снимки результата. Пока ни одно задание не принято.";
         paintTaskHistory();
         loadProjectHistory(project, key);
       }
@@ -15429,7 +16220,10 @@
       }
 
       function toggleHistoryExpanded() {
-        if (!state.historyEntries || state.historyEntries.length <= 3) return;
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        var entries = Array.isArray(state.historyEntries) ? state.historyEntries : [];
+        if (!entries.length) entries = listCompletedTasksForDoneZone(project);
+        if (entries.length <= 3) return;
         state.historyExpanded = !state.historyExpanded;
         paintTaskHistory();
       }
@@ -15511,17 +16305,28 @@
       }
 
       function renderReviewBlock(project, task) {
+        var criteriaBlock = document.getElementById("stageCriteriaBlock");
+        var transferBlock = document.getElementById("stageTransferBlock");
+        var criteriaList = document.getElementById("stageCriteriaList");
+        var verifyChecks = document.getElementById("stageVerifyChecksBlock");
         if (!task) {
           if (els.reviewCard) els.reviewCard.hidden = true;
           if (els.stageCheckBlock) els.stageCheckBlock.hidden = true;
+          if (criteriaBlock) criteriaBlock.hidden = true;
+          if (transferBlock) transferBlock.hidden = true;
+          if (verifyChecks) verifyChecks.hidden = true;
           if (els.stageFixBlock) els.stageFixBlock.hidden = true;
           if (els.stageNextBlock) els.stageNextBlock.hidden = true;
           if (els.reviewChecks) els.reviewChecks.innerHTML = "";
+          if (criteriaList) criteriaList.innerHTML = "";
           syncStageNextEmpty();
           return;
         }
         els.reviewCard.hidden = false;
         if (els.stageCheckBlock) els.stageCheckBlock.hidden = false;
+        if (criteriaBlock) criteriaBlock.hidden = false;
+        if (transferBlock) transferBlock.hidden = false;
+        if (verifyChecks) verifyChecks.hidden = false;
         var review = ensureTaskReview(project, task);
         els.reviewStatus.textContent = reviewStatusLabel(review.status);
         els.reviewStatus.className = "review-status" +
@@ -15529,15 +16334,18 @@
         els.reviewNotes.value = review.notes || "";
         els.reviewNotes.disabled = review.status === "accepted";
 
+        var readonlyHtml = "";
         var html = "";
         for (var i = 0; i < review.items.length; i++) {
           var item = review.items[i];
+          readonlyHtml += "<li>" + escapeHtml(item.label) + "</li>";
           html +=
             '<label><input type="checkbox" data-review-check="' + escapeHtml(item.id) + '"' +
             (review.checks[item.id] ? " checked" : "") +
             (review.status === "accepted" ? " disabled" : "") +
             " /> " + escapeHtml(item.label) + "</label>";
         }
+        if (criteriaList) criteriaList.innerHTML = readonlyHtml || "<li>—</li>";
         els.reviewChecks.innerHTML = html;
 
         var checks = els.reviewChecks.querySelectorAll("[data-review-check]");
@@ -15595,13 +16403,283 @@
         } catch (e) { return ""; }
       }
 
+      function resolveKickoffToolId(project) {
+        return resolvePrimaryToolId(project) || "cursor";
+      }
+
+      function taskNameFromGoalLine(goal) {
+        var line = String(goal || "").replace(/\r\n/g, "\n").split("\n")[0].trim();
+        if (line.length > 120) line = line.slice(0, 120).trim();
+        return line;
+      }
+
+      function setKickoffError(message, onConfirm) {
+        var box = onConfirm ? els.kickoffConfirmError : els.kickoffError;
+        var other = onConfirm ? els.kickoffError : els.kickoffConfirmError;
+        if (other) {
+          other.hidden = true;
+          other.textContent = "";
+        }
+        if (!box) return;
+        var msg = String(message || "").trim();
+        box.textContent = msg;
+        box.hidden = !msg;
+      }
+
+      function readKickoffCriteriaFromForm() {
+        if (!els.kickoffCriteriaList) return [];
+        var inputs = els.kickoffCriteriaList.querySelectorAll("input[data-kickoff-criteria]");
+        var items = [];
+        for (var i = 0; i < inputs.length; i++) {
+          var label = String(inputs[i].value || "").trim();
+          if (!label) continue;
+          items.push({
+            id: inputs[i].getAttribute("data-kickoff-criteria") || ("c" + (i + 1)),
+            label: label
+          });
+        }
+        return items;
+      }
+
+      function paintKickoffCriteria(items) {
+        if (!els.kickoffCriteriaList) return;
+        var list = Array.isArray(items) && items.length ? items : [
+          { id: "resultOk", label: "Ожидаемый результат задачи достигнут." },
+          { id: "scopeOk", label: "Изменения уложились в разрешённую область." },
+          { id: "forbidOk", label: "Запрещённые области не затронуты." },
+          { id: "manualOk", label: "Результат проверен вручную." },
+          { id: "criteriaOk", label: "Критерии принятия выполнены." }
+        ];
+        var html = "";
+        for (var i = 0; i < list.length; i++) {
+          html +=
+            "<li><input type=\"text\" data-kickoff-criteria=\"" +
+            escapeHtml(list[i].id) +
+            "\" value=\"" +
+            escapeHtml(list[i].label) +
+            "\" maxlength=\"200\" /></li>";
+        }
+        els.kickoffCriteriaList.innerHTML = html;
+      }
+
+      function paintKickoffMeta(project) {
+        var toolId = resolveKickoffToolId(project);
+        state.workKickoff.toolId = toolId;
+        var tool = getTool(toolId);
+        if (els.kickoffToolName) els.kickoffToolName.textContent = tool.name || "Cursor";
+        if (els.kickoffFolder) {
+          els.kickoffFolder.textContent = String(project.workFolder || "").trim() || "не указана";
+        }
+      }
+
+      function syncWorkKickoffStepUi() {
+        var step = state.workKickoff && state.workKickoff.step === "confirm" ? "confirm" : "form";
+        if (els.workKickoffFormStep) els.workKickoffFormStep.hidden = step !== "form";
+        if (els.workKickoffConfirmStep) els.workKickoffConfirmStep.hidden = step !== "confirm";
+      }
+
+      function setWorkZonesForKickoff(showKickoff) {
+        if (els.workKickoffZone) els.workKickoffZone.hidden = !showKickoff;
+        var columns = document.getElementById("stageWorkColumns");
+        if (columns) columns.hidden = !!showKickoff;
+      }
+
+      function resetWorkKickoffForm(project) {
+        state.workKickoff.projectId = project && project.id ? project.id : "";
+        state.workKickoff.step = "form";
+        state.workKickoff.nameManual = false;
+        state.workKickoff.toolId = resolveKickoffToolId(project);
+        if (els.kickoffGoal) els.kickoffGoal.value = "";
+        if (els.kickoffResult) els.kickoffResult.value = "";
+        if (els.kickoffName) els.kickoffName.value = "";
+        paintKickoffCriteria(defaultReviewItems(null, project));
+        paintKickoffMeta(project || {});
+        setKickoffError("", false);
+        setKickoffError("", true);
+        syncWorkKickoffStepUi();
+      }
+
+      function ensureWorkKickoffState(project) {
+        if (!project) return;
+        if (!state.workKickoff || state.workKickoff.projectId !== project.id) {
+          resetWorkKickoffForm(project);
+          return;
+        }
+        paintKickoffMeta(project);
+        syncWorkKickoffStepUi();
+      }
+
+      function readKickoffDraftFromForm(project) {
+        var goal = els.kickoffGoal ? String(els.kickoffGoal.value || "").trim() : "";
+        var expectedResult = els.kickoffResult ? String(els.kickoffResult.value || "").trim() : "";
+        var name = els.kickoffName ? String(els.kickoffName.value || "").trim() : "";
+        if (!name) name = taskNameFromGoalLine(goal);
+        var criteria = readKickoffCriteriaFromForm();
+        var toolId = resolveKickoffToolId(project);
+        return {
+          name: name,
+          goal: goal,
+          expectedResult: expectedResult,
+          reviewItems: criteria,
+          toolId: toolId,
+          toolName: getTool(toolId).name || "Cursor",
+          workFolder: String(project.workFolder || "").trim()
+        };
+      }
+
+      function validateKickoffDraft(draft, onConfirm) {
+        if (!draft.goal) {
+          setKickoffError("Укажите, что нужно сделать.", onConfirm);
+          return false;
+        }
+        if (!draft.expectedResult) {
+          setKickoffError("Укажите, какой результат должен получиться. Без этого задачу сохранить нельзя.", onConfirm);
+          return false;
+        }
+        if (!draft.name) {
+          setKickoffError("Укажите название задачи.", onConfirm);
+          return false;
+        }
+        if (!draft.reviewItems.length) {
+          setKickoffError("Оставьте хотя бы один критерий проверки.", onConfirm);
+          return false;
+        }
+        setKickoffError("", onConfirm);
+        return true;
+      }
+
+      function paintKickoffConfirm(draft) {
+        if (els.kickoffConfirmName) els.kickoffConfirmName.textContent = draft.name || "—";
+        if (els.kickoffConfirmGoal) els.kickoffConfirmGoal.textContent = draft.goal || "—";
+        if (els.kickoffConfirmResult) els.kickoffConfirmResult.textContent = draft.expectedResult || "—";
+        if (els.kickoffConfirmTool) els.kickoffConfirmTool.textContent = draft.toolName || "Cursor";
+        if (els.kickoffConfirmFolder) {
+          els.kickoffConfirmFolder.textContent = draft.workFolder || "не указана";
+        }
+        if (els.kickoffConfirmCriteria) {
+          var html = "";
+          for (var i = 0; i < draft.reviewItems.length; i++) {
+            html += "<li>" + escapeHtml(draft.reviewItems[i].label) + "</li>";
+          }
+          els.kickoffConfirmCriteria.innerHTML = html || "<li>—</li>";
+        }
+      }
+
+      function onKickoffGoalInput() {
+        if (!els.kickoffName || state.workKickoff.nameManual) return;
+        els.kickoffName.value = taskNameFromGoalLine(els.kickoffGoal ? els.kickoffGoal.value : "");
+      }
+
+      function onKickoffNameInput() {
+        state.workKickoff.nameManual = true;
+      }
+
+      function onKickoffContinue(event) {
+        if (event) event.preventDefault();
+        var project = currentProjectMutable() || findProject(state.currentId);
+        if (!project) return;
+        var draft = readKickoffDraftFromForm(project);
+        if (!validateKickoffDraft(draft, false)) return;
+        if (els.kickoffName && !String(els.kickoffName.value || "").trim()) {
+          els.kickoffName.value = draft.name;
+        }
+        paintKickoffConfirm(draft);
+        state.workKickoff.step = "confirm";
+        setKickoffError("", true);
+        syncWorkKickoffStepUi();
+      }
+
+      function onKickoffBack() {
+        state.workKickoff.step = "form";
+        setKickoffError("", true);
+        syncWorkKickoffStepUi();
+        if (els.kickoffGoal) els.kickoffGoal.focus();
+      }
+
+      function onKickoffCancel() {
+        var project = currentProjectMutable() || findProject(state.currentId);
+        if (!project) return;
+        resetWorkKickoffForm(project);
+        if (els.kickoffGoal) els.kickoffGoal.focus();
+      }
+
+      function ensureTaskContainer(project) {
+        if (!project.modules) project.modules = [];
+        if (project.modules.length) {
+          var existing = getActiveModule(project) || project.modules[0];
+          project.activeModuleId = existing.id;
+          return existing;
+        }
+        var mod = {
+          id: uid("mod"),
+          name: "Текущая работа",
+          purpose: "Контейнер текущих задач проекта",
+          status: "В работе",
+          ready: "",
+          remaining: "",
+          constraints: "",
+          tasks: [],
+          activeTaskId: ""
+        };
+        project.modules.push(mod);
+        project.activeModuleId = mod.id;
+        return mod;
+      }
+
+      function onKickoffSave() {
+        // Пишем в живую запись state.projects — ensureDerived даёт shallow-копию.
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var draft = readKickoffDraftFromForm(mutable);
+        if (!validateKickoffDraft(draft, true)) {
+          state.workKickoff.step = "form";
+          syncWorkKickoffStepUi();
+          return;
+        }
+        if (!Array.isArray(mutable.modules)) mutable.modules = [];
+        var mod = ensureTaskContainer(mutable);
+        if (!mod.tasks) mod.tasks = [];
+        var task = {
+          id: uid("task"),
+          name: draft.name,
+          goal: draft.goal,
+          whyNow: "Следующий шаг, который вы указали.",
+          expectedResult: draft.expectedResult,
+          canChange: "Только то, что нужно для этой задачи",
+          cannotChange: [],
+          recommendedTool: draft.toolId || "cursor",
+          filesRefs: "",
+          subtask: "",
+          reviewItems: draft.reviewItems.slice()
+        };
+        mod.tasks.push(task);
+        mod.activeTaskId = task.id;
+        mutable.activeModuleId = mod.id;
+        if (!resolvePrimaryToolId(mutable)) mutable.primaryTool = draft.toolId || "cursor";
+        if (!mutable.stage || mutable.stage === "Анализ") mutable.stage = "Разработка";
+        if (!mutable.isDemo) saveProjects();
+        state.workKickoff = {
+          projectId: "",
+          step: "form",
+          nameManual: false,
+          toolId: "cursor"
+        };
+        refreshWorkspace();
+      }
+
       function renderTaskTab(project, view) {
         var task = view.task;
-        els.taskEmptyNote.hidden = !!task;
+        if (els.taskEmptyNote) els.taskEmptyNote.hidden = true;
         renderTaskHistory(project);
         if (els.stageProjectName) els.stageProjectName.textContent = project.name || "—";
-        if (els.stageModuleName) els.stageModuleName.textContent = view.module ? view.module.name : "не выбран";
+        if (els.stageModuleName) {
+          els.stageModuleName.textContent = view.module
+            ? ("Модуль: " + view.module.name)
+            : (task ? "Модуль: не выбран" : "Модуль: —");
+        }
         if (!task) {
+          ensureWorkKickoffState(project);
+          setWorkZonesForKickoff(true);
           els.taskGoalText.textContent = "—";
           els.taskWhyText.textContent = "—";
           els.taskResultText.textContent = "—";
@@ -15613,6 +16691,7 @@
           return;
         }
 
+        setWorkZonesForKickoff(false);
         els.taskGoalText.textContent = task.goal || "—";
         if (task.subtask && String(task.subtask).trim()) {
           els.taskGoalText.textContent = (task.goal || "").trim()
@@ -16925,14 +18004,80 @@
         renderStructureTree(data);
       }
 
-      function renderStructureRecommendations(_items, _options) {
-        // Техническую диагностику, дубли и внутренние предупреждения не показываем.
-        if (els.structureReview) els.structureReview.hidden = true;
-        if (els.structureReviewCount) els.structureReviewCount.textContent = "";
-        if (els.structureReviewGroups) els.structureReviewGroups.innerHTML = "";
-        if (els.structureReviewActions) els.structureReviewActions.hidden = true;
-        if (els.structureSetupGateNote) els.structureSetupGateNote.hidden = true;
-        hideStructureSetupPreview();
+      function renderStructureRecommendations(items, options) {
+        if (!els.structureReview) return;
+        var opts = options || {};
+        var showDev = state.workspaceMode === "developer" && !!opts.show;
+        if (!showDev) {
+          els.structureReview.hidden = true;
+          if (els.structureReviewCount) els.structureReviewCount.textContent = "";
+          if (els.structureReviewGroups) els.structureReviewGroups.innerHTML = "";
+          if (els.structureReviewActions) els.structureReviewActions.hidden = true;
+          if (els.structureSetupGateNote) els.structureSetupGateNote.hidden = true;
+          hideStructureSetupPreview();
+          return;
+        }
+        var diag = normalizeStructureDiagnostics(opts.data || null, items);
+        var view = presentStructureDiagnostics(diag);
+        if (els.structureReviewDone) {
+          els.structureReviewDone.textContent = "Проверка завершена.";
+        }
+        if (els.structureReviewCount) {
+          els.structureReviewCount.textContent = formatStructureRecCount(
+            view.can_now.length,
+            view.need_fill.length,
+            view.need_check.length
+          );
+        }
+        if (els.structureReviewGroups) {
+          els.structureReviewGroups.textContent = "";
+          if (view.portfolio_note) {
+            var note = document.createElement("p");
+            note.className = "structure-review-note";
+            note.textContent = view.portfolio_note;
+            els.structureReviewGroups.appendChild(note);
+          }
+          appendStructureDiagGroup(
+            els.structureReviewGroups,
+            "Можно выполнить сейчас",
+            view.can_now
+          );
+          var addInfoBtn = null;
+          if (view.need_fill.length) {
+            addInfoBtn = document.createElement("button");
+            addInfoBtn.type = "button";
+            addInfoBtn.className = "btn btn-secondary";
+            addInfoBtn.id = "btnStructureInfoAdd";
+            addInfoBtn.textContent = "Добавить сведения";
+            addInfoBtn.addEventListener("click", onStructureInfoAddClick);
+          }
+          appendStructureDiagGroup(
+            els.structureReviewGroups,
+            "Нужно заполнить",
+            view.need_fill,
+            { actionButton: addInfoBtn }
+          );
+          appendStructureDiagGroup(
+            els.structureReviewGroups,
+            "Требуется проверить",
+            view.need_check
+          );
+        }
+        if (els.structureReviewActions) {
+          var hasSetup = !!(view.setup_actions && view.setup_actions.length);
+          els.structureReviewActions.hidden = !hasSetup;
+          if (els.structureSetupGateNote) {
+            els.structureSetupGateNote.hidden = !(hasSetup && view.show_context_only_note);
+          }
+        }
+        els.structureReview.hidden = false;
+        if (opts.focus) {
+          try {
+            els.structureReview.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          } catch (e) {
+            /* ignore */
+          }
+        }
       }
 
       function hideStructureSetupPreview() {
@@ -17168,12 +18313,12 @@
       }
 
       var PREP_STEPS = [
-        { label: "Структура проекта", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
-        { label: "Документы", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
-        { label: "Архитектура", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
-        { label: "Связи между файлами", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
-        { label: "Паспорт проекта", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" },
-        { label: "Внутренняя модель проекта", done: "✓ Готово", active: "⏳ Выполняется", wait: "○ Ожидает" }
+        { label: "Знакомимся с проектом", done: "✓ Готово", active: "⏳ Сейчас", wait: "○ Дальше" },
+        { label: "Собираем основные сведения", done: "✓ Готово", active: "⏳ Сейчас", wait: "○ Дальше" },
+        { label: "Уточняем цель и результат", done: "✓ Готово", active: "⏳ Сейчас", wait: "○ Дальше" },
+        { label: "Разбираем структуру проекта", done: "✓ Готово", active: "⏳ Сейчас", wait: "○ Дальше" },
+        { label: "Проверяем, что всё на месте", done: "✓ Готово", active: "⏳ Сейчас", wait: "○ Дальше" },
+        { label: "Открываем работу над проектом", done: "✓ Готово", active: "⏳ Сейчас", wait: "○ Дальше" }
       ];
 
       function setPrepChrome(mode) {
@@ -17183,33 +18328,42 @@
           else el.removeAttribute("hidden");
           el.hidden = !!hide;
         }
-        if (els.prepHeading) els.prepHeading.textContent = "Подготовка проекта";
+        var ready = mode === "ready";
+        if (els.prepHeading) {
+          els.prepHeading.textContent = ready ? "Структура проекта" : "Подготовка проекта";
+        }
         if (els.prepLead) {
-          if (mode === "ready") {
-            els.prepLead.textContent = "";
-            setHidden(els.prepLead, true);
+          if (ready) {
+            setHidden(els.prepLead, false);
+            els.prepLead.textContent =
+              "Здесь показано, где находятся папки и файлы проекта и для чего они нужны.";
           } else if (mode === "needs") {
             setHidden(els.prepLead, false);
             els.prepLead.textContent =
-              "AI POS почти завершила подготовку проекта. Осталось немного рассказать о самом проекте.";
+              "Почти готово. Осталось коротко рассказать о проекте — цель, смысл и желаемый результат.";
           } else {
             setHidden(els.prepLead, false);
-            els.prepLead.textContent = "AI POS подготавливает проект к дальнейшей работе.";
+            els.prepLead.textContent = "AI POS знакомится с проектом и готовит его к работе.";
           }
         }
-        setHidden(els.prepReadyBlock, mode !== "ready");
+        // Готовый проект: без экрана подготовки и без повторного «Проект готов…».
+        setHidden(els.prepReadyBlock, true);
         setHidden(els.prepReadyLine, true);
-        if (els.prepReadyTitle) els.prepReadyTitle.textContent = "Проект подготовлен.";
+        if (els.prepReadyTitle) els.prepReadyTitle.textContent = "Проект готов к работе.";
         if (els.prepReadyText) {
-          els.prepReadyText.textContent = "AI POS полностью подготовила проект к дальнейшей работе.";
+          els.prepReadyText.textContent =
+            "Ниже — структура проекта: где что находится и какую роль выполняет.";
         }
-        // Навигатор: «Продолжить» сразу после текста о почти завершённой подготовке.
         setHidden(els.prepActions, mode !== "needs");
         setHidden(els.btnPrepContinue, mode !== "needs");
-        if (els.btnPrepContinue) els.btnPrepContinue.textContent = "Продолжить";
+        if (els.btnPrepContinue) els.btnPrepContinue.textContent = "Рассказать о проекте";
         if (mode !== "needs") hidePrepTellScreen();
-        setHidden(els.prepProgressList, false);
-        renderStructureRecommendations([], { show: false });
+        setHidden(els.prepProgressList, ready);
+        if (ready && els.prepProgressList) els.prepProgressList.textContent = "";
+        var modeSwitch = document.getElementById("structureModeSwitch");
+        setHidden(modeSwitch, !ready);
+        if (ready) refreshStructureModePanel();
+        else renderStructureRecommendations([], { show: false });
         syncProjectBannerContinue();
       }
 
@@ -17717,7 +18871,7 @@
         var cached = state.structureByProject[cacheKey];
         if (cached && cached.ok && !opts.force) {
           renderStructureMap(cached);
-          renderStructureRecommendations([], { show: false });
+          refreshStructureModePanel();
           var okCache = await animatePrepProgress(seq, 0, 3);
           if (!okCache) return;
           await syncPrepStatusForProject(project, seq);
@@ -17726,7 +18880,7 @@
 
         var okStart = await animatePrepProgress(seq, 0, 2);
         if (!okStart) return;
-        setStructureStatus("Читаем структуру проекта…", false);
+        setStructureStatus("Изучаем проект…", false);
         var res = await postBridgeJson("/api/project-structure/map", {
           project_path: project.workFolder
         });
@@ -17735,7 +18889,7 @@
         var data = res.data || { ok: false, message: "Не удалось прочитать структуру проекта." };
         if (data.ok) state.structureByProject[cacheKey] = data;
         renderStructureMap(data);
-        renderStructureRecommendations([], { show: false });
+        refreshStructureModePanel();
         if (data.ok) setStructureStatus("", false);
         else setStructureStatus(data.message || "Не удалось прочитать структуру проекта.", true);
         await syncPrepStatusForProject(project, seq);
@@ -17939,16 +19093,26 @@
         review.acceptedAt = new Date().toISOString();
         review.notes = "";
         task.workflowStatus = "Готово";
+        task.review = review;
         if (mod) {
-          mod.remaining = "Сформулировать следующую точечную доработку модуля";
-          mod.nextAfterAccept = "Определить следующую точечную задачу для «" + mod.name + "»";
+          // Задачу не удаляем: остаётся в tasks[], снимаем только активность.
+          mod.activeTaskId = "";
           mod.ready = (mod.ready ? (mod.ready + " ") : "") + "Принята задача: " + task.name + ".";
+          mod.remaining = "";
+          mod.nextAfterAccept = "";
         }
         persistTaskReview(mutable, task);
         if (!mutable.isDemo) saveProjects();
         state.stageIssuesOpen = false;
         delete state.stageShots[reviewMapKey(mutable, task)];
         if (els.reviewNotes) els.reviewNotes.value = "";
+        // Следующий шаг — экран создания новой задачи (kickoff), без auto-create.
+        state.workKickoff = {
+          projectId: "",
+          step: "form",
+          nameManual: false,
+          toolId: "cursor"
+        };
         refreshWorkspace();
       }
 
@@ -18105,6 +19269,10 @@
       }
 
       function syncGateConfirmButton() {
+        if (state.gatePurpose === "copy") {
+          els.btnConfirmGate.disabled = false;
+          return;
+        }
         var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
         var all = true;
         for (var i = 0; i < boxes.length; i++) {
@@ -18115,22 +19283,53 @@
 
       var GATE_TEXTS = {
         copy: {
-          title: "Передать задачу ИИ",
-          lead: "Контроль перед передачей задачи. Подтвердите границы, затем скопируйте задание.",
-          confirm: "Скопировать и продолжить"
+          title: "Просмотреть задание",
+          lead: "",
+          confirm: "Скопировать и открыть Cursor",
+          cancel: "Закрыть"
         },
         cursor: {
-          title: "Открыть задачу в Cursor",
-          lead: "Контроль перед передачей задачи. Подтвердите границы: задание будет скопировано, затем откроется Cursor с папкой проекта.",
-          confirm: "Открыть в Cursor"
+          title: "Передать в Cursor",
+          lead: "Подтвердите границы: AI POS скопирует задание и откроет Cursor с папкой проекта.",
+          confirm: "Передать в Cursor",
+          cancel: "Отмена"
         },
         accept: {
           title: "Принять результат",
           lead: "Вы подтверждаете, что результат проверен и соответствует ожидаемому результату. " +
-            "После подтверждения текущая задача будет завершена, а система подготовит следующее задание.",
-          confirm: "Подтвердить принятие"
+            "После подтверждения задача будет завершена, и вы сможете указать следующую.",
+          confirm: "Подтвердить принятие",
+          cancel: "Отмена"
         }
       };
+
+      function setGateAssignmentViewMode(isView) {
+        if (els.gateCard) els.gateCard.classList.toggle("is-assignment-view", !!isView);
+        if (els.gateLead) els.gateLead.hidden = !!isView || !String(els.gateLead.textContent || "").trim();
+        if (els.gateMeta) els.gateMeta.hidden = !!isView;
+        if (els.gateChecks) els.gateChecks.hidden = !!isView;
+        if (els.gateConfirmedAt) els.gateConfirmedAt.hidden = true;
+        if (els.gateAssignmentPreview) {
+          els.gateAssignmentPreview.hidden = !isView;
+          if (isView) {
+            var text = (els.workBox && (els.workBox.getAttribute("data-plain") || els.workBox.textContent)) || "";
+            els.gateAssignmentPreview.textContent = String(text || "").trim() || "Задание пока не подготовлено.";
+          } else {
+            els.gateAssignmentPreview.textContent = "";
+          }
+        }
+        var actions = els.gateCard && els.gateCard.querySelector(".modal-actions");
+        var cancelBtn = document.getElementById("btnCancelGate");
+        if (actions && cancelBtn && els.btnConfirmGate) {
+          if (isView) {
+            actions.appendChild(els.btnConfirmGate);
+            actions.appendChild(cancelBtn);
+          } else {
+            actions.appendChild(cancelBtn);
+            actions.appendChild(els.btnConfirmGate);
+          }
+        }
+      }
 
       function openActionGate(purpose) {
         var project = currentProjectMutable() || findProject(state.currentId);
@@ -18152,10 +19351,16 @@
         }
 
         state.gatePurpose = purpose === "accept" ? "accept" : (purpose === "cursor" ? "cursor" : "copy");
+        var isView = state.gatePurpose === "copy";
         var texts = GATE_TEXTS[state.gatePurpose];
         if (els.gateTitle) els.gateTitle.textContent = texts.title;
-        if (els.gateLead) els.gateLead.textContent = texts.lead;
+        if (els.gateLead) {
+          els.gateLead.textContent = texts.lead || "";
+          els.gateLead.hidden = isView || !texts.lead;
+        }
         els.btnConfirmGate.textContent = texts.confirm;
+        var cancelBtn = document.getElementById("btnCancelGate");
+        if (cancelBtn) cancelBtn.textContent = texts.cancel || "Отмена";
 
         els.gateProject.textContent = project.name;
         els.gateModule.textContent = mod ? mod.name : "не выбран";
@@ -18170,17 +19375,23 @@
           return "<li>" + escapeHtml(item) + "</li>";
         }).join("");
 
+        setGateAssignmentViewMode(isView);
+
         var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
         for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
-        els.btnConfirmGate.disabled = true;
 
-        var prev = loadJsonMap(GATE_KEY)[reviewMapKey(project, task)];
-        if (prev && prev.at) {
-          els.gateConfirmedAt.hidden = false;
-          els.gateConfirmedAt.textContent = "Последнее подтверждение: " + formatDateTime(prev.at);
+        if (isView) {
+          els.btnConfirmGate.disabled = false;
         } else {
-          els.gateConfirmedAt.hidden = true;
-          els.gateConfirmedAt.textContent = "";
+          els.btnConfirmGate.disabled = true;
+          var prev = loadJsonMap(GATE_KEY)[reviewMapKey(project, task)];
+          if (prev && prev.at) {
+            els.gateConfirmedAt.hidden = false;
+            els.gateConfirmedAt.textContent = "Последнее подтверждение: " + formatDateTime(prev.at);
+          } else {
+            els.gateConfirmedAt.hidden = true;
+            els.gateConfirmedAt.textContent = "";
+          }
         }
 
         openModal(els.gateModal);
@@ -18193,6 +19404,12 @@
         var mod = getActiveModule(project);
         var task = getActiveTask(mod);
         if (!task) return;
+
+        if (state.gatePurpose === "copy") {
+          closeModal(els.gateModal);
+          transferToCursorDirect();
+          return;
+        }
 
         var boxes = els.gateChecks.querySelectorAll("[data-gate-check]");
         for (var i = 0; i < boxes.length; i++) {
@@ -18217,7 +19434,6 @@
         closeModal(els.gateModal);
         if (state.gatePurpose === "accept") acceptStageResult();
         else if (state.gatePurpose === "cursor") openInCursorAfterGate();
-        else copyWorkText();
       }
 
       function onSubmitModule(event) {
@@ -18291,11 +19507,12 @@
 
       function showCopyToastMessage(message) {
         if (!els.copyToast) return;
-        els.copyToast.textContent = message || "Задание скопировано";
+        var text = message || "Задание скопировано. Вставьте его в Cursor";
+        els.copyToast.textContent = text;
         els.copyToast.classList.add("is-visible");
         window.setTimeout(function () {
           els.copyToast.classList.remove("is-visible");
-          els.copyToast.textContent = "Задание скопировано";
+          els.copyToast.textContent = "Задание скопировано. Вставьте его в Cursor";
         }, 2800);
       }
 
@@ -18326,10 +19543,19 @@
         });
       }
 
-      async function openInCursorAfterGate() {
+      async function transferToCursorDirect() {
         var project = currentProjectMutable() || findProject(state.currentId);
         if (!project) return;
         project = ensureDerived(project);
+        if (!resolvePrimaryToolId(project)) {
+          window.alert("Сначала укажите основной инструмент в настройках проекта.");
+          return;
+        }
+        var task = getActiveTask(getActiveModule(project));
+        if (!task) {
+          window.alert("Сначала добавьте текущую задачу.");
+          return;
+        }
         var folder = String(project.workFolder || "").trim();
         if (!folder) {
           window.alert("Сначала укажите рабочую папку проекта в настройках.");
@@ -18356,17 +19582,17 @@
           els.btnOpenInCursor.disabled = !hasTool || !hasTask || !folder;
         }
 
+        showCopyToastMessage("Задание скопировано. Вставьте его в Cursor");
         if (!res.data || !res.data.ok) {
           window.alert(
             ((res.data && res.data.message) || "Не удалось открыть Cursor.") +
               " Задание уже скопировано — вставьте его в чат вручную."
           );
-          return;
         }
+      }
 
-        showCopyToastMessage(
-          (res.data && res.data.message) || "Cursor открыт. Вставьте задание в чат."
-        );
+      async function openInCursorAfterGate() {
+        await transferToCursorDirect();
       }
 
       function fallbackCopy(text) {
@@ -18896,7 +20122,16 @@
           els.btnProjectInfoContinue.addEventListener("click", onProjectInfoContinueClick);
         }
         if (els.btnProjectInfoEdit) {
-          els.btnProjectInfoEdit.addEventListener("click", openProjectInfoEditor);
+          els.btnProjectInfoEdit.addEventListener("click", function () {
+            openProjectInfoEditor();
+          });
+        }
+        if (els.projectInfoSummary) {
+          els.projectInfoSummary.addEventListener("click", function (event) {
+            var btn = event.target.closest("#btnProjectInfoNeedsChip, .project-info-summary-chip.is-needs");
+            if (!btn || !els.projectInfoSummary.contains(btn)) return;
+            openProjectInfoEditor(btn.getAttribute("data-focus-need") || "");
+          });
         }
         if (els.btnProjectInfoMaterials) {
           els.btnProjectInfoMaterials.addEventListener("click", onProjectInfoMaterialsClick);
@@ -18992,6 +20227,29 @@
         if (els.btnPrepContinueProject) {
           els.btnPrepContinueProject.addEventListener("click", onPrepContinueProjectClick);
         }
+        var btnStructureModeUser = document.getElementById("btnStructureModeUser");
+        var btnStructureModeDeveloper = document.getElementById("btnStructureModeDeveloper");
+        if (btnStructureModeUser) {
+          btnStructureModeUser.addEventListener("click", function () {
+            applyWorkspaceMode("user");
+          });
+        }
+        if (btnStructureModeDeveloper) {
+          btnStructureModeDeveloper.addEventListener("click", function () {
+            applyWorkspaceMode("developer");
+          });
+        }
+        var structureDeveloperLinks = document.getElementById("structureDeveloperLinks");
+        if (structureDeveloperLinks) {
+          structureDeveloperLinks.addEventListener("click", function (event) {
+            var btn = event.target && event.target.closest
+              ? event.target.closest("[data-os-nav]")
+              : null;
+            if (!btn) return;
+            event.preventDefault();
+            openOsSection(btn.getAttribute("data-os-nav"));
+          });
+        }
         if (els.btnPrepTellBack) {
           els.btnPrepTellBack.addEventListener("click", hidePrepTellScreen);
         }
@@ -19082,9 +20340,17 @@
         document.getElementById("btnCopyWork").addEventListener("click", function () {
           openActionGate("copy");
         });
+        if (els.workKickoffForm) {
+          els.workKickoffForm.addEventListener("submit", onKickoffContinue);
+        }
+        if (els.kickoffGoal) els.kickoffGoal.addEventListener("input", onKickoffGoalInput);
+        if (els.kickoffName) els.kickoffName.addEventListener("input", onKickoffNameInput);
+        if (els.btnKickoffCancel) els.btnKickoffCancel.addEventListener("click", onKickoffCancel);
+        if (els.btnKickoffBack) els.btnKickoffBack.addEventListener("click", onKickoffBack);
+        if (els.btnKickoffSave) els.btnKickoffSave.addEventListener("click", onKickoffSave);
         if (els.btnOpenInCursor) {
           els.btnOpenInCursor.addEventListener("click", function () {
-            openActionGate("cursor");
+            openActionGate("copy");
           });
         }
         if (els.btnOpenProjectSettings) {
