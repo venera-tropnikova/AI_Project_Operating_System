@@ -362,15 +362,51 @@ def _passport_payload_from_user_info(
             return incoming
         return _trim_text(existing.get(key))
 
+    # Do not clone one user phrase into several semantic passport fields.
+    summary_in = _trim_text(mapping.get("summary"))
+    goal_in = _trim_text(mapping.get("goal"))
+    audience_in = _trim_text(mapping.get("audience"))
+    result_in = _trim_text(mapping.get("expected_result"))
+    if summary_in:
+        if goal_in and goal_in == summary_in:
+            mapping["goal"] = ""
+        if result_in and result_in == summary_in:
+            mapping["expected_result"] = ""
+        if audience_in and audience_in == summary_in:
+            mapping["audience"] = ""
+    elif goal_in:
+        if result_in and result_in == goal_in:
+            mapping["expected_result"] = ""
+        if audience_in and audience_in == goal_in:
+            mapping["audience"] = ""
+
+    summary = pick("summary")
+    goal = pick("goal")
+    audience = pick("audience")
+    expected_result = pick("expected_result")
+    # Final safety-net: one phrase must not occupy several semantic fields.
+    if summary:
+        if goal and goal == summary:
+            goal = ""
+        if expected_result and expected_result == summary:
+            expected_result = ""
+        if audience and audience == summary:
+            audience = ""
+    elif goal:
+        if expected_result and expected_result == goal:
+            expected_result = ""
+        if audience and audience == goal:
+            audience = ""
+
     payload = {
         "schema": PASSPORT_SCHEMA,
         "version": PASSPORT_VERSION,
         "project_id": _trim_text(existing.get("project_id")),
         "name": pick("name"),
-        "summary": pick("summary"),
-        "goal": pick("goal"),
-        "audience": pick("audience"),
-        "expected_result": pick("expected_result"),
+        "summary": summary,
+        "goal": goal,
+        "audience": audience,
+        "expected_result": expected_result,
         "capabilities": existing.get("capabilities")
         if isinstance(existing.get("capabilities"), list)
         else [],
