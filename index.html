@@ -3225,6 +3225,34 @@
       color: var(--allow);
     }
 
+    .stage-accept-outcome {
+      max-width: min(560px, 100%);
+      margin: 0 0 1rem;
+    }
+    .stage-accept-outcome .stage-flow {
+      padding: 1.1rem 1.15rem;
+    }
+    .stage-accept-outcome-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.2rem;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .stage-accept-outcome-lead {
+      margin: 0 0 0.85rem;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .stage-accept-outcome-lead strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .stage-accept-outcome .flow-actions {
+      margin-top: 0.35rem;
+    }
+
     .check-list {
       margin: 0 0 0.85rem;
       padding: 0;
@@ -7645,6 +7673,16 @@
             </div>
           </section>
 
+          <section class="stage-zone stage-accept-outcome" id="stageAcceptOutcome" data-zone="accept-outcome" aria-labelledby="acceptOutcomeTitle" hidden>
+            <div class="stage-flow">
+              <h3 class="stage-accept-outcome-title" id="acceptOutcomeTitle">Задача принята</h3>
+              <p class="stage-accept-outcome-lead" id="acceptOutcomeLead"></p>
+              <div class="flow-actions" id="acceptOutcomeActions">
+                <button type="button" class="btn btn-primary" id="btnAcceptOutcomeNext">Продолжить</button>
+              </div>
+            </div>
+          </section>
+
           <section class="stage-zone" id="workKickoffZone" data-zone="kickoff" aria-labelledby="workKickoffTitle" hidden>
             <h3 class="stage-zone-title" id="workKickoffTitle">С чего продолжить работу над проектом?</h3>
             <div class="stage-flow work-kickoff-flow">
@@ -7781,20 +7819,22 @@
                 <h3 class="stage-zone-title" id="zoneResultTitle">Проверка результата</h3>
                 <div class="stage-flow">
                   <section class="flow-row" id="stageCheckBlock">
-                    <span class="flow-label">После работы в Cursor</span>
-                    <p class="flow-hint">Проверьте результат. При необходимости откройте приложение или приложите снимок.</p>
+                    <span class="flow-label">Проверьте результат работы</span>
+                    <p class="flow-hint" id="checkResultLead">
+                      Мы уже открыли приложение. Убедитесь, что результат соответствует ожидаемому.
+                    </p>
                     <div class="flow-actions">
-                      <button type="button" class="btn btn-secondary" id="btnOpenApp">Открыть приложение</button>
                       <div class="capture-attach-wrap">
                         <label class="btn btn-ghost file-btn">
                           <span id="resultShotAttachText">Прикрепить снимок</span>
                           <input type="file" id="resultShotInput" accept="image/png,image/*" />
                         </label>
-                        <button type="button" class="flow-inline-btn" id="btnChooseCaptureWindow">Выбрать окно</button>
+                        <button type="button" class="flow-inline-btn" id="btnChooseCaptureWindow">Снять с окна</button>
                         <button type="button" class="btn btn-secondary" id="btnCaptureResult" hidden>Снять результат</button>
                       </div>
+                      <button type="button" class="flow-inline-btn" id="btnOpenApp" hidden>Открыть снова</button>
                     </div>
-                    <p class="flow-hint" id="openAppHint">Адрес приложения не указан. Задайте его в настройках проекта.</p>
+                    <p class="flow-hint" id="openAppHint" hidden></p>
                     <p class="flow-hint" id="captureWindowHint" hidden></p>
                     <p class="flow-hint" id="captureStatus" hidden aria-live="polite"></p>
                     <div class="capture-preview" id="capturePreview" hidden>
@@ -7822,16 +7862,16 @@
                   </section>
 
                   <section class="flow-row" id="stageVerifyChecksBlock">
-                    <span class="flow-label">Проверочные пункты</span>
+                    <span class="flow-label">Подтвердите проверку</span>
                     <ul class="check-list" id="reviewChecks"></ul>
                   </section>
 
                   <section class="flow-row" id="reviewCard">
-                    <span class="flow-label">Завершение задачи</span>
+                    <span class="flow-label">Завершите задачу</span>
                     <div class="review-status" id="reviewStatus">Не проверено</div>
                     <div class="flow-actions">
                       <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
-                      <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
+                      <button type="button" class="btn btn-ghost" id="btnStageIssues">Есть замечания</button>
                     </div>
                     <div class="flow-issues" id="stageIssuesBox" hidden>
                       <div class="field">
@@ -8760,6 +8800,13 @@
           nameManual: false,
           toolId: "cursor"
         },
+        // Итог после принятия задачи: один ближайший шаг (не модель данных).
+        acceptOutcome: null,
+        // После передачи в Cursor: открыть launchUrl один раз, когда пользователь вернётся.
+        resultLaunchPending: null,
+        resultLaunchOpenedKey: "",
+        // Держать вкладку «Работа» / проверку результата после возврата из Cursor.
+        resultCheckFocus: false,
         passportByFolder: {},
         passportRequestSeq: 0,
         stageRequestSeq: 0,
@@ -9027,6 +9074,11 @@
         workKickoffForm: document.getElementById("workKickoffForm"),
         workKickoffFormStep: document.getElementById("workKickoffFormStep"),
         workKickoffConfirmStep: document.getElementById("workKickoffConfirmStep"),
+        stageAcceptOutcome: document.getElementById("stageAcceptOutcome"),
+        acceptOutcomeTitle: document.getElementById("acceptOutcomeTitle"),
+        acceptOutcomeLead: document.getElementById("acceptOutcomeLead"),
+        acceptOutcomeActions: document.getElementById("acceptOutcomeActions"),
+        btnAcceptOutcomeNext: document.getElementById("btnAcceptOutcomeNext"),
         kickoffGoal: document.getElementById("kickoffGoal"),
         kickoffResult: document.getElementById("kickoffResult"),
         kickoffName: document.getElementById("kickoffName"),
@@ -9110,6 +9162,7 @@
         stageModuleName: document.getElementById("stageModuleName"),
         btnOpenApp: document.getElementById("btnOpenApp"),
         openAppHint: document.getElementById("openAppHint"),
+        checkResultLead: document.getElementById("checkResultLead"),
         btnStageDone: document.getElementById("btnStageDone"),
         btnStageIssues: document.getElementById("btnStageIssues"),
         stageIssuesBox: document.getElementById("stageIssuesBox"),
@@ -9546,6 +9599,119 @@
           if (!review.checks[review.items[i].id]) return false;
         }
         return true;
+      }
+
+      function isVisualDraftReady(review) {
+        var draft = normalizeVisualDraft(review && review.visualDraft);
+        if (!draft) return false;
+        if (draft.kind === "capture" || draft.kind === "attachment") {
+          return !!String(draft.file || "").trim();
+        }
+        if (draft.kind === "none") {
+          return !!String(draft.skip_reason || "").trim();
+        }
+        return false;
+      }
+
+      function canAcceptStageResult(review) {
+        if (!review || review.status === "accepted") return false;
+        return allReviewChecksDone(review) && isVisualDraftReady(review);
+      }
+
+      function syncStageDoneButton(review) {
+        if (!els.btnStageDone) return;
+        var accepted = !!(review && review.status === "accepted");
+        els.btnStageDone.disabled = accepted || !canAcceptStageResult(review);
+      }
+
+      function isModuleCompleted(mod) {
+        if (!mod) return true;
+        if (String(mod.status || "").trim() === "Готово") return true;
+        var tasks = mod.tasks || [];
+        if (!tasks.length) return false;
+        for (var i = 0; i < tasks.length; i++) {
+          if (!isTaskCompleted(tasks[i])) return false;
+        }
+        return true;
+      }
+
+      function findNextIncompleteTask(mod, exceptTaskId) {
+        if (!mod) return null;
+        var tasks = mod.tasks || [];
+        var skip = String(exceptTaskId || "").trim();
+        for (var i = 0; i < tasks.length; i++) {
+          var task = tasks[i];
+          if (!task) continue;
+          if (skip && task.id === skip) continue;
+          if (!isTaskCompleted(task)) return task;
+        }
+        return null;
+      }
+
+      function findNextIncompleteModule(project, exceptModuleId) {
+        if (!project) return null;
+        var modules = project.modules || [];
+        var skip = String(exceptModuleId || "").trim();
+        for (var i = 0; i < modules.length; i++) {
+          var mod = modules[i];
+          if (!mod) continue;
+          if (skip && mod.id === skip) continue;
+          if (!isModuleCompleted(mod)) return mod;
+        }
+        return null;
+      }
+
+      function isProjectWorkComplete(project) {
+        if (!project) return false;
+        var modules = project.modules || [];
+        if (!modules.length) return false;
+        for (var i = 0; i < modules.length; i++) {
+          if (!isModuleCompleted(modules[i])) return false;
+        }
+        return true;
+      }
+
+      function resolveNearestAcceptAction(project, currentMod, acceptedTaskId) {
+        var nextTask = findNextIncompleteTask(currentMod, acceptedTaskId);
+        if (nextTask) {
+          return {
+            kind: "next_task",
+            moduleId: currentMod ? currentMod.id : "",
+            moduleName: currentMod ? currentMod.name : "",
+            taskId: nextTask.id,
+            taskName: nextTask.name || "Следующая задача"
+          };
+        }
+        var nextMod = findNextIncompleteModule(project, currentMod && currentMod.id);
+        if (nextMod) {
+          var taskInMod = findNextIncompleteTask(nextMod, "");
+          return {
+            kind: "next_module",
+            moduleId: nextMod.id,
+            moduleName: nextMod.name || "Следующий модуль",
+            taskId: taskInMod ? taskInMod.id : "",
+            taskName: taskInMod ? (taskInMod.name || "") : ""
+          };
+        }
+        return {
+          kind: "project_done",
+          moduleId: currentMod ? currentMod.id : "",
+          moduleName: currentMod ? currentMod.name : "",
+          taskId: "",
+          taskName: ""
+        };
+      }
+
+      function clearAcceptOutcome() {
+        state.acceptOutcome = null;
+      }
+
+      function hasAcceptOutcome(project) {
+        return !!(
+          state.acceptOutcome &&
+          project &&
+          state.acceptOutcome.projectId === project.id
+        );
       }
 
       function reviewStatusLabel(status) {
@@ -10375,11 +10541,18 @@
         if (!tabId) return;
         var project = findProjectRecord(state.currentId) || getFocusProject();
         if (!project) return;
+        if (section !== "current-task") state.resultCheckFocus = false;
         // Overview (Сведения о проекте) is always available; incomplete passport/setup must not block it.
-        if (section === "current-task" && !isProjectSetupReady(project)) {
+        if (section === "current-task" && !isProjectSetupReady(project) && !shouldKeepResultCheckWorkspace()) {
           updateProjectSetupNavGate();
           openWorkspace(project.id, false, { enterProject: true });
           setStructureStatus("Сначала проверьте и настройте проект", false);
+          return;
+        }
+        if (section === "current-task" && shouldKeepResultCheckWorkspace()) {
+          openWorkspace(project.id, false, { tab: "task" });
+          setOsNavActive("current-task");
+          showResultCheckWorkspace();
           return;
         }
         openWorkspace(project.id, false, { tab: tabId });
@@ -15615,29 +15788,138 @@
         return /^AI_Portfolio$/i.test(base);
       }
 
-      function renderOpenAppButton(project) {
-        if (!els.btnOpenApp) return;
-        var launch = resolveProjectLaunch(project);
-        var canOpen = !!(launch && launch.kind === "url");
-        els.btnOpenApp.disabled = !canOpen;
-        if (els.openAppHint) {
-          if (canOpen) {
-            els.openAppHint.textContent = "Приложение откроется в новом окне.";
-          } else if (launch && launch.kind === "unsupported") {
-            els.openAppHint.textContent =
-              "Сейчас можно открыть только адрес сайта (начинается с http:// или https://). Исправьте адрес в настройках проекта.";
-          } else {
-            els.openAppHint.textContent =
-              "Адрес приложения не указан. Задайте его в настройках проекта.";
-          }
-        }
+      function resultLaunchKey(project, task) {
+        return reviewMapKey(project, task);
+      }
+
+      function markResultLaunchPending(project, task) {
+        if (!project || !task || project.isDemo) return;
+        state.resultLaunchPending = {
+          projectId: project.id,
+          taskId: task.id,
+          key: resultLaunchKey(project, task)
+        };
+        state.resultCheckFocus = true;
+      }
+
+      function shouldKeepResultCheckWorkspace() {
+        return !!(state.resultLaunchPending || state.resultCheckFocus);
+      }
+
+      function showResultCheckWorkspace() {
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        state.resultCheckFocus = true;
+        state.activeTab = "task";
+        setActiveTab("task", { force: true, skipHistory: true });
+        setOsNavActive("current-task");
+        if (els.currentStageScreen) els.currentStageScreen.hidden = false;
+      }
+
+      function onReturnFromCursorWork() {
+        if (!shouldKeepResultCheckWorkspace()) return;
+        showResultCheckWorkspace();
+        var project = findProjectRecord(state.currentId) || findProject(state.currentId);
+        if (!project) return;
+        var view = deriveView(project);
+        renderTaskTab(project, view);
+        renderTools(project);
+        renderAssignment(project);
+        tryAutoOpenResultAfterCursor();
       }
 
       function openProjectApp() {
         var project = findProject(state.currentId);
         var launch = resolveProjectLaunch(project);
-        if (!launch || launch.kind !== "url") return;
-        window.open(launch.value, "_blank", "noopener");
+        if (!launch || launch.kind !== "url") return false;
+        var win = window.open(launch.value, "_blank", "noopener");
+        var opened = !!win;
+        if (opened) {
+          var task = getActiveTask(getActiveModule(project));
+          if (task) {
+            state.resultLaunchOpenedKey = resultLaunchKey(project, task);
+            if (
+              state.resultLaunchPending &&
+              state.resultLaunchPending.key === state.resultLaunchOpenedKey
+            ) {
+              state.resultLaunchPending = null;
+            }
+            renderCheckResultLead(project, task);
+          }
+        }
+        return opened;
+      }
+
+      function tryAutoOpenResultAfterCursor() {
+        var pending = state.resultLaunchPending;
+        if (!pending) return false;
+        if (document.visibilityState && document.visibilityState !== "visible") return false;
+        var project = findProject(state.currentId) || currentProjectMutable();
+        if (!project || project.id !== pending.projectId) return false;
+        var mod = getActiveModule(project);
+        var task = getActiveTask(mod);
+        if (!task || task.id !== pending.taskId) return false;
+        if (state.resultLaunchOpenedKey === pending.key) {
+          state.resultLaunchPending = null;
+          return false;
+        }
+        var launch = resolveProjectLaunch(project);
+        if (!launch || launch.kind !== "url") {
+          state.resultLaunchPending = null;
+          renderCheckResultLead(project, task);
+          return false;
+        }
+        var opened = openProjectApp();
+        state.resultLaunchPending = null;
+        if (opened) {
+          state.resultLaunchOpenedKey = pending.key;
+        }
+        renderCheckResultLead(project, task);
+        return opened;
+      }
+
+      function renderCheckResultLead(project, task) {
+        var launch = resolveProjectLaunch(project);
+        var canOpen = !!(launch && launch.kind === "url");
+        var key = task ? resultLaunchKey(project, task) : "";
+        var opened = !!(key && state.resultLaunchOpenedKey === key);
+        var pending = !!(
+          state.resultLaunchPending &&
+          task &&
+          state.resultLaunchPending.key === key
+        );
+
+        if (els.checkResultLead) {
+          if (!canOpen) {
+            els.checkResultLead.textContent =
+              "Для этого проекта не указан адрес запуска. При необходимости откройте результат вручную.";
+          } else if (opened) {
+            els.checkResultLead.textContent =
+              "Мы уже открыли приложение. Убедитесь, что результат соответствует ожидаемому.";
+          } else if (pending) {
+            els.checkResultLead.textContent =
+              "Когда вернётесь из работы, мы откроем приложение для проверки результата.";
+          } else {
+            els.checkResultLead.textContent =
+              "При необходимости откройте результат вручную и убедитесь, что он соответствует ожидаемому.";
+          }
+        }
+
+        if (els.btnOpenApp) {
+          els.btnOpenApp.hidden = !canOpen;
+          els.btnOpenApp.disabled = false;
+          els.btnOpenApp.textContent = opened ? "Открыть снова" : "Открыть результат";
+        }
+        if (els.openAppHint) {
+          els.openAppHint.hidden = true;
+          els.openAppHint.textContent = "";
+        }
+      }
+
+      function renderOpenAppButton(project) {
+        // Совместимость: прежний вызов теперь рисует текст проверки результата.
+        var task = getActiveTask(getActiveModule(project));
+        renderCheckResultLead(project, task);
       }
 
       function setCaptureStatus(text, isError) {
@@ -15773,6 +16055,7 @@
         review.visualDraft = normalizeVisualDraft(draft);
         persistTaskReview(project, task);
         renderCaptureVisual(project, task);
+        renderReviewBlock(project, task);
       }
 
       function clearVisualDraft() {
@@ -15854,7 +16137,7 @@
 
         var hwnd = String(mutable.captureWindowHwnd || "").trim();
         if (!hwnd) {
-          setCaptureStatus("Сначала нажмите «Выбрать окно» под «Прикрепить снимок».", true);
+          setCaptureStatus("Сначала нажмите «Снять с окна» под «Прикрепить снимок».", true);
           return;
         }
 
@@ -15862,7 +16145,7 @@
         var probe = await postBridgeJson("/api/capture/probe", { hwnd: hwnd });
         if (!probe.data || !probe.data.ok || probe.data.available === false) {
           saveCaptureWindow(mutable, "", "", "");
-          setCaptureStatus("Сохранённое окно больше недоступно. Нажмите «Выбрать окно» снова.", true);
+          setCaptureStatus("Сохранённое окно больше недоступно. Нажмите «Снять с окна» снова.", true);
           return;
         }
         if (probe.data.title || probe.data.process_name) {
@@ -15886,7 +16169,7 @@
         if (!res.data || !res.data.ok) {
           if (res.data && res.data.need_reselect) {
             saveCaptureWindow(mutable, "", "", "");
-            setCaptureStatus(res.data.message || "Нажмите «Выбрать окно» снова.", true);
+            setCaptureStatus(res.data.message || "Нажмите «Снять с окна» снова.", true);
             return;
           }
           setCaptureStatus((res.data && res.data.message) || "Не удалось сделать снимок.", true);
@@ -15894,6 +16177,15 @@
         }
         setVisualDraft(mutable, task, res.data.visual);
         setCaptureStatus("Снимок сохранён.", false);
+      }
+
+      function isImageEvidenceFile(file) {
+        if (!file) return false;
+        var typ = String(file.type || "").trim().toLowerCase();
+        if (typ.indexOf("image/") === 0) return true;
+        // Некоторые браузеры не заполняют file.type при выборе файла.
+        var name = String(file.name || "").trim().toLowerCase();
+        return /\.(png|jpe?g|gif|webp|bmp)$/.test(name);
       }
 
       function onResultShotSelected(event) {
@@ -15910,7 +16202,7 @@
           setCaptureStatus("Сначала укажите рабочую папку проекта.", true);
           return;
         }
-        if ((file.type || "").indexOf("image/") !== 0) {
+        if (!isImageEvidenceFile(file)) {
           setCaptureStatus("Нужен файл изображения PNG.", true);
           return;
         }
@@ -15952,19 +16244,18 @@
         var reason = els.captureSkipReason ? String(els.captureSkipReason.value || "").trim() : "";
         if (!reason) {
           setCaptureStatus("Укажите короткую причину, почему снимок не нужен.", true);
-          setVisualDraft(mutable, task, {
-            required: false,
-            kind: "none",
-            file: null,
-            skip_reason: "",
-            window_hwnd: null,
-            window_title: null,
-            process_name: null,
-            captured_at: null,
-            width: null,
-            height: null,
-            bytes: null
-          });
+          var review = ensureTaskReview(mutable, task);
+          if (review) {
+            review.visualDraft = null;
+            persistTaskReview(mutable, task);
+          }
+          if (els.captureSkipCheck) els.captureSkipCheck.checked = true;
+          if (els.captureSkipReasonWrap) els.captureSkipReasonWrap.hidden = false;
+          syncStageDoneButton(review);
+          if (els.reviewHint && review && review.status !== "accepted") {
+            els.reviewHint.textContent =
+              "Осталось сохранить снимок результата или указать, почему снимок не нужен.";
+          }
           return;
         }
         setVisualDraft(mutable, task, {
@@ -16304,6 +16595,30 @@
         }
       }
 
+      function syncReviewHint(review) {
+        if (!els.reviewHint || !review) return;
+        var accepted = review.status === "accepted";
+        var allChecked = allReviewChecksDone(review);
+        var visualReady = isVisualDraftReady(review);
+        if (accepted) {
+          els.reviewHint.textContent = "Результат принят" +
+            (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ".";
+        } else if (review.status === "notes") {
+          els.reviewHint.textContent = "Задание на исправление готово. После исправления заново отметьте пункты проверки.";
+        } else if (!visualReady && allChecked) {
+          els.reviewHint.textContent =
+            "Осталось сохранить снимок результата или указать, почему снимок не нужен.";
+        } else if (!visualReady) {
+          els.reviewHint.textContent =
+            "Сначала посмотрите результат и сохраните снимок (или причину без снимка). Затем отметьте пункты проверки.";
+        } else if (allChecked) {
+          els.reviewHint.textContent = "Все пункты отмечены. Можно принять результат.";
+        } else {
+          els.reviewHint.textContent =
+            "Отметьте пункты, которые вы проверили. Кнопка «✔ Всё выполнено» станет доступна, когда отмечены все пункты.";
+        }
+      }
+
       function renderReviewBlock(project, task) {
         var criteriaBlock = document.getElementById("stageCriteriaBlock");
         var transferBlock = document.getElementById("stageTransferBlock");
@@ -16360,31 +16675,26 @@
             rev.checks[event.currentTarget.getAttribute("data-review-check")] = event.currentTarget.checked;
             if (rev.status === "accepted") rev.status = "unchecked";
             persistTaskReview(mutable, active);
-            renderReviewBlock(mutable, active);
+            // Не пересобираем список галочек: иначе соседние отметки сбрасываются.
+            els.reviewStatus.textContent = reviewStatusLabel(rev.status);
+            els.reviewStatus.className = "review-status" +
+              (rev.status === "accepted" ? " is-accepted" : rev.status === "notes" || rev.status === "ready" ? " is-notes" : "");
+            syncStageDoneButton(rev);
+            syncReviewHint(rev);
           });
         }
 
-        var accepted = review.status === "accepted";
-        var allChecked = allReviewChecksDone(review);
-        if (els.btnStageDone) els.btnStageDone.disabled = accepted || !allChecked;
-        if (els.btnStageIssues) els.btnStageIssues.disabled = accepted;
+        syncStageDoneButton(review);
+        if (els.btnStageIssues) els.btnStageIssues.disabled = review.status === "accepted";
         if (els.stageIssuesBox) {
-          els.stageIssuesBox.hidden = accepted || !state.stageIssuesOpen;
+          els.stageIssuesBox.hidden = review.status === "accepted" || !state.stageIssuesOpen;
         }
         renderStageShot(project, task);
         syncSubmitIssuesButton();
-        if (accepted) {
-          els.reviewHint.textContent = "Результат принят" +
-            (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ".";
-        } else if (review.status === "notes") {
-          els.reviewHint.textContent = "Задание на исправление готово. После исправления заново отметьте пункты проверки.";
-        } else if (allChecked) {
-          els.reviewHint.textContent = "Все пункты отмечены. Можно принять результат.";
-        } else {
-          els.reviewHint.textContent = "Отметьте пункты, которые вы проверили. Кнопка «✔ Всё выполнено» станет доступна, когда отмечены все пункты.";
-        }
+        syncReviewHint(review);
 
         renderOpenAppButton(project);
+        tryAutoOpenResultAfterCursor();
         renderCaptureVisual(project, task);
         renderStageFixBlock(project, task, review);
         renderStageNextBlock(project, review);
@@ -16482,6 +16792,107 @@
         if (els.workKickoffZone) els.workKickoffZone.hidden = !showKickoff;
         var columns = document.getElementById("stageWorkColumns");
         if (columns) columns.hidden = !!showKickoff;
+        if (showKickoff && els.stageAcceptOutcome) els.stageAcceptOutcome.hidden = true;
+      }
+
+      function setWorkZonesForAcceptOutcome(showOutcome) {
+        if (els.stageAcceptOutcome) els.stageAcceptOutcome.hidden = !showOutcome;
+        if (els.workKickoffZone) els.workKickoffZone.hidden = true;
+        var columns = document.getElementById("stageWorkColumns");
+        if (columns) columns.hidden = true;
+      }
+
+      function paintAcceptOutcome(project) {
+        var outcome = state.acceptOutcome;
+        if (!outcome || !els.stageAcceptOutcome) return;
+        var taskLabel = outcome.acceptedTaskName || "Задача";
+        var title = "Задача принята";
+        var lead = "Принята задача: «" + taskLabel + "».";
+        var btnLabel = "Продолжить";
+        var showBtn = true;
+
+        if (outcome.kind === "next_task") {
+          title = "Задача принята";
+          lead =
+            "Принята задача: «" + taskLabel + "». " +
+            "В этом модуле есть следующая задача" +
+            (outcome.taskName ? ": «" + outcome.taskName + "»." : ".");
+          btnLabel = "Следующая задача";
+        } else if (outcome.kind === "next_module") {
+          title = "Модуль завершён";
+          lead =
+            "Принята задача: «" + taskLabel + "». " +
+            "Модуль «" + (outcome.acceptedModuleName || "текущий") + "» завершён. " +
+            "Дальше — модуль «" + (outcome.moduleName || "следующий") + "».";
+          btnLabel = "Следующий модуль";
+        } else {
+          title = "Проект завершён";
+          if (taskLabel && outcome.acceptedTaskId) {
+            lead =
+              "Принята задача: «" + taskLabel + "». " +
+              "Незавершённых модулей больше нет. Проект «" +
+              (project && project.name ? project.name : "текущий") +
+              "» завершён.";
+          } else {
+            lead =
+              "Незавершённых модулей больше нет. Проект «" +
+              (project && project.name ? project.name : "текущий") +
+              "» завершён.";
+          }
+          showBtn = false;
+        }
+
+        if (els.acceptOutcomeTitle) els.acceptOutcomeTitle.textContent = title;
+        if (els.acceptOutcomeLead) els.acceptOutcomeLead.textContent = lead;
+        if (els.btnAcceptOutcomeNext) {
+          els.btnAcceptOutcomeNext.textContent = btnLabel;
+          els.btnAcceptOutcomeNext.hidden = !showBtn;
+        }
+        if (els.acceptOutcomeActions) els.acceptOutcomeActions.hidden = !showBtn;
+      }
+
+      function continueFromAcceptOutcome() {
+        var mutable = currentProjectMutable();
+        var outcome = state.acceptOutcome;
+        if (!mutable || !outcome || outcome.projectId !== mutable.id) return;
+
+        if (outcome.kind === "next_task") {
+          var mod = getActiveModule(mutable);
+          if (!mod && outcome.moduleId) {
+            for (var i = 0; i < (mutable.modules || []).length; i++) {
+              if (mutable.modules[i].id === outcome.moduleId) mod = mutable.modules[i];
+            }
+          }
+          if (!mod || !outcome.taskId) return;
+          mutable.activeModuleId = mod.id;
+          mod.activeTaskId = outcome.taskId;
+          clearAcceptOutcome();
+          if (!mutable.isDemo) saveProjects();
+          refreshWorkspace();
+          return;
+        }
+
+        if (outcome.kind === "next_module") {
+          var nextMod = null;
+          for (var m = 0; m < (mutable.modules || []).length; m++) {
+            if (mutable.modules[m].id === outcome.moduleId) nextMod = mutable.modules[m];
+          }
+          if (!nextMod) return;
+          mutable.activeModuleId = nextMod.id;
+          if (outcome.taskId) {
+            nextMod.activeTaskId = outcome.taskId;
+            clearAcceptOutcome();
+            if (!mutable.isDemo) saveProjects();
+            refreshWorkspace();
+            return;
+          }
+          // В модуле ещё нет задач — только тогда kickoff.
+          nextMod.activeTaskId = "";
+          clearAcceptOutcome();
+          resetWorkKickoffForm(mutable);
+          if (!mutable.isDemo) saveProjects();
+          refreshWorkspace();
+        }
       }
 
       function resetWorkKickoffForm(project) {
@@ -16677,9 +17088,39 @@
             ? ("Модуль: " + view.module.name)
             : (task ? "Модуль: не выбран" : "Модуль: —");
         }
+
+        if (hasAcceptOutcome(project)) {
+          if (els.stageModuleName && state.acceptOutcome.acceptedModuleName) {
+            els.stageModuleName.textContent = "Модуль: " + state.acceptOutcome.acceptedModuleName;
+          }
+          paintAcceptOutcome(project);
+          setWorkZonesForAcceptOutcome(true);
+          renderReviewBlock(project, null);
+          return;
+        }
+
         if (!task) {
+          if (isProjectWorkComplete(project)) {
+            state.acceptOutcome = {
+              projectId: project.id,
+              acceptedTaskId: "",
+              acceptedTaskName: "",
+              acceptedModuleId: view.module ? view.module.id : "",
+              acceptedModuleName: view.module ? view.module.name : "",
+              kind: "project_done",
+              moduleId: "",
+              moduleName: "",
+              taskId: "",
+              taskName: ""
+            };
+            paintAcceptOutcome(project);
+            setWorkZonesForAcceptOutcome(true);
+            renderReviewBlock(project, null);
+            return;
+          }
           ensureWorkKickoffState(project);
           setWorkZonesForKickoff(true);
+          if (els.stageAcceptOutcome) els.stageAcceptOutcome.hidden = true;
           els.taskGoalText.textContent = "—";
           els.taskWhyText.textContent = "—";
           els.taskResultText.textContent = "—";
@@ -16691,6 +17132,7 @@
           return;
         }
 
+        if (els.stageAcceptOutcome) els.stageAcceptOutcome.hidden = true;
         setWorkZonesForKickoff(false);
         els.taskGoalText.textContent = task.goal || "—";
         if (task.subtask && String(task.subtask).trim()) {
@@ -18911,6 +19353,7 @@
         state.currentId = id;
         state.exampleMode = id === DEMO_PROJECT.id;
         state.stageIssuesOpen = false;
+        if (entering) clearAcceptOutcome();
         saveLastOpened(id);
 
         var view = deriveView(project);
@@ -18957,6 +19400,13 @@
         if (!isDemoProject(project) && String(project.workFolder || "").trim()) {
           refreshProjectSetupStatus(project).then(function (ready) {
             if (!ready && (state.activeTab === "task" || state.activeTab === "work")) {
+              // После возврата из Cursor не уводим с проверки результата в Навигатор.
+              if (shouldKeepResultCheckWorkspace()) {
+                setActiveTab("task", { force: true, skipHistory: true });
+                setOsNavActive("current-task");
+                if (els.currentStageScreen) els.currentStageScreen.hidden = false;
+                return;
+              }
               state.activeTab = "structure";
               setActiveTab("structure", { force: true, skipHistory: true });
               setOsNavActive("structure");
@@ -19089,6 +19539,11 @@
         if (!task) return;
         var review = ensureTaskReview(mutable, task);
         if (!allReviewChecksDone(review)) return;
+        if (!isVisualDraftReady(review)) return;
+        var acceptedTaskId = task.id;
+        var acceptedTaskName = task.name || "Задача";
+        var acceptedModuleId = mod ? mod.id : "";
+        var acceptedModuleName = mod ? mod.name : "";
         review.status = "accepted";
         review.acceptedAt = new Date().toISOString();
         review.notes = "";
@@ -19100,13 +19555,40 @@
           mod.ready = (mod.ready ? (mod.ready + " ") : "") + "Принята задача: " + task.name + ".";
           mod.remaining = "";
           mod.nextAfterAccept = "";
+          if (!findNextIncompleteTask(mod, "")) {
+            mod.status = "Готово";
+          }
         }
         persistTaskReview(mutable, task);
         if (!mutable.isDemo) saveProjects();
         state.stageIssuesOpen = false;
         delete state.stageShots[reviewMapKey(mutable, task)];
         if (els.reviewNotes) els.reviewNotes.value = "";
-        // Следующий шаг — экран создания новой задачи (kickoff), без auto-create.
+        if (
+          state.resultLaunchPending &&
+          state.resultLaunchPending.taskId === acceptedTaskId
+        ) {
+          state.resultLaunchPending = null;
+        }
+        if (state.resultLaunchOpenedKey === reviewMapKey(mutable, task)) {
+          state.resultLaunchOpenedKey = "";
+        }
+        state.resultCheckFocus = false;
+
+        var nearest = resolveNearestAcceptAction(mutable, mod, acceptedTaskId);
+        state.acceptOutcome = {
+          projectId: mutable.id,
+          acceptedTaskId: acceptedTaskId,
+          acceptedTaskName: acceptedTaskName,
+          acceptedModuleId: acceptedModuleId,
+          acceptedModuleName: acceptedModuleName,
+          kind: nearest.kind,
+          moduleId: nearest.moduleId,
+          moduleName: nearest.moduleName,
+          taskId: nearest.taskId,
+          taskName: nearest.taskName
+        };
+        // Kickoff только если следующего шага ещё нет в данных (см. continueFromAcceptOutcome).
         state.workKickoff = {
           projectId: "",
           step: "form",
@@ -19122,7 +19604,7 @@
         var task = getActiveTask(getActiveModule(mutable));
         if (!task) return;
         var review = ensureTaskReview(mutable, task);
-        if (review.status === "accepted" || !allReviewChecksDone(review)) return;
+        if (review.status === "accepted" || !canAcceptStageResult(review)) return;
         var draft = els.reviewNotes ? els.reviewNotes.value.trim() : "";
         if (state.stageIssuesOpen && draft && draft !== (review.notes || "")) {
           var keepGoing = window.confirm(
@@ -19589,6 +20071,8 @@
               " Задание уже скопировано — вставьте его в чат вручную."
           );
         }
+        markResultLaunchPending(project, task);
+        renderCheckResultLead(project, task);
       }
 
       async function openInCursorAfterGate() {
@@ -20444,6 +20928,9 @@
         document.getElementById("btnCancelGate").addEventListener("click", function () { closeModal(els.gateModal); });
         document.getElementById("btnConfirmGate").addEventListener("click", confirmActionGate);
         if (els.btnStageDone) els.btnStageDone.addEventListener("click", requestStageAcceptance);
+        if (els.btnAcceptOutcomeNext) {
+          els.btnAcceptOutcomeNext.addEventListener("click", continueFromAcceptOutcome);
+        }
         if (els.btnHistoryToggle) els.btnHistoryToggle.addEventListener("click", toggleHistoryExpanded);
         if (els.historyList) {
           els.historyList.addEventListener("click", function (event) {
@@ -20459,6 +20946,12 @@
         if (els.reviewShotInput) els.reviewShotInput.addEventListener("change", onReviewShotSelected);
         if (els.btnRemoveShot) els.btnRemoveShot.addEventListener("click", removeStageShot);
         if (els.btnOpenApp) els.btnOpenApp.addEventListener("click", openProjectApp);
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState === "visible") onReturnFromCursorWork();
+        });
+        window.addEventListener("focus", function () {
+          onReturnFromCursorWork();
+        });
         if (els.btnCaptureResult) els.btnCaptureResult.addEventListener("click", captureResultShot);
         if (els.btnChooseCaptureWindow) els.btnChooseCaptureWindow.addEventListener("click", openCaptureWindowPicker);
         if (els.btnCancelCaptureWindow) els.btnCancelCaptureWindow.addEventListener("click", hideCaptureWindowPicker);
