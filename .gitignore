@@ -9,3 +9,9 @@ AI_Project_Operating_System.zip
 # Local quarantine (not product)
 /Backups/
 /cls
+
+# Local UI verification screenshots (not product)
+candidate_shots/
+
+# Runtime project state of this repo only (not fixtures)
+/.ai-pos/
