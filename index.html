@@ -2185,6 +2185,83 @@
       background: #fbfcfe;
     }
 
+    #reviewDecisionActions #btnStageIssues {
+      min-height: 2.7rem;
+      padding: 0.55rem 1.15rem;
+      font-size: 0.96rem;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+      background: #eef6f3;
+      border: 1px solid color-mix(in srgb, #2f6f5e 32%, #d7e3de);
+      color: #1f5c4d;
+      box-shadow: 0 1px 2px color-mix(in srgb, #1f5c4d 8%, transparent);
+    }
+
+    #reviewDecisionActions #btnStageIssues:hover {
+      background: #e5f2ed;
+      border-color: color-mix(in srgb, #2f6f5e 42%, #d7e3de);
+      color: #18493d;
+    }
+
+    .issue-actions-divider {
+      display: block;
+      width: 100%;
+      height: 0;
+      border: 0;
+      border-top: 1px solid #dde3ea;
+      margin: 1rem 0 0.85rem;
+    }
+
+    .issue-submit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0;
+    }
+
+    .issue-submit-actions #btnCancelIssues {
+      margin-left: 0.55rem;
+      min-height: 2.45rem;
+      padding: 0.45rem 1rem;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 1px 1px rgba(26, 31, 44, 0.03);
+    }
+
+    .issue-submit-actions #btnCancelIssues:hover {
+      background: #f8fafc;
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    .review-notes-wrap {
+      position: relative;
+    }
+
+    .review-notes-wrap textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding-right: 5.1rem;
+      padding-bottom: 2.4rem;
+    }
+
+    .review-notes-wrap .create-clear-idea-btn {
+      top: auto;
+      right: 3.15rem;
+      bottom: 0.65rem;
+    }
+
+    .review-notes-wrap .create-mic-btn {
+      right: 0.65rem;
+      bottom: 0.65rem;
+    }
+
     .btn-ghost {
       color: var(--ink-muted);
       min-height: 2.2rem;
@@ -4936,10 +5013,11 @@
     .stage-work-columns {
       display: grid;
       grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
-      gap: 1rem 1.15rem;
+      gap: 1rem 2.35rem;
       align-items: start;
       max-width: min(1120px, 100%);
       margin: 0 0 0.25rem;
+      position: relative;
     }
     .stage-work-columns[hidden] { display: none !important; }
     .stage-work-columns .stage-zone { margin: 0; }
@@ -4948,11 +5026,53 @@
       height: 100%;
       box-sizing: border-box;
     }
+    /* Тонкий вертикальный разделитель между колонками. */
+    .stage-work-columns::before {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      top: 1.85rem;
+      bottom: 1.85rem;
+      left: calc((100% - 2.35rem) * 1.22 / 2.22 + 1.175rem);
+      width: 1px;
+      background: #dde3ea;
+      pointer-events: none;
+    }
     .stage-col-review {
       display: flex;
       flex-direction: column;
       gap: 1rem;
       min-width: 0;
+      padding-left: 0.35rem;
+    }
+    /* Заголовки колонок: один стиль и общая верхняя линия. */
+    .stage-col-work > .stage-context {
+      margin: 0 0 0.8rem;
+      padding: 0;
+      max-width: none;
+      min-height: 1.69rem;
+    }
+    .stage-col-work > .stage-context .stage-context-item {
+      min-width: 0;
+      max-width: 100%;
+    }
+    .stage-col-work > .stage-context .stage-context-item--module .flow-value,
+    .stage-col-review > .stage-zone > .stage-zone-title {
+      margin: 0;
+      font-family: inherit;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .stage-col-review > .stage-zone > .stage-zone-title {
+      margin: 0 0 0.8rem;
+      min-height: 1.69rem;
     }
     /* Левая колонка: спокойные карточки; жирным — заголовок и одно ключевое. */
     .stage-col-work > .stage-zone-title {
@@ -5059,6 +5179,8 @@
       .stage-work-columns {
         grid-template-columns: 1fr;
       }
+      .stage-work-columns::before { display: none; }
+      .stage-col-review { padding-left: 0; }
     }
     .history-list { display: grid; gap: 0.7rem; }
     .history-list[hidden] { display: none !important; }
@@ -5203,6 +5325,63 @@
       word-break: break-word;
     }
     .flow-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.8rem; }
+    .flow-actions[hidden],
+    .review-status[hidden],
+    .flow-issues[hidden] {
+      display: none !important;
+    }
+
+    .issue-quick-reasons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.35rem;
+    }
+
+    .issue-reason-chip {
+      appearance: none;
+      margin: 0;
+      padding: 0.4rem 0.7rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      background: #fff;
+      color: #374151;
+      font: inherit;
+      font-size: 0.86rem;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    .issue-reason-chip:hover {
+      border-color: color-mix(in srgb, #233a8b 28%, #e5e7eb);
+      color: #233a8b;
+    }
+
+    .issue-reason-chip.is-selected {
+      border-color: color-mix(in srgb, #233a8b 45%, #e5e7eb);
+      background: #f5f8ff;
+      color: #233a8b;
+      font-weight: 600;
+    }
+
+    .issue-shot-preview {
+      margin-top: 0.65rem;
+      padding: 0.55rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+
+    .issue-shot-preview img {
+      display: block;
+      max-width: 100%;
+      max-height: 180px;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      object-fit: contain;
+      background: #fff;
+    }
     .flow-hint { margin: 0.55rem 0 0; font-size: 0.82rem; color: var(--ink-muted); }
     .flow-issues { display: grid; gap: 0.6rem; margin-top: 0.85rem; }
     .flow-issues textarea { width: 100%; }
@@ -5828,6 +6007,14 @@
     .create-idea-wrap {
       position: relative;
       display: block;
+    }
+
+    .stage-fix-preview {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: inherit;
+      font-size: inherit;
+      margin: 0;
     }
 
     #panelForm.is-create-story .create-basics-mount-new [data-field="idea"] textarea {
@@ -7652,13 +7839,6 @@
         <main class="current-stage-screen" id="currentStageScreen" aria-label="Текущая задача проекта" hidden>
           <p class="section-note" id="taskEmptyNote" hidden>Текущая задача ещё не выбрана.</p>
 
-          <header class="stage-context">
-            <div class="stage-context-item stage-context-item--module">
-              <span class="flow-label" id="stagePartLabel" hidden>Модуль</span>
-              <p class="flow-value" id="stageModuleName">Модуль: —</p>
-            </div>
-          </header>
-
           <section class="stage-zone" id="stageDoneZone" data-zone="done" aria-labelledby="zoneDoneTitle" hidden>
             <h3 class="stage-zone-title" id="zoneDoneTitle">Что уже сделано</h3>
             <div class="stage-flow">
@@ -7670,6 +7850,16 @@
                   <button type="button" class="btn btn-ghost" id="btnHistoryToggle">Показать всю историю</button>
                 </div>
               </section>
+            </div>
+          </section>
+
+          <section class="stage-zone stage-accept-outcome" id="stageAcceptOutcome" data-zone="accept-outcome" aria-labelledby="acceptOutcomeTitle" hidden>
+            <div class="stage-flow">
+              <h3 class="stage-accept-outcome-title" id="acceptOutcomeTitle">Задача принята</h3>
+              <p class="stage-accept-outcome-lead" id="acceptOutcomeLead"></p>
+              <div class="flow-actions" id="acceptOutcomeActions">
+                <button type="button" class="btn btn-primary" id="btnAcceptOutcomeNext">Продолжить</button>
+              </div>
             </div>
           </section>
 
@@ -7757,6 +7947,12 @@
 
           <div class="stage-work-columns" id="stageWorkColumns" hidden>
             <section class="stage-zone stage-col-work" data-zone="now" aria-labelledby="stageModuleName">
+              <header class="stage-context">
+                <div class="stage-context-item stage-context-item--module">
+                  <span class="flow-label" id="stagePartLabel" hidden>Модуль</span>
+                  <p class="flow-value" id="stageModuleName">Модуль: —</p>
+                </div>
+              </header>
               <h3 class="stage-zone-title" id="zoneNowTitle" hidden>Сейчас в работе</h3>
               <div class="stage-flow">
                 <section class="flow-row">
@@ -7819,37 +8015,33 @@
                 <h3 class="stage-zone-title" id="zoneResultTitle">Проверка результата</h3>
                 <div class="stage-flow">
                   <section class="flow-row" id="stageCheckBlock">
-                    <span class="flow-label">Проверьте результат работы</span>
                     <p class="flow-hint" id="checkResultLead">
-                      Мы уже открыли приложение. Убедитесь, что результат соответствует ожидаемому.
+                      Посмотрите результат и примите решение.
                     </p>
-                    <div class="flow-actions">
-                      <div class="capture-attach-wrap">
-                        <label class="btn btn-ghost file-btn">
-                          <span id="resultShotAttachText">Прикрепить снимок</span>
-                          <input type="file" id="resultShotInput" accept="image/png,image/*" />
-                        </label>
-                        <button type="button" class="flow-inline-btn" id="btnChooseCaptureWindow">Снять с окна</button>
-                        <button type="button" class="btn btn-secondary" id="btnCaptureResult" hidden>Снять результат</button>
-                      </div>
-                      <button type="button" class="flow-inline-btn" id="btnOpenApp" hidden>Открыть снова</button>
+                    <div class="flow-actions" id="resultOpenActions">
+                      <button type="button" class="btn btn-secondary" id="btnOpenApp" hidden>Открыть результат</button>
                     </div>
                     <p class="flow-hint" id="openAppHint" hidden></p>
-                    <p class="flow-hint" id="captureWindowHint" hidden></p>
-                    <p class="flow-hint" id="captureStatus" hidden aria-live="polite"></p>
-                    <div class="capture-preview" id="capturePreview" hidden>
-                      <img id="capturePreviewImage" alt="Снимок результата" />
-                      <p class="flow-meta" id="capturePreviewMeta"></p>
-                      <button type="button" class="flow-inline-btn" id="btnClearCaptureVisual">Удалить снимок</button>
-                    </div>
-                    <div class="field capture-skip" id="captureSkipBox">
-                      <label class="check-list" style="display:block;margin:0.75rem 0 0">
-                        <input type="checkbox" id="captureSkipCheck" />
-                        Задание не меняет интерфейс
-                      </label>
-                      <div id="captureSkipReasonWrap" hidden style="margin-top:0.55rem">
-                        <label for="captureSkipReason">Почему визуальный результат не нужен</label>
-                        <textarea id="captureSkipReason" rows="2" placeholder="Кратко опишите причину"></textarea>
+                    <!-- Служебные элементы захвата: видны только в режиме замечаний. -->
+                    <div id="resultCaptureSupport" hidden>
+                      <input type="file" id="resultShotInput" accept="image/png,image/*" />
+                      <button type="button" class="btn btn-secondary" id="btnCaptureResult" hidden>Снять результат</button>
+                      <p class="flow-hint" id="captureWindowHint" hidden></p>
+                      <p class="flow-hint" id="captureStatus" hidden aria-live="polite"></p>
+                      <div class="capture-preview" id="capturePreview" hidden>
+                        <img id="capturePreviewImage" alt="Снимок результата" />
+                        <p class="flow-meta" id="capturePreviewMeta"></p>
+                        <button type="button" class="flow-inline-btn" id="btnClearCaptureVisual">Удалить снимок</button>
+                      </div>
+                      <div class="field capture-skip" id="captureSkipBox" hidden>
+                        <label class="check-list" style="display:block;margin:0.75rem 0 0">
+                          <input type="checkbox" id="captureSkipCheck" />
+                          Задание не меняет интерфейс
+                        </label>
+                        <div id="captureSkipReasonWrap" hidden style="margin-top:0.55rem">
+                          <label for="captureSkipReason">Почему визуальный результат не нужен</label>
+                          <textarea id="captureSkipReason" rows="2" placeholder="Кратко опишите причину"></textarea>
+                        </div>
                       </div>
                     </div>
                     <div class="capture-window-picker" id="captureWindowPicker" hidden>
@@ -7861,37 +8053,59 @@
                     </div>
                   </section>
 
-                  <section class="flow-row" id="stageVerifyChecksBlock">
+                  <section class="flow-row" id="stageVerifyChecksBlock" hidden>
                     <span class="flow-label">Подтвердите проверку</span>
                     <ul class="check-list" id="reviewChecks"></ul>
                   </section>
 
                   <section class="flow-row" id="reviewCard">
-                    <span class="flow-label">Завершите задачу</span>
-                    <div class="review-status" id="reviewStatus">Не проверено</div>
-                    <div class="flow-actions">
-                      <button type="button" class="btn btn-primary" id="btnStageDone" disabled>✔ Всё выполнено</button>
-                      <button type="button" class="btn btn-ghost" id="btnStageIssues">Есть замечания</button>
+                    <span class="flow-label" id="reviewDecisionLabel">Ваше решение</span>
+                    <div class="review-status" id="reviewStatus" hidden>Не проверено</div>
+                    <div class="flow-actions" id="reviewDecisionActions">
+                      <button type="button" class="btn btn-primary" id="btnStageDone">Всё устраивает</button>
+                      <button type="button" class="btn btn-secondary" id="btnStageIssues">Есть замечания</button>
                     </div>
                     <div class="flow-issues" id="stageIssuesBox" hidden>
                       <div class="field">
-                        <label for="reviewNotes">Описание замечаний</label>
-                        <textarea id="reviewNotes" rows="3" placeholder="Что именно нужно исправить"></textarea>
+                        <span class="field-label">Возможная причина</span>
+                        <div class="issue-quick-reasons" id="issueQuickReasons" role="group" aria-label="Возможные причины">
+                          <button type="button" class="issue-reason-chip" data-issue-reason="no_image">Нет изображения</button>
+                          <button type="button" class="issue-reason-chip" data-issue-reason="layout">Неверная вёрстка</button>
+                          <button type="button" class="issue-reason-chip" data-issue-reason="broken">Ошибка в работе</button>
+                          <button type="button" class="issue-reason-chip" data-issue-reason="other">Другое</button>
+                        </div>
                       </div>
-                      <div class="flow-actions" style="margin-top:0">
-                        <label class="btn btn-ghost file-btn">
-                          <span id="reviewShotBtnText">Прикрепить скриншот</span>
+                      <div class="field">
+                        <label for="reviewNotes">Что исправить</label>
+                        <div class="create-idea-wrap review-notes-wrap">
+                          <textarea id="reviewNotes" rows="3" placeholder="Можно уточнить замечание или надиктовать"></textarea>
+                          <button type="button" class="create-clear-idea-btn" id="btnClearReviewNotes" hidden aria-label="Очистить замечание" title="Очистить">×</button>
+                          <button type="button" class="create-mic-btn" id="btnReviewNotesMic" aria-label="Голосовой ввод замечания" title="Голосовой ввод">🎤</button>
+                        </div>
+                        <p class="create-mic-note" id="reviewNotesMicNote" hidden></p>
+                      </div>
+                      <div class="flow-actions" id="issueMediaActions" style="margin-top:0">
+                        <label class="btn btn-ghost file-btn" id="reviewShotAttachWrap">
+                          <span id="reviewShotBtnText">Прикрепить изображение</span>
                           <input type="file" id="reviewShotInput" accept="image/*" />
                         </label>
-                        <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Передать на исправление</button>
+                        <button type="button" class="flow-inline-btn" id="btnChooseCaptureWindow" hidden>Снять с окна</button>
                       </div>
-                      <p class="flow-hint" id="reviewShotNote" hidden>
-                        <span id="reviewShotName"></span>
-                        <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
-                      </p>
-                      <p class="flow-hint">Связь скриншота с замечанием сохраняется только в текущей сессии.</p>
+                      <div class="issue-shot-preview" id="issueShotPreview" hidden>
+                        <img id="issueShotImage" alt="Прикреплённое изображение" />
+                        <div class="flow-actions" style="margin-top:0.45rem">
+                          <span class="flow-meta" id="reviewShotName"></span>
+                          <button type="button" class="flow-inline-btn" id="btnRemoveShot">Удалить</button>
+                        </div>
+                      </div>
+                      <p class="flow-hint" id="reviewShotNote" hidden></p>
+                      <hr class="issue-actions-divider" />
+                      <div class="flow-actions issue-submit-actions">
+                        <button type="button" class="btn btn-primary" id="btnSubmitIssues" disabled>Отправить в Cursor</button>
+                        <button type="button" class="btn btn-secondary" id="btnCancelIssues">Назад</button>
+                      </div>
                     </div>
-                    <p class="flow-hint" id="reviewHint">Отметьте проверочные пункты. Затем нажмите «Всё выполнено».</p>
+                    <p class="flow-hint" id="reviewHint">Если результат хороший — «Всё устраивает». Если нужно поправить — «Есть замечания».</p>
                   </section>
                 </div>
               </section>
@@ -7900,11 +8114,12 @@
                 <h3 class="stage-zone-title" id="zoneNextTitle">Что нужно сделать дальше</h3>
                 <div class="stage-flow">
                   <section class="flow-row" id="stageFixBlock" hidden>
-                    <span class="flow-label">Задание на исправление</span>
-                    <p class="flow-text" id="stageFixText">—</p>
+                    <span class="flow-label">Исправление</span>
+                    <pre class="flow-text stage-fix-preview" id="stageFixText" hidden>—</pre>
                     <p class="flow-meta" id="stageFixShot" hidden></p>
-                    <div class="flow-actions">
-                      <button type="button" class="btn btn-primary" id="btnCopyFix">Скопировать задание на исправление</button>
+                    <p class="flow-hint" id="stageFixHint">Полный текст задания откроется перед отправкой в Cursor.</p>
+                    <div class="flow-actions" hidden>
+                      <button type="button" class="btn btn-ghost" id="btnCopyFix" hidden>Скопировать задание на исправление</button>
                     </div>
                     <span class="copy-toast" id="copyFixToast" aria-live="polite">Задание скопировано</span>
                   </section>
@@ -8477,7 +8692,7 @@
           "не ломать готовые модули",
           "менять только согласованную область",
           "сохранять понятную архитектуру",
-          "сначала завершать механику, затем расширять данные",
+          "сначала завершать работу карточки, затем расширять данные",
           "не добавлять лишние функции без отдельного решения"
         ],
         changeScale: "Только согласованная область текущей задачи внутри активного модуля. Расширение продукта — только после отдельного решения.",
@@ -8604,7 +8819,7 @@
           ],
           responsibility: [
             "код в рабочей папке",
-            "механика текущей задачи",
+            "работу текущей задачи",
             "техническая целостность решения"
           ]
         },
@@ -8672,9 +8887,9 @@
 
       var DEMO_TASK = {
         id: "task-card-reveal",
-        name: "Сделать так, чтобы карточка правильно открывалась на трёх проверенных датах.",
+        name: "Завершить раскрытие карточек на трёх проверенных датах.",
         goal: "Сделать так, чтобы карточка открывалась правильно и показывала нужную информацию.",
-        whyNow: "Раздел почти готов. Осталось завершить работу карточки, чтобы она работала правильно.",
+        whyNow: "Основная работа выполнена. Осталось завершить раскрытие карточек, чтобы модуль был готов.",
         expectedResult: "Карточка открывается и показывает нужную информацию.",
         canChange: "Только раздел «Историческая справка» и работу его карточки.",
         cannotChange: [
@@ -8734,7 +8949,7 @@
         purpose: "Показывать интересные исторические факты дня внутри приложения «Мой день».",
         status: "В работе",
         ready: "Черновик карточки и несколько примеров для проверки.",
-        remaining: "Завершить работу карточки, чтобы она правильно открывалась.",
+        remaining: "Завершить раскрытие карточек на трёх проверенных датах.",
         constraints: "Не превращать этот раздел в отдельное приложение; сначала довести карточку до рабочего вида.",
         tasks: [DEMO_TASK],
         activeTaskId: DEMO_TASK.id
@@ -8769,6 +8984,7 @@
         customTemplates: [],
         activeTab: "task",
         stageIssuesOpen: false,
+        issueQuickReason: "",
         gatePurpose: "copy",
         // boot | system | project — слой оболочки (стартовый экран / каталог / проект)
         shellLevel: "boot",
@@ -9156,6 +9372,9 @@
         reviewStatus: document.getElementById("reviewStatus"),
         reviewChecks: document.getElementById("reviewChecks"),
         reviewNotes: document.getElementById("reviewNotes"),
+        btnClearReviewNotes: document.getElementById("btnClearReviewNotes"),
+        btnReviewNotesMic: document.getElementById("btnReviewNotesMic"),
+        reviewNotesMicNote: document.getElementById("reviewNotesMicNote"),
         reviewHint: document.getElementById("reviewHint"),
         stageProjectName: document.getElementById("stageProjectName"),
         stageCheckBlock: document.getElementById("stageCheckBlock"),
@@ -9165,12 +9384,17 @@
         checkResultLead: document.getElementById("checkResultLead"),
         btnStageDone: document.getElementById("btnStageDone"),
         btnStageIssues: document.getElementById("btnStageIssues"),
+        btnCancelIssues: document.getElementById("btnCancelIssues"),
+        reviewDecisionActions: document.getElementById("reviewDecisionActions"),
+        reviewDecisionLabel: document.getElementById("reviewDecisionLabel"),
         stageIssuesBox: document.getElementById("stageIssuesBox"),
         btnSubmitIssues: document.getElementById("btnSubmitIssues"),
         reviewShotInput: document.getElementById("reviewShotInput"),
         reviewShotBtnText: document.getElementById("reviewShotBtnText"),
         reviewShotNote: document.getElementById("reviewShotNote"),
         reviewShotName: document.getElementById("reviewShotName"),
+        issueShotPreview: document.getElementById("issueShotPreview"),
+        issueShotImage: document.getElementById("issueShotImage"),
         btnRemoveShot: document.getElementById("btnRemoveShot"),
         stageFixBlock: document.getElementById("stageFixBlock"),
         stageFixText: document.getElementById("stageFixText"),
@@ -9360,7 +9584,7 @@
           "не ломать готовые модули",
           "менять только согласованную область",
           "сохранять понятную архитектуру",
-          "сначала завершать механику, затем расширять данные",
+          "сначала завершать работу карточки, затем расширять данные",
           "не добавлять лишние функции без отдельного решения"
         ],
         changeScale: [
@@ -9618,10 +9842,90 @@
         return allReviewChecksDone(review) && isVisualDraftReady(review);
       }
 
+      function prepareReviewForAcceptance(project, task) {
+        var review = ensureTaskReview(project, task);
+        if (!review) return null;
+        for (var i = 0; i < review.items.length; i++) {
+          review.checks[review.items[i].id] = true;
+        }
+        if (!isVisualDraftReady(review)) {
+          review.visualDraft = normalizeVisualDraft({
+            kind: "none",
+            required: false,
+            skip_reason: "Результат проверен без отдельного снимка"
+          });
+        }
+        if (review.status === "notes" || review.status === "ready") {
+          review.status = "unchecked";
+        }
+        persistTaskReview(project, task);
+        return review;
+      }
+
       function syncStageDoneButton(review) {
         if (!els.btnStageDone) return;
         var accepted = !!(review && review.status === "accepted");
-        els.btnStageDone.disabled = accepted || !canAcceptStageResult(review);
+        // Чек-лист убран из UX: кнопка доступна сразу, условия Gate готовятся при нажатии.
+        els.btnStageDone.disabled = accepted;
+      }
+
+      var ISSUE_QUICK_REASONS = {
+        no_image: "Нет изображения",
+        layout: "Неверная вёрстка",
+        broken: "Ошибка в работе",
+        other: "Другое"
+      };
+
+      function getSelectedIssueReasonLabel() {
+        var key = String(state.issueQuickReason || "").trim();
+        return ISSUE_QUICK_REASONS[key] || "";
+      }
+
+      function resolveIssueNotes() {
+        return els.reviewNotes ? els.reviewNotes.value.trim() : "";
+      }
+
+      function isIssueReadyToSubmit() {
+        return !!resolveIssueNotes();
+      }
+
+      function syncIssueReasonChips() {
+        var root = document.getElementById("issueQuickReasons");
+        if (!root) return;
+        var chips = root.querySelectorAll("[data-issue-reason]");
+        var selected = String(state.issueQuickReason || "").trim();
+        for (var i = 0; i < chips.length; i++) {
+          var key = chips[i].getAttribute("data-issue-reason") || "";
+          chips[i].classList.toggle("is-selected", key === selected);
+          chips[i].setAttribute("aria-pressed", key === selected ? "true" : "false");
+        }
+      }
+
+      function selectIssueQuickReason(reasonKey) {
+        var key = String(reasonKey || "").trim();
+        var prev = String(state.issueQuickReason || "").trim();
+        var prevLabel = ISSUE_QUICK_REASONS[prev] || "";
+        if (state.issueQuickReason === key) {
+          state.issueQuickReason = "";
+          if (els.reviewNotes && els.reviewNotes.value.trim() === prevLabel) {
+            els.reviewNotes.value = "";
+          }
+        } else {
+          state.issueQuickReason = key;
+          var label = ISSUE_QUICK_REASONS[key] || "";
+          if (els.reviewNotes) {
+            if (key === "other") {
+              if (!els.reviewNotes.value.trim() || els.reviewNotes.value.trim() === prevLabel) {
+                els.reviewNotes.value = "";
+              }
+              els.reviewNotes.focus();
+            } else if (label) {
+              els.reviewNotes.value = label;
+            }
+          }
+        }
+        syncIssueReasonChips();
+        syncSubmitIssuesButton();
       }
 
       function isModuleCompleted(mod) {
@@ -9717,7 +10021,7 @@
       function reviewStatusLabel(status) {
         if (status === "accepted") return "Принято";
         if (status === "ready") return "Результат готов";
-        if (status === "notes") return "Нужны изменения";
+        if (status === "notes") return "Есть замечания";
         return "Не проверено";
       }
 
@@ -9882,8 +10186,8 @@
           view.nextLine1 = mod.remaining || "Есть незакрытая работа.";
           view.nextLine2 = "Рекомендуем: " + task.name + ".";
           if (project.isDemo || mod.id === "mod-history") {
-            view.nextLine1 = "«Историческая справка» почти готова.";
-            view.nextLine2 = "Сделать так, чтобы карточка правильно открывалась на трёх проверенных датах.";
+            view.nextLine1 = "Основная работа выполнена. Осталось завершить раскрытие карточек, чтобы модуль был готов.";
+            view.nextLine2 = "Завершить раскрытие карточек на трёх проверенных датах.";
           }
           view.whyPath = task.whyNow
             ? ("Сейчас в проекте «" + project.name + "» активен модуль «" + mod.name + "». " +
@@ -10541,7 +10845,10 @@
         if (!tabId) return;
         var project = findProjectRecord(state.currentId) || getFocusProject();
         if (!project) return;
-        if (section !== "current-task") state.resultCheckFocus = false;
+        if (section !== "current-task") {
+          state.resultCheckFocus = false;
+          syncLeftCursorTransferButton(project);
+        }
         // Overview (Сведения о проекте) is always available; incomplete passport/setup must not block it.
         if (section === "current-task" && !isProjectSetupReady(project) && !shouldKeepResultCheckWorkspace()) {
           updateProjectSetupNavGate();
@@ -15800,6 +16107,7 @@
           key: resultLaunchKey(project, task)
         };
         state.resultCheckFocus = true;
+        syncLeftCursorTransferButton(project);
       }
 
       function shouldKeepResultCheckWorkspace() {
@@ -15814,6 +16122,7 @@
         setActiveTab("task", { force: true, skipHistory: true });
         setOsNavActive("current-task");
         if (els.currentStageScreen) els.currentStageScreen.hidden = false;
+        syncLeftCursorTransferButton(project);
       }
 
       function onReturnFromCursorWork() {
@@ -15892,23 +16201,23 @@
         if (els.checkResultLead) {
           if (!canOpen) {
             els.checkResultLead.textContent =
-              "Для этого проекта не указан адрес запуска. При необходимости откройте результат вручную.";
+              "Для этого проекта не указан адрес запуска. Примите решение после ручной проверки.";
           } else if (opened) {
             els.checkResultLead.textContent =
-              "Мы уже открыли приложение. Убедитесь, что результат соответствует ожидаемому.";
+              "Мы уже открыли результат. Примите решение.";
           } else if (pending) {
             els.checkResultLead.textContent =
-              "Когда вернётесь из работы, мы откроем приложение для проверки результата.";
+              "Когда вернётесь из работы, мы откроем результат для проверки.";
           } else {
             els.checkResultLead.textContent =
-              "При необходимости откройте результат вручную и убедитесь, что он соответствует ожидаемому.";
+              "Откройте результат и примите решение.";
           }
         }
 
         if (els.btnOpenApp) {
           els.btnOpenApp.hidden = !canOpen;
           els.btnOpenApp.disabled = false;
-          els.btnOpenApp.textContent = opened ? "Открыть снова" : "Открыть результат";
+          els.btnOpenApp.textContent = "Открыть результат";
         }
         if (els.openAppHint) {
           els.openAppHint.hidden = true;
@@ -16026,25 +16335,14 @@
         }
 
         if (els.capturePreview && els.capturePreviewImage) {
-          if (draft && (draft.kind === "capture" || draft.kind === "attachment") && draft.file) {
-            els.capturePreview.hidden = false;
-            els.capturePreviewImage.src = shotUrlFor(project, draft.file);
-            if (els.capturePreviewMeta) {
-              var meta = draft.kind === "capture" ? "Системный снимок" : "Прикреплённый снимок";
-              if (draft.captured_at) meta += " · " + (formatDateTime(draft.captured_at) || draft.captured_at);
-              els.capturePreviewMeta.textContent = meta;
-            }
-            if (els.btnClearCaptureVisual) els.btnClearCaptureVisual.hidden = accepted;
-          } else if (draft && draft.kind === "none") {
-            els.capturePreview.hidden = true;
-            els.capturePreviewImage.removeAttribute("src");
+          // Превью снимка в режиме замечаний показывается в блоке issueShotPreview.
+          els.capturePreview.hidden = true;
+          els.capturePreviewImage.removeAttribute("src");
+          if (draft && draft.kind === "none") {
             setCaptureStatus(
               "Визуальный результат не требуется: " + (draft.skip_reason || "причина указана"),
               false
             );
-          } else {
-            els.capturePreview.hidden = true;
-            els.capturePreviewImage.removeAttribute("src");
           }
         }
       }
@@ -16054,6 +16352,7 @@
         if (!review) return;
         review.visualDraft = normalizeVisualDraft(draft);
         persistTaskReview(project, task);
+        syncIssueShotFromVisualDraft(project, task);
         renderCaptureVisual(project, task);
         renderReviewBlock(project, task);
       }
@@ -16324,13 +16623,40 @@
         if (els.stageNextText) els.stageNextText.textContent = nextStepText(project);
       }
 
-      // Зона «Что дальше» — только после «Есть замечания» и передачи на исправление.
+      // Зона «Что дальше» больше не показывает полный текст fix на основном экране.
       function syncStageNextEmpty() {
-        var hasFix = !!(els.stageFixBlock && !els.stageFixBlock.hidden);
         var zone = els.stageNextZone || document.getElementById("stageNextZone");
-        if (zone) zone.hidden = !hasFix;
+        if (zone) zone.hidden = true;
         if (els.stageNextEmptyRow) els.stageNextEmptyRow.hidden = true;
-        if (!hasFix && els.stageNextBlock) els.stageNextBlock.hidden = true;
+        if (els.stageNextBlock) els.stageNextBlock.hidden = true;
+        if (els.stageFixBlock) els.stageFixBlock.hidden = true;
+      }
+
+      function syncReviewDecisionUi(review) {
+        var accepted = !!(review && review.status === "accepted");
+        var issuesOpen = !!state.stageIssuesOpen && !accepted;
+        if (els.reviewDecisionLabel) {
+          // Один статусный заголовок: в форме замечаний не дублируем отдельным статусом.
+          els.reviewDecisionLabel.textContent = issuesOpen ? "Есть замечания" : "Ваше решение";
+        }
+        if (els.reviewDecisionActions) {
+          els.reviewDecisionActions.hidden = issuesOpen;
+        }
+        if (els.btnStageIssues) {
+          els.btnStageIssues.hidden = issuesOpen;
+          els.btnStageIssues.disabled = accepted;
+        }
+        if (els.stageIssuesBox) {
+          els.stageIssuesBox.hidden = accepted || !issuesOpen;
+        }
+        if (els.reviewStatus) {
+          // Не показываем второй статус рядом с заголовком «Есть замечания».
+          var showStatus = accepted;
+          els.reviewStatus.hidden = !showStatus;
+        }
+        if (els.btnChooseCaptureWindow) {
+          els.btnChooseCaptureWindow.hidden = true;
+        }
       }
 
       // Журнал выполненных заданий: на этом этапе только чтение и показ.
@@ -16569,53 +16895,84 @@
       }
 
       function renderStageFixBlock(project, task, review) {
+        // Полный текст задания на исправление показываем только в Gate, не на основном экране.
         if (!els.stageFixBlock) return;
-        var needsFix = !!(review && review.status === "notes");
-        els.stageFixBlock.hidden = !needsFix;
-        if (!needsFix) return;
-        if (els.stageFixText) els.stageFixText.textContent = review.notes || "—";
-        var shot = getStageShot(project, task);
-        if (els.stageFixShot) {
-          els.stageFixShot.hidden = !shot;
-          els.stageFixShot.textContent = shot ? ("Скриншот с замечанием: " + shot.name) : "";
+        els.stageFixBlock.hidden = true;
+        if (els.stageFixText) {
+          els.stageFixText.hidden = true;
+          els.stageFixText.textContent = "";
         }
+        if (els.stageFixShot) {
+          els.stageFixShot.hidden = true;
+          els.stageFixShot.textContent = "";
+        }
+        if (els.btnCopyFix) els.btnCopyFix.hidden = true;
+        syncStageNextEmpty();
       }
 
       function renderStageShot(project, task) {
         var shot = getStageShot(project, task);
         if (els.reviewShotBtnText) {
-          els.reviewShotBtnText.textContent = shot ? "Заменить скриншот" : "Прикрепить скриншот";
+          els.reviewShotBtnText.textContent = shot ? "Заменить изображение" : "Прикрепить изображение";
         }
-        if (els.reviewShotNote) {
-          els.reviewShotNote.hidden = !shot;
-          if (els.reviewShotName) {
-            els.reviewShotName.textContent = shot ? ("Прикреплён скриншот: " + shot.name) : "";
+        if (els.issueShotPreview) {
+          els.issueShotPreview.hidden = !shot;
+        }
+        if (els.issueShotImage) {
+          if (shot && shot.dataUrl) {
+            els.issueShotImage.src = shot.dataUrl;
+            els.issueShotImage.hidden = false;
+          } else {
+            els.issueShotImage.removeAttribute("src");
+            els.issueShotImage.hidden = true;
           }
-          if (els.btnRemoveShot) els.btnRemoveShot.hidden = !shot;
         }
+        if (els.reviewShotName) {
+          els.reviewShotName.textContent = shot ? shot.name : "";
+        }
+        if (els.btnRemoveShot) els.btnRemoveShot.hidden = !shot;
+        if (els.reviewShotNote) {
+          els.reviewShotNote.hidden = true;
+          els.reviewShotNote.textContent = "";
+        }
+      }
+
+      function rememberIssueShot(project, task, shot) {
+        if (!project || !task || !shot) return;
+        state.stageShots[reviewMapKey(project, task)] = {
+          name: shot.name || "изображение",
+          location: shot.location || "",
+          dataUrl: shot.dataUrl || ""
+        };
+      }
+
+      function syncIssueShotFromVisualDraft(project, task) {
+        if (!state.stageIssuesOpen || !project || !task) return;
+        var review = ensureTaskReview(project, task);
+        var draft = normalizeVisualDraft(review && review.visualDraft);
+        if (!draft || (draft.kind !== "capture" && draft.kind !== "attachment") || !draft.file) return;
+        rememberIssueShot(project, task, {
+          name: draft.file,
+          location: "Снимок с окна приложения",
+          dataUrl: shotUrlFor(project, draft.file)
+        });
       }
 
       function syncReviewHint(review) {
         if (!els.reviewHint || !review) return;
         var accepted = review.status === "accepted";
-        var allChecked = allReviewChecksDone(review);
-        var visualReady = isVisualDraftReady(review);
         if (accepted) {
           els.reviewHint.textContent = "Результат принят" +
             (review.acceptedAt ? (" · " + formatDateTime(review.acceptedAt)) : "") + ".";
+        } else if (state.stageIssuesOpen) {
+          els.reviewHint.textContent =
+            "Выберите причину или опишите замечание, при необходимости прикрепите изображение и нажмите «Отправить в Cursor».";
         } else if (review.status === "notes") {
-          els.reviewHint.textContent = "Задание на исправление готово. После исправления заново отметьте пункты проверки.";
-        } else if (!visualReady && allChecked) {
           els.reviewHint.textContent =
-            "Осталось сохранить снимок результата или указать, почему снимок не нужен.";
-        } else if (!visualReady) {
-          els.reviewHint.textContent =
-            "Сначала посмотрите результат и сохраните снимок (или причину без снимка). Затем отметьте пункты проверки.";
-        } else if (allChecked) {
-          els.reviewHint.textContent = "Все пункты отмечены. Можно принять результат.";
+            "Замечание передано. После исправления снова проверьте результат.";
         } else {
           els.reviewHint.textContent =
-            "Отметьте пункты, которые вы проверили. Кнопка «✔ Всё выполнено» станет доступна, когда отмечены все пункты.";
+            "Посмотрите результат и выберите: «Всё устраивает» или «Есть замечания».";
         }
       }
 
@@ -16641,54 +16998,28 @@
         if (els.stageCheckBlock) els.stageCheckBlock.hidden = false;
         if (criteriaBlock) criteriaBlock.hidden = false;
         if (transferBlock) transferBlock.hidden = false;
-        if (verifyChecks) verifyChecks.hidden = false;
+        // Чек-лист проверки скрыт: решение пользователя — «Всё устраивает» / «Есть замечания».
+        if (verifyChecks) verifyChecks.hidden = true;
         var review = ensureTaskReview(project, task);
         els.reviewStatus.textContent = reviewStatusLabel(review.status);
         els.reviewStatus.className = "review-status" +
           (review.status === "accepted" ? " is-accepted" : review.status === "notes" || review.status === "ready" ? " is-notes" : "");
-        els.reviewNotes.value = review.notes || "";
+        if (!state.stageIssuesOpen) {
+          els.reviewNotes.value = review.notes || "";
+        }
         els.reviewNotes.disabled = review.status === "accepted";
+        if (els.btnReviewNotesMic) els.btnReviewNotesMic.disabled = review.status === "accepted";
 
         var readonlyHtml = "";
-        var html = "";
         for (var i = 0; i < review.items.length; i++) {
-          var item = review.items[i];
-          readonlyHtml += "<li>" + escapeHtml(item.label) + "</li>";
-          html +=
-            '<label><input type="checkbox" data-review-check="' + escapeHtml(item.id) + '"' +
-            (review.checks[item.id] ? " checked" : "") +
-            (review.status === "accepted" ? " disabled" : "") +
-            " /> " + escapeHtml(item.label) + "</label>";
+          readonlyHtml += "<li>" + escapeHtml(review.items[i].label) + "</li>";
         }
         if (criteriaList) criteriaList.innerHTML = readonlyHtml || "<li>—</li>";
-        els.reviewChecks.innerHTML = html;
-
-        var checks = els.reviewChecks.querySelectorAll("[data-review-check]");
-        for (var c = 0; c < checks.length; c++) {
-          checks[c].addEventListener("change", function (event) {
-            var mutable = currentProjectMutable();
-            if (!mutable) return;
-            var mod = getActiveModule(mutable);
-            var active = getActiveTask(mod);
-            if (!active) return;
-            var rev = ensureTaskReview(mutable, active);
-            rev.checks[event.currentTarget.getAttribute("data-review-check")] = event.currentTarget.checked;
-            if (rev.status === "accepted") rev.status = "unchecked";
-            persistTaskReview(mutable, active);
-            // Не пересобираем список галочек: иначе соседние отметки сбрасываются.
-            els.reviewStatus.textContent = reviewStatusLabel(rev.status);
-            els.reviewStatus.className = "review-status" +
-              (rev.status === "accepted" ? " is-accepted" : rev.status === "notes" || rev.status === "ready" ? " is-notes" : "");
-            syncStageDoneButton(rev);
-            syncReviewHint(rev);
-          });
-        }
+        if (els.reviewChecks) els.reviewChecks.innerHTML = "";
 
         syncStageDoneButton(review);
-        if (els.btnStageIssues) els.btnStageIssues.disabled = review.status === "accepted";
-        if (els.stageIssuesBox) {
-          els.stageIssuesBox.hidden = review.status === "accepted" || !state.stageIssuesOpen;
-        }
+        syncReviewDecisionUi(review);
+        syncIssueReasonChips();
         renderStageShot(project, task);
         syncSubmitIssuesButton();
         syncReviewHint(review);
@@ -17157,6 +17488,22 @@
         renderReviewBlock(project, task);
       }
 
+      function syncLeftCursorTransferButton(project) {
+        if (!els.btnOpenInCursor) return;
+        var proj = project || currentProjectMutable() || findProject(state.currentId);
+        var hasTool = !!(proj && resolvePrimaryToolId(proj));
+        var hasTask = !!(proj && getActiveTask(getActiveModule(proj)));
+        var hasFolder = !!(proj && String(proj.workFolder || "").trim());
+        // Во время проверки / замечаний / после принятия — без конкурирующей передачи исходного задания.
+        var hideLeft =
+          !!state.resultCheckFocus ||
+          !!state.resultLaunchPending ||
+          !!state.stageIssuesOpen ||
+          !!(proj && hasAcceptOutcome(proj));
+        els.btnOpenInCursor.hidden = hideLeft;
+        els.btnOpenInCursor.disabled = hideLeft || !hasTool || !hasTask || !hasFolder;
+      }
+
       function renderTools(project) {
         var toolId = resolvePrimaryToolId(project);
         state.selectedTool = toolId;
@@ -17165,9 +17512,7 @@
         if (els.stagePrimaryToolReady) els.stagePrimaryToolReady.hidden = !hasTool;
         if (els.stagePrimaryToolMissing) els.stagePrimaryToolMissing.hidden = hasTool;
         if (els.btnCopyWork) els.btnCopyWork.disabled = !hasTool || !hasTask;
-        if (els.btnOpenInCursor) {
-          els.btnOpenInCursor.disabled = !hasTool || !hasTask || !String(project.workFolder || "").trim();
-        }
+        syncLeftCursorTransferButton(project);
         if (els.toolPicks) els.toolPicks.innerHTML = "";
 
         els.toolFolder.textContent = project.workFolder || "не указана";
@@ -19513,7 +19858,7 @@
         if (!force && currentTask) {
           var review = ensureTaskReview(project, currentTask);
           if (review.status !== "accepted") {
-            window.alert("Сначала примите результат текущей задачи. Переход к следующей задаче доступен только после статуса «Принято».");
+            window.alert("Сначала примите результат текущей задачи. К следующей задаче можно перейти только после принятия.");
             setActiveTab("task");
             return;
           }
@@ -19595,6 +19940,7 @@
           nameManual: false,
           toolId: "cursor"
         };
+        syncLeftCursorTransferButton(mutable);
         refreshWorkspace();
       }
 
@@ -19604,7 +19950,7 @@
         var task = getActiveTask(getActiveModule(mutable));
         if (!task) return;
         var review = ensureTaskReview(mutable, task);
-        if (review.status === "accepted" || !canAcceptStageResult(review)) return;
+        if (review.status === "accepted") return;
         var draft = els.reviewNotes ? els.reviewNotes.value.trim() : "";
         if (state.stageIssuesOpen && draft && draft !== (review.notes || "")) {
           var keepGoing = window.confirm(
@@ -19613,6 +19959,10 @@
           if (!keepGoing) return;
           els.reviewNotes.value = "";
         }
+        state.stageIssuesOpen = false;
+        review = prepareReviewForAcceptance(mutable, task);
+        if (!review || !canAcceptStageResult(review)) return;
+        syncLeftCursorTransferButton(mutable);
         openActionGate("accept");
       }
 
@@ -19622,19 +19972,50 @@
         var task = getActiveTask(getActiveModule(mutable));
         if (!task) return;
         state.stageIssuesOpen = !state.stageIssuesOpen;
+        if (state.stageIssuesOpen && !state.issueQuickReason) {
+          state.issueQuickReason = "";
+        }
         renderReviewBlock(mutable, task);
+        syncLeftCursorTransferButton(mutable);
         if (state.stageIssuesOpen && els.reviewNotes) els.reviewNotes.focus();
+      }
+
+      function cancelStageIssues() {
+        var mutable = currentProjectMutable();
+        if (!mutable) return;
+        var task = getActiveTask(getActiveModule(mutable));
+        if (!task) return;
+        state.stageIssuesOpen = false;
+        state.issueQuickReason = "";
+        renderReviewBlock(mutable, task);
+        syncLeftCursorTransferButton(mutable);
       }
 
       function syncSubmitIssuesButton() {
         if (!els.btnSubmitIssues) return;
-        var text = els.reviewNotes ? els.reviewNotes.value.trim() : "";
-        els.btnSubmitIssues.disabled = !text;
+        els.btnSubmitIssues.disabled = !isIssueReadyToSubmit();
+        syncClearReviewNotesButton();
+      }
+
+      function syncClearReviewNotesButton() {
+        if (!els.btnClearReviewNotes) return;
+        var hasText = !!(els.reviewNotes && String(els.reviewNotes.value || "").length);
+        var disabled = !!(els.reviewNotes && els.reviewNotes.disabled);
+        els.btnClearReviewNotes.hidden = !hasText || disabled;
+      }
+
+      function clearReviewNotesField() {
+        if (!els.reviewNotes || els.reviewNotes.disabled) return;
+        els.reviewNotes.value = "";
+        state.issueQuickReason = "";
+        syncIssueReasonChips();
+        syncSubmitIssuesButton();
+        els.reviewNotes.focus();
       }
 
       /**
-       * Передача на исправление. Отметки проверки снимаются: принять прежний
-       * результат без нового цикла проверки нельзя.
+       * Передача на исправление в Cursor: сохранить замечание, показать
+       * короткое fix-задание и открыть Cursor с этим текстом в буфере.
        */
       function submitStageIssues() {
         var mutable = currentProjectMutable();
@@ -19642,8 +20023,16 @@
         var mod = getActiveModule(mutable);
         var task = getActiveTask(mod);
         if (!task) return;
-        var notes = els.reviewNotes ? els.reviewNotes.value.trim() : "";
+        var notes = resolveIssueNotes();
         if (!notes) return;
+        if (!resolvePrimaryToolId(mutable)) {
+          window.alert("Сначала укажите основной инструмент в настройках проекта.");
+          return;
+        }
+        if (!String(mutable.workFolder || "").trim()) {
+          window.alert("Сначала укажите рабочую папку проекта в настройках.");
+          return;
+        }
         var review = ensureTaskReview(mutable, task);
         review.notes = notes;
         review.status = "notes";
@@ -19655,7 +20044,9 @@
         persistTaskReview(mutable, task);
         if (!mutable.isDemo) saveProjects();
         state.stageIssuesOpen = false;
+        state.issueQuickReason = "";
         refreshWorkspace();
+        openActionGate("fix");
       }
 
       function copyFixAssignment() {
@@ -19667,10 +20058,79 @@
         copyTextWithToast(buildFixAssignmentText(project, task, review), els.copyFixToast);
       }
 
+      function bindReviewNotesMic() {
+        var btn = els.btnReviewNotesMic;
+        if (!btn) return;
+        var reviewSpeech = null;
+        function setReviewMicNote(noteText) {
+          if (!els.reviewNotesMicNote) return;
+          if (!noteText) {
+            els.reviewNotesMicNote.hidden = true;
+            els.reviewNotesMicNote.textContent = "";
+            return;
+          }
+          els.reviewNotesMicNote.hidden = false;
+          els.reviewNotesMicNote.textContent = noteText;
+        }
+        btn.addEventListener("click", function () {
+          if (els.reviewNotes && els.reviewNotes.disabled) return;
+          var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SpeechRecognition) {
+            setReviewMicNote("Голосовой ввод в этом браузере пока недоступен.");
+            return;
+          }
+          try {
+            if (reviewSpeech && btn.classList.contains("is-listening")) {
+              reviewSpeech.stop();
+              return;
+            }
+            reviewSpeech = new SpeechRecognition();
+            reviewSpeech.lang = "ru-RU";
+            reviewSpeech.interimResults = false;
+            reviewSpeech.maxAlternatives = 1;
+            reviewSpeech.onstart = function () {
+              btn.classList.add("is-listening");
+              setReviewMicNote("Слушаю…");
+            };
+            reviewSpeech.onend = function () {
+              btn.classList.remove("is-listening");
+              if (els.reviewNotesMicNote && els.reviewNotesMicNote.textContent === "Слушаю…") {
+                setReviewMicNote("");
+              }
+            };
+            reviewSpeech.onerror = function () {
+              btn.classList.remove("is-listening");
+              setReviewMicNote("Не удалось получить доступ к микрофону.");
+            };
+            reviewSpeech.onresult = function (event) {
+              var transcript = "";
+              if (event.results && event.results[0] && event.results[0][0]) {
+                transcript = event.results[0][0].transcript || "";
+              }
+              transcript = String(transcript).trim();
+              if (!transcript || !els.reviewNotes) return;
+              var base = els.reviewNotes.value;
+              els.reviewNotes.value = base ? (base.replace(/\s+$/, "") + " " + transcript) : transcript;
+              setReviewMicNote("");
+              syncSubmitIssuesButton();
+            };
+            reviewSpeech.start();
+          } catch (err) {
+            btn.classList.remove("is-listening");
+            setReviewMicNote("Не удалось запустить голосовой ввод.");
+          }
+        });
+      }
+
       function showStageShotProblem(message) {
+        if (els.issueShotPreview) els.issueShotPreview.hidden = true;
+        if (els.issueShotImage) {
+          els.issueShotImage.removeAttribute("src");
+          els.issueShotImage.hidden = true;
+        }
         if (!els.reviewShotNote) return;
         els.reviewShotNote.hidden = false;
-        if (els.reviewShotName) els.reviewShotName.textContent = message;
+        els.reviewShotNote.textContent = message || "";
         if (els.btnRemoveShot) els.btnRemoveShot.hidden = true;
       }
 
@@ -19712,7 +20172,8 @@
           }
           state.stageShots[reviewMapKey(mutable, task)] = {
             name: stored.name,
-            location: "Материалы проекта AI POS → раздел «Материалы» → " + stored.name
+            location: "Материалы проекта AI POS → раздел «Материалы» → " + stored.name,
+            dataUrl: stored.dataUrl
           };
           if (!mutable.isDemo) saveProjects();
           renderReviewBlock(mutable, task);
@@ -19751,7 +20212,7 @@
       }
 
       function syncGateConfirmButton() {
-        if (state.gatePurpose === "copy") {
+        if (state.gatePurpose === "copy" || state.gatePurpose === "fix") {
           els.btnConfirmGate.disabled = false;
           return;
         }
@@ -19766,6 +20227,12 @@
       var GATE_TEXTS = {
         copy: {
           title: "Просмотреть задание",
+          lead: "",
+          confirm: "Скопировать и открыть Cursor",
+          cancel: "Закрыть"
+        },
+        fix: {
+          title: "Задание на исправление",
           lead: "",
           confirm: "Скопировать и открыть Cursor",
           cancel: "Закрыть"
@@ -19827,13 +20294,16 @@
           window.alert("Сначала добавьте текущую задачу.");
           return;
         }
-        if (purpose === "cursor" && !String(project.workFolder || "").trim()) {
+        if ((purpose === "cursor" || purpose === "fix") && !String(project.workFolder || "").trim()) {
           window.alert("Сначала укажите рабочую папку проекта в настройках.");
           return;
         }
 
-        state.gatePurpose = purpose === "accept" ? "accept" : (purpose === "cursor" ? "cursor" : "copy");
-        var isView = state.gatePurpose === "copy";
+        state.gatePurpose =
+          purpose === "accept" ? "accept" :
+          purpose === "cursor" ? "cursor" :
+          purpose === "fix" ? "fix" : "copy";
+        var isView = state.gatePurpose === "copy" || state.gatePurpose === "fix";
         var texts = GATE_TEXTS[state.gatePurpose];
         if (els.gateTitle) els.gateTitle.textContent = texts.title;
         if (els.gateLead) {
@@ -19887,7 +20357,7 @@
         var task = getActiveTask(mod);
         if (!task) return;
 
-        if (state.gatePurpose === "copy") {
+        if (state.gatePurpose === "copy" || state.gatePurpose === "fix") {
           closeModal(els.gateModal);
           transferToCursorDirect();
           return;
@@ -20049,6 +20519,9 @@
           window.alert("Сначала подготовьте рабочее задание: выберите инструмент и текущую задачу.");
           return;
         }
+        if (els.workBox) {
+          els.workBox.setAttribute("data-plain", text);
+        }
 
         var copied = await copyTextToClipboard(text);
         if (!copied) {
@@ -20056,13 +20529,14 @@
           return;
         }
 
-        if (els.btnOpenInCursor) els.btnOpenInCursor.disabled = true;
+        // Сразу входим в режим проверки: левая кнопка не должна конкурировать,
+        // даже если ответ Bridge задерживается.
+        markResultLaunchPending(project, task);
+        renderCheckResultLead(project, task);
+        syncLeftCursorTransferButton(project);
+
         var res = await postBridgeJson("/api/open-in-cursor", { project_path: folder });
-        if (els.btnOpenInCursor) {
-          var hasTool = !!resolvePrimaryToolId(project);
-          var hasTask = !!getActiveTask(getActiveModule(project));
-          els.btnOpenInCursor.disabled = !hasTool || !hasTask || !folder;
-        }
+        syncLeftCursorTransferButton(project);
 
         showCopyToastMessage("Задание скопировано. Вставьте его в Cursor");
         if (!res.data || !res.data.ok) {
@@ -20071,8 +20545,6 @@
               " Задание уже скопировано — вставьте его в чат вручную."
           );
         }
-        markResultLaunchPending(project, task);
-        renderCheckResultLead(project, task);
       }
 
       async function openInCursorAfterGate() {
@@ -20942,7 +21414,26 @@
           });
         }
         if (els.btnStageIssues) els.btnStageIssues.addEventListener("click", toggleStageIssues);
+        if (els.btnCancelIssues) els.btnCancelIssues.addEventListener("click", cancelStageIssues);
         if (els.btnSubmitIssues) els.btnSubmitIssues.addEventListener("click", submitStageIssues);
+        if (els.btnClearReviewNotes) {
+          els.btnClearReviewNotes.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            clearReviewNotesField();
+          });
+        }
+        var issueReasons = document.getElementById("issueQuickReasons");
+        if (issueReasons) {
+          issueReasons.addEventListener("click", function (event) {
+            var chip = event.target && event.target.closest
+              ? event.target.closest("[data-issue-reason]")
+              : null;
+            if (!chip || !issueReasons.contains(chip)) return;
+            selectIssueQuickReason(chip.getAttribute("data-issue-reason"));
+          });
+        }
+        bindReviewNotesMic();
         if (els.reviewShotInput) els.reviewShotInput.addEventListener("change", onReviewShotSelected);
         if (els.btnRemoveShot) els.btnRemoveShot.addEventListener("click", removeStageShot);
         if (els.btnOpenApp) els.btnOpenApp.addEventListener("click", openProjectApp);
